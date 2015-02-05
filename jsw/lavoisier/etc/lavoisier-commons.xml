@@ -1,6 +1,35 @@
 <config xmlns="http://software.in2p3.fr/lavoisier/config.xsd" version="14">
     <!-- post-processors -->
     <processors>
+        <processor type="SelectProcessor" match="eval(path())" disabled="not(boolean(path(false())))">
+            <namespaces eval="entries(arguments())">
+                <entry key="cfg">http://software.in2p3.fr/lavoisier/config.xsd</entry>
+                <entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry>
+            </namespaces>
+        </processor>
+        <processor type="SelectWindowProcessor" match="/*/*" disabled="not(arguments()[@key='_window_']/text())">
+            <parameter name="offset" eval="substring-before(arguments()[@key='_window_']/text(), '-')"/>
+            <parameter name="length" eval="substring-after(arguments()[@key='_window_']/text(), '-') - number(substring-before(arguments()[@key='_window_']/text(), '-')) + 1"/>
+        </processor>
+        <processor type="ExtractProcessor" match="/*" disabled="not(arguments()[@key='_extract_'])"/>
+        <processor type="SkeletonProcessor" match="/*" disabled="not(arguments()[@key='_skeleton_'])"/>
+    </processors>
+    <processors name="single_node">
+        <processor type="SelectProcessor" match="eval(path())" disabled="not(boolean(path(false())))">
+            <namespaces eval="entries(arguments())">
+                <entry key="cfg">http://software.in2p3.fr/lavoisier/config.xsd</entry>
+                <entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry>
+            </namespaces>
+            <parameter name="single_node">true</parameter>
+        </processor>
+        <processor type="SelectWindowProcessor" match="/*/*" disabled="not(arguments()[@key='_window_']/text())">
+            <parameter name="offset" eval="substring-before(arguments()[@key='_window_']/text(), '-')"/>
+            <parameter name="length" eval="substring-after(arguments()[@key='_window_']/text(), '-') - number(substring-before(arguments()[@key='_window_']/text(), '-')) + 1"/>
+        </processor>
+        <processor type="ExtractProcessor" match="/*" disabled="not(arguments()[@key='_extract_'])"/>
+        <processor type="SkeletonProcessor" match="/*" disabled="not(arguments()[@key='_skeleton_'])"/>
+    </processors>
+    <processors name="disable">
         <processor type="SelectWindowProcessor" match="/*/*" disabled="not(arguments()[@key='_window_']/text())">
             <parameter name="offset" eval="substring-before(arguments()[@key='_window_']/text(), '-')"/>
             <parameter name="length" eval="substring-after(arguments()[@key='_window_']/text(), '-') - number(substring-before(arguments()[@key='_window_']/text(), '-')) + 1"/>
@@ -10,21 +39,19 @@
     </processors>
 
     <!-- helper views -->
-    <view name="list">
+    <view name="list" post-processors="disable">
         <info>
             <category>Hidden</category>
         </info>
-        <argument name="disable-default-XPath">true</argument>
         <connector type="FileConnector">
             <parameter name="path" eval="concat('./',path())"/>
         </connector>
         <serializer type="ListSerializer"/>
     </view>
-    <view name="properties">
+    <view name="properties" post-processors="disable">
         <info>
             <category>Hidden</category>
         </info>
-        <argument name="disable-default-XPath">true</argument>
         <connector type="FileConnector">
             <parameter name="path" eval="concat('./',path())"/>
         </connector>
@@ -32,7 +59,7 @@
     </view>
 
     <!-- generated rendering stylesheets -->
-    <view name="base">
+    <view name="base" post-processors="disable">
         <info>
             <category>Hidden</category>
         </info>
@@ -45,11 +72,10 @@
             </renderer>
         </renderers>
     </view>
-    <view name="xsl">
+    <view name="xsl" post-processors="disable">
         <info>
             <category>Hidden</category>
         </info>
-        <argument name="disable-default-XPath">true</argument>
         <connector type="FileConnector">
             <parameter name="path" eval="concat('memory:/', path())"/>
         </connector>
@@ -61,7 +87,7 @@
     </view>
 
     <!-- layout -->
-    <view name="head">
+    <view name="head" post-processors="disable">
         <info>
             <category>Hidden</category>
         </info>

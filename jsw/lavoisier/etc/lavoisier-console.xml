@@ -180,7 +180,7 @@
             </renderer>
         </renderers>
     </view>
-    <view name="view_dependencies">
+    <view name="view_dependencies" post-processors="disable">
         <info>
             <category>Configuration</category>
             <description>Graphical representation of the view dependencies</description>
@@ -206,7 +206,7 @@
             </renderer>
         </renderers>
     </view>
-    <view name="cache_dependencies">
+    <view name="cache_dependencies" post-processors="disable">
         <info>
             <category>Configuration</category>
             <description>Graphical representation of cache dependencies</description>
@@ -290,7 +290,7 @@
             </renderer>
         </renderers>
     </view>
-    <view name="breakpoint">
+    <view name="breakpoint" post-processors="disable">
         <info>
             <category>Hidden</category>
             <description>Interrupt execution on each event matching the XPath expression</description>
@@ -309,7 +309,7 @@
             <processor type="XmlDumpProcessor" match="/*"/>
         </processors>
     </view>
-    <view name="resume_breakpoint">
+    <view name="resume_breakpoint" post-processors="disable">
         <info>
             <category>Environment</category>
             <label>Resume Breakpoint</label>
@@ -387,7 +387,7 @@
             <title>'Operating System Information'</title>
             <field>/jmx/domain/mbean/@type</field>
             <row foreach="/jmx/domain/mbean/attribute">
-                <column link="/lavoisier/os/jmx/domain/mbean/attribute[@name='{@name}']?accept=xml">
+                <column link="/lavoisier/os/jmx/domain/mbean/attribute[@name='{@name}']?accept=xml&amp;processors=single_node">
                     @name
                 </column>
                 <column>value</column>
@@ -472,11 +472,10 @@
             </row>
         </pre-renderers>
     </view>
-    <view name="cache_content">
+    <view name="cache_content" post-processors="disable">
         <info>
             <category>Hidden</category>
         </info>
-        <argument name="disable-default-XPath">true</argument>
         <connector type="FileConnector">
             <parameter name="path" eval="concat(property('cache.baseDirectory'), '/', path())"/>
         </connector>
@@ -487,11 +486,10 @@
             </renderer>
         </renderers>
     </view>
-    <view name="cache_delete" authenticators="admin">
+    <view name="cache_delete" post-processors="disable" authenticators="admin">
         <info>
             <category>Hidden</category>
         </info>
-        <argument name="disable-default-XPath">true</argument>
         <connector type="ShellConnector">
             <parameter name="executable">/bin/rm</parameter>
             <parameter name="arguments">
