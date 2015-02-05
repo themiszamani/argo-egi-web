@@ -13,8 +13,8 @@
         <variable name="request" eval="concat($action, '-', $type, '-request')"/>
         <connector type="XMLConnector">
             <parameter name="content" eval="entries(choose($type='cards',
-                view('schema')/schema/relations[not(@manual='true')]/*[not(@class=preceding::*/@class)]/@class,
-                view('schema')/schema/relations[not(@manual='true')]/@id
+                view('schema')/schema/relations/*[not(@class=preceding::*/@class)]/@class,
+                view('schema')/schema/relations/@id
             ))"/>
         </connector>
         <processors>
@@ -239,7 +239,7 @@
         </info>
         <argument name="class-or-domain"/>
         <connector type="CMDBuildConnector">
-            <parameter name="url" eval="property('cmdbuild.url')"/>
+            <parameter name="url" eval="concat('http://',property('cmdbuild.server'),':8080/cmdbuild/services/soap/Private')"/>
             <parameter name="username" eval="property('cmdbuild.username')"/>
             <parameter name="password" eval="property('cmdbuild.password')"/>
             <parameter name="request" eval="new_element('cards', new_attribute('class',$class-or-domain))"/>
@@ -257,7 +257,7 @@
         </info>
         <argument name="class-or-domain"/>
         <connector type="CMDBuildConnector">
-            <parameter name="url" eval="property('cmdbuild.url')"/>
+            <parameter name="url" eval="concat('http://',property('cmdbuild.server'),':8080/cmdbuild/services/soap/Private')"/>
             <parameter name="username" eval="property('cmdbuild.username')"/>
             <parameter name="password" eval="property('cmdbuild.password')"/>
             <parameter name="request" eval="view('schema')/schema/relations[@id=$class-or-domain]"/>
@@ -271,7 +271,7 @@
         <argument name="request"/>
         <argument name="class-or-domain"/>
         <connector type="CMDBuildConnector">
-            <parameter name="url" eval="property('cmdbuild.url')"/>
+            <parameter name="url" eval="concat('http://',property('cmdbuild.server'),':8080/cmdbuild/services/soap/Private')"/>
             <parameter name="username" eval="property('cmdbuild.username')"/>
             <parameter name="password" eval="property('cmdbuild.password')"/>
             <parameter name="request" eval="view($request, entry('class-or-domain',$class-or-domain))"/>
@@ -282,8 +282,14 @@
         <info>
             <description>The CMDBuild schema</description>
         </info>
+        <argument name="all">false</argument>
         <connector type="FileConnector">
             <parameter name="path">cmdb/cmdbuild-schema.xml</parameter>
         </connector>
+        <processors>
+            <element in="schema">
+                <element-ignore in="relations" if="@manual='true' and $all!='true'"/>
+            </element>
+        </processors>
     </view>
 </config>

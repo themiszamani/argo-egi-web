@@ -20,9 +20,6 @@
                 <element in="server" if="contains(serial,'(')">
                     <attribute-create out="serial">substring-before(../serial,'(')</attribute-create>
                 </element>
-                <element in="server" if="contains(serial, '-')">
-                    <attribute-create out="serial">substring-before(../serial,'-')</attribute-create>
-                </element>
                 <element in="server">
                     <attribute-create out="serial">../serial</attribute-create>
                 </element>
@@ -52,7 +49,7 @@
     <view name="puppet_facts">
         <info><category>Data</category></info>
         <connector type="HTTPConnector">
-            <parameter name="url">http://ccosvms0025.in2p3.fr:8082/v3/facts?order-by=[{"field": "certname"}]</parameter>
+            <parameter name="url">http://ccosvms0025.in2p3.fr:8080/v3/facts?order-by=[{"field": "certname"}]</parameter>
             <parameter name="header">
                 <entry key="Accept">application/json</entry>
             </parameter>
@@ -102,6 +99,7 @@
         </processors>
         <cache type="IndexedFileCache">
             <parameter name="index_depth">1</parameter>
+            <parameter name="xpath" eval="path(false())"/>
             <trigger type="ViewCreatedTrigger" ignore-during="PT24H"/>
         </cache>
     </view>
@@ -119,7 +117,7 @@
     <view name="Server_puppet_old">
         <info><category>Data</category></info>
         <argument name="hostname"/>
-        <variable name="url">http://ccosvms0025.in2p3.fr:8082/v2/facts?query=["=","certname","</variable>
+        <variable name="url">http://ccosvms0025.in2p3.fr:8080/v2/facts?query=["=","certname","</variable>
         <connector type="HTTPConnector">
             <parameter name="url" eval="concat($url, $hostname, '&quot;]')"/>
             <parameter name="header">
