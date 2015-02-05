@@ -1,0 +1,192 @@
+<config
+        xmlns="http://software.in2p3.fr/lavoisier/config.xsd"
+        xmlns:date="http://exslt.org/dates-and-times"
+        xmlns:xi="http://www.w3.org/2001/XInclude"
+        xmlns:str="http://exslt.org/strings"
+        xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
+
+    <authenticators name="AuthenticatedUsers">
+        <!--<authenticator type="X509Authenticator"  authorized="view('administratorsList')/admins/admin/DN[text()=user()]"/>-->
+        <authenticator type="X509Authenticator"  authorized="true()"/>
+    </authenticators>
+
+
+    <view xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" name="listProfiles" authenticators="AuthenticatedUsers">
+        <info>
+            <description>List of Profile html</description>
+            <category>Administration</category>
+        </info>
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('listProfilesRaw')"></parameter>
+        </connector>
+
+         <processors>
+             <insert match="/root"
+                     nodes="new_attribute('admin',boolean(view('administratorsList')/admins/admin/CertDN[text()=user()]))
+                     |new_attribute('user',user())">
+              </insert>
+         </processors>
+
+
+        <renderers>
+
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/ARGO_UI/resources/html/profiles.html</parameter>
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/ARGO_UI/resources/html/profiles.html</parameter>
+            </renderer>
+        </renderers>
+
+    </view>
+    <view xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" name="CreationProfiles" authenticators="AuthenticatedUsers">
+        <info>
+            <description>creation of Profile</description>
+            <category>Administration</category>
+        </info>
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('goc.ServiceFlavours')"></parameter>
+        </connector>
+
+        <processors>
+            <insert match="/results"
+                    nodes="new_attribute('admin',boolean(view('administratorsList')/admins/admin/CertDN[text()=user()]))
+                     |new_attribute('user',user())">
+            </insert>
+        </processors>
+
+
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/ARGO_UI/resources/html/profiles_creation.html</parameter>
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/ARGO_UI/resources/html/profiles_creation.html</parameter>
+            </renderer>
+        </renderers>
+
+    </view>
+
+    <view name="listProfilesRaw">
+        <info>
+            <description>List of Profile Raw</description>
+            <category>Administration</category>
+        </info>
+        <connector type="HTTPConnector">
+
+            <parameter name="url" eval="property('api.availabilities.profiles')"/>
+            <parameter name="certificate" eval="property('certificate.path')"/>
+            <parameter name="passphrase" eval="property('certificate.password')"/>
+        </connector>
+
+        <cache type="FileCache">
+        <!--<trigger type="ViewCreatedTrigger"/>-->
+        <trigger type="DeltaTimeTrigger">
+        <parameter name="hours">4</parameter>
+        </trigger>
+        <trigger type="ViewNotifiedTrigger"/>
+        <trigger type="ViewCreatedTrigger"/>
+        </cache>
+
+    </view>
+
+    <view name="recomputation" authenticators="AuthenticatedUsers" >
+        <info>
+            <description>Recomputation interface</description>
+            <category>Administration</category>
+        </info>
+
+        <connector type="XMLConnector">
+           <parameter name="content" eval="view('listParameters')"></parameter>
+         </connector>
+
+        <processors>
+            <insert match="/root"
+                    nodes="new_attribute('admin',boolean(view('administratorsList')/admins/admin/CertDN[text()=user()]))
+                     |new_attribute('user',user())">
+            </insert>
+            <insert match="/root" nodes="view('listSitesbyNgi')" />
+        </processors>
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/ARGO_UI/resources/html/recomputation.html</parameter>
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/ARGO_UI/resources/html/recomputation.html</parameter>
+            </renderer>
+        </renderers>
+
+    </view>
+
+
+
+    <view name="administratorsList" authenticators="AuthenticatedUsers">
+        <info>
+            <description>List of admin static</description>
+            <category>Administration</category>
+        </info>
+        <connector type="FileConnector">
+            <parameter name="path" eval="concat(property('directory.name'),'/resources/xml/administrators.xml')"></parameter>
+        </connector>
+        <processors>
+            <!--<insert match="/admins"-->
+                    <!--nodes="new_attribute('admin',boolean(view('administratorsList')/admins/admin/CertDN[text()=user()]))-->
+                     <!--|new_attribute('user',user())">-->
+            <!--</insert>-->
+
+        </processors>
+
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/ARGO_UI/resources/html/admin.html</parameter>
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/ARGO_UI/resources/html/admin.html</parameter>
+            </renderer>
+        </renderers>
+
+
+    </view>
+
+    <view name="post_profile" >
+
+
+        <info>
+            <description>list of parameters trated from the profile form</description>
+            <category>Form</category>
+        </info>
+
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view_post('format_post', post())/e:entries"/>
+        </connector>
+
+        <renderers>
+            <renderer type="JSONRenderer">
+                <parameter name="text_as_pair">false</parameter>
+            </renderer>
+        </renderers>
+    </view>
+
+    <view name="format_post">
+        <info>
+            <description>list of parameters posted from the profile form</description>
+            <category>Form</category>
+        </info>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="post()"/>
+        </connector>
+        <processors>
+
+            <insert match="/e:entries[*]" nodes="new_element('groups')"></insert>
+            <insert match="/e:entries[*]/groups" nodes="ancestor::e:entries/e:entry[contains(@key,'group')]"></insert>
+            <remove match="/e:entries/e:entry[contains(@key,'group')]"/>
+            <replace match="/e:entries//e:entry[text()]" nodes="new_element(match()/@key,new_text(match()/text()))"></replace>
+            <!--<replace nodes="/*/*/text()" ><node value="concat('&amp;', @key, '=', .)"/></replace>-->
+
+        </processors>
+    </view>
+
+</config>

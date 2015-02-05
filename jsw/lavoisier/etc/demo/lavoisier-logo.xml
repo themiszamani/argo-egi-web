@@ -1,0 +1,27 @@
+<config xmlns="http://software.in2p3.fr/lavoisier/config.xsd" version="14">
+    <view name="logo">
+        <argument name="ratio" pattern="\d+"/>
+        <argument name="hair" path-format="name_value">grey</argument>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="document('rsc/logo.svg')"/>
+        </connector>
+        <processors xmlns:svg="http://www.w3.org/2000/svg">
+            <!-- use ratio to change height and width -->
+            <processor type="ReplaceProcessor" match="/svg:svg/@height">
+                <parameter name="nodes" eval="concat(substring-before(., 'px') * number($ratio div 100), 'px')"/>
+            </processor>
+            <processor type="ReplaceProcessor" match="/svg:svg/@width">
+                <parameter name="nodes" eval="concat(substring-before(., 'px') * number($ratio div 100), 'px')"/>
+            </processor>
+            <!-- change hair color -->
+            <processor type="ReplaceProcessor" match="//svg:path[@id='hair']/@fill">
+                <parameter name="$hair"/>
+            </processor>
+        </processors>
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="contentType">image/svg+xml</parameter>
+            </renderer>
+        </renderers>
+    </view>
+</config>

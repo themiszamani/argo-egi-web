@@ -1,0 +1,182 @@
+<config xmlns="http://software.in2p3.fr/lavoisier/config.xsd" version="14">
+    <authenticators name="auth_chain">
+        <authenticator type="HTTPBasicAuthenticator" authorized="user()='lavoisier'">
+            <parameter name="passwords" eval="view_path('properties', '/security/passwords.properties')"/>
+        </authenticator>
+        <authenticator type="IPAddressAuthenticator">
+            <parameter name="addresses">
+                <entry>127.0.0.1</entry>
+                <entry>0:0:0:0:0:0:0:1</entry>
+            </parameter>
+        </authenticator>
+        <authenticator type="X509Authenticator" authorized="user()='EMAILADDRESS=lionel.schwarz@in2p3.fr, CN=Lionel Schwarz, OU=USR6402, O=CNRS, C=FR'
+                                                         or user()='EMAILADDRESS=Sylvain.Reynaud@in2p3.fr, CN=Sylvain Reynaud, OU=USR6402, O=CNRS, C=FR'"/>
+        <authenticator type="CASAuthenticator" authorized="user()='lionel.schwarz@in2p3.fr' or user()='Sylvain.Reynaud@in2p3.fr'">
+            <parameter name="server" eval="property('cas.server')"/>
+        </authenticator>
+    </authenticators>
+    <view name="restricted" authenticators="auth_chain">
+        <connector type="StringConnector">
+            <parameter name="content" eval="user()"/>
+        </connector>
+        <serializer type="EncapsulateSerializer">
+            <parameter name="cdata">false</parameter>
+        </serializer>
+    </view>
+
+    <authenticators name="chained">
+        <authenticator type="IPAddressAuthenticator">
+            <parameter name="addresses">
+                <entry>0.0.0.0</entry>
+            </parameter>
+        </authenticator>
+        <authenticator type="CASAuthenticator" authorized="user()='lionel.schwarz@in2p3.fr' or user()='Sylvain.Reynaud@in2p3.fr'">
+            <parameter name="server">https://serverCas.domain</parameter>
+        </authenticator>
+    </authenticators>
+    <view name="restricted_chained" authenticators="chained">
+        <connector type="StringConnector">
+            <parameter name="content">SECRET</parameter>
+        </connector>
+        <serializer type="EncapsulateSerializer">
+            <parameter name="cdata">false</parameter>
+        </serializer>
+    </view>
+
+    <authenticators name="google">
+        <authenticator type="OAuth2Authenticator">
+            <parameter name="authz_location">https://accounts.google.com/o/oauth2/auth</parameter>
+            <parameter name="token_location">https://accounts.google.com/o/oauth2/token</parameter>
+            <!-- Create your client ID here: https://console.developers.google.com/ -->
+            <parameter name="client_id" eval="property('google.oauth2.client.id')"/>
+            <parameter name="client_secret" eval="property('google.oauth2.client.secret')"/>
+            <parameter name="scope">email profile</parameter>
+        </authenticator>
+    </authenticators>
+    <view name="myGoogleProfile" authenticators="google">
+        <connector type="HTTPConnector">
+            <parameter name="url" eval="concat('https://www.googleapis.com/oauth2/v1/userinfo?access_token=', user())"/>
+        </connector>
+        <serializer type="JSONSerializer"/>
+    </view>
+    
+    <authenticators name="fb">
+        <authenticator type="OAuth2Authenticator">
+            <parameter name="authz_location">https://graph.facebook.com/oauth/authorize</parameter>
+            <parameter name="token_location">https://graph.facebook.com/oauth/access_token</parameter>
+            <parameter name="client_id" eval="property('fb.oauth2.client.id')"/>
+            <parameter name="client_secret" eval="property('fb.oauth2.client.secret')"/>
+            <parameter name="scope">email</parameter>
+        </authenticator>
+    </authenticators>
+    <view name="myFBProfile" authenticators="fb">
+        <connector type="HTTPConnector">
+            <parameter name="url" eval="concat('https://graph.facebook.com/me?access_token=', user())"></parameter>
+        </connector>
+        <serializer type="JSONSerializer">
+        </serializer>
+    </view>
+    
+    <authenticators name="github">
+        <authenticator type="OAuth2Authenticator">
+            <parameter name="authz_location">https://github.com/login/oauth/authorize</parameter>
+            <parameter name="token_location">https://github.com/login/oauth/access_token</parameter>
+            <parameter name="client_id" eval="property('github.oauth2.client.id')"/>
+            <parameter name="client_secret" eval="property('github.oauth2.client.secret')"/>
+            <parameter name="scope">user</parameter>
+        </authenticator>
+    </authenticators>
+    <view name="myGithubProfile" authenticators="github">
+        <connector type="HTTPConnector">
+            <parameter name="url" eval="concat('https://api.github.com/user?access_token=', user())"></parameter>
+        </connector>
+        <serializer type="JSONSerializer">
+        </serializer>
+    </view>
+    
+    <authenticators name="password_dummy">
+        <authenticator type="HTTPBasicAuthenticator" authorized="user()='dummy'">
+            <parameter name="passwords" eval="view_path('properties', '/security/passwords.properties')"/>
+        </authenticator>
+    </authenticators>
+    <view name="restricted_password_dummy" authenticators="password_dummy">
+        <connector type="StringConnector">
+            <parameter name="content">SECRET</parameter>
+        </connector>
+        <serializer type="EncapsulateSerializer">
+            <parameter name="cdata">false</parameter>
+        </serializer>
+    </view>
+
+    <!-- This view is used to test sessions, do not uncomment if your are not in scope TEST -->
+    <!-- 
+    <authenticators name="ok">
+        <authenticator type="DummyAuthenticator">
+        </authenticator>
+    </authenticators>
+    <view name="session" authenticators="ok">
+        <connector type="StringConnector">
+            <parameter name="content" eval="user()"></parameter>
+        </connector>
+        <serializer type="EncapsulateSerializer">
+            <parameter name="cdata">false</parameter>
+        </serializer>
+    </view>
+     -->
+     
+    <view name="sendback">
+        <info>
+            <category>Hidden</category>
+        </info>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="post()"/>
+        </connector>
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="contentType">application/xml</parameter>
+            </renderer>
+        </renderers>
+    </view>
+
+    <view name="example">
+        <info>
+            <accept>chart</accept>
+        </info>
+        <argument name="axis" path-format="none" pattern="normal|inverted|polar">polar</argument>
+        <argument name="stacking" path-format="none" pattern="none|normal|percent">none</argument>
+        <connector type="XMLConnector">
+            <parameter name="content"><![CDATA[
+                <data>
+                    <products month="January"><A>8343</A><B>2446</B></products>
+                    <products month="February"><A>7684</A><B>3935</B></products>
+                    <products month="March"><A>6983</A><B>3452</B></products>
+                    <products month="April"><A>8345</A><B>4424</B></products>
+                    <products month="May"><A>8195</A><B>4925</B></products>
+                    <products month="June"><A>6983</A><B>4328</B></products>
+                </data>
+            ]]></parameter>
+        </connector>
+        <processors>
+            <processor type="InsertProcessor" match="/data/products[B]">
+                <parameter name="nodes" eval="new_element('average', sum(*/text()) div count(*))"/>
+            </processor>
+        </processors>
+        <cache type="FileCache">
+            <trigger type="ViewCreatedTrigger" ignore-during="PT1H"/>
+            <trigger type="ViewNotifiedTrigger"/>
+        </cache>
+        <renderers>
+            <renderer type="ChartRenderer">
+                <parameter name="types">
+                    <entry>area</entry>
+                    <entry>spline</entry>
+                </parameter>
+                <parameter name="axis" eval="$axis"/>
+                <parameter name="stacking" eval="$stacking"/>
+            </renderer>
+            <renderer type="CsvRenderer">
+                <parameter name="separator">;</parameter>
+            </renderer>
+        </renderers>
+    </view>
+</config>

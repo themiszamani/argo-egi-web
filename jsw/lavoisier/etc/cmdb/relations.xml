@@ -1,0 +1,289 @@
+<?xml-stylesheet type="text/xsl" href="/lavoisier/lavoisier-package/src/site/resources/config.xsl"?>
+<config xmlns="http://software.in2p3.fr/lavoisier/config.xsd" version="14">
+    <view name="Server2Rack">
+        <info><category>Relations</category></info>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('Server_smurf')"/>
+        </connector>
+        <processors>
+            <element in="result" out="relations">
+                <attribute-create out="domain">'Machine2Rack'</attribute-create>
+                <attribute-create out="class1">'Server'</attribute-create>
+                <attribute-create out="class2">'Rack'</attribute-create>
+                <element in="row" out="relation" if="serial!='' and rack_id!=''">
+                    <attribute-create out="Code1">../serial</attribute-create>
+                    <attribute-create out="Code2">../rack_id</attribute-create>
+                    <element-ignore/>
+                </element>
+                <element-ignore/>
+            </element>
+        </processors>
+    </view>
+    <view name="Switch2Rack">
+        <info><category>Relations</category></info>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('Switch_smurf')"/>
+        </connector>
+        <processors>
+            <element in="result" out="relations">
+                <attribute-create out="domain">'Machine2Rack'</attribute-create>
+                <attribute-create out="class1">'Switch'</attribute-create>
+                <attribute-create out="class2">'Rack'</attribute-create>
+                <element in="row" out="relation" if="serial!='' and rack_id!=''">
+                    <attribute-create out="Code1">../serial</attribute-create>
+                    <attribute-create out="Code2">../rack_id</attribute-create>
+                    <element-ignore/>
+                </element>
+                <element-ignore/>
+            </element>
+        </processors>
+    </view>
+
+    <view name="Server2Interface">
+        <info><category>Relations</category></info>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('smurf_puppet')"/>
+        </connector>
+        <processors>
+            <element out="relations" in="servers">
+                <attribute-create out="domain">'Machine2GlobalConfig'</attribute-create>
+                <attribute-create out="class1">'Server'</attribute-create>
+                <attribute-create out="class2">'Interface'</attribute-create>
+                <element-ignore in="server">
+                    <element-ignore in="serial">
+                        <set variable="serial">text()</set>
+                    </element-ignore>
+                    <element-ignore in="host">
+                        <element-ignore in="object" if="@name='interfaces'">
+                            <element out="relation" in="item">
+                                <attribute-ignore/>
+                                <attribute-create out="Code1">$serial</attribute-create>
+                                <attribute-create out="Code2">concat(../@key, '-', ancestor::server/@hostname)</attribute-create>
+                                <element-ignore/>
+                            </element>
+                        </element-ignore>
+                    </element-ignore>
+                </element-ignore>
+            </element>
+        </processors>
+    </view>
+    <view name="Switch2Interface">
+        <info><category>Relations</category></info>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('Interface')"/>
+        </connector>
+        <processors>
+            <element out="relations" in="cards">
+                <set variable="topology">view('NetworkTopology')</set>
+                <attribute-create out="domain">'Switch2Interface'</attribute-create>
+                <attribute-create out="class1">'Switch'</attribute-create>
+                <attribute-create out="class2">'Interface'</attribute-create>
+                <element out="relation" in="card" if="Ipaddress4">
+                    <set variable="mac">translate(Macaddress, ':', '')</set>
+                    <attribute-create out="Code1">$topology/topology/link[MacAddress=$mac]/row/serial</attribute-create>
+                    <attribute-create out="Code2">../Code</attribute-create>
+                    <element-ignore/>
+                </element>
+                <element-ignore in="card"/>
+            </element>
+        </processors>
+    </view>
+
+    <view name="Server2BlockDevice">
+        <info><category>Relations</category></info>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('smurf_puppet')"/>
+        </connector>
+        <processors>
+            <element out="relations" in="servers">
+                <attribute-create out="domain">'Machine2GlobalConfig'</attribute-create>
+                <attribute-create out="class1">'Server'</attribute-create>
+                <attribute-create out="class2">'BlockDevice'</attribute-create>
+                <element-ignore in="server">
+                    <element-ignore in="serial">
+                        <set variable="serial">text()</set>
+                    </element-ignore>
+                    <element-ignore in="host">
+                        <element-ignore in="object" if="@name='blockdevices'">
+                            <element out="relation" in="item">
+                                <attribute-ignore/>
+                                <attribute-create out="Code1">$serial</attribute-create>
+                                <attribute-create out="Code2">concat(../@key, '-', ancestor::server/@hostname)</attribute-create>
+                                <element-ignore/>
+                            </element>
+                        </element-ignore>
+                    </element-ignore>
+                </element-ignore>
+            </element>
+        </processors>
+    </view>
+
+    <view name="Server2StoragePools">
+        <info><category>Relations</category></info>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('dcache_park')"/>
+        </connector>
+        <processors xmlns:str="http://exslt.org/strings">
+            <element out="relations" in="DCACHE_PARK">
+                <set variable="smurf">view('Server_smurf')</set>
+                <attribute-ignore/>
+                <attribute-create out="domain">'Machine2GlobalConfig'</attribute-create>
+                <attribute-create out="class1">'Server'</attribute-create>
+                <attribute-create out="class2">'StoragePools'</attribute-create>
+                <element-ignore in="pool_park">
+                    <element-ignore in="poolgroup">
+                        <element out="relation" in="pool" if="@name!=''">
+                            <set variable="hostname">choose(contains(@onhost,'atli'), str:replace(current()/@onhost,'atli','acli'), current()/@onhost)</set>
+                            <attribute-ignore/>
+                            <attribute-create out="Code1">$smurf/result/row[name=substring-before($hostname, '.')]/serial</attribute-create>
+                            <attribute-create out="Code2">../@name</attribute-create>
+                        </element>
+                    </element-ignore>
+                </element-ignore>
+                <element-ignore/>
+            </element>
+            <element in="relations">
+                <element-ignore in="relation" if="@Code1=''"/>
+            </element>
+        </processors>
+    </view>
+
+    <view name="StoragePools2PoolGroups">
+        <info><category>Relations</category></info>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('dcache_park')"/>
+        </connector>
+        <processors>
+            <element out="relations" in="DCACHE_PARK">
+                <attribute-ignore/>
+                <attribute-create out="domain">'GlobalConfig2GlobalPartition'</attribute-create>
+                <attribute-create out="class1">'StoragePools'</attribute-create>
+                <attribute-create out="class2">'PoolGroups'</attribute-create>
+                <element-ignore in="pool_park">
+                    <element-ignore in="poolgroup">
+                        <element out="relation" in="pool">
+                            <attribute-ignore/>
+                            <attribute-create out="Code1">../@name</attribute-create>
+                            <attribute-create out="Code2">../parent::poolgroup/@name</attribute-create>
+                        </element>
+                    </element-ignore>
+                </element-ignore>
+                <element-ignore/>
+            </element>
+        </processors>
+    </view>
+
+    <view name="PoolGroups2UserGroup">
+        <info><category>Relations</category></info>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('dcache_park')"/>
+        </connector>
+        <processors>
+            <element in="DCACHE_PARK">
+                <element-ignore in="pool_park">
+                    <element in="poolgroup">
+                        <element-ignore/>
+                    </element>
+                    <element in="unitgroup">
+                        <element in="unit" if="@mode='store'">
+                            <attribute in="name">substring-after(substring-before(.,'@'),':')</attribute>
+                        </element>
+                        <element-ignore in="unit"/>
+                        <comment-ignore/>
+                    </element>
+                    <element-ignore in="linkGroup">
+                        <element in="link"/>
+                    </element-ignore>
+                </element-ignore>
+                <element-ignore/>
+            </element>
+
+            <element in="DCACHE_PARK">
+                <element in="link">
+                    <element-create if="../@ugroup1">/DCACHE_PARK/unitgroup[@name = current()/../@ugroup1]/unit</element-create>
+                    <element-create if="../@ugroup2">/DCACHE_PARK/unitgroup[@name = current()/../@ugroup2]/unit</element-create>
+                    <element-create if="../@ugroup3">/DCACHE_PARK/unitgroup[@name = current()/../@ugroup3]/unit</element-create>
+                </element>
+                <element-ignore in="unitgroup"/>
+            </element>
+            <element in="DCACHE_PARK">
+                <element in="poolgroup">
+                    <element-create>/DCACHE_PARK/link[@pgroup = current()/../@name]/unit</element-create>
+                </element>
+                <element-ignore in="link"/>
+            </element>
+
+            <element in="DCACHE_PARK">
+                <element in="poolgroup">
+                    <element-ignore in="unit" if="preceding-sibling::unit[@name = current()/@name]"/>
+                </element>
+            </element>
+
+            <element out="relations" in="DCACHE_PARK">
+                <attribute-create out="domain">'GlobalPartition2UserGroup'</attribute-create>
+                <attribute-create out="class1">'PoolGroups'</attribute-create>
+                <attribute-create out="class2">'UserGroup'</attribute-create>
+                <attribute-ignore/>
+                <element-ignore in="poolgroup">
+                    <element out="relation" in="unit">
+                        <attribute-ignore/>
+                        <attribute-create out="Code1">../parent::poolgroup/@name</attribute-create>
+                        <attribute-create out="Code2">../@name</attribute-create>
+                    </element>
+                </element-ignore>
+            </element>
+        </processors>
+    </view>
+
+    <view name="Server2DnsAlias">
+        <info><category>Relations</category></info>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('Server_smurf')"/>
+        </connector>
+        <processors>
+            <element in="result" out="relations">
+                <set variable="aliases">view('DnsAliasOracle')</set>
+                <attribute-create out="domain">'Machine2GlobalConfig'</attribute-create>
+                <attribute-create out="class1">'Server'</attribute-create>
+                <attribute-create out="class2">'DnsAlias'</attribute-create>
+                <element in="row" out="relation">
+                    <attribute-create out="Code1">../serial</attribute-create>
+                    <attribute-create out="Code2">$aliases/result/row[NOM=current()/../name]/ALIAS</attribute-create>
+                    <element-ignore/>
+                </element>
+                <element-ignore/>
+            </element>
+            <element in="relations">
+                <element-ignore in="relation" if="@Code2=''"/>
+            </element>
+        </processors>
+    </view>
+
+    <view name="ServiceElement2ServiceElement">
+        <info><category>Relations</category></info>
+        <connector type="FileConnector">
+            <parameter name="path">cmdb/data/services.xml</parameter>
+        </connector>
+        <processors>
+            <element in="families">
+                <element-ignore in="family">
+                    <element in="service">
+                        <element-create>parent::service/parent::family/depends</element-create>
+                    </element>
+                </element-ignore>
+            </element>
+            <element in="families" out="relations">
+                <attribute-create out="domain">'Element2Element'</attribute-create>
+                <attribute-create out="class1">'ServiceElement'</attribute-create>
+                <attribute-create out="class2">'ServiceElement'</attribute-create>
+                <element-ignore in="service">
+                    <element in="depends" out="relation">
+                        <attribute-create out="Code1">parent::depends/parent::service/@name</attribute-create>
+                        <attribute in="on" out="Code2">.</attribute>
+                        <attribute-ignore in="criticality"/>
+                    </element>
+                </element-ignore>
+            </element>
+        </processors>
+    </view>
+</config>

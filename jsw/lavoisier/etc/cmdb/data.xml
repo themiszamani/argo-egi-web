@@ -1,0 +1,331 @@
+<?xml-stylesheet type="text/xsl" href="/lavoisier/lavoisier-package/src/site/resources/config.xsl"?>
+<config xmlns="http://software.in2p3.fr/lavoisier/config.xsd" version="14">
+    <view name="smurf_puppet">
+        <info><category>Data</category></info>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('Server_smurf')"/>
+        </connector>
+        <processors>
+            <element in="result" out="servers">
+                <set variable="puppet">view('puppet_facts')</set>
+                <element in="row" out="server">
+                    <attribute-create out="hostname">../name</attribute-create>
+                    <element-create>$puppet/puppet/host[@certname=concat(current()/../name,'.in2p3.fr')]</element-create>
+                </element>
+            </element>
+            <element in="servers">
+                <element in="server" if="host">
+                    <attribute-create out="serial">../host/object[@name='serialnumber']/@value</attribute-create>
+                </element>
+                <element in="server" if="contains(serial,'(')">
+                    <attribute-create out="serial">substring-before(../serial,'(')</attribute-create>
+                </element>
+                <element in="server" if="contains(serial, '-')">
+                    <attribute-create out="serial">substring-before(../serial,'-')</attribute-create>
+                </element>
+                <element in="server">
+                    <attribute-create out="serial">../serial</attribute-create>
+                </element>
+            </element>
+        </processors>
+        <cache type="FileCache">
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="views">
+                    <entry>puppet_facts</entry>
+                </parameter>
+            </trigger>
+        </cache>
+    </view>
+
+    <view name="Server_smurf">
+        <info><category>Data</category></info>
+        <variable name="query">select m.id, s.name as smurfstatus, m.comment, m.name, DATE_FORMAT(m.created,'%d/%m/%Y') as created,
+                mt.name as machinet, m.serial, u.name as usag, m.y, m.rack_id
+            from machine as m join usag as u join machinet as mt join stat as s
+            where m.serial IS NOT NULL and piecet_id='6' and m.machinet_id=mt.id and m.stat_id=s.id and m.usag_id=u.id and s.name!='Out' and s.name!='Down'
+                  and m.usag_id=10</variable>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('sql', entry('database','smurf')|entry('query',$query))"/>
+        </connector>
+    </view>
+
+    <view name="puppet_facts">
+        <info><category>Data</category></info>
+        <connector type="HTTPConnector">
+            <parameter name="url">http://ccosvms0025.in2p3.fr:8082/v3/facts?order-by=[{"field": "certname"}]</parameter>
+            <parameter name="header">
+                <entry key="Accept">application/json</entry>
+            </parameter>
+        </connector>
+        <serializer type="JSONSerializer"/>
+        <processors xmlns:str="http://exslt.org/strings">
+            <element in="object" out="puppet">
+                <element-ignore in="array">
+                    <element-ignore in="item">
+                        <element in="object" if="@name='interfaces' or @name='blockdevices' or @name='filesystems'">
+                            <element-create>str:split(../@value, ',')</element-create>
+                        </element>
+                        <element in="object"/>
+                    </element-ignore>
+                </element-ignore>
+            </element>
+            <element in="puppet">
+                <element-create-as-parent out="host" group-by="@certname" attributes="@certname">
+                    <element in="object">
+                        <attribute-ignore in="certname"/>
+                    </element>
+                </element-create-as-parent>
+            </element>
+            <element in="puppet">
+                <element in="host">
+                    <attribute in="certname" if="contains(.,'atli')">concat(substring-before(.,'atli'), 'acli', substring-after(.,'atli'))</attribute>
+                    <element in="object">
+                        <element in="token" out="item">
+                            <attribute-create out="key">../text()</attribute-create>
+                            <text-ignore/>
+                            <element-create>../../../object[contains(@name,concat('_',current()/../text()))]</element-create>
+                        </element>
+                    </element>
+                </element>
+            </element>
+            <element in="puppet">
+                <element in="host">
+                    <element in="object" if="@name='interfaces'">
+                        <element-ignore in="item" if="@key = 'lo'"/>
+                    </element>
+                    <element-ignore in="object" if="starts-with(@name, 'mtu_')"/>
+                    <element-ignore in="object" if="starts-with(@name, 'netmask_') or starts-with(@name, 'network_')"/>
+                    <element-ignore in="object" if="starts-with(@name, 'macaddress_') or starts-with(@name, 'ipaddress_')"/>
+                    <element-ignore in="object" if="starts-with(@name, 'blockdevice_') or starts-with(@name, 'filesystem_')"/>
+                </element>
+            </element>
+        </processors>
+        <cache type="IndexedFileCache">
+            <parameter name="index_depth">1</parameter>
+            <trigger type="ViewCreatedTrigger" ignore-during="PT24H"/>
+        </cache>
+    </view>
+    <view name="Server_puppet">
+        <info><category>Data</category></info>
+        <argument name="hostname"/>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view_path('puppet_facts', concat('/puppet/host[@certname=&quot;',$hostname,'&quot;]'))"/>
+        </connector>
+        <processors>
+            <remove match="/*" depth="1"/>
+        </processors>
+    </view>
+
+    <view name="Server_puppet_old">
+        <info><category>Data</category></info>
+        <argument name="hostname"/>
+        <variable name="url">http://ccosvms0025.in2p3.fr:8082/v2/facts?query=["=","certname","</variable>
+        <connector type="HTTPConnector">
+            <parameter name="url" eval="concat($url, $hostname, '&quot;]')"/>
+            <parameter name="header">
+                <entry key="Accept">application/json</entry>
+            </parameter>
+        </connector>
+        <serializer type="JSONSerializer"/>
+        <processors xmlns:str="http://exslt.org/strings">
+            <element in="object" out="host">
+                <attribute-create out="certname">$hostname</attribute-create>
+                <element-ignore in="array">
+                    <element-ignore in="item">
+                        <element in="object" if="@name='interfaces' or @name='blockdevices' or @name='filesystems'">
+                            <attribute-ignore in="certname"/>
+                            <element-create>str:split(../@value, ',')</element-create>
+                        </element>
+                        <element in="object">
+                            <attribute-ignore in="certname"/>
+                        </element>
+                    </element-ignore>
+                </element-ignore>
+            </element>
+            <element in="host">
+                <element-ignore in="object" if="starts-with(@name, 'mtu_')"/>
+                <element-ignore in="object" if="starts-with(@name, 'netmask_') or starts-with(@name, 'network_')"/>
+                <element-ignore in="object" if="starts-with(@name, 'macaddress_') or starts-with(@name, 'ipaddress_')"/>
+                <element-ignore in="object" if="starts-with(@name, 'blockdevice_') or starts-with(@name, 'filesystem_')"/>
+                <element in="object">
+                    <element in="token" out="item">
+                        <attribute-create out="key">../text()</attribute-create>
+                        <text-ignore/>
+                        <element-create>../../../object[contains(@name,concat('_',current()/../text()))]</element-create>
+                    </element>
+                </element>
+            </element>
+        </processors>
+    </view>
+
+    <view name="dcache_park">
+        <info><category>Data</category></info>
+        <connector type="HTTPConnector">
+            <parameter name="url">https://svn.in2p3.fr/dCache/trunk/config/lcg/config.xml?revision=HEAD&amp;content-type=text%2Fplain</parameter>
+        </connector>
+    </view>
+
+    <view name="UserGroupDB">
+        <info><category>Data</category></info>
+        <variable name="query">SELECT GR.GROUPE_ID,GR.GROUPE,GR.GROUP_ID,GR.WEB,GR.ISVIRTUAL,GR.FLAG_SUPP,A.LIBELLE
+            from BDUSER_QUERY.GROUPES GR,BDUSER_QUERY.ACTIVITE A
+            WHERE A.ACTIVITE_ID=GR.ACTIVITE_ID</variable>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('sql', entry('database','oracle')|entry('query',$query))"/>
+        </connector>
+    </view>
+
+    <view name="DnsAliasOracle">
+        <info><category>Data</category></info>
+        <variable name="query"> SELECT ALIAS.ALIAS,ALIAS.ALIAS DES,ALIAS.DOMAIN,IP.ADRESSE,MACHINE.NOM FROM DNS.ALIAS ALIAS,DNS.MACHINE MACHINE,DNS.IPADDR IP WHERE ALIAS.MACH_ID=MACHINE.NUM AND MACHINE.NUM = IP.MACH_ID and (MACHINE.NOM like '%ccdcac%' or MACHINE.NOM like '%ccdcam%')</variable>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('sql', entry('database','oracledns')|entry('query',$query))"/>
+        </connector>
+    </view>
+
+    <view name="Rane">
+        <info><category>Data</category></info>
+        <connector type="FileConnector">
+            <parameter name="path">IB.csv</parameter>
+        </connector>
+        <serializer type="CSVSerializer">
+            <parameter name="header">true</parameter>
+            <parameter name="separators">
+                <entry>;</entry>
+            </parameter>
+            <parameter name="strict">false</parameter>
+        </serializer>
+        <processors xmlns:r="http://software.in2p3.fr/lavoisier/rendering.xsd">
+            <element in="r:rendering" out="ranes">
+                <element-ignore in="r:rows">
+                    <element in="r:row" out="rane">
+                        <element in="r:column" if="@label='CodeBarre'"/>
+                        <element in="r:column" if="@label='NumImmo'"/>
+                        <element in="r:column" if="@label='NumSerie'"/>
+                        <element in="r:column" if="@label='DateAcquis' and text()!=''"/>
+                        <element in="r:column" if="@label='Z_Rap' and text()>0 and text()&lt;100"/>
+                        <element-ignore in="r:column"/>
+                    </element>
+                </element-ignore>
+            </element>
+            <element in="ranes">
+                <element in="rane">
+                    <element-ignore>
+                        <element-create>new_element(../@label, ../text())</element-create>
+                    </element-ignore>
+                </element>
+            </element>
+            <element in="ranes">
+                <element in="rane" if="NumSerie/text()!=''">
+                    <attribute-create out="serial">../NumSerie/text()</attribute-create>
+                    <element-ignore in="NumSerie"/>
+                </element>
+                <element-ignore in="rane"/>
+            </element>
+        </processors>
+        <cache type="FileCache">
+            <trigger type="ViewCreatedTrigger" ignore-during="PT24H"/>
+        </cache>
+    </view>
+
+    <view name="Switch_smurf">
+        <info><category>Data</category></info>
+        <variable name="query">select m.id, s.name as smurfstatus, m.comment, m.name, DATE_FORMAT(m.created,'%d/%m/%Y') as created,
+            mt.name as machinet, m.serial, u.name as usag, m.y, m.rack_id
+            from machine as m join usag as u join machinet as mt join stat as s
+            where m.serial IS NOT NULL and piecet_id='7' and m.machinet_id=mt.id and m.stat_id=s.id and m.usag_id=u.id</variable>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('sql', entry('database','smurf')|entry('query',$query))"/>
+        </connector>
+        <cache type="FileCache">
+            <trigger type="ViewCreatedTrigger" ignore-during="PT24H"/>
+        </cache>
+    </view>
+
+    <view name="NetworkTopology">
+        <info><category>Data</category></info>
+        <connector type="HTTPConnector">
+            <parameter name="url">https://cctelecom.in2p3.fr/MAC/ip-addresses.txt</parameter>
+        </connector>
+        <serializer type="CSVSerializer">
+            <parameter name="separators">
+                <entry eval="' '"/>
+            </parameter>
+            <parameter name="strict">false</parameter>
+        </serializer>
+        <processors xmlns:r="http://software.in2p3.fr/lavoisier/rendering.xsd">
+            <element out="topology" in="r:rendering">
+                <element-ignore in="r:rows">
+                    <element out="link" in="r:row">
+                        <element out="IP" in="r:column" if="@label='1'" />
+                        <element out="MacAddress" in="r:column" if="@label='2'">
+                            <text>translate(., 'abcdef.', 'ABCDEF')</text>
+                        </element>
+                        <element out="Router" in="r:column" if="@label='3'"/>
+                        <element out="SwitchName" in="r:column" if="@label='4'"/>
+                        <element out="PortNumber" in="r:column" if="@label='5'"/>
+                        <element-ignore in="r:column"/>
+                    </element>
+                </element-ignore>
+            </element>
+            <element in="topology">
+                <element in="link">
+                    <element>
+                        <attribute-ignore in="label"/>
+                    </element>
+                </element>
+            </element>
+            <element in="topology">
+                <set variable="smurf">view('Switch_smurf')</set>
+                <element in="link">
+                    <element in="SwitchName">
+                        <set variable="name">text()</set>
+                    </element>
+                    <element-create>$smurf/result/row[name=$name]</element-create>
+                </element>
+            </element>
+        </processors>
+    </view>
+
+    <!-- common functions -->
+
+    <view name="sql_schema">
+        <info><category>Data</category></info>
+        <argument name="database" pattern="oracle|smurf"/>
+        <variable name="query" eval='choose(
+                contains(property(concat($database,".driver")), "Oracle"),
+                "SELECT C.TABLE_NAME, CC.TABLE_NAME AS REFERENCED_TABLE_NAME FROM ALL_CONSTRAINTS C, ALL_CONS_COLUMNS CC WHERE C.R_CONSTRAINT_NAME=CC.CONSTRAINT_NAME AND C.owner=&apos;BDUSER_TEMP&apos; AND C.constraint_type=&apos;R&apos; ORDER BY C.TABLE_NAME",
+                "SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS"
+            )'/>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('sql', arguments() | entry('query',$query))"/>
+        </connector>
+        <processors xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
+            <element in="result" out="e:entries">
+                <element-create as="first-child">new_element('e:entry', 'digraph schema {')</element-create>
+                <element in="row" out="e:entry">
+                    <element-ignore/>
+                    <text-create>concat(../TABLE_NAME, ' -&gt; ', ../REFERENCED_TABLE_NAME, ';')</text-create>
+                </element>
+                <element-create as="last-child">new_element('e:entry', '}')</element-create>
+            </element>
+        </processors>
+        <renderers>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">xsl/graphviz.xsl</parameter>
+            </renderer>
+        </renderers>
+    </view>
+    <view name="sql">
+        <info><category>Data</category></info>
+        <argument name="database"/>
+        <argument name="query"/>
+        <connector type="SQLConnector">
+            <parameter name="driver" eval="property(concat($database,'.driver'))"/>
+            <parameter name="url" eval="property(concat($database,'.url'))"/>
+            <parameter name="username" eval="property(concat($database,'.username'))"/>
+            <parameter name="password" eval="property(concat($database,'.password'))"/>
+            <parameter name="query" eval="$query"/>
+        </connector>
+    </view>
+</config>

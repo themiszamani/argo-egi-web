@@ -1,0 +1,347 @@
+<?xml-stylesheet type="text/xsl" href="/lavoisier/lavoisier-package/src/site/resources/config.xsl"?>
+<config xmlns="http://software.in2p3.fr/lavoisier/config.xsd" version="14">
+    <view name="dependencies">
+        <info><category>Main</category></info>
+        <argument name="class"/>
+        <argument name="card"/>
+        <argument name="depth" pattern="1|2|3|4|5">4</argument>
+        <argument name="siblings">16</argument>
+        <argument name="skip">StoragePools,PoolGroups,BlockDevice,DnsAlias,Interface</argument>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('dependencies-local', arguments())"/>
+        </connector>
+        <processors xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" xmlns:str="http://exslt.org/strings">
+            <element in="card">
+                <set variable="schema">view('schema')</set>
+                <element in="card">
+                    <set variable="link">$schema/schema/relations[@domain=current()/@domain]</set>
+                    <attribute in="domain" out="relation">concat($link/*[@class=current()/../../@class]/@occurs, '-', $link/*[@class=current()/../@class]/@occurs)</attribute>
+                    <element-recursive count="5"/>
+                </element>
+            </element>
+
+            <element in="card" out="edges">
+                <element-create-as-parent out="card" group-by="true()" attributes="../@*">
+                    <element/>
+                </element-create-as-parent>
+            </element>
+
+            <element in="edges">
+                <element-ignore in="card" if="contains($skip,@class)">
+                    <element-recursive count="5" ancestor="0"/>
+                </element-ignore>
+                <element in="card">
+                    <element-recursive count="5" ancestor="0"/>
+                </element>
+            </element>
+
+            <element in="edges">
+                <set variable="colors">str:split('red,orange,yellow,white,white', ',')</set>
+                <element in="card" out="edge" if="$depth >= count(ancestor::*)-1">
+                    <attribute-create out="color">$colors[count(current()/ancestor::*)-1]</attribute-create>
+                    <attribute-create out="source">../../@id</attribute-create>
+                    <element-recursive count="5"/>
+                </element>
+            </element>
+
+            <element in="edges">
+                <element in="edge" empty="true">
+                    <element-recursive count="5"/>
+                </element>
+            </element>
+
+            <element in="edges">
+                <element-ignore in="edge"/>
+                <element-create>sort_by_string(/edges/edge, "concat(@source,'-',@id)")</element-create>
+            </element>
+            <element in="edges">
+                <element-create-as-parent out="group" group-by="concat(@source,'-',@id)">
+                    <element in="edge"/>
+                </element-create-as-parent>
+            </element>
+            <element in="edges">
+                <element-ignore in="group" future="true">
+                    <set variable="current">null</set>
+                    <element in="edge" if="not($current)">
+                        <set variable="current">.</set>
+                    </element>
+                </element-ignore>
+            </element>
+
+            <element in="edges" out="e:entries">
+                <element-create as="first-child">new_element('e:entry', 'digraph G {')</element-create>
+                <element-create as="first-child">new_element('e:entry', 'graph [style=dotted, overlap=false];')</element-create>
+                <element-create as="first-child">new_element('e:entry', 'node [style=filled, shape=box];')</element-create>
+                <element-create as="first-child">new_element('e:entry', 'edge [arrowhead=crow];')</element-create>
+                <element-create as="preceding-sibling" if="@relation='1-N'">new_element('e:entry', concat('"', @source, '"->"', @id, '";'))</element-create>
+                <element in="edge" out="e:entry">
+                    <set variable="href">concat('/lavoisier/dependencies?class=',@class,'&amp;card=',@id,
+                                                '&amp;depth=',$depth,'&amp;siblings=',$siblings,'&amp;skip=',$skip)</set>
+                    <attribute-ignore/>
+                    <text-create>concat('"',../@id,'" [label="',../@label,'\n',../@class,'", fillcolor=',../@color)</text-create>
+                    <text-create if="../@id and ../@class!='ServiceElement'">concat(', href="',$href,'"')</text-create>
+                    <text-create if="not(../@id)">', shape=Msquare'</text-create>
+                    <text-create>']'</text-create>
+                </element>
+                <element-create as="following-sibling" if="@relation='N-1' or @relation='N-N'">new_element('e:entry', concat('"', @id, '"->"', @source, '";'))</element-create>
+                <element-create as="last-child">new_element('e:entry', '}')</element-create>
+            </element>
+
+            <element in="e:entries">
+                <element-create>new_element('arguments',
+                    new_element('depth', for(1,5)) |
+                    new_element('siblings', for(1,32)) |
+                    new_element('skip', view('schema')/schema/relations/*[not(@class = preceding::*/@class)])
+                )</element-create>
+            </element>
+            <element in="e:entries">
+                <element in="arguments">
+                    <element in="skip">
+                        <element out="option">
+                            <attribute-ignore/>
+                            <text-create>../@class</text-create>
+                        </element>
+                    </element>
+                    <element>
+                        <element out="option"/>
+                    </element>
+                </element>
+            </element>
+            <element in="e:entries">
+                <element in="arguments">
+                    <element in="depth">
+                        <element in="option" if="text() = $depth">
+                            <attribute-create out="selected">'selected'</attribute-create>
+                        </element>
+                    </element>
+                    <element in="siblings">
+                        <element in="option" if="text() = $siblings">
+                            <attribute-create out="selected">'selected'</attribute-create>
+                        </element>
+                    </element>
+                    <element in="skip">
+                        <set variable="selected">str:split($skip,',')</set>
+                        <attribute-create out="multiple">'multiple'</attribute-create>
+                        <element out="option" if="text() = $selected/text()">
+                            <attribute-create out="selected">'selected'</attribute-create>
+                        </element>
+                    </element>
+                </element>
+            </element>
+        </processors>
+        <renderers>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">html/cmdbuild-graph.html</parameter>
+            </renderer>
+        </renderers>
+    </view>
+    <view name="dependencies-local">
+        <info><category>LocalCMDB</category></info>
+        <argument name="class"/>
+        <argument name="card"/>
+        <argument name="siblings">16</argument>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('get-card', arguments())"/>
+        </connector>
+        <processors>
+            <elements path="card" depth="4">
+                <!-- keep attributes only for root card -->
+                <element-ignore in="attributes" if="parent::card/parent::card"/>
+                <!-- aggregate cards if there are too many of the same class -->
+                <element-ignore in="relation" if="count(parent::card/relation[@class = current()/@class]) > $siblings">
+                    <element-create if="not(../preceding-sibling::relation/@class = current()/../@class)">
+                        new_element('card',
+                            new_attribute('class', ../@class) |
+                            new_attribute('domain', ../@domain) |
+                            new_attribute('label', concat('(',count(../parent::card/relation[@class = current()/../@class]),')')))
+                    </element-create>
+                </element-ignore>
+                <!-- ignore already visited cards -->
+                <element-ignore in="relation" if="@id = ancestor::card/@id"/>
+                <!-- forward cards of a visited class -->
+                <element in="relation" out="card" if="@class = ancestor::card/@class"/>
+                <!-- recurse to related cards -->
+                <element in="relation" out="card">
+                    <element-create>view('get-card', entry('class',../@class)|entry('card',../@id))/*/*</element-create>
+                </element>
+            </elements>
+        </processors>
+    </view>
+    <view name="dependencies-remote">
+        <info><category>LocalCMDB</category></info>
+        <argument name="class"/>
+        <argument name="card"/>
+        <argument name="depth" pattern="1|2|3|4|5">4</argument>
+        <argument name="siblings">16</argument>
+        <connector type="CMDBuildConnector">
+            <parameter name="url" eval="property('cmdbuild.url')"/>
+            <parameter name="username" eval="property('cmdbuild.username')"/>
+            <parameter name="password" eval="property('cmdbuild.password')"/>
+            <parameter name="request" eval="new_element('dependencies',
+                    new_attribute('class',$class)|new_attribute('cardId',$card)|new_attribute('depth',$depth)|new_attribute('siblings',$siblings)
+                )"/>
+        </connector>
+        <processors>
+            <element in="card">
+                <element in="card">
+                    <element-recursive count="5"/>
+                    <element in="card"/>
+                    <element-ignore/>
+                </element>
+                <element-create-as-parent out="attributes" group-by="local-name()='card'">
+                    <element/>
+                </element-create-as-parent>
+            </element>
+        </processors>
+    </view>
+
+    <view name="get-card">
+        <info><category>LocalCMDB</category></info>
+        <argument name="class"/>
+        <argument name="card"/>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view_path('cards-with-label',
+                concat('/classes/cards[@class=',quot($class),']/card[@id=',quot($card),']'))/*/*"/>
+        </connector>
+    </view>
+    <view name="cards-with-label">
+        <info><category>LocalCMDB</category></info>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('cards')"/>
+        </connector>
+        <processors>
+            <element in="classes">
+                <set variable="cards">view('cards')</set>
+                <element in="cards">
+                    <element in="card">
+                        <element in="relation">
+                            <attribute-create out="label">$cards/classes/cards[@class=current()/../@class]/card[@id=current()/../@id]/@label</attribute-create>
+                        </element>
+                    </element>
+                </element>
+            </element>
+        </processors>
+        <cache type="IndexedFileCache">
+            <parameter name="index_depth">2</parameter>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="views">
+                    <entry>cards</entry>
+                </parameter>
+            </trigger>
+        </cache>
+    </view>
+    <view name="cards">
+        <info><category>LocalCMDB</category></info>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="entries(view('schema')/schema/relations/*[not(@class=preceding::*/@class)]/@class)"/>
+        </connector>
+        <processors>
+            <element out="classes">
+                <element-ignore>
+                    <element-create>view('cmdbuild-cards', entry('class-or-domain',../text()))</element-create>
+                </element-ignore>
+            </element>
+            <element in="classes">
+                <set variable="relations">view('relations')</set>
+                <element in="cards">
+                    <element in="card">
+                        <element-create>$relations/domains/relations[@class1=current()/../../@class]/relation[@card1Id=current()/../@id]</element-create>
+                        <element-create>$relations/domains/relations[@class2=current()/../../@class]/relation[@card2Id=current()/../@id]</element-create>
+                    </element>
+                </element>
+            </element>
+            <element in="classes">
+                <element in="cards">
+                    <element in="card">
+                        <attribute-create out="class">../../@class</attribute-create>
+                        <attribute-create out="label">../Description/text()</attribute-create>
+                        <element in="relation">
+                            <attribute-ignore in="class1" if=". = ../../../@class"/>
+                            <attribute in="class1" out="class"/>
+
+                            <attribute-ignore in="class2" if=". = ../../../@class and . != ../@class1"/>
+                            <attribute in="class2" out="class"/>
+
+                            <attribute-ignore in="card1Id" if=". = ../../@id"/>
+                            <attribute in="card1Id" out="id"/>
+
+                            <attribute-ignore in="card2Id" if=". = ../../@id"/>
+                            <attribute in="card2Id" out="id"/>
+                        </element>
+                        <element-create-as-parent out="attributes" group-by="true()">
+                            <element/>
+                        </element-create-as-parent>
+                    </element>
+                </element>
+            </element>
+        </processors>
+        <cache type="IndexedFileCache">
+            <parameter name="index_depth">2</parameter>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="views">
+                    <entry>relations</entry>
+                </parameter>
+            </trigger>
+        </cache>
+    </view>
+    <view name="relations">
+        <info><category>LocalCMDB</category></info>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="entries(view('schema')/schema/relations/@id)"/>
+        </connector>
+        <processors>
+            <element out="domains">
+                <element-ignore>
+                    <element-create>view('cmdbuild-relations', entry('class-or-domain',../text()))</element-create>
+                </element-ignore>
+            </element>
+            <element in="domains">
+                <element in="relations">
+                    <element in="relation" attributes="@* | ../@*"/>
+                </element>
+            </element>
+        </processors>
+        <cache type="FileCache">
+            <trigger type="ViewNotifiedTrigger"/>
+        </cache>
+    </view>
+
+    <view name="network_to_dCache">
+        <info><category>Main</category></info>
+        <argument name="switch"/>
+        <variable name="query">SELECT
+            "Server"."Description" AS "Server",
+            "StoragePools"."Description" AS "Pool"
+        FROM
+            public."Server",
+            public."Interface",
+            public."Switch",
+            public."StoragePools"
+        WHERE
+            "Interface"."Machine" = "Server"."Id" and
+            "Interface"."Switch" = "Switch"."Id" and
+            "StoragePools"."Machine" = "Server"."Id" and
+            "Server"."Status"='A' and "Interface"."Status"='A' and "Switch"."Status"='A' and "StoragePools"."Status"='A' and
+            "Interface"."Description" LIKE '%bond%' and "Server"."Disabled"='False' and "Switch"."Description" LIKE ?
+        ORDER BY "Server"."Description"</variable>
+        <connector type="SQLConnector">
+            <parameter name="driver" eval="property('postgres.driver')"/>
+            <parameter name="url" eval="property('postgres.url')"/>
+            <parameter name="username" eval="property('postgres.username')"/>
+            <parameter name="password" eval="property('postgres.password')"/>
+            <parameter name="query" eval="$query"/>
+            <parameter name="parameters">
+                <entry eval='concat("%",$switch,"%")'/>
+            </parameter>
+        </connector>
+        <renderers>
+            <renderer type="JSONRenderer">
+                <parameter name="element_as_array">false</parameter>
+                <parameter name="text_as_pair">false</parameter>
+            </renderer>
+            <renderer type="CsvRenderer">
+                <parameter name="separator">;</parameter>
+            </renderer>
+        </renderers>
+    </view>
+</config>

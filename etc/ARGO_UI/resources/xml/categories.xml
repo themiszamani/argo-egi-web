@@ -1,0 +1,33 @@
+<menu title="ARGO Module">
+
+    <categories bg="bg-aqua" icon="fa fa-dashboard" title="Status" >
+
+        <category link="/lavoisier/choiceNgi?accept=html" icon="fa fa-globe"> Ngi Status Report</category>
+        <category link="/lavoisier/choiceSite?accept=html" icon="fa fa-home"> Site Status Report</category>
+        <category link="/lavoisier/site_status?report=cloud&amp;ngi=all&amp;accept=html" icon="fa fa-cloud">Cloud Status Report</category>
+        <category link="/lavoisier/status_form?accept=html" icon="fa fa-list"> Customized Report</category>
+        <category link="/lavoisier/StatusTreeMap?accept=html" icon="fa fa-th">Status Treemap</category>
+
+    </categories>
+
+    <categories bg="bg-aqua" icon="fa fa-table" title="Availabilities/Reliabilities" >
+        <category link="/lavoisier/ngi_reports" icon="fa fa-globe"> NGI Report</category>
+        <category link="/lavoisier/site_reports" icon="fa fa-home"> Site Report</category>
+        <category link="/lavoisier/cloud_reports" icon="fa fa-cloud"> Cloud Report</category>
+        <category link="/lavoisier/report_form" icon="fa fa-list"> Customized Report</category>
+        <category link="/lavoisier/customFactors?accept=html" icon="fa fa-th">Availability Treemap</category>
+    </categories>
+
+    <categories bg="bg-purple" icon="fa fa-cog" title="Administration">
+        <category link="/lavoisier/listProfiles" icon="fa fa-group"> Profile Management</category>
+        <category link="/lavoisier/recomputation" icon="fa fa-mail-forward">Recomputation request</category>
+        <category link="/lavoisier/administratorsList" icon="fa fa-list"> Admin List</category>
+
+    </categories>
+   <categories bg="bg-blue" icon="fa fa-comments" title="About ARGO">
+
+       <category link="https://github.com/ARGOeu" icon="fa fa-github-alt"> GitHub</category>
+       <category link="mailto:&#105;&#110;&#115;&#112;&#105;&#114;&#101;&#045;&#115;&#097;&#052;&#045;&#116;&#115;&#097;&#052;&#049;&#048;&#064;&#109;&#097;&#105;&#108;&#109;&#097;&#110;&#046;&#101;&#103;&#105;&#046;&#101;&#117;" icon="fa fa-envelope">Contact Us</category>
+
+   </categories>
+</menu>
