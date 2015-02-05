@@ -49,7 +49,7 @@
         </processors>
         <renderers>
             <renderer type="HTMLRenderer">
-                <parameter name="stylesheet">xsl/form.xsl</parameter>
+                <parameter name="template">xsl/form.xsl</parameter>
             </renderer>
         </renderers>
     </view>
@@ -145,14 +145,14 @@
         </processors>
         <renderers>
             <renderer type="DefaultRenderer">
-                <parameter name="stylesheet">/resource/xsl/xml.xsl</parameter>
+                <parameter name="template">xsl/xml.xsl</parameter>
             </renderer>
             <renderer type="HTMLRenderer">
-                <parameter name="stylesheet">xsl/xml_content.xsl</parameter>
+                <parameter name="template">xsl/xml_content.xsl</parameter>
             </renderer>
         </renderers>
     </view>
-    <view name="configuration">
+    <view name="configuration" xmlns:cfg="http://software.in2p3.fr/lavoisier/config.xsd">
         <info>
             <category>Configuration</category>
             <description>Preprocessed service configuration</description>
@@ -162,7 +162,7 @@
         </connector>
         <renderers>
             <renderer type="HTMLRenderer">
-                <parameter name="stylesheet">xsl/configuration.xsl</parameter>
+                <parameter name="template">xsl/configuration.xsl</parameter>
             </renderer>
         </renderers>
     </view>
@@ -176,11 +176,11 @@
         </connector>
         <renderers>
             <renderer type="HTMLRenderer">
-                <parameter name="stylesheet">xsl/configuration.xsl</parameter>
+                <parameter name="template">xsl/configuration.xsl</parameter>
             </renderer>
         </renderers>
     </view>
-    <view name="view_dependencies" post-processors="disable">
+    <view name="view_dependencies">
         <info>
             <category>Configuration</category>
             <description>Graphical representation of the view dependencies</description>
@@ -202,11 +202,11 @@
         </connector>
         <renderers>
             <renderer type="HTMLRenderer">
-                <parameter name="stylesheet">xsl/view_dependencies.xsl</parameter>
+                <parameter name="template">xsl/view_dependencies.xsl</parameter>
             </renderer>
         </renderers>
     </view>
-    <view name="cache_dependencies" post-processors="disable">
+    <view name="cache_dependencies">
         <info>
             <category>Configuration</category>
             <description>Graphical representation of cache dependencies</description>
@@ -217,7 +217,7 @@
         </connector>
         <renderers>
             <renderer type="HTMLRenderer">
-                <parameter name="stylesheet">xsl/graphviz.xsl</parameter>
+                <parameter name="template">xsl/graphviz.xsl</parameter>
             </renderer>
         </renderers>
     </view>
@@ -290,7 +290,7 @@
             </renderer>
         </renderers>
     </view>
-    <view name="breakpoint" post-processors="disable">
+    <view name="breakpoint">
         <info>
             <category>Hidden</category>
             <description>Interrupt execution on each event matching the XPath expression</description>
@@ -309,7 +309,7 @@
             <processor type="XmlDumpProcessor" match="/*"/>
         </processors>
     </view>
-    <view name="resume_breakpoint" post-processors="disable">
+    <view name="resume_breakpoint">
         <info>
             <category>Environment</category>
             <label>Resume Breakpoint</label>
@@ -387,7 +387,7 @@
             <title>'Operating System Information'</title>
             <field>/jmx/domain/mbean/@type</field>
             <row foreach="/jmx/domain/mbean/attribute">
-                <column link="/lavoisier/os/jmx/domain/mbean/attribute[@name='{@name}']?accept=xml&amp;processors=single_node">
+                <column link="/lavoisier/os/jmx/domain/mbean/attribute[@name='{@name}']?accept=xml">
                     @name
                 </column>
                 <column>value</column>
@@ -408,7 +408,7 @@
         </processors>
         <renderers>
             <renderer type="HTMLRenderer">
-                <parameter name="stylesheet">xsl/status.xsl</parameter>
+                <parameter name="template">xsl/status.xsl</parameter>
             </renderer>
         </renderers>
     </view>
@@ -426,7 +426,7 @@
         </connector>
         <renderers>
             <renderer type="HTMLRenderer">
-                <parameter name="stylesheet">xsl/send_to_dev.xsl</parameter>
+                <parameter name="template">xsl/send_to_dev.xsl</parameter>
             </renderer>
         </renderers>
     </view>
@@ -472,10 +472,11 @@
             </row>
         </pre-renderers>
     </view>
-    <view name="cache_content" post-processors="disable">
+    <view name="cache_content">
         <info>
             <category>Hidden</category>
         </info>
+        <argument name="disable-default-XPath">true</argument>
         <connector type="FileConnector">
             <parameter name="path" eval="concat(property('cache.baseDirectory'), '/', path())"/>
         </connector>
@@ -486,10 +487,11 @@
             </renderer>
         </renderers>
     </view>
-    <view name="cache_delete" post-processors="disable" authenticators="admin">
+    <view name="cache_delete" authenticators="admin">
         <info>
             <category>Hidden</category>
         </info>
+        <argument name="disable-default-XPath">true</argument>
         <connector type="ShellConnector">
             <parameter name="executable">/bin/rm</parameter>
             <parameter name="arguments">
@@ -559,7 +561,7 @@
         </processors>
         <renderers>
             <renderer type="HTMLRenderer">
-                <parameter name="stylesheet">xsl/restart.xsl</parameter>
+                <parameter name="template">xsl/restart.xsl</parameter>
             </renderer>
         </renderers>
     </view>
