@@ -1,0 +1,140 @@
+<config xmlns="http://software.in2p3.fr/lavoisier/config.xsd" version="14">
+    <!-- post-processors -->
+    <processors>
+        <processor type="SelectProcessor" match="eval(path())" disabled="not(boolean(path(false())))">
+            <namespaces eval="entries(arguments())">
+                <entry key="cfg">http://software.in2p3.fr/lavoisier/config.xsd</entry>
+                <entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry>
+            </namespaces>
+        </processor>
+        <processor type="SelectWindowProcessor" match="/*/*" disabled="not(arguments()[@key='_window_']/text())">
+            <parameter name="offset" eval="substring-before(arguments()[@key='_window_']/text(), '-')"/>
+            <parameter name="length" eval="substring-after(arguments()[@key='_window_']/text(), '-') - number(substring-before(arguments()[@key='_window_']/text(), '-')) + 1"/>
+        </processor>
+    </processors>
+    <processors name="single_node">
+        <processor type="SelectProcessor" match="eval(path())" disabled="not(boolean(path(false())))">
+            <namespaces eval="entries(arguments())">
+                <entry key="cfg">http://software.in2p3.fr/lavoisier/config.xsd</entry>
+                <entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry>
+            </namespaces>
+            <parameter name="single_node">true</parameter>
+        </processor>
+        <processor type="SelectWindowProcessor" match="/*/*" disabled="not(arguments()[@key='_window_']/text())">
+            <parameter name="offset" eval="substring-before(arguments()[@key='_window_']/text(), '-')"/>
+            <parameter name="length" eval="substring-after(arguments()[@key='_window_']/text(), '-') - number(substring-before(arguments()[@key='_window_']/text(), '-')) + 1"/>
+        </processor>
+    </processors>
+    <processors name="disable">
+        <processor type="SelectWindowProcessor" match="/*/*" disabled="not(arguments()[@key='_window_']/text())">
+            <parameter name="offset" eval="substring-before(arguments()[@key='_window_']/text(), '-')"/>
+            <parameter name="length" eval="substring-after(arguments()[@key='_window_']/text(), '-') - number(substring-before(arguments()[@key='_window_']/text(), '-')) + 1"/>
+        </processor>
+    </processors>
+
+    <!-- helper views -->
+    <view name="list" post-processors="disable">
+        <info>
+            <category>Hidden</category>
+        </info>
+        <connector type="FileConnector">
+            <parameter name="path" eval="concat('.',path())"/>
+        </connector>
+        <serializer type="ListSerializer"/>
+    </view>
+    <view name="properties" post-processors="disable">
+        <info>
+            <category>Hidden</category>
+        </info>
+        <connector type="FileConnector">
+            <parameter name="path" eval="concat('.',path())"/>
+        </connector>
+        <serializer type="PropertiesSerializer"/>
+    </view>
+
+    <!-- generated rendering stylesheets -->
+    <view name="base" post-processors="disable">
+        <info>
+            <category>Hidden</category>
+        </info>
+        <connector type="MemoryCacheConnector">
+            <parameter name="key">!user_configuration!</parameter>
+        </connector>
+        <renderers>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">html/base.html</parameter>
+            </renderer>
+        </renderers>
+    </view>
+    <view name="xsl" post-processors="disable">
+        <info>
+            <category>Hidden</category>
+        </info>
+        <connector type="FileConnector">
+            <parameter name="path" eval="concat('memory:/', path())"/>
+        </connector>
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="contentType">application/xslt+xml</parameter>
+            </renderer>
+        </renderers>
+    </view>
+    <view name="with-param" post-processors="disable">
+        <info>
+            <category>Hidden</category>
+        </info>
+        <connector type="XSLTConnector">
+            <parameter name="stylesheet" eval="document('xsl/with-param.xsl')"/>
+            <parameter name="input" eval="document(substring-after(path(),'/'))"/>
+            <parameter name="documents">
+                <entry key="parameters" eval="entries(arguments())"/>
+            </parameter>
+        </connector>
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="contentType">application/xslt+xml</parameter>
+            </renderer>
+        </renderers>
+    </view>
+
+    <!-- layout -->
+    <view name="head" post-processors="disable">
+        <info>
+            <category>Hidden</category>
+        </info>
+        <connector type="XSLTConnector">
+            <parameter name="stylesheet" eval="document('xsl/head.xsl')"/>
+        </connector>
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="contentType">application/xslt+xml</parameter>
+            </renderer>
+        </renderers>
+    </view>
+    <view name="navbar">
+        <info>
+            <category>Hidden</category>
+        </info>
+        <connector type="XSLTConnector">
+            <parameter name="stylesheet" eval="document('xsl/navbar.xsl')"/>
+            <parameter name="input" eval="document('rsc/categories.xml')"/>
+            <parameter name="documents">
+                <entry key="conf" eval="view('configuration')"/>
+            </parameter>
+        </connector>
+        <processors xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+            <insert-parent match="/*" name="xsl:template"/>
+            <insert match="/*" nodes="new_attribute('name', 'navbar')"/>
+            <insert-parent match="/*" name="xsl:stylesheet"/>
+            <insert match="/*" nodes="new_attribute('version', '1.0')"/>
+        </processors>
+        <cache type="FileCache">
+            <trigger type="ViewCreatedTrigger"/>
+        </cache>
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="contentType">application/xslt+xml</parameter>
+            </renderer>
+        </renderers>
+    </view>
+</config>

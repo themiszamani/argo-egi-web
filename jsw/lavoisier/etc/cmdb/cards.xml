@@ -1,0 +1,331 @@
+<?xml-stylesheet type="text/xsl" href="/lavoisier/lavoisier-package/src/site/resources/config.xsl"?>
+<config xmlns="http://software.in2p3.fr/lavoisier/config.xsd" version="14">
+    <view name="Rack">
+        <info><category>Cards</category></info>
+        <variable name="query">select r.id, r.name as Description, r.vsize, d.name as DataCenter, rt.name as RackType
+            from rack as r join rackt as rt join datacenter as d
+            where r.rackt_id=rt.id and r.datacenter_id=d.id</variable>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('sql', entry('database','smurf')|entry('query',$query))"/>
+        </connector>
+        <processors>
+            <element in="result" out="cards">
+                <attribute-create out="class">'Rack'</attribute-create>
+                <element in="row" out="card">
+                    <element out="Code" in="id"/>
+                    <element out="DataCenter" in="DataCenter"/>
+                    <element out="Description" in="Description"/>
+                    <element out="RackType" in="RackType"/>
+                    <element out="Size" in="vsize"/>
+                    <element-ignore/>
+                </element>
+            </element>
+        </processors>
+    </view>
+
+    <view name="Server">
+        <info><category>Cards</category></info>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('smurf_puppet')"/>
+        </connector>
+        <processors xmlns:date="http://exslt.org/dates-and-times">
+            <element in="servers" out="cards">
+                <set variable="rane">view('Rane')</set>
+                <attribute-create out="class">'Server'</attribute-create>
+                <element in="server" out="card">
+                    <element-create>$rane/ranes/rane[@serial = current()/../@serial]</element-create>
+                </element>
+            </element>
+            <element in="cards">
+                <element in="card">
+                    <element in="host">
+                        <element-ignore in="object" if="not(*)">
+                            <element-create>new_element(../@name, new_text(../@value))</element-create>
+                        </element-ignore>
+                    </element>
+                </element>
+            </element>
+            <element in="cards">
+                <element in="card">
+                    <attribute-ignore/>
+                    <element-create>new_element('SerialNumber', ../@serial)</element-create>
+                    <element out="Code" in="serial"/>
+                    <element out="Comment" in="comment"/>
+                    <!--<element out="Created" in="created"/>-->
+                    <element out="Description" in="name"/>
+                    <element out="SmurfStatus" in="smurfstatus"/>
+                    <element out="Usage" in="usag"/>
+                    <element out="YPosition" in="y"/>
+                    <element-ignore in="host">
+                        <element out="Architecture" in="architecture"/>
+                        <element out="BoardManufacturer" in="boardmanufacturer"/>
+                        <element out="BoardProductName" in="boardproductname"/>
+                        <element out="BoardSerialNumber" in="boardserialnumber"/>
+                        <element out="KernelRelease" in="kernelrelease"/>
+                        <element out="MemorySize" in="memorysize_mb">
+                            <text>substring-before(., '.')</text>
+                        </element>
+                        <element out="OperatingSystemMajorRelease" in="operatingsystemmajrelease"/>
+                        <element out="OperatingSystem" in="operatingsystem"/>
+                        <element out="OSFamily" in="osfamily"/>
+                        <element out="ProcessorType" in="processor0"/>
+                        <element out="ProcessorCount" in="processorcount"/>
+                        <element out="ProductName" in="productname"/>
+                        <element out="Virtual" in="virtual"/>
+                        <element out="PhysicalProcessorCount" in="physicalprocessorcount"/>
+                        <element-ignore/>
+                    </element-ignore>
+<!--
+                    <element-ignore in="rane">
+                        <element out="Barcode" in="CodeBarre"/>
+                        <element out="NumImmo" in="NumImmo"/>
+                        <element out="WarrantyStartDate" in="DateAcquis"/>
+                        <element out="WarrantyPeriod" in="Z_Rap"/>
+                        <element-create if="../DateAcquis and ../Z_Rap">
+                            new_element('WarrantyEndDate',
+                            date:format-date(
+                                date:add(
+                                    date:parse-date(../DateAcquis,'dd/MM/yyyy'), concat("P",../Z_Rap,"M")
+                                ),'dd/MM/yyyy'
+                            ))
+                        </element-create>
+                    </element-ignore>
+-->
+                    <element-ignore/>
+                </element>
+            </element>
+        </processors>
+    </view>
+
+    <view name="BlockDevice">
+        <info><category>Cards</category></info>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('smurf_puppet')"/>
+        </connector>
+        <processors>
+            <element out="cards" in="servers">
+                <attribute-create out="class">'BlockDevice'</attribute-create>
+                <element-ignore in="server">
+                    <element-ignore in="host">
+                        <element-ignore in="object" if="@name='blockdevices'">
+                            <element out="card" in="item">
+                                <attribute-ignore/>
+                                <element-create>new_element('Code', concat(../@key, '-', ancestor::server/@hostname))</element-create>
+                                <element-create>new_element('Description', new_text(../@key))</element-create>
+                                <element out="Size" in="object" if="ends-with(@name,'_size')">
+                                    <attribute-ignore/>
+                                    <text-create>round(../@value div 1000000000)</text-create>
+                                </element>
+                                <element out="Vendor" in="object" if="ends-with(@name,'_vendor')">
+                                    <attribute-ignore/>
+                                    <text-create>../@value</text-create>
+                                </element>
+                                <element out="Model" in="object" if="ends-with(@name,'_model')">
+                                    <attribute-ignore/>
+                                    <text-create>../@value</text-create>
+                                </element>
+                            </element>
+                        </element-ignore>
+                    </element-ignore>
+                </element-ignore>
+                <element-ignore/>
+            </element>
+        </processors>
+    </view>
+
+    <view name="Interface">
+        <info><category>Cards</category></info>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('smurf_puppet')"/>
+        </connector>
+        <processors>
+            <element out="cards" in="servers">
+                <attribute-create out="class">'Interface'</attribute-create>
+                <element-ignore in="server">
+                    <element-ignore in="host">
+                        <element-ignore in="object" if="@name='interfaces'">
+                            <element out="card" in="item">
+                                <attribute-ignore/>
+                                <element-create>new_element('Code', concat(../@key, '-', ancestor::server/@hostname))</element-create>
+                                <element-create>new_element('Description', new_text(../@key))</element-create>
+                                <element out="Ipaddress4" in="object" if="starts-with(@name,'ipaddress_')">
+                                    <attribute-ignore/>
+                                    <text-create>../@value</text-create>
+                                </element>
+                                <element out="Macaddress" in="object" if="starts-with(@name,'macaddress_')">
+                                    <attribute-ignore/>
+                                    <text-create>../@value</text-create>
+                                </element>
+                                <element out="Mtu" in="object" if="starts-with(@name,'mtu_')">
+                                    <attribute-ignore/>
+                                    <text-create>../@value</text-create>
+                                </element>
+                                <element out="Network" in="object" if="starts-with(@name,'network_')">
+                                    <attribute-ignore/>
+                                    <text-create>../@value</text-create>
+                                </element>
+                                <element out="Netmask" in="object" if="starts-with(@name,'netmask_')">
+                                    <attribute-ignore/>
+                                    <text-create>../@value</text-create>
+                                </element>
+                            </element>
+                        </element-ignore>
+                    </element-ignore>
+                </element-ignore>
+                <element-ignore/>
+            </element>
+        </processors>
+    </view>
+
+    <view name="StoragePools">
+        <info><category>Cards</category></info>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('dcache_park')"/>
+        </connector>
+        <processors>
+            <element out="cards" in="DCACHE_PARK">
+                <attribute-ignore/>
+                <attribute-create out="class">'StoragePools'</attribute-create>
+                <element-ignore in="pool_park">
+                    <element-ignore in="poolgroup">
+                        <element out="card" in="pool">
+                            <attribute-ignore/>
+                            <element-create>new_element('Code', new_text(../@name))</element-create>
+                            <element-create>new_element('Description', new_text(../@name))</element-create>
+                            <element-create>new_element('Size', new_text(../@size))</element-create>
+                        </element>
+                    </element-ignore>
+                </element-ignore>
+                <element-ignore/>
+            </element>
+        </processors>
+    </view>
+
+    <view name="PoolGroups">
+        <info><category>Cards</category></info>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('dcache_park')"/>
+        </connector>
+        <processors>
+            <element out="cards" in="DCACHE_PARK">
+                <attribute-ignore/>
+                <attribute-create out="class">'PoolGroups'</attribute-create>
+                <element-ignore in="pool_park">
+                    <element out="card" in="poolgroup">
+                        <attribute-ignore/>
+                        <element-create>new_element('Code', new_text(../@name))</element-create>
+                        <element-create>new_element('Description', new_text(../@name))</element-create>
+                        <element-ignore/>
+                    </element>
+                </element-ignore>
+                <element-ignore/>
+            </element>
+        </processors>
+    </view>
+
+    <view name="UserGroup">
+        <info><category>Cards</category></info>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('UserGroupDB')"/>
+        </connector>
+        <processors>
+            <element in="result" out="cards">
+                <attribute-create out="class">'UserGroup'</attribute-create>
+                <element in="row" out="card">
+                    <element out="Activity" in="LIBELLE"/>
+                    <element out="Code" in="GROUPE_ID"/>
+                    <element out="Description" in="GROUPE"/>
+                    <element out="FlagSupport" in="FLAG_SUPP"/>
+                    <element out="GroupID" in="GROUP_ID"/>
+                    <element out="ISVirtual" in="ISVIRTUAL"/>
+                    <element out="WebSite" in="WEB"/>
+                </element>
+            </element>
+        </processors>
+    </view>
+
+    <view name="DnsAlias">
+        <info><category>Cards</category></info>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('DnsAliasOracle')"/>
+        </connector>
+        <processors>
+            <element in="result" out="cards">
+                <attribute-create out="class">'DnsAlias'</attribute-create>
+                <element in="row" out="card">
+                    <element out="Code" in="ALIAS"/>
+                    <element out="Description" in="DES"/>
+                    <element out="IP4" in="ADRESSE"/>
+                    <element-ignore in="NOM"/>
+                    <element-ignore in="DOMAIN"/>
+                </element>
+            </element>
+        </processors>
+    </view>
+
+    <view name="Switch">
+        <info><category>Cards</category></info>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('Switch_smurf')"/>
+        </connector>
+        <processors xmlns:date="http://exslt.org/dates-and-times">
+            <element in="result" out="cards">
+                <set variable="rane">view('Rane')</set>
+                <attribute-create out="class">'Switch'</attribute-create>
+                <element in="row" out="card">
+                    <element-create>$rane/ranes/rane[@serial = current()/../serial/text()]</element-create>
+                </element>
+            </element>
+            <element in="cards">
+                <element in="card">
+                    <element out="Code" in="serial"/>
+                    <element out="Comment" in="comment"/>
+                    <!--<element out="Created" in="created"/>-->
+                    <element out="Description" in="name"/>
+                    <element out="SmurfStatus" in="smurfstatus"/>
+                    <element out="Usage" in="usag"/>
+                    <element out="YPosition" in="y"/>
+<!--
+                    <element-ignore in="rane">
+                        <element out="Barcode" in="CodeBarre"/>
+                        <element out="NumImmo" in="NumImmo"/>
+                        <element out="WarrantyStartDate" in="DateAcquis"/>
+                        <element out="WarrantyPeriod" in="Z_Rap"/>
+                        <element-create if="../DateAcquis and ../Z_Rap">
+                            new_element('WarrantyEndDate',
+                            date:add(date:parse-date(../DateAcquis,'dd/MM/yyyy'), concat("P",../Z_Rap,"M"))
+                        </element-create>
+                    </element-ignore>
+-->
+                    <element-ignore/>
+                </element>
+            </element>
+        </processors>
+    </view>
+
+    <view name="ServiceElement">
+        <info><category>Cards</category></info>
+        <connector type="FileConnector">
+            <parameter name="path">cmdb/data/services.xml</parameter>
+        </connector>
+        <processors>
+            <element in="families">
+                <element-ignore in="family">
+                    <element in="service">
+                        <attribute-create out="family">parent::service/parent::family/@name</attribute-create>
+                    </element>
+                </element-ignore>
+            </element>
+            <element in="families" out="cards">
+                <attribute-create out="class">'ServiceElement'</attribute-create>
+                <element in="service" out="card">
+                    <attribute-ignore/>
+                    <element-ignore in="depends"/>
+                    <element-create>new_element('Code', new_text(../@name))</element-create>
+                    <element-create>new_element('Description', new_text(../@name))</element-create>
+                    <element-create>new_element('Family', new_text(../@family))</element-create>
+                </element>
+            </element>
+        </processors>
+    </view>
+</config>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html  xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd"
+       xmlns:tpl="http://software.in2p3.fr/lavoisier/template.xsd"
+       tpl:extends="http://localhost:8080/lavoisier/_default_?accept=html">
+
+<body>
+<!-- Right side column. Contains the navbar and content of the page -->
+<div id="wrapper">
+
+    <aside tpl:if="/e:entries/e:entry/Site" class="left-side" id="left-side">
+        <section class="sidebar">
+            <ul class="sidebar-menu" style="list-style:none;">
+
+                <li tpl:foreach="/e:entries/e:entry" style="padding-left:20px;">
+                    <a   href="#{{@key}}" >
+                        <i class="fa fa-angle-double-left" style="padding:5px"> </i>
+                        <span> {{@key}} </span>
+                        <i class="fa fa-angle-double-right" style="padding:5px"> </i>
+
+                    </a>
+
+
+                </li>
+
+
+            </ul>
+        </section>
+    </aside>
+
+    <aside class="right-side" id="right-side">
+        <!-- Content Header (Page header) -->
+        <section class="content-header" id="content-header">
+            <h1>
+                Site Status Reports
+                <small tpl:if="/e:entries/@entity='ngi'">Access to the sites reports by selecting a NGI </small>
+                <small tpl:else="">Access to the status reports by selecting a site </small>
+            </h1>
+
+        </section>
+
+        <!-- Main content -->
+        <section class="content" id="content" >
+
+
+
+
+
+
+
+
+
+            <div  class="box box-primary">
+
+                <div class="box-header">
+
+                </div>
+
+
+                <div  id="listItems" class="hidden">
+                    <div tpl:foreach="/e:entries/e:entry" id="{{@ngi}}">{{text()}}</div>
+                 </div>
+
+                <div class="hidden" tpl:foreach="/e:entries">
+                    <input  id="entity" value="{{@entity}}"/>
+
+                </div>
+
+
+        <div class="box-body">
+
+
+                <label tpl:if="/e:entries/@entity='ngi'">NGI </label>
+                <label tpl:else="">SITE </label>
+                <input type="text" style="margin-left:20px" name="ngi" id="filters-entity" placeholder="Enter Search "/><br/>
+
+            <div class="row" style="margin:30px;padding:20px">
+                <input type="submit" class="btn offset1" id="buttonfilter" value="Status Report"/>
+            </div>
+
+        </div>
+                </div>
+
+
+        </section><!-- /.content -->
+
+    </aside><!-- /.right-side -->
+
+
+
+    <script>
+        <!--
+        $(document).ready(function() {
+
+
+
+            var availableItems = [];
+            var tabNgiSite= [];
+
+
+            var listItems = document.getElementById('listItems').getElementsByTagName('div');
+
+
+
+            for (j = 0; j < listItems .length; j++) {
+
+                availableItems.push(listItems[j].textContent);
+                tabNgiSite[listItems[j].textContent]=listItems[j].getAttribute('id');
+
+            }
+
+
+            $("#filters-entity").autocomplete({
+                search:true,
+                source: availableItems,
+                TextHint : "Enter search or Double click to have the whole list"
+
+            });
+
+            $("#buttonfilter").click(function () {
+
+                var entity = $('input[id=entity]').val();
+                var entityName=$('input[id=filters-entity]').val();
+
+                if (tabNgiSite[entityName])
+                var link = '/lavoisier/site_status?ngi='+tabNgiSite[entityName]+'&'+entity+'=' + entityName +'&accept=html';
+                else
+                    var link = '/lavoisier/site_status?'+entity+'=' + entityName +'&accept=html';
+                window.location = link;
+            });
+
+        })
+        -->
+    </script>
+
+
+</div>
+</body>
+</html>

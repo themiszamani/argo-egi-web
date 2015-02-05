@@ -1,0 +1,46 @@
+<schema>
+    <relations id="Server2Rack" domain="Machine2Rack">
+        <cards1 class="Server" occurs="N"/>
+        <cards2 class="Rack" occurs="1"/>
+    </relations>
+    <relations id="Server2StoragePools" domain="Machine2GlobalConfig">
+        <cards1 class="Server" occurs="1"/>
+        <cards2 class="StoragePools" occurs="N"/>
+    </relations>
+    <relations id="StoragePools2PoolGroups" domain="GlobalConfig2GlobalPartition">
+        <cards1 class="StoragePools" occurs="N"/>
+        <cards2 class="PoolGroups" occurs="1"/>
+    </relations>
+    <relations id="PoolGroups2UserGroup" domain="GlobalPartition2UserGroup">
+        <cards1 class="PoolGroups" occurs="1"/>
+        <cards2 class="UserGroup" occurs="N"/>
+    </relations>
+    <relations id="PoolGroups2ServiceElement" domain="GlobalPartition2Element" manual="true">
+        <cards1 class="PoolGroups" occurs="1"/>
+        <cards2 class="ServiceElement" occurs="N"/>
+    </relations>
+    <relations id="Server2BlockDevice" domain="Machine2GlobalConfig">
+        <cards1 class="Server" occurs="1"/>
+        <cards2 class="BlockDevice" occurs="N"/>
+    </relations>
+    <relations id="Server2DnsAlias" domain="Machine2GlobalConfig">
+        <cards1 class="Server" occurs="1"/>
+        <cards2 class="DnsAlias" occurs="N"/>
+    </relations>
+    <relations id="Server2Interface" domain="Machine2GlobalConfig">
+        <cards1 class="Server" occurs="1"/>
+        <cards2 class="Interface" occurs="N"/>
+    </relations>
+    <relations id="Switch2Interface" domain="Switch2Interface">
+        <cards1 class="Switch" occurs="1"/>
+        <cards2 class="Interface" occurs="N"/>
+    </relations>
+    <relations id="Switch2Rack" domain="Machine2Rack">
+        <cards1 class="Switch" occurs="N"/>
+        <cards2 class="Rack" occurs="1"/>
+    </relations>
+    <relations id="ServiceElement2ServiceElement" domain="Element2Element">
+        <cards1 class="ServiceElement" occurs="N"/>
+        <cards2 class="ServiceElement" occurs="N"/>
+    </relations>
+</schema>

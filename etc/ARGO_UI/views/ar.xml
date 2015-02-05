@@ -1,0 +1,282 @@
+<config xmlns="http://software.in2p3.fr/lavoisier/config.xsd"
+        xmlns:date="http://exslt.org/dates-and-times"
+        xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" >
+
+
+
+
+    <view name="ngi_ar">
+        <info>
+            <category>Display</category>
+            <description>NGI Customized Reports</description>
+        </info>
+
+        <argument name="ngi"></argument>
+        <argument name="granularity"></argument>
+        <argument name="start_date"></argument>
+        <argument name="end_date"></argument>
+        <argument name="poems">ch.cern.sam.ROC_CRITICAL</argument>
+        <argument name="profile">test-ap1</argument>
+        <argument name="view_details">site_ar</argument>
+        <argument name="cr">0</argument>
+
+        <connector type="XMLConnector">
+
+            <parameter name="content" eval="
+
+            view(choose($cr,'group_availability_results','group_availability_results_rotated'),
+            entry('granularity',$granularity)
+            | entry('availability_profile',$profile)
+            | entry('group_type','ngi')
+            | entry('start_time',concat($start_date,'T00:00:00Z'))
+            | entry('end_time',concat($end_date,'T00:00:00Z'))
+            )"/>
+        </connector>
+
+
+
+
+        <processors>
+            <select match="/root/Profile"></select>
+            <select  match="/e:entries/Profile/Ngi[@NGI=$ngi]"></select>
+            <insert match="/e:entries" nodes="new_attribute('start_timestamp',date:seconds($start_date))"></insert>
+            <insert match="/e:entries" nodes="new_attribute('end_timestamp',date:seconds($end_date))"></insert>
+            <insert match="/e:entries" nodes="new_attribute('view','ngi_ar')"></insert>
+            <insert match="/e:entries" nodes="new_attribute('view_details',$view_details)"></insert>
+            <remove match="/e:entries/Ngi/Availability[date:seconds(@timestamp) &lt; ancestor::e:entries/@start_timestamp ]"></remove>
+            <remove match="/e:entries/Ngi/Availability[date:seconds(@timestamp) &gt; ancestor::e:entries/@end_timestamp ]"></remove>
+            <rename match="/e:entries/Ngi" name="Entity"></rename>
+            <rename match="/e:entries/Entity/@NGI" name="name"></rename>
+
+        </processors>
+
+        <pre-renderers>
+            <title>'Availabilities Reliabilities Chart'</title>
+            <row foreach="/e:entries/Entity/Availability">
+                <column label="entity">ancestor::Entity/@name</column>
+                <column label="timestamp">@timestamp</column>
+                <column unit="percentage" label="availability">format-number(@availability,'#.00')</column>
+                <column unit="percentage" label="reliability">format-number(@reliability,'#.00')</column>
+            </row>
+        </pre-renderers>
+        <renderers>
+
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/ARGO_UI/resources/html/render_form_reports.html</parameter>
+
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/ARGO_UI/resources/html/render_form_reports.html</parameter>
+
+            </renderer>
+            <renderer type="ChartRenderer">
+                <parameter name="rotation">-45</parameter>
+
+            </renderer>
+        </renderers>
+
+
+    </view>
+
+    <view name="cloud_ar">
+        <info>
+            <category>Display</category>
+            <description>CloudCustomized Reports</description>
+        </info>
+        <argument name="site"></argument>
+        <argument name="ngi">false</argument>
+        <argument name="granularity"></argument>
+        <argument name="start_date"></argument>
+        <argument name="end_date"></argument>
+        <argument name="view_details">services_ar</argument>
+        <argument name="poems">ch.cern.sam.CLOUD-MON</argument>
+        <argument name="profile">egi-fedcloud</argument>
+
+        <!--<connector type="XMLConnector">-->
+
+            <!--<parameter name="content" eval="view('group_availability_results_rotated',-->
+            <!--entry('granularity',$granularity)-->
+            <!--| entry('availability_profile',$profile)-->
+            <!--| entry('group_type','ngi')-->
+            <!--| entry('start_time',concat($start_date,'T00:00:00Z'))-->
+            <!--| entry('end_time',concat($end_date,'T00:00:00Z'))-->
+            <!--)"/>-->
+        <!--</connector>-->
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('site_ar',arguments())"></parameter>
+        </connector>
+
+        <pre-renderers>
+            <title>'Availabilities Reliabilities Chart'</title>
+            <row foreach="/e:entries/Entity/Availability">
+                <column label="entity">ancestor::Entity/@name</column>
+                <column label="timestamp">@timestamp</column>
+                <column unit="percentage" label="availability">format-number(@availability,'#.00')</column>
+                <column unit="percentage" label="reliability">format-number(@reliability,'#.00')</column>
+            </row>
+        </pre-renderers>
+        <renderers>
+
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/ARGO_UI/resources/html/render_form_reports.html</parameter>
+
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/ARGO_UI/resources/html/render_form_reports.html</parameter>
+
+            </renderer>
+            <renderer type="ChartRenderer">
+                <parameter name="rotation">-45</parameter>
+
+            </renderer>
+        </renderers>
+    </view>
+
+    <view name="site_ar">
+        <info>
+            <category>Display</category>
+            <description>Site Customized Reports</description>
+        </info>
+
+        <argument name="site"></argument>
+        <argument name="ngi">false</argument>
+        <argument name="granularity"></argument>
+        <argument name="start_date"></argument>
+        <argument name="end_date"></argument>
+        <argument name="view_details">services_ar</argument>
+        <argument name="poems">ch.cern.sam.ROC_CRITICAL</argument>
+        <argument name="profile">test-ap1</argument>
+
+
+        <connector type="XMLConnector">
+
+            <parameter name="content" eval="view('group_availability_results_rotated',
+            entry('granularity',$granularity)
+            | entry('availability_profile',$profile)
+            | entry('group_type','site')
+            | entry('start_time',concat($start_date,'T00:00:00Z'))
+            | entry('end_time',concat($end_date,'T00:00:00Z'))
+            )"/>
+        </connector>
+
+        <processors>
+            <select match="/root/Profile"></select>
+
+
+            <processor match="/e:entries/Profile/Site[@site=$site]" type="SelectProcessor" disabled="$ngi!='false'"></processor>
+            <processor match="/e:entries/Profile/Site[@NGI=$ngi]" type="SelectProcessor" disabled="$ngi='false'"></processor>
+            <insert match="/e:entries" nodes="new_attribute('start_timestamp',date:seconds($start_date))"></insert>
+            <insert match="/e:entries" nodes="new_attribute('end_timestamp',date:seconds($end_date))"></insert>
+            <insert match="/e:entries" nodes="new_attribute('view','site_ar')"></insert>
+            <insert match="/e:entries" nodes="new_attribute('view_details',$view_details)"></insert>
+
+            <remove match="/e:entries/Site/Availability[date:seconds(@timestamp) &lt; ancestor::e:entries/@start_timestamp ]"></remove>
+            <remove match="/e:entries/Site/Availability[date:seconds(@timestamp) &gt; ancestor::e:entries/@end_timestamp ]"></remove>
+            <rename match="/e:entries/Site" name="Entity"></rename>
+            <rename match="/e:entries/Entity/@site" name="name"></rename>
+
+        </processors>
+
+        <pre-renderers>
+            <title>'Availabilities Reliabilities Chart'</title>
+            <row foreach="/e:entries/Entity/Availability">
+                <column label="entity">ancestor::Entity/@name</column>
+                <column label="timestamp">@timestamp</column>
+                <column unit="percentage" label="availability">format-number(@availability,'#.00')</column>
+                <column unit="percentage" label="reliability">format-number(@reliability,'#.00')</column>
+            </row>
+        </pre-renderers>
+        <renderers>
+
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/ARGO_UI/resources/html/render_form_reports.html</parameter>
+
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/ARGO_UI/resources/html/render_form_reports.html</parameter>
+
+            </renderer>
+            <renderer type="ChartRenderer">
+                <parameter name="rotation">-45</parameter>
+
+            </renderer>
+        </renderers>
+
+
+    </view>
+
+    <view name="services_ar">
+    <info>
+        <category>Display</category>
+        <description>Site Customized Reports</description>
+    </info>
+
+
+        <argument name="site"></argument>
+
+    <argument name="granularity"></argument>
+    <argument name="start_date"></argument>
+    <argument name="end_date"></argument>
+    <argument name="poems">ch.cern.sam.ROC_CRITICAL</argument>
+    <argument name="profile">test-ap1</argument>
+
+
+    <!--<connector type="XMLConnector">-->
+        <!--<parameter name="content" eval="view('services_daily_results')"></parameter>-->
+    <!--</connector>-->
+
+        <connector type="XMLConnector">
+
+            <parameter name="content" eval="view('group_availability_results_rotated',
+            entry('granularity',$granularity)
+            | entry('availability_profile',$poems)
+            | entry('group_type','service')
+            | entry('start_time',concat($start_date,'T00:00:00Z'))
+            | entry('end_time',concat($end_date,'T00:00:00Z'))
+            )"/>
+        </connector>
+
+    <processors>
+        <select match="/root/Profile"></select>
+        <select  match="/e:entries/Profile/Site[@Site=$site]"></select>
+        <insert match="/e:entries" nodes="new_attribute('start_timestamp',date:seconds($start_date))"></insert>
+        <insert match="/e:entries" nodes="new_attribute('end_timestamp',date:seconds($end_date))"></insert>
+
+        <remove match="/e:entries/Site//Availability[date:seconds(@timestamp) &lt; ancestor::e:entries/@start_timestamp ]"></remove>
+        <remove match="/e:entries/Site//Availability[date:seconds(@timestamp) &gt; ancestor::e:entries/@end_timestamp ]"></remove>
+        <rename match="/e:entries/Site" name="Entity"></rename>
+        <rename match="/e:entries/Entity/@Site" name="name"></rename>
+        <rename match="/e:entries/Entity/@site" name="name"></rename>
+    </processors>
+
+    <pre-renderers>
+        <title>'Availabilities Reliabilities Chart'</title>
+        <row foreach="/e:entries/Entity//Availability">
+            <column label="entity">ancestor::Entity/@name</column>
+            <column label="entity">ancestor::Flavor/@Flavor</column>
+            <column label="timestamp">@timestamp</column>
+            <column unit="percentage" label="availability">format-number(@availability,'#.00')</column>
+            <column unit="percentage" label="reliability">format-number(@reliability,'#.00')</column>
+        </row>
+    </pre-renderers>
+    <renderers>
+
+        <renderer type="DefaultRenderer">
+            <parameter name="template">/ARGO_UI/resources/html/render_SF_ar_reports.html</parameter>
+
+        </renderer>
+        <renderer type="HTMLRenderer">
+            <parameter name="template">/ARGO_UI/resources/html/render_SF_ar_reports.html</parameter>
+
+        </renderer>
+        <renderer type="ChartRenderer">
+            <parameter name="rotation">-45</parameter>
+
+        </renderer>
+    </renderers>
+
+
+</view>
+
+    </config>
