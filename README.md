@@ -15,6 +15,7 @@ Installation - the $HOME_LAVOISIER is the directory where do you install the ser
 * cd $HOME_LAVOISIER/argo-ui-master/etc
 * vi lavoisier-hidden.properties
 * complete certificate.password and certificate.password
+* eventually modify the cache.baseDirectory - if you want to put it elsewhere
 
 
 Start the service 
