@@ -24,3 +24,11 @@ Start the service
 * check the logs and access to the interface : http://yourmachine:8080/lavoisier
 * if everything goes well 
 *  ./bin/lavoisier.sh restart
+
+
+Useful commands and hints
+
+* To change the PI base url : vi $HOME_LAVOISIER/etc/ARGO_UI/lavoisier-config.properties
+* to stop lavoisier : 
+cd $HOME_LAVOISIER
+./bin/lavoisier.sh stop
