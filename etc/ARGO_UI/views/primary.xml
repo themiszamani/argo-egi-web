@@ -153,6 +153,14 @@
             <!--<replace match="/e:entries/e:entry/text()" nodes="concat('&quot;',text(),'&quot;,')"/>-->
         <!--</processors>-->
 
+        <cache type="FileCache">
+            <!--<trigger type="ViewCreatedTrigger"/>-->
+            <trigger type="DeltaTimeTrigger">
+                <parameter name="hours">2</parameter>
+            </trigger>
+            <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="ViewCreatedTrigger"/>
+        </cache>
 
     </view>
 
@@ -169,7 +177,14 @@
             <parameter name="content" eval="view('goc.siteList')/results/SITE[not(@NAME=preceding-sibling::SITE/@NAME)]/@NAME"/>
         </connector>
 
-
+        <cache type="FileCache">
+            <!--<trigger type="ViewCreatedTrigger"/>-->
+            <trigger type="DeltaTimeTrigger">
+                <parameter name="hours">2</parameter>
+            </trigger>
+            <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="ViewCreatedTrigger"/>
+        </cache>
 
 
     </view>
