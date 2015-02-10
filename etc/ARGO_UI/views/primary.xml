@@ -362,7 +362,13 @@
 
             <remove match="/nodeData/children" depth="1"/>
             <replace match="/nodeData/children/@ngi" nodes="new_attribute('Parent',match())"></replace>
-            <remove match="nodeData/children[@Parent='NA']"></remove>
+
+            <element in="nodeData">
+                <element-ignore in="children" if="@Parent='NA'"></element-ignore>
+                <element in="children"></element>
+            </element>
+
+
     </processors>
     <cache type="FileCache">
         <!--<trigger type="ViewCreatedTrigger"/>-->
