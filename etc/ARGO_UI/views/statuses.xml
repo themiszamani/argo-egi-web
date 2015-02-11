@@ -92,8 +92,8 @@
 
         <processors>
             <element in="root">
-                <attribute-create out="start_time">concat(substring(date:date-time(), 0,11),'T00:00:00Z')</attribute-create>
-                <attribute-create out="end_time">concat(substring(date:date-time(), 0,11),'T23:59:59Z')</attribute-create>
+                <attribute-create out="start_time">concat(substring(date:add(date:date-time(),concat('-P',1,'D')), 0,11),'T00:00:00Z')</attribute-create>
+                <attribute-create out="end_time">concat(substring(date:add(date:date-time(),concat('-P',1,'D')), 0,11),'T23:59:00Z')</attribute-create>
                 <element in="entry">
                     <text-ignore></text-ignore>
                     <elements-ignore path="root/profile/group">
@@ -113,15 +113,6 @@
 
         </processors>
 
-        <cache type="IndexedFileCache">
-            <parameter name="index_depth">3</parameter>
-            <trigger type="DeltaTimeTrigger">
-                <parameter name="hours">1</parameter>
-            </trigger>
-            <trigger type="ViewNotifiedTrigger"></trigger>
-        </cache>
-
-
 
     </view>
 
@@ -136,8 +127,8 @@
 
         <processors>
             <element in="root">
-                <attribute-create out="start_time">concat(substring(date:date-time(), 0,11),'T00:00:00Z')</attribute-create>
-                <attribute-create out="end_time">concat(substring(date:date-time(), 0,11),'T23:59:59Z')</attribute-create>
+                <attribute-create out="start_time">concat(substring(date:add(date:date-time(),concat('-P',1,'D')), 0,11),'T00:00:00Z')</attribute-create>
+                <attribute-create out="end_time">concat(substring(date:add(date:date-time(),concat('-P',1,'D')), 0,11),'T23:59:00Z')</attribute-create>
                 <element in="entry">
                     <text-ignore></text-ignore>
                     <elements-ignore path="root/profile/group">
