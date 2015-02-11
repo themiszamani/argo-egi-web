@@ -34,8 +34,8 @@
             </elements>
         </processors>
 
-        <cache type="IndexedFileCache">
-            <parameter name="index_depth">2</parameter>
+        <cache type="FileCache">
+            <!--<parameter name="index_depth">3</parameter>-->
             <trigger type="DeltaTimeTrigger">
                 <parameter name="minutes">10</parameter>
             </trigger>
@@ -71,8 +71,8 @@
             </elements>
         </processors>
 
-        <cache type="IndexedFileCache">
-            <parameter name="index_depth">2</parameter>
+        <cache type="FileCache">
+            <!--<parameter name="index_depth">3</parameter>-->
             <trigger type="DeltaTimeTrigger">
                 <parameter name="hours">1</parameter>
             </trigger>
