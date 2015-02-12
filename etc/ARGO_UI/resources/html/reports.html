@@ -11,7 +11,7 @@
         <section class="sidebar">
         <ul class="sidebar-menu" style="list-style:none;">
 
-            <li tpl:foreach="/e:entries/e:entry" style="padding-left:20px;">
+            <li tpl:foreach="/e:entries/e:entry[@key=parent::e:entries/@ngi or parent::e:entries/@ngi='all']" style="padding-left:20px;">
                 <a   href="#{{@key}}" >
                         <i class="fa fa-angle-double-left" style="padding:5px"> </i>
                         <span> {{@key}} </span>
@@ -161,7 +161,7 @@
 </div>
 
 <div tpl:else="">
-    <div class="box box-primary" tpl:foreach="/e:entries/e:entry">
+    <div class="box box-primary" tpl:foreach="/e:entries/e:entry[@key=parent::e:entries/@ngi or parent::e:entries/@ngi='all']">
         <a name="{{@key}}"> </a>
         <div class="box-header">
             <h3 class="box-title">
