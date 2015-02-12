@@ -98,8 +98,9 @@
         </info>
 
         <argument name="diff">10</argument>
-        <argument name="availability_profile">test-ap1</argument>
+
         <argument name="group_type">site</argument>
+        <argument name="availability_profile" eval="choose($group_type!='service','test-ap1','ch.cern.sam.ROC_CRITICAL')"></argument>
         <argument name="granularity">DAILY</argument>
         <argument name="start_time">0</argument>
         <argument name="end_time">0</argument>
