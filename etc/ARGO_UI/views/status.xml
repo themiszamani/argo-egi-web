@@ -1301,8 +1301,8 @@
                         <attribute in="status" out="value"></attribute>
                         <attribute-create out="color">$StateColor/e:entries/e:entry[@key=current()/../@status]/text()</attribute-create>
                         <attribute in="name">../ancestor::group/@name</attribute>
-                        <attribute-create out="url">concat('metric_output?site=',$site,'&amp;host=',$host,'&amp;sf=',$sf,'&amp;timestamp=',../@timestamp,'&amp;metric=',../parent::group/@name)</attribute-create>
-
+                        <attribute-create out="url" if="$report!='cloud'">concat('metric_output?site=',$site,'&amp;host=',$host,'&amp;sf=',$sf,'&amp;timestamp=',../@timestamp,'&amp;metric=',../parent::group/@name)</attribute-create>
+                        <attribute-create out="url" if="$report='cloud'">concat('metric_output?site=',$site,'&amp;host=',$host,'&amp;sf=',$sf,'&amp;timestamp=',../@timestamp,'&amp;metric=',../parent::group/@name,'&amp;profile=ch.cern.sam.CLOUD-MON')</attribute-create>
                     </element>
 
                 </elements>
@@ -1353,10 +1353,11 @@
         <argument name="host"></argument>
         <argument name="sf"></argument>
         <argument name="metric"></argument>
+        <argument name="profile">false</argument>
         <argument name="timestamp"></argument>
 
         <connector type="HTTPConnector">
-            <parameter name="url" eval="concat(property('api.metric.output.url'),$host,'/',$sf,'/',$metric,'?exec_time=',$timestamp)"></parameter>
+            <parameter name="url" eval="choose($profile='false',concat(property('api.metric.output.url'),$host,'/',$sf,'/',$metric,'?exec_time=',$timestamp),concat(property('api.metric.output.url'),$host,'/',$sf,'/',$metric,'?exec_time=',$timestamp,'&amp;profile=',$profile))"></parameter>
         </connector>
 
         
