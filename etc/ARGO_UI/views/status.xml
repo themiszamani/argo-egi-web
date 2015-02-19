@@ -361,9 +361,8 @@
 
         <connector type="HTTPConnector">
             <parameter name="url" eval="concat(property('api.status.url'),'/',$ngi,'?profile=',$profile,'&amp;group_type=ngi&amp;start_time=',$start_time,'&amp;end_time=',$end_time)"></parameter>
-            <fallback eval="view('statusperNgi_bis',arguments())">
+            <fallback>
                 <exception type="java.net.SocketException"/>
-
             </fallback>
         </connector>
 
