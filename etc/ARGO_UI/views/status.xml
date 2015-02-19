@@ -383,6 +383,41 @@
 
     </view>
 
+    <view name="statusperNgi_bis">
+        <info>
+            <category>Status</category>
+            <description>Status Raw Data per NGI</description>
+        </info>
+        <argument name="ngi">NGI_FRANCE</argument>
+
+
+        <argument name="start_time"></argument>
+        <argument name="end_time"></argument>
+        <argument name="profile">ch.cern.sam.ROC_CRITICAL</argument>
+        <!--ch.cern.sam.CLOUD-MON-->
+
+        <connector type="HTTPConnector">
+            <parameter name="url" eval="concat(property('api.status.url'),'/',$ngi,'?profile=',$profile,'&amp;group_type=ngi&amp;start_time=',$start_time,'&amp;end_time=',$end_time)"></parameter>
+
+        </connector>
+
+        <processors>
+            <element in="root">
+
+                <attribute-create out="start_time">$start_time</attribute-create>
+                <attribute-create out="end_time">$end_time</attribute-create>
+                <attribute-create out="ngi">$ngi</attribute-create>
+                <attribute-create out="timestamp_start">date:seconds(substring($start_time,0,20))</attribute-create>
+
+
+
+            </element>
+
+        </processors>
+
+
+    </view>
+
     <view name="Site_Statuses_NGI_noCache">
     <info>
         <category>Status</category>
@@ -1301,8 +1336,7 @@
                         <attribute in="status" out="value"></attribute>
                         <attribute-create out="color">$StateColor/e:entries/e:entry[@key=current()/../@status]/text()</attribute-create>
                         <attribute in="name">../ancestor::group/@name</attribute>
-                        <attribute-create out="url">concat('metric_output?site=',$site,'&amp;host=',$host,'&amp;sf=',$sf,'&amp;timestamp=',../@timestamp,'&amp;metric=',../parent::group/@name)</attribute-create>
-
+                        <attribute-create out="url">choose($report!='cloud',concat('metric_output?site=',$site,'&amp;host=',$host,'&amp;sf=',$sf,'&amp;timestamp=',../@timestamp,'&amp;metric=',../parent::group/@name),concat('metric_output?site=',$site,'&amp;host=',$host,'&amp;sf=',$sf,'&amp;timestamp=',../@timestamp,'&amp;metric=',../parent::group/@name,'&amp;profile=ch.cern.sam.CLOUD-MON'))</attribute-create>
                     </element>
 
                 </elements>
@@ -1353,10 +1387,13 @@
         <argument name="host"></argument>
         <argument name="sf"></argument>
         <argument name="metric"></argument>
+        <argument name="profile">false</argument>
         <argument name="timestamp"></argument>
 
+        <variable name="api.url" eval="choose($profile='false',concat(property('api.metric.output.url'),$host,'/',$sf,'/',$metric,'?exec_time=',$timestamp),concat(property('api.metric.output.url'),$host,'/',$sf,'/',$metric,'?exec_time=',$timestamp,'&amp;profile=',$profile))"></variable>
+
         <connector type="HTTPConnector">
-            <parameter name="url" eval="concat(property('api.metric.output.url'),$host,'/',$sf,'/',$metric,'?exec_time=',$timestamp)"></parameter>
+            <parameter name="url" eval="$api.url"></parameter>
         </connector>
 
         
@@ -1367,6 +1404,7 @@
                 <attribute-create out="sf">$sf</attribute-create>
                 <attribute-create out="metric">$metric</attribute-create>
                 <attribute-create out="timestamp">$timestamp</attribute-create>
+                <attribute-create out="url">$api.url</attribute-create>
 
                 <elements-ignore path="profile/group/group/group/group/host/metric/status">
                     <element in="summary"></element>
