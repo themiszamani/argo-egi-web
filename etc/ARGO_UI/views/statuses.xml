@@ -87,7 +87,7 @@
 
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('status_data_cached', entry('start_date', concat(substring(date:add(date:date-time(),concat('-P',1,'D')), 0,11),'T00:00:00Z')))"></parameter>
+            <parameter name="content" eval="view('status_data_cached')"></parameter>
         </connector>
 
         <processors>
@@ -115,10 +115,10 @@
 
         <cache type="IndexedFileCache">
             <parameter name="index_depth">3</parameter>
-            <trigger type="DeltaTimeTrigger">
-                <parameter name="hours">1</parameter>
+            <trigger type="FixedTimeTrigger">
+                <parameter name="hour">4</parameter>
             </trigger>
-            <trigger type="ViewNotifiedTrigger"></trigger>
+
         </cache>
 
 
@@ -130,7 +130,7 @@
 
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('status_data_cached_cloud', entry('start_date', concat(substring(date:add(date:date-time(),concat('-P',1,'D')), 0,11),'T00:00:00Z')))"></parameter>
+            <parameter name="content" eval="view('status_data_cached_cloud')"></parameter>
         </connector>
 
         <processors>
@@ -158,12 +158,11 @@
 
         <cache type="IndexedFileCache">
             <parameter name="index_depth">3</parameter>
-            <trigger type="DeltaTimeTrigger">
-                <parameter name="hours">1</parameter>
+            <trigger type="FixedTimeTrigger">
+                <parameter name="hour">4</parameter>
             </trigger>
-            <trigger type="ViewNotifiedTrigger"></trigger>
-        </cache>
 
+        </cache>
 
 
     </view>
