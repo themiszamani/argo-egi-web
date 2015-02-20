@@ -28,7 +28,7 @@
             <parameter name="template" eval="concat('/',property('directory.name'),'/resources/html/index.html')"/>
         </renderer>
         <renderer type="HTMLRenderer">
-            <parameter name="template" eval="concat('/',property('directory.name'),'/resources/html/index.html')"/>
+            <parameter name="template" eval="concat('/',property('directory.name'),'/resources/html/default.html')"/>
         </renderer>
     </renderers>
 
