@@ -31,34 +31,21 @@
                             <h3 class="box-title">Recomputation Form</h3>
                         </div><!-- /.box-header -->
                         <!-- form start -->
-                        <form role="form" >
+                        <form action="/lavoisier/form_recomputation_results_INTERNAL?accept=html" method="post"  id="recomp_form">
                             <div class="box-body">
 
                                 <div class="form-group">
                                     <label for="exampleInputPassword1">Name of the enquirer</label>
-                                    <input type="name" class="form-control" id="exampleInputPassword1" placeholder="Enter the Name"/>
+                                    <input name="requestor" type="name" class="form-control" id="exampleInputPassword1" placeholder="Enter the Name"/>
                                 </div>
-
-                                <!--<div class="form-group">-->
-                                    <!--<label class="span1">NGI</label>-->
-                                    <!--<select class="form-control"  name="listNgi">-->
-                                        <!--<option  tpl:foreach="/root/e:entries/CONTACT" value="{{@ngi}}">{{@ngi}}</option>-->
-                                    <!--&lt;!&ndash;</select>&ndash;&gt;-->
-
-                                    <!--<input type="text" class="form-control" name="ngi" id="filters-ngi" /><br/>-->
-
-
-                                <!--</div>-->
 
 
 
                                 <div class="form-group">
                                     <label class="span1">Sites to be excluded from the computation</label>
 
-
-
-                                    <select  class="form-control"  multiple="multiple"  id="listSites">
-                                        <optgroup  tpl:foreach="/root/results/Ngi" label="{{@key}}">
+                                    <select  name="site" class="form-control"  multiple="multiple"  id="listSites">
+                                        <optgroup   tpl:foreach="/root/results/Ngi" label="{{@key}}">
                                             <option tpl:foreach="SITE" name="{{@NAME}}" value="{{@NAME}}">{{@NAME}}</option>
                                         </optgroup>
                                     </select>
@@ -84,7 +71,7 @@
                             </form>
 
                         <div class="box-footer">
-                            <button class="btn btn-primary" type="submit">Submit</button>
+                            <button class="btn btn-primary" id="buttonSubmit" type="submit">Submit</button>
                         </div>
                         </div>
 
@@ -153,6 +140,11 @@
 
 
 
+        $("#buttonSubmit").click(function(){
+
+            $("#recomp_form").submit();
+
+        });
 
         <!-- date picker load -->
 

@@ -10,11 +10,11 @@
         <!-- Content Header (Page header) -->
         <section class="content-header" id="content-header">
             <h1>
-                Recomputation
+                Profile
                 <small>Management page</small>
             </h1>
             <ol class="breadcrumb" id="breadcrumb">
-                <li ><a href="#"><i class="fa fa-dashboard"></i> Recomputation Management</a></li>
+                <li ><a href="#"><i class="fa fa-dashboard"></i> Profile Management</a></li>
                 <li class="active">Index</li>
             </ol>
         </section>
@@ -22,24 +22,28 @@
         <!-- Main content -->
         <section class="content" id="content">
 
-             <div class="alert alert-info">
-                            Your request has been successfully submitted (details below)<br/>
-                            You should wait now for the validation and will be informed by email .
-             </div>
+            <div class="alert alert-info">
+                Your request has been successfully submitted (details below)<br/>
+                You should wait now for the validation and will be informed by email .
+            </div>
             <br/><br/>
 
+
             <table class="table table-condensed table-striped ">
-                <thead>
-                    <tr><th tpl:foreach="e:entries/*">{{name()}}</th></tr>
-                </thead>
-                <tbody>
-                <tr>
-                <tr><td tpl:foreach="e:entries/*/text()">{{.}}</td></tr>
+                <caption>Profile Description</caption>
+                <tr tpl:foreach="e:entries/*[local-name()!='groups']">
+                    <th>{{local-name()}}</th>
+                    <td>{{text()}}</td>
+                </tr>
+                <tr tpl:foreach="e:entries/groups/*">
+                    <th>{{name()}}</th>
+                    <td>{{text()}}</td>
                 </tr>
 
-                </tbody>
-
             </table>
+
+
+
 
 
         </section><!-- /.content -->
@@ -50,6 +54,8 @@
 
 
 </body>
+
+
 
 
 </html>
