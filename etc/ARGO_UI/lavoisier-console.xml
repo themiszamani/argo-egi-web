@@ -572,16 +572,12 @@
             <category>Monitoring</category>
             <description>*** WARNING: clicking of this link will restart Lavoisier service! ***</description>
         </info>
-        <connector type="ConfigurationCheckingConnector"/>
-        <processors>
-            <insert match="/*">
-                <connector type="JMXOperationConnector">
-                    <parameter name="domain">fr.in2p3.lavoisier.engine.jmx</parameter>
-                    <parameter name="type">daemon</parameter>
-                    <parameter name="operation">restart</parameter>
-                </connector>
-            </insert>
-        </processors>
+        <connector type="JMXOperationConnector">
+            <parameter name="domain">fr.in2p3.lavoisier.engine.jmx</parameter>
+            <parameter name="type">daemon</parameter>
+            <parameter name="operation">restart</parameter>
+        </connector>
+
         <renderers>
             <renderer type="HTMLRenderer">
                 <parameter name="template">xsl/restart.xsl</parameter>

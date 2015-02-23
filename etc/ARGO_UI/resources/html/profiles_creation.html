@@ -19,9 +19,9 @@
 
 
     <!-- Main content -->
-    <section class="content" id="content" tpl:if="/results/@admin='true'">>
+    <section class="content" id="content" tpl:if="/results/@admin='true'">
 
-        <form role="form"  style="margin:50px" method="post" action="/lavoisier/post_profile?accept=json" id="form_profile">
+        <form role="form"  style="margin:50px" method="post" action="/lavoisier/form_profile_results_INTERNAL?accept=html" id="form_profile">
 
             <div class="row">
             <div class="col-xs-8 box box-primary">
@@ -105,8 +105,8 @@
 
 
 
-        <input type="text" class="hidden" id="profile_input"/>
-        <div id="newGroup"  style="min-height:90px" class="hidden"/>
+        <input type="text"  class="hidden" id="profile_input"/>
+        <div id="newGroup"  name="group" style="min-height:90px" class="hidden"/>
         <div id="separator"  class="hidden"><code>AND</code> </div>
         <button id="removeId" onclick="javascript:closeGroup(this.id)" class="btn btn-primary fa fa-times-circle" style="display:none;"></button>
 
