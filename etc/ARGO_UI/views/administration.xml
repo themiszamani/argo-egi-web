@@ -189,4 +189,77 @@
         </processors>
     </view>
 
+    <view name="form_recomputation_results">
+        <argument name="Id">0</argument>
+
+        <connector type="RotatingCacheConnector">
+            <parameter name="content" eval="view_post('form_recomputation_results_INTERNAL', post())"/>
+
+            <parameter name="key" eval="$Id"/>
+            <parameter name="size">100</parameter>
+        </connector>
+
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/ARGO_UI/resources/html/recomp_res.html</parameter>
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/ARGO_UI/resources/html/recomp_res.html</parameter>
+            </renderer>
+        </renderers>
+
+
+    </view>
+
+    <view name="form_recomputation_results_INTERNAL" xmlns:str="http://exslt.org/strings" xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
+        <info>
+            <category>Interface</category>
+            <description>Build your AR data</description>
+        </info>
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view_post('format_post', post()) "/>
+
+            <!--<parameter name="url">https://operations-portal.egi.eu/cron/sendEmail</parameter>-->
+            <!--<parameter name="certificate" eval="property('certificate.path')"/>-->
+            <!--<parameter name="passphrase" eval="property('certificate.password')"/>-->
+        </connector>
+
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/ARGO_UI/resources/html/recomp_res.html</parameter>
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/ARGO_UI/resources/html/recomp_res.html</parameter>
+            </renderer>
+        </renderers>
+
+    </view>
+
+    <view name="form_profile_results_INTERNAL" xmlns:str="http://exslt.org/strings" xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
+        <info>
+            <category>Interface</category>
+            <description>Build your AR data</description>
+        </info>
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view_post('format_post', post()) "/>
+
+            <!--<parameter name="url">https://operations-portal.egi.eu/cron/sendEmail</parameter>-->
+            <!--<parameter name="certificate" eval="property('certificate.path')"/>-->
+            <!--<parameter name="passphrase" eval="property('certificate.password')"/>-->
+        </connector>
+
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/ARGO_UI/resources/html/profile_res.html</parameter>
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/ARGO_UI/resources/html/profile_res.html</parameter>
+            </renderer>
+        </renderers>
+
+    </view>
+
+
 </config>
