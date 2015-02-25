@@ -180,10 +180,10 @@
         </connector>
         <processors>
 
-            <insert match="/e:entries[*]" nodes="new_element('groups')"></insert>
-            <insert match="/e:entries[*]/groups" nodes="ancestor::e:entries/e:entry[contains(@key,'group')]"></insert>
-            <remove match="/e:entries/e:entry[contains(@key,'group')]"/>
-            <replace match="/e:entries//e:entry[text()]" nodes="new_element(match()/@key,new_text(match()/text()))"></replace>
+            <!--<insert match="/e:entries[*]" nodes="new_element('groups')"></insert>-->
+            <!--<insert match="/e:entries[*]/groups" nodes="ancestor::e:entries/e:entry[contains(@key,'group')]"></insert>-->
+            <!--<remove match="/e:entries/e:entry[contains(@key,'group')]"/>-->
+            <!--<replace match="/e:entries//e:entry[text()]" nodes="new_element(match()/@key,new_text(match()/text()))"></replace>-->
             <!--<replace nodes="/*/*/text()" ><node value="concat('&amp;', @key, '=', .)"/></replace>-->
 
         </processors>

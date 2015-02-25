@@ -25,7 +25,7 @@
 
     </categories>
    <categories bg="bg-light-blue" icon="fa fa-comments" title="About ARGO">
-
+       <category link="/lavoisier" icon="fa fa-home"> Start Page</category>
        <category link="http://argoeu.github.io/" icon="fa fa-book"> Documentation</category>
        <category link="https://github.com/ARGOeu" icon="fa fa-github-alt"> GitHub</category>
        <category link="mailto:&#105;&#110;&#115;&#112;&#105;&#114;&#101;&#045;&#115;&#097;&#052;&#045;&#116;&#115;&#097;&#052;&#049;&#048;&#064;&#109;&#097;&#105;&#108;&#109;&#097;&#110;&#046;&#101;&#103;&#105;&#046;&#101;&#117;" icon="fa fa-envelope">Contact Us</category>
