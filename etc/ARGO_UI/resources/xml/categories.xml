@@ -10,7 +10,7 @@
 
     </categories>
 
-    <categories bg="bg-aqua" icon="fa fa-table" title="Availabilities/Reliabilities" >
+    <categories bg="bg-blue" icon="fa fa-table" title="Availabilities/Reliabilities" >
         <category link="/lavoisier/ngi_reports" icon="fa fa-globe"> NGI Report</category>
         <category link="/lavoisier/site_reports" icon="fa fa-home"> Site Report</category>
         <category link="/lavoisier/cloud_reports" icon="fa fa-cloud"> Cloud Report</category>
@@ -24,7 +24,7 @@
         <category link="/lavoisier/administratorsList" icon="fa fa-list"> Admin List</category>
 
     </categories>
-   <categories bg="bg-blue" icon="fa fa-comments" title="About ARGO">
+   <categories bg="bg-light-blue" icon="fa fa-comments" title="About ARGO">
 
        <category link="http://argoeu.github.io/" icon="fa fa-book"> Documentation</category>
        <category link="https://github.com/ARGOeu" icon="fa fa-github-alt"> GitHub</category>

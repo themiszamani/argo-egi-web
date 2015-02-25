@@ -17,12 +17,11 @@
         <link href="/resource/ARGO_UI/resources/css/multiselect.css" rel="stylesheet" type="text/css"/>
 
 
+        <link href="/resource/ARGO_UI/resources/css/font-beba.css" rel="stylesheet" type="text/css"/>
+
         <script src="/resource/ARGO_UI/resources/js/jquery.min.js"/>
         <script src="/resource/ARGO_UI/resources/js/jquery-ui-1.10.3.js"/>
-        <!--<script src="/resource/ARGO_UI/resources/js/tablesort.js"></script>-->
-
         <script src="/resource/ARGO_UI/resources/js/bootstrap.min.js"></script>
-
 
         <script src="/resource/ARGO_UI/resources/js/AdminLTE/app.js"></script>
         <!--<script src="/resource/ARGO_UI/resources/js/AdminLTE/plugins/slimScroll/jquery.slimscroll.min.js"></script>-->
@@ -30,56 +29,44 @@
         <script src="/resource/ARGO_UI/resources/js/scripts.js"></script>
 
 
-
-        <link rel="shortcut icon" href="/resource/ARGO_UI/img/favicon.ico"/>
+        <link href="/resource/ARGO_UI/resources/css/custom.css" rel="stylesheet" type="text/css"/>
+        <link rel="shortcut icon" href="/resource/ARGO_UI/resources/img/favicon.ico"/>
 
     </head>
     <body class="skin-blue">
-        <!-- header logo: style can be found in header.less -->
-        <header class="header">
-            <a href="/lavoisier" class="logo" style="font-size: 30px">
-                ARGO.eu
 
-                <!-- Add the class icon to your logo image or logo icon to add the margining -->
-            </a>
-            <!-- Header Navbar: style can be found in header.less -->
-            <nav class="navbar navbar-static-top" role="navigation">
-                <!-- Sidebar toggle button-->
-                <a href="#" class="navbar-btn sidebar-toggle" data-toggle="offcanvas" role="button">
+
+
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
-                </a>
-
-                <div class="navbar-right">
-                    <ul class="nav navbar-nav">
-
-                        </ul>
-                    </div>
-
+                </button>
+                <a class="navbar-brand" href="/lavoisier"><img src='/resource/ARGO_UI/resources/img/logo.png' alt='Argo'  /></a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="active"><a href="#">ARGO WEB UI</a></li>
 
 
+                </ul>
 
 
-            </nav>
-        </header>
+
+            </div><!--/.nav-collapse -->
+        </div>
+    </nav>
+
         <div class="wrapper row-offcanvas row-offcanvas-left" id="wrapper">
             <aside class="left-side sidebar-offcanvas">
-                <!-- sidebar: style can be found in sidebar.less -->
+
                 <section class="sidebar">
-                    <!-- Sidebar user panel -->
-                    <div class="user-panel">
 
-                        <div class="pull-left info">
-
-
-
-                        </div>
-                    </div>
-
-                    <!-- /.search form -->
-                    <!-- sidebar menu: : style can be found in sidebar.less -->
                     <ul class="sidebar-menu">
 
                         <li tpl:foreach="/menu/categories" class="treeview" id="sidebar-menu">
