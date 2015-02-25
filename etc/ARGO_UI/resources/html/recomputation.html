@@ -31,7 +31,7 @@
                             <h3 class="box-title">Recomputation Form</h3>
                         </div><!-- /.box-header -->
                         <!-- form start -->
-                        <form action="/lavoisier/form_recomputation_results_INTERNAL?accept=html" method="post"  id="recomp_form">
+                        <form action="/lavoisier/form_recomputation_results_INTERNAL?accept=xml" method="post"  id="recomp_form">
                             <div class="box-body">
 
                                 <div class="form-group">
@@ -44,7 +44,7 @@
                                 <div class="form-group">
                                     <label class="span1">Sites to be excluded from the computation</label>
 
-                                    <select  name="site" class="form-control"  multiple="multiple"  id="listSites">
+                                    <select   class="form-control"  multiple="multiple"  id="listSites">
                                         <optgroup   tpl:foreach="/root/results/Ngi" label="{{@key}}">
                                             <option tpl:foreach="SITE" name="{{@NAME}}" value="{{@NAME}}">{{@NAME}}</option>
                                         </optgroup>
@@ -68,6 +68,11 @@
 
                             </div>
 
+                            <div class="form-group hidden" >
+                                <input name="listofSites" type="text" class="form-control" id="listSitesP" />
+                            </div>
+
+
                             </form>
 
                         <div class="box-footer">
@@ -75,8 +80,8 @@
                         </div>
                         </div>
 
-            <div class="hidden" id="listNgi" tpl:foreach="/root/ngis">{{text()}}</div>
-            <div class="hidden" id="listSite" tpl:foreach="/root/sites">{{text()}}</div>
+
+
 
         </section><!-- /.content -->
 
@@ -120,7 +125,6 @@
 
         );
 
-        <!-- Variable initialisation for the autocomplete -->
         var availableNgis = "ALL" + $("#listNgi").text();
         var availableSites =  "ALL" + $("#listSite").text();
         var tabavailableNgis=  availableNgis.split(',');
@@ -142,17 +146,26 @@
 
         $("#buttonSubmit").click(function(){
 
-            $("#recomp_form").submit();
+
+
+            var listSites="";
+
+            $(".ms-selected >span").each(function( index ) {
+                listSites=listSites + ',' +  $( this ).text() ;
+            });
+
+            console.log(listSites);
+            $("#listeSitesP").val(listSites);
+           $("#recomp_form").submit();
 
         });
 
-        <!-- date picker load -->
+
 
 
 
 
     });
-
 
 
 
