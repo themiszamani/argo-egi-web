@@ -11,7 +11,7 @@
         <!-- Content Header (Page header) -->
         <section class="content-header" id="content-header">
             <h1>
-                Status Reports
+               Availability Reports
                 <small>Click on individual bar to access details</small>
 
             </h1>
@@ -22,19 +22,38 @@
         <!-- Main content -->
         <section class="content" id="content">
 
-            <div  id="local_groups" class="hidden" >
+            <div id="local_groups">
+                   <span tpl:foreach="/e:entries/e:entry/Ngi"   class="hidden" >
 
-                <div tpl:foreach="/e:entries/e:entry/Ngi" >{{@NGI}},{{ancestor::e:entries/@month1}},{{ancestor::e:entries/@month2}},{{Availability[@timestamp=ancestor::e:entries/@month1]/@color_av}},{{Availability[@timestamp=ancestor::e:entries/@month1]/@availability}}
-                </div>
+                <div tpl:if="Availability[@timestamp=ancestor::e:entries/@month1]/@color_av">{{@NGI}}-Availability,{{ancestor::e:entries/@month1}}_{{@NGI}}_av,{{ancestor::e:entries/@month1}},{{ancestor::e:entries/@month2}},{{Availability[@timestamp=ancestor::e:entries/@month1]/@color_av}},{{Availability[@timestamp=ancestor::e:entries/@month1]/@availability}}</div>
+                <div tpl:else="">{{@NGI}}-Availability,{{ancestor::e:entries/@month1}}_{{@NGI}}_av,{{ancestor::e:entries/@month1}},{{ancestor::e:entries/@month2}},grey,unknown</div>
 
-                <div tpl:foreach="/e:entries/e:entry/Ngi" >{{@NGI}},{{ancestor::e:entries/@month2}},{{ancestor::e:entries/@month3}},{{Availability[@timestamp=ancestor::e:entries/@month2]/@color_av}},{{Availability[@timestamp=ancestor::e:entries/@month2]/@availability}}</div>
 
-                <div tpl:foreach="/e:entries/e:entry/Ngi" >{{@NGI}},{{ancestor::e:entries/@month3}},{{ancestor::e:entries/@month4}},{{Availability[@timestamp=ancestor::e:entries/@month3]/@color_av}},{{Availability[@timestamp=ancestor::e:entries/@month3]/@availability}}</div>
+                <div tpl:if="Availability[@timestamp=ancestor::e:entries/@month2]/@color_av">{{@NGI}}-Availability,{{ancestor::e:entries/@month2}}_{{@NGI}}_av,{{ancestor::e:entries/@month2}},{{ancestor::e:entries/@month3}},{{Availability[@timestamp=ancestor::e:entries/@month2]/@color_av}},{{Availability[@timestamp=ancestor::e:entries/@month2]/@availability}}</div>
+                <div tpl:else="">{{@NGI}}-Availability,{{ancestor::e:entries/@month2}}_{{@NGI}}_av,{{ancestor::e:entries/@month2}},{{ancestor::e:entries/@month3}},grey,unknown</div>
 
+
+                <div tpl:if="Availability[@timestamp=ancestor::e:entries/@month3]/@color_av">{{@NGI}}-Availability,{{ancestor::e:entries/@month3}}_{{@NGI}}_av,{{ancestor::e:entries/@month3}},{{ancestor::e:entries/@month4}},{{Availability[@timestamp=ancestor::e:entries/@month3]/@color_av}},{{Availability[@timestamp=ancestor::e:entries/@month3]/@availability}}</div>
+                <div tpl:else="">{{@NGI}}-Availability,{{ancestor::e:entries/@month3}}_{{@NGI}}_av,{{ancestor::e:entries/@month3}},{{ancestor::e:entries/@month4}},grey,unknown</div>
+
+
+                          <div tpl:if="Availability[@timestamp=ancestor::e:entries/@month1]/@color_av">{{@NGI}}-Reliability,{{ancestor::e:entries/@month1}}_{{@NGI}}_re,{{ancestor::e:entries/@month1}},{{ancestor::e:entries/@month2}},{{Availability[@timestamp=ancestor::e:entries/@month1]/@color_av}},{{Availability[@timestamp=ancestor::e:entries/@month1]/@reliability}}</div>
+                <div tpl:else="">{{@NGI}}-Reliability,{{ancestor::e:entries/@month1}}_{{@NGI}}_re,{{ancestor::e:entries/@month1}},{{ancestor::e:entries/@month2}},grey,unknown</div>
+
+
+                       <div tpl:if="Availability[@timestamp=ancestor::e:entries/@month2]/@color_av">{{@NGI}}-Reliability,{{ancestor::e:entries/@month2}}_{{@NGI}}_re,{{ancestor::e:entries/@month2}},{{ancestor::e:entries/@month3}},{{Availability[@timestamp=ancestor::e:entries/@month2]/@color_av}},{{Availability[@timestamp=ancestor::e:entries/@month2]/@reliability}}</div>
+                <div tpl:else="">{{@NGI}}-Reliability,{{ancestor::e:entries/@month2}}_{{@NGI}}_re,{{ancestor::e:entries/@month2}},{{ancestor::e:entries/@month3}},grey,unknown</div>
+
+
+                <div tpl:if="Availability[@timestamp=ancestor::e:entries/@month3]/@color_av">{{@NGI}}-Reliability,{{ancestor::e:entries/@month3}}_{{@NGI}}_re,{{ancestor::e:entries/@month3}},{{ancestor::e:entries/@month4}},{{Availability[@timestamp=ancestor::e:entries/@month3]/@color_av}},{{Availability[@timestamp=ancestor::e:entries/@month3]/@reliability}}</div>
+                <div tpl:else="">{{@NGI}}-Reliability,{{ancestor::e:entries/@month3}}_{{@NGI}}_re,{{ancestor::e:entries/@month3}},{{ancestor::e:entries/@month4}},grey,unknown</div>
+
+            </span>
 
             </div>
 
-            <div id="div_timeline" style="height: 800px;margin:20px" ></div>
+
+                <div id="div_timeline" style="height: 800px;margin:20px;width:800px" ></div>
 
         </section><!-- /.content -->
     </aside><!-- /.right-side -->
@@ -54,25 +73,27 @@
 
 
             var local_groups = document.getElementById('local_groups').getElementsByTagName('div');
+            var l=local_groups.length ;
 
 
-
-            for (j = 0; j < local_groups.length; j++) {
+            for (j = 0; j < l ; j++) {
 
                 var tempArray = local_groups[j].textContent.split(",");
+                var availability = tempArray.pop();
                 var color = tempArray.pop();
 
-//                tempArray[4]= '<div class="panel panel-default">' +
-//                                    '<div class="panel-heading">' +
-//                                            '<div class="panel-title"><h3>'+ tempArray[0] +
-//                            '</h3></div></div>' +
-//                        '<div class="panel-body">' +
-//                        '<label>Availability:</label>' + tempArray[3] +
-//                        '<label>Month : &nbsp;</label>' + tempArray[1] + '<hr/>' +
-//                        '</div></div>';
-                tempArray[4]=tempArray[0];
-                tempArray[1] = new Date(tempArray[1].substring(0,4),tempArray[1].substring(5,7),1);
+                tempArray[4]= '<div class="panel panel-default">' +
+                                    '<div class="panel-heading">' +
+                                            '<div class="panel-title"><h3>'+ tempArray[0] +
+                            '</h3></div></div>' +
+                        '<div class="panel-body">' +
+                        '<label>Value : &nbsp;</label><span class="label label-info" style="background:'+color+'">' + availability  + '</span><hr/>'+
+                        '<label>Month : &nbsp;</label>' + tempArray[2] + '<hr/>' +
+                        '</div></div>';
+
+
                 tempArray[2] = new Date(tempArray[2].substring(0,4),tempArray[2].substring(5,7),1);
+                tempArray[3] = new Date(tempArray[3].substring(0,4),tempArray[3].substring(5,7),1);
 
 
                 newgroup.push(tempArray);
@@ -107,7 +128,7 @@
                 dataTable.addRows(newgroup);
 
                 var options = {
-                    title: 'Status report',
+                    title: 'Availability report',
                     backgroundColor: '#fff',
                     colors : colorsgroup,
                     timeline: {
@@ -127,7 +148,7 @@
 
                 google.visualization.events.addListener(chart, 'onmouseover', myHandler);
 
-                chart.draw(dataTable, options);
+               chart.draw(dataTable, options);
             }
 
 
