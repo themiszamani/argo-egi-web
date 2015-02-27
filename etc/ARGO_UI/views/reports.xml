@@ -315,7 +315,7 @@
         </renderers>
     </view>
 
-    <view name="render_chart_n" xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
+    <view name="render_chart" xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
         <info>
             <category>Display</category>
             <description>Render view in chart</description>
@@ -325,7 +325,7 @@
         <argument name="type">availability</argument>
         <argument name="chart">false</argument>
         <connector type="XMLConnector">
-            <parameter name="content" eval="view($view)"></parameter>
+            <parameter name="content" eval="view($view,arguments())"></parameter>
 
         </connector>
 
@@ -373,7 +373,7 @@
         </renderers>
     </view>
 
-    <view name="render_chart" >
+    <view name="render_chart_old" >
         <info>
             <category>Display</category>
             <description>Render view in chart</description>
