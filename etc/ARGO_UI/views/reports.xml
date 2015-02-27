@@ -315,7 +315,7 @@
         </renderers>
     </view>
 
-    <view name="render_chart" xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
+    <view name="render_chart_n" xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
         <info>
             <category>Display</category>
             <description>Render view in chart</description>
@@ -373,7 +373,7 @@
         </renderers>
     </view>
 
-    <view name="render_chart_old" >
+    <view name="render_chart" >
         <info>
             <category>Display</category>
             <description>Render view in chart</description>
