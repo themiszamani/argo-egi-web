@@ -315,6 +315,64 @@
         </renderers>
     </view>
 
+    <view name="render_chart_n" xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
+        <info>
+            <category>Display</category>
+            <description>Render view in chart</description>
+        </info>
+        <argument name="view"></argument>
+        <argument name="ngi">all</argument>
+        <argument name="type">availability</argument>
+        <argument name="chart">false</argument>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view($view,arguments())"></parameter>
+
+        </connector>
+
+        <processors>
+
+
+
+            <processor match="/e:entries/e:entry[@key!=$ngi]" type="RemoveProcessor" disabled="$ngi='all' or $ngi='false' "></processor>
+
+
+
+            <processor match="//Availability[@timestamp=ancestor::chart/@month1 or @timestamp=ancestor::chart/@month2 or @timestamp=ancestor::chart/@month3]"
+                       type="ReplaceProcessor"
+                       disabled="$type='reliability'">
+                <parameter name="nodes" eval="new_element('point',new_text(@availability))"></parameter>
+            </processor>
+
+            <processor match="//Availability[@timestamp=ancestor::chart/@month1 or @timestamp=ancestor::chart/@month2 or @timestamp=ancestor::chart/@month3]"
+                       type="ReplaceProcessor"
+                       disabled="$type='availability'">
+                <parameter name="nodes" eval="new_element('point',new_text(@reliability))"></parameter>
+            </processor>
+
+
+            <elements path="e:entries/e:entry/Ngi">
+                <element in="Availability">
+                    <attribute-create out="color_av" if="../@availability &gt;= 80" >'green'</attribute-create>
+                    <attribute-create out="color_av" if="../@availability &lt; 80">'red'</attribute-create>
+                    <attribute-create out="color_re" if="../@availability &gt;= 85">'green'</attribute-create>
+                    <attribute-create out="color_re" if="../@availability &lt; 85">'red'</attribute-create>
+                </element>
+            </elements>
+        </processors>
+
+
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/ARGO_UI/resources/html/calendarmap.html</parameter>
+
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/ARGO_UI/resources/html/calendarmap.html</parameter>
+
+            </renderer>
+        </renderers>
+    </view>
+
     <view name="render_chart" >
         <info>
             <category>Display</category>

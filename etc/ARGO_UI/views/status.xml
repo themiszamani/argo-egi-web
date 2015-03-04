@@ -383,7 +383,7 @@
 
     </view>
 
-    <view name="statusperNgi_bis">
+    <view name="statusperNgi_url">
         <info>
             <category>Status</category>
             <description>Status Raw Data per NGI</description>
@@ -396,24 +396,13 @@
         <argument name="profile">ch.cern.sam.ROC_CRITICAL</argument>
         <!--ch.cern.sam.CLOUD-MON-->
 
-        <connector type="HTTPConnector">
-            <parameter name="url" eval="concat(property('api.status.url'),'/',$ngi,'?profile=',$profile,'&amp;group_type=ngi&amp;start_time=',$start_time,'&amp;end_time=',$end_time)"></parameter>
+        <connector type="StringConnector">
+            <parameter name="content" eval="concat(property('api.status.url'),'/',$ngi,'?profile=',$profile,'&amp;group_type=ngi&amp;start_time=',$start_time,'&amp;end_time=',$end_time)"></parameter>
 
         </connector>
 
-        <processors>
-            <element in="root">
+        <serializer type="EncapsulateSerializer"></serializer>
 
-                <attribute-create out="start_time">$start_time</attribute-create>
-                <attribute-create out="end_time">$end_time</attribute-create>
-                <attribute-create out="ngi">$ngi</attribute-create>
-                <attribute-create out="timestamp_start">date:seconds(substring($start_time,0,20))</attribute-create>
-
-
-
-            </element>
-
-        </processors>
 
 
     </view>
@@ -444,6 +433,36 @@
 
         </element>
     </processors>
+    </view>
+
+    <view name="Site_Statuses_NGI_url">
+        <info>
+            <category>Status</category>
+            <description>Status Raw Data</description>
+        </info>
+
+        <argument name="start_time" eval="concat(substring(date:date(),0,11),'T00:00:00Z')"></argument>
+        <argument name="end_time" eval="concat(substring(date:date-time(),0,20),'Z')"></argument>
+
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('listNgi')"></parameter>
+        </connector>
+
+
+        <processors>
+            <element in="e:entries" out="root">
+
+                <element in="e:entry">
+                    <element-create>view('statusperNgi_url',entry('ngi',current()/../text())|entry('start_time',$start_time)|entry('end_time',$end_time))</element-create>
+                    <text-ignore></text-ignore>
+
+                </element>
+
+            </element>
+        </processors>
+
+
     </view>
 
     <view name="Site_Statuses_NGI">
