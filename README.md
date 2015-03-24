@@ -17,13 +17,13 @@ title: Web UI | ARGO
 
 
  # Configuration - edit lavoisier-hidden.properties
-* cd $HOME_LAVOISIER/argo-ui-master/etc
+* cd $HOME_LAVOISIER/argo-egi-web-master/etc
 * vi lavoisier-hidden.properties
 * complete certificate.password and certificate.password
 *
 
  # Configuration - edit lavoisier-service.properties
-* cd $HOME_LAVOISIER/argo-ui-master/etc
+* cd $HOME_LAVOISIER/argo-egi-web-master/etc
 * vi lavoisier-service.properties
 * lavoisier.ssl.trustStore=path_to_your_ca  (/etc/grid-security/certificates)
 * lavoisier.ssl.keyStore= path to the lavoisier certificate
