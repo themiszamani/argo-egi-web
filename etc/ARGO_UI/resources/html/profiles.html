@@ -28,9 +28,12 @@
                         <div tpl:if="/root/@admin='true'" class="box-tools pull-right">
 
 
-                            <button id="removeProfile" style="margin-left:4px" class="btn btn-primary btn-xs" title="remove the profile">
+                            <a  style="margin-left:4px" name="{{@id}}" href="/lavoisier/profileDeletion?profileId={{@id}}" class="btn btn-primary btn-xs" title="remove the profile">
                                 <i class="fa fa-times"> </i>
-                            </button>
+                            </a>
+                            <a  style="margin-left:4px" name="edit_{{@id}}" href="/lavoisier/updateProfile?profileId={{@id}}" class="btn btn-primary btn-xs" title="update the profile">
+                                <i class="fa fa-pencil"> </i>
+                            </a>
                          </div>
                         <div tpl:else="" class="box-tools pull-right">
                             <button title="You are not authorized to edit" style="margin-left:4px" class="btn  btn-xs">
@@ -62,4 +65,7 @@
 </aside><!-- /.right-side -->
 </div>
 </body>
+
+
 </html>
+

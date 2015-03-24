@@ -650,8 +650,8 @@
 
                             <element-ignore in="profile">
                                     <element-ignore in="group">
-                                            <element in="group"   if="@name=$ngi or $report='cloud'" attributes="current()/parent::group/parent::profile/parent::root/@*">
-                                                <element in="group" if="@name=$site or $site='false'">
+                                            <element in="group"   if="@name=$ngi or $ngi='all' or $report='cloud'" attributes="current()/parent::group/parent::profile/parent::root/@*">
+                                                <element in="group" if="contains($site,@name) or $site='false'">
                                                     <element-ignore in="group">
                                                         <element-ignore in="host">
 
@@ -1477,7 +1477,7 @@
 
     </view>
 
-    <view name="StatusTreeMap">
+    <view name="StatusTreeMap_2">
 
 
         <info>
@@ -1495,11 +1495,15 @@
         <processors>
             <insert match="/root/Factor" nodes="new_attribute('ngi',choose(view('goc.siteList')/results/SITE[@NAME=match()/@site]/ROC/text(),view('goc.siteList')/results/SITE[@NAME=match()/@site]/ROC/text(),'NA'))"></insert>
 
-            <elements path="root/Factor">
-                <attribute in="ngi" >view('goc.siteList')/results/SITE[@NAME=current()/../@site]/ROC/text()</attribute>
+            <elements path="root">
+                <set variable="siteList">view('goc.siteList')</set>
+            <element in="Factor">
+                <attribute in="ngi" >$siteList/results/SITE[@NAME=current()/../@site]/ROC/text()</attribute>
                 <attribute in="site" out="id"></attribute>
                 <attribute in="ngi" out="Parent"></attribute>
+                </element>
             </elements>
+
 
 
             <element in="root" out="nodeData">
@@ -1565,4 +1569,151 @@
 
     </view>
 
+    <view name="StatusTreeMap">
+
+
+        <info>
+            <category>API results aggregated</category>
+            <description>Custom factor display</description>
+        </info>
+
+
+
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('site_status',entry('ngi','all'))"></parameter>
+        </connector>
+
+        <processors>
+
+
+            <element in="root" out="nodeData">
+                <attribute-create out="profile">'ROC_CRITICAL'</attribute-create>
+                <element in="group" out="children" flat="true">
+                    <attribute-ignore></attribute-ignore>
+                    <attribute-create out="id">../@ngi</attribute-create>
+                    <attribute-create out="Parent">'EGI'</attribute-create>
+                    <attribute-create out="color">0.0</attribute-create>
+                    <attribute-create out="size">0</attribute-create>
+                    <element in="group" out="children">
+                        <attribute-ignore></attribute-ignore>
+                        <attribute-create out="id">../@name</attribute-create>
+                        <attribute-create out="weight">0</attribute-create>
+                        <attribute-create out="Parent">../ancestor::group/@ngi</attribute-create>
+                        <attribute-create out="status">../group_ts[position()=last()]/@value</attribute-create>
+                        <element-ignore></element-ignore>
+                    </element>
+                </element>
+            </element>
+
+
+            <elements path="nodeData">
+                <set variable="customFactors">view('customFactorsRaw')</set>
+                <element in="children">
+                    <attribute in="weight" if="../@Parent!='EGI'">choose($customFactors/root/Factor[@site=current()/../@id]/@weight,$customFactors/root/Factor[@site=current()/../@id]/@weight,200)</attribute>
+                </element>
+            </elements>
+
+
+
+        </processors>
+        <cache type="FileCache">
+
+            <trigger type="DeltaTimeTrigger">
+                <parameter name="hours">4</parameter>
+            </trigger>
+            <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="ViewCreatedTrigger"/>
+        </cache>
+
+        <renderers>
+
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/ARGO_UI/resources/html/factors.html</parameter>
+
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/ARGO_UI/resources/html/factors.html</parameter>
+
+            </renderer>
+            <renderer type="JSONRenderer">
+                <parameter name="element_as_array">true</parameter>
+            </renderer>
+        </renderers>
+
+    </view>
+
+    <view name="StatusTreeMap_Cloud">
+
+
+        <info>
+            <category>API results aggregated</category>
+            <description>Custom factor display</description>
+        </info>
+
+
+
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('site_status',entry('report','cloud')|entry('ngi','all'))"></parameter>
+        </connector>
+
+        <processors>
+
+
+            <element in="root" out="nodeData">
+                <attribute-create out="profile">'EGI FEDCLOUD'</attribute-create>
+                <element in="group" out="children" flat="true">
+                    <attribute-ignore></attribute-ignore>
+                    <attribute-create out="id">../@ngi</attribute-create>
+                    <attribute-create out="Parent">'EGI'</attribute-create>
+                    <attribute-create out="color">0</attribute-create>
+                    <attribute-create out="size">0</attribute-create>
+
+                    <element in="group" out="children">
+                        <attribute-ignore></attribute-ignore>
+                        <attribute-create out="id">../@name</attribute-create>
+                        <attribute-create out="Parent">../ancestor::group/@ngi</attribute-create>
+                        <attribute-create out="status">../group_ts[position()=last()]/@value</attribute-create>
+                        <element-ignore></element-ignore>
+                    </element>
+                </element>
+            </element>
+
+
+            <elements path="nodeData">
+                <set variable="customFactors">view('customFactorsRaw')</set>
+                <element in="children">
+                    <attribute-create out="weight" if="../@Parent!='EGI'">choose($customFactors/root/Factor[@site=current()/../@id]/@weight,$customFactors/root/Factor[@site=current()/../@id]/@weight,1000)</attribute-create>
+                </element>
+            </elements>
+
+
+
+        </processors>
+        <cache type="FileCache">
+
+            <trigger type="DeltaTimeTrigger">
+                <parameter name="hours">4</parameter>
+            </trigger>
+            <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="ViewCreatedTrigger"/>
+        </cache>
+
+        <renderers>
+
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/ARGO_UI/resources/html/factors.html</parameter>
+
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/ARGO_UI/resources/html/factors.html</parameter>
+
+            </renderer>
+            <renderer type="JSONRenderer">
+                <parameter name="element_as_array">true</parameter>
+            </renderer>
+        </renderers>
+
+    </view>
 </config>

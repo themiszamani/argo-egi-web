@@ -30,16 +30,33 @@
                 </div>
                 <div class="form-group">
                     <label for="profileName">Name of the Profile</label>
-                    <input type="text" class="form-control" name="profileName" id="profileName" placeholder="Profile Name"/>
+                    <input type="text" tpl:if="/results/@mode='edition'" class="form-control" name="name" id="profileName" placeholder="Profile Name" value="{{/results/profile/@name}}"/>
+                    <input type="text" tpl:else="" class="form-control" name="name" id="profileName" placeholder="Profile Name"/>
                 </div>
                 <div class="form-group">
                     <label for="profileNameSpace">NameSpace of the Profile</label>
-                    <input type="text" class="form-control" name="profileNameSpace" id="profileNameSpace" placeholder="Profile Name Space"/>
+                    <input type="text" tpl:if="/results/@mode='edition'"  class="form-control" name="namespace" id="profileNameSpace" placeholder="Profile Name Space" value="{{/results/profile/@namespace}}"/>
+                    <input type="text" tpl:else=""  class="form-control" name="namespace" id="profileNameSpace" placeholder="Profile Name Space"/>
                 </div>
+
                 <div class="form-group">
                     <label>POEM Profile</label>
-                    <input type="text" class="form-control" name="profilePoem" id="profilePoem" placeholder="POEM Profile"/>
+
+                    <select   class="form-control"  multiple="multiple"  id="listPoem">
+
+
+                            <option tpl:foreach="/results/root/Poem" name="{{@profile}}" value="{{@profile}}"
+                                    selected="true" tpl:remove-attribute.selected="not(contains(/results/profile/@poems,@profile))">{{@profile}}</option>
+
+                    </select>
+
+                    <div class="form-group hidden" >
+                        <input name="poems"  value="" class="form-control" id="poems" />
+                        <div id="poemList" tpl:foreach="/results/profile/@poems">{{text()}}</div>
+                    </div>
+
                 </div>
+                
 
              </div>
                 </div>
@@ -57,7 +74,7 @@
                     <div class="box-content">
 
 
-                        <div class="form-group">
+                        <div class="form-group" id="services">
 
                                     <select  multiple="multiple"  id="listServices">
                                         <option tpl:foreach="/results/SERVICE_TYPE/SERVICE_TYPE_NAME" name="{{text()}}" value="{{text()}}">{{text()}}</option>
@@ -79,7 +96,7 @@
 
         <div class="row">
 
-        <div class="box box-primary"  id="div_add_list" style="display:none">
+        <div class="box box-primary"  tpl:if="/results/@mode!='edition'"  id="div_add_list" style="display:none">
 
             <div class="box-header">
                 <h3 class="box-title">Profile</h3>
@@ -88,20 +105,69 @@
 
 
             <div class="box-content">
-
                 <div  id="listProfile" style="height:400px;overflow:auto"></div>
             </div>
 
-            <div class="form-group">
 
-                <input style="margin:5px"  type="submit" class="btn btn-primary " value="submit"/>
+
+            <div class="form-group">
+                <input id="buttonSubmit" style="margin:5px"  class="btn btn-primary "  value="submit"/>
             </div>
 
 
 
         </div>
 
+            <div class="box box-primary"  tpl:else="" id="div_add_list" >
+
+                <div class="box-header">
+                    <h3 class="box-title">Profile</h3>
+                    <em class="pull-right"> Compose a profile with a combination of groups then validate</em>
+                </div>
+
+
+                <div class="box-content">
+                    <div  id="listProfile" style="height:400px;overflow:auto">
+                        <input tpl:if="/results/@mode='edition'"  class="hidden" name="profileId" value="{{/results/profile/@id}}"/>
+                        <div tpl:foreach="/results/profile/AND/OR">
+                        <div  class="col-xs-3 box group" id="group_update{{position()}}" name="group" style="min-height:90px">
+                            <button class="btn btn-primary fa fa-times-circle" id="close_group_update{{position()}}" onclick="javascript:closeGroup(this.id)" style="display: block;">
+
+                            </button>
+                            <ul class="ms-list">
+                                <li tpl:foreach="Group" name="{{@service_flavor}}">{{@service_flavor}}</li>
+                            </ul>
+
+                            <input class="hidden" name="group_update{{position()}}" type="text"
+                                tpl:call-function="concatvalues"/>
+
+                            <xsl:template name="concatvalues" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+                                <xsl:attribute name="value">
+                                    <xsl:for-each select="Group">
+                                        "<xsl:value-of select="@service_flavor"></xsl:value-of>",
+                                    </xsl:for-each>
+                                </xsl:attribute>
+                                </xsl:template>
+
+                        </div>
+                            <div class="col-xs-1" id="separator_group1"><code>AND</code></div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+                <div class="form-group">
+                    <input id="buttonSubmit" style="margin:5px"  class="btn btn-primary "  value="submit"/>
+                </div>
+
+
+
+            </div>
+
         </div>
+
 
 
 
@@ -155,6 +221,15 @@
 
     $( document ).ready(function(){
 
+        var poemList = new Array( $("#poemList").val());
+        console.log(poemList);
+
+
+        $('#listPoem').multiSelect(  );
+
+
+
+
 
 
         $('#listServices').change(function(){
@@ -196,11 +271,11 @@
             $("#" + newId + "> #removeId").attr("id",newcloseId);
 
 
-            $(".ms-selection > .ms-list").clone().appendTo('#' + newId);
+            $("#ms-listServices > .ms-selection > .ms-list").clone().appendTo('#' + newId);
 
 
             $("#" + newId +"> .ms-list  > li:visible > span").each(function( index ) {
-                textIn =  $(this).text() + ',' +  textIn ;
+                textIn =  '"' + $(this).text() + '"' + ',' +  textIn ;
 
             });
 
@@ -213,8 +288,8 @@
             $("#listProfile > #separator").attr("class","col-xs-1");
             $("#listProfile > #separator").attr("id",newseparatorId );
 
-            $(".ms-selection > .ms-list  > li").css("display","none");
-            $(".ms-selectable > .ms-list  > li").css("display","block");
+            $("#ms-listServices > .ms-selection > .ms-list  > li").css("display","none");
+            $("#ms-listServices > .ms-selectable > .ms-list  > li").css("display","block");
 
             $("#div_add_profile").css("display","block");
 
@@ -224,7 +299,19 @@
 
         $("#buttonSubmit").click(function(){
 
-            $("#form_profile").submit();
+
+            var poems="";
+
+            $("#ms-listPoem> .ms-selection > .ms-list >.ms-selected >span").each(function( index ) {
+                poems=poems +  '"' + $( this ).text() + '"' + ',' ;
+            });
+
+            poems=poems.substring(0,poems.length - 1);
+
+            poems="[" + poems +"]" ;
+            $("#poems").val(poems);
+
+           $("#form_profile").submit();
 
         });
 

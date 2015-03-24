@@ -428,7 +428,24 @@
         </connector>
         <processors>
             <processor type="EncodeProcessor" match="/jmx/domain/group/mbean/attribute/value/text()"/>
-        </processors>
+
+
+            <elements path="jmx/domain/group/mbean">
+                <attribute-create out="status">3</attribute-create>
+            </elements>
+
+            <elements path="jmx/domain/group/mbean">
+
+                <attribute in="status" if="../attribute[@name='LastException']/value/text()!='null' and ../attribute[@name='LastErrorDate']/value/text()!='null'">1</attribute>
+                 <attribute in="status" if="../attribute[@name='CurrentBuildStartDate']/value/text()!='null'">2</attribute>
+                <attribute in="status" if="../attribute[@name='LastBuildDate']/value/text()='null'">4</attribute>
+            </elements>
+            <elements path="jmx/domain/group">
+                <element-ignore in="mbean"></element-ignore>
+                <element-create>sort_by_string(../mbean,'@status')</element-create>
+            </elements>
+
+  	</processors>
         <renderers>
             <renderer type="HTMLRenderer">
                 <parameter name="template">xsl/status.xsl</parameter>

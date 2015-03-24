@@ -9,7 +9,7 @@
     <section class="content-header" id="content-header">
         <h1>
             Comparison page
-            <small>Validate the ARGO results</small>
+            <small>Compare the ARGO and MyEGI results</small>
         </h1>
         <ol class="breadcrumb" id="breadcrumb">
             <li ><a href="#"><i class="fa fa-dashboard"></i> Comparison Pages</a></li>
@@ -21,151 +21,50 @@
     <section class="content" id="content">
 
 
-           <table class="table table-sorted table-bordered table-striped">
-               <thead>
-               <tr>
-                   <th></th><th  >2014-05</th><th  >2014-06</th><th  >2014-07</th><th  >2014-08</th><th  >2014-09</th>
-                   <th  >2014-10</th><th  >2014-11</th><th  >2014-12</th><th  >2015-01</th><th  >2015-02</th>
-               </tr>
-               <tr>
-                   <td>Site</td>
-                   <!--2014-05-->
-                   <td>  Argo <br/> MyEgi <br/> % </td>
-                   <!--2014-06-->
-                   <td>  Argo <br/> MyEgi <br/> %  </td>
-                   <!--2014-07-->
-                   <td>  Argo <br/> MyEgi <br/> %  </td>
-                   <!--2014-08-->
-                   <td>  Argo <br/> MyEgi <br/> %  </td>
-                   <!--2014-09-->
-                   <td>  Argo <br/> MyEgi <br/> %  </td>
-                   <!--2014-10-->
-                   <td>  Argo <br/> MyEgi <br/> %  </td>
-                   <!--2014-11-->
-                   <td>  Argo <br/> MyEgi <br/> %  </td>
-                   <!--2014-12-->
-                   <td>  Argo <br/> MyEgi <br/> %  </td>
-                   <!--2015-01-->
-                   <td>  Argo <br/> MyEgi <br/> %  </td>
-                   <!--2015-02-->
-                   <td>  Argo <br/> MyEgi <br/> %  </td>
-
-               </tr>
-
-               </thead>
-
-               <tbody >
-
-               <tr tpl:foreach="/root/Profile/Site">
-
-                   <td>{{@site}}</td>
-                    <td tpl:if="Availability[@timestamp='2014-05']">
-                   {{Availability[@timestamp='2014-05']/@availability}}  <br/>
-                   {{Availability[@timestamp='2014-05']/@availability_cern}} <br/>
-                        <span class="label label-success" tpl:if="Availability[@timestamp='2014-05']/@error_av &lt; 5">{{Availability[@timestamp='2014-05']/@error_av}}</span>
-                        <span class="label label-warning" tpl:if="Availability[@timestamp='2014-05']/@error_av &gt; 5 and Availability[@timestamp='2014-05']/@error_av &lt; 10">{{Availability[@timestamp='2014-05']/@error_av}}</span>
-                        <span class="label label-danger" tpl:if="Availability[@timestamp='2014-05']/@error_av &gt;= 10">{{Availability[@timestamp='2014-05']/@error_av}}</span>
-                    </td>
-                   <td tpl:else="">
-                       N.A
-                   </td>
-
-                   <td tpl:if="Availability[@timestamp='2014-06']">
-                       {{Availability[@timestamp='2014-06']/@availability}}  <br/>
-                       {{Availability[@timestamp='2014-06']/@availability_cern}} <br/>
-                       <span class="label label-success" tpl:if="Availability[@timestamp='2014-06']/@error_av &lt; 5">{{Availability[@timestamp='2014-06']/@error_av}}</span>
-                       <span class="label label-warning" tpl:if="Availability[@timestamp='2014-06']/@error_av &gt; 5 and Availability[@timestamp='2014-06']/@error_av &lt; 10">{{Availability[@timestamp='2014-06']/@error_av}}</span>
-                       <span class="label label-danger" tpl:if="Availability[@timestamp='2014-06']/@error_av &gt;= 10">{{Availability[@timestamp='2014-06']/@error_av}}</span>
-                   </td>
-                   <td tpl:else="">
-                       N.A
-                   </td>
-                   <td tpl:if="Availability[@timestamp='2014-07']">
-                       {{Availability[@timestamp='2014-07']/@availability}}  <br/>
-                       {{Availability[@timestamp='2014-07']/@availability_cern}} <br/>
-                       <span class="label label-success" tpl:if="Availability[@timestamp='2014-07']/@error_av &lt; 5">{{Availability[@timestamp='2014-07']/@error_av}}</span>
-                       <span class="label label-warning" tpl:if="Availability[@timestamp='2014-07']/@error_av &gt; 5 and Availability[@timestamp='2014-07']/@error_av &lt; 10">{{Availability[@timestamp='2014-07']/@error_av}}</span>
-                       <span class="label label-danger" tpl:if="Availability[@timestamp='2014-07']/@error_av &gt;= 10">{{Availability[@timestamp='2014-07']/@error_av}}</span>
-                   </td>
-                   <td tpl:else="">
-                       N.A
-                   </td>
-                   <td tpl:if="Availability[@timestamp='2014-08']">
-                       {{Availability[@timestamp='2014-08']/@availability}}  <br/>
-                       {{Availability[@timestamp='2014-08']/@availability_cern}} <br/>
-                       <span class="label label-success" tpl:if="Availability[@timestamp='2014-08']/@error_av &lt; 5">{{Availability[@timestamp='2014-08']/@error_av}}</span>
-                       <span class="label label-warning" tpl:if="Availability[@timestamp='2014-08']/@error_av &gt; 5 and Availability[@timestamp='2014-08']/@error_av &lt; 10">{{Availability[@timestamp='2014-08']/@error_av}}</span>
-                       <span class="label label-danger" tpl:if="Availability[@timestamp='2014-08']/@error_av &gt;= 10">{{Availability[@timestamp='2014-08']/@error_av}}</span>
-                   </td>
-                   <td tpl:else="">
-                       N.A
-                   </td>
-                   <td tpl:if="Availability[@timestamp='2014-09']">
-                       {{Availability[@timestamp='2014-09']/@availability}}  <br/>
-                       {{Availability[@timestamp='2014-09']/@availability_cern}} <br/>
-                       <span class="label label-success" tpl:if="Availability[@timestamp='2014-09']/@error_av &lt; 5">{{Availability[@timestamp='2014-09']/@error_av}}</span>
-                       <span class="label label-warning" tpl:if="Availability[@timestamp='2014-09']/@error_av &gt; 5 and Availability[@timestamp='2014-09']/@error_av &lt; 10">{{Availability[@timestamp='2014-09']/@error_av}}</span>
-                       <span class="label label-danger" tpl:if="Availability[@timestamp='2014-09']/@error_av &gt;= 10">{{Availability[@timestamp='2014-09']/@error_av}}</span>
-                   </td>
-                   <td tpl:else="">
-                       N.A
-                   </td>
-                   <td tpl:if="Availability[@timestamp='2014-10']">
-                       {{Availability[@timestamp='2014-10']/@availability}}  <br/>
-                       {{Availability[@timestamp='2014-10']/@availability_cern}} <br/>
-                       <span class="label label-success" tpl:if="Availability[@timestamp='2014-10']/@error_av &lt; 5">{{Availability[@timestamp='2014-10']/@error_av}}</span>
-                       <span class="label label-warning" tpl:if="Availability[@timestamp='2014-10']/@error_av &gt; 5 and Availability[@timestamp='2014-10']/@error_av &lt; 10">{{Availability[@timestamp='2014-10']/@error_av}}</span>
-                       <span class="label label-danger" tpl:if="Availability[@timestamp='2014-10']/@error_av &gt;= 10">{{Availability[@timestamp='2014-10']/@error_av}}</span>
-                   </td>
-                   <td tpl:else="">
-                       N.A
-                   </td>
-                   <td tpl:if="Availability[@timestamp='2014-11']">
-                       {{Availability[@timestamp='2014-11']/@availability}}  <br/>
-                       {{Availability[@timestamp='2014-11']/@availability_cern}} <br/>
-                       <span class="label label-success" tpl:if="Availability[@timestamp='2014-11']/@error_av &lt; 5">{{Availability[@timestamp='2014-11']/@error_av}}</span>
-                       <span class="label label-warning" tpl:if="Availability[@timestamp='2014-11']/@error_av &gt; 5 and Availability[@timestamp='2014-11']/@error_av &lt; 10">{{Availability[@timestamp='2014-11']/@error_av}}</span>
-                       <span class="label label-danger" tpl:if="Availability[@timestamp='2014-11']/@error_av &gt;= 10">{{Availability[@timestamp='2014-11']/@error_av}}</span>
-                   </td>
-                   <td tpl:else="">
-                       N.A
-                   </td>
-                   <td tpl:if="Availability[@timestamp='2014-12']">
-                       {{Availability[@timestamp='2014-12']/@availability}}  <br/>
-                       {{Availability[@timestamp='2014-12']/@availability_cern}} <br/>
-                       <span class="label label-success" tpl:if="Availability[@timestamp='2014-12']/@error_av &lt; 5">{{Availability[@timestamp='2014-12']/@error_av}}</span>
-                       <span class="label label-warning" tpl:if="Availability[@timestamp='2014-12']/@error_av &gt; 5 and Availability[@timestamp='2014-12']/@error_av &lt; 10">{{Availability[@timestamp='2014-12']/@error_av}}</span>
-                       <span class="label label-danger" tpl:if="Availability[@timestamp='2014-12']/@error_av &gt;= 10">{{Availability[@timestamp='2014-12']/@error_av}}</span>
-                   </td>
-                   <td tpl:else="">
-                       N.A
-                   </td>
-                   <td tpl:if="Availability[@timestamp='2015-01']">
-                       {{Availability[@timestamp='2015-01']/@availability}}  <br/>
-                       {{Availability[@timestamp='2015-01']/@availability_cern}} <br/>
-                       <span class="label label-success" tpl:if="Availability[@timestamp='2015-01']/@error_av &lt; 5">{{Availability[@timestamp='2015-01']/@error_av}}</span>
-                       <span class="label label-warning" tpl:if="Availability[@timestamp='2015-01']/@error_av &gt; 5 and Availability[@timestamp='2015-01']/@error_av &lt; 10">{{Availability[@timestamp='2015-01']/@error_av}}</span>
-                       <span class="label label-danger" tpl:if="Availability[@timestamp='2015-01']/@error_av &gt;= 10">{{Availability[@timestamp='2015-01']/@error_av}}</span>
-                   </td>
-                   <td tpl:else="">
-                       N.A
-                   </td>
-                   <td tpl:if="Availability[@timestamp='2015-02']">
-                       {{Availability[@timestamp='2015-02']/@availability}}  <br/>
-                       {{Availability[@timestamp='2015-02']/@availability_cern}} <br/>
-                       <span class="label label-success" tpl:if="Availability[@timestamp='2015-02']/@error_av &lt; 5">{{Availability[@timestamp='2015-02']/@error_av}}</span>
-                       <span class="label label-warning" tpl:if="Availability[@timestamp='2015-02']/@error_av &gt; 5 and Availability[@timestamp='2015-02']/@error_av &lt; 10">{{Availability[@timestamp='2015-02']/@error_av}}</span>
-                       <span class="label label-danger" tpl:if="Availability[@timestamp='2015-02']/@error_av &gt;= 10">{{Availability[@timestamp='2015-02']/@error_av}}</span>
-                   </td>
-                   <td tpl:else="">
-                       N.A
-                   </td>
 
 
 
-               </tr>
-               </tbody>
-           </table>
+               <table class="table table-condensed table-bordered table-striped"  tpl:foreach="/root/Profile/Site" tpl:with-order="@site">
+
+
+
+
+                       <tr>
+
+                       <td>{{@site}}</td>
+
+                       <td>
+                           <table class="table table-sorted table-bordered table-striped">
+
+                           <tr>
+                               <th>Source</th>
+                               <th tpl:foreach="Availability">{{@timestamp}}</th>
+                           </tr>
+                            <tr>
+                                <th>ARGO</th>
+                                <td tpl:foreach="Availability">{{@availability}}</td>
+                            </tr>
+                            <tr>
+                                <th>MyEGI</th>
+                                <td tpl:foreach="Availability">{{@availability_cern}}</td>
+                            </tr>
+                            <tr>
+                                <th>Diff</th>
+                                <td tpl:foreach="Availability">
+                                   <span tpl:if="@error_av &lt; 5" style="color:green">{{@error_av}}</span>
+                                   <span tpl:if="@error_av &gt;= 5 and @error_av &lt; 10" style="color:orange">{{@error_av}}</span>
+                                   <span tpl:if="@error_av &gt; 10" style="color:red">{{@error_av}}</span>
+                                </td>
+                            </tr>
+
+                       </table>
+                       </td>
+
+                        </tr>
+
+
+
+                   </table>
 
     </section><!-- /.content -->
 </aside><!-- /.right-side -->

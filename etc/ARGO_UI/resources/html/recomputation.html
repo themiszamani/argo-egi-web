@@ -31,7 +31,7 @@
                             <h3 class="box-title">Recomputation Form</h3>
                         </div><!-- /.box-header -->
                         <!-- form start -->
-                        <form action="/lavoisier/form_recomputation_results_INTERNAL?accept=xml" method="post"  id="recomp_form">
+                        <form action="/lavoisier/form_recomputation_results_INTERNAL?accept=html" method="post"  id="recomp_form">
                             <div class="box-body">
 
                                 <div class="form-group">
@@ -58,18 +58,30 @@
                                     </textarea>
                                 </div>
 
+
+
+                                <div class="form-group">
+
+                                    <label for="profile">Profiles</label>
+
+                                            <select name="profile" id="profile" class="form-control">
+                                                <option tpl:foreach="/root/profile" value="{{concat(@namespace,'-',@name)}}">{{concat(@namespace,'-',@name)}}</option>
+                                            </select>
+
+                                </div>
+
+
                                 <div  class="form-group">
-                                    <label>Computation Period (UTC)</label>
-                                    <input type="text" name="dateStart"  id="reportrange" />
-                                 </div>
-
-
+                                    <label for="reportrange">Computation Period (UTC)</label>
+                                    <input  class="form-control" type="text" name="period"  id="reportrange"/>
+                                </div>
 
 
                             </div>
 
                             <div class="form-group hidden" >
-                                <input name="listofSites" type="text" class="form-control" id="listSitesP" />
+                                <input name="listofSites" value="" class="form-control" id="listSitesP" />
+                                <input name="profile" value="" id="Fprofile"/>
                             </div>
 
 
@@ -118,7 +130,7 @@
         $('#reportrange').daterangepicker(
                 {
                     timePicker: true,
-                    format: 'YYYY-MM-DD',
+                    format: 'YYYY-MM-DD HH:MM',
                     startDate: moment().subtract('days', 29),
                     endDate: moment()
                 }
@@ -154,8 +166,11 @@
                 listSites=listSites + ',' +  $( this ).text() ;
             });
 
-            console.log(listSites);
-            $("#listeSitesP").val(listSites);
+            $("#listSitesP").val(listSites);
+
+            var profile=$('#profile :selected').val();
+            $("#Fprofile").val(profile);
+
            $("#recomp_form").submit();
 
         });

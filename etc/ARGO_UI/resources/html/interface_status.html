@@ -32,9 +32,39 @@
         <section class="content-header" id="content-header">
             <h1>
                 Site Status Reports
-                <small tpl:if="/e:entries/@entity='ngi'">Access to the sites reports by selecting a NGI </small>
+                <small tpl:if="/e:entries/@entity='ngi'">Access to the sites reports by selecting an Operation Center</small>
                 <small tpl:else="">Access to the status reports by selecting a site </small>
+
+                <button type="button" class="pull-right btn btn-primary" data-toggle="modal" data-target="#myHelp">
+                    <div class="fa fa-info"></div>
+                </button>
+
+
+
             </h1>
+
+            <div class="modal fade" id="myHelp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+                            <h3 class="modal-title" id="myModalLabel">Help  <i class="ion ion-clipboard"></i></h3>
+                        </div>
+                        <div class="modal-body">
+                            <ul>
+                                <li>Start to type a part of the name of the site or the Operation center </li>
+                                <li class="info-box-text">Then select one of the items given by the auto-completed list</li>
+                                <li class="info-box-text">Click the button to access to the status report of the selected entity</li>
+                            </ul>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
         </section>
 
@@ -44,41 +74,31 @@
 
 
 
+            <div  id="listItems" class="hidden">
+                <div tpl:foreach="/e:entries/e:entry" id="{{@ngi}}">{{text()}}</div>
+            </div>
 
+            <div class="hidden" tpl:foreach="/e:entries">
+                <input  id="entity" value="{{@entity}}"/>
+
+            </div>
 
 
 
 
             <div  class="box box-primary">
+                <div class="box-body">
 
-                <div class="box-header">
+                        <label tpl:if="/e:entries/@entity='ngi'">OPERATION CENTER</label>
+                        <label tpl:else="">SITE </label>
+                        <input type="text" style="margin-left:20px" name="ngi" id="filters-entity" placeholder="Enter Search "/><br/>
 
-                </div>
-
-
-                <div  id="listItems" class="hidden">
-                    <div tpl:foreach="/e:entries/e:entry" id="{{@ngi}}">{{text()}}</div>
-                 </div>
-
-                <div class="hidden" tpl:foreach="/e:entries">
-                    <input  id="entity" value="{{@entity}}"/>
+                        <div class="row" style="margin:30px;padding:20px">
+                            <input type="submit" class="btn btn-primary offset1" id="buttonfilter" value="Status Report"/>
+                        </div>
 
                 </div>
-
-
-        <div class="box-body">
-
-
-                <label tpl:if="/e:entries/@entity='ngi'">NGI </label>
-                <label tpl:else="">SITE </label>
-                <input type="text" style="margin-left:20px" name="ngi" id="filters-entity" placeholder="Enter Search "/><br/>
-
-            <div class="row" style="margin:30px;padding:20px">
-                <input type="submit" class="btn btn-primary offset1" id="buttonfilter" value="Status Report"/>
             </div>
-
-        </div>
-                </div>
 
 
         </section><!-- /.content -->
