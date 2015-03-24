@@ -10,7 +10,7 @@ title: Web UI | ARGO
 
  # Installation - the $HOME_LAVOISIER is the directory where do you install the service
 * cd $HOME_LAVOISIER
-* wget https://github.com/ARGOeu/argo-ui/archive/master.zip
+* wget https://github.com/ARGOeu/argo-egi-web/archive/master.zip
 * unzip master.zip
 * mkdir certificate
 * put your certificate in p12 format in this directory
