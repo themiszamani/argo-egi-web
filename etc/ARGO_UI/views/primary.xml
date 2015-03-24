@@ -332,6 +332,31 @@
     </view>
 
 
+    <view name="customFactorsRaw">
+
+
+    <info>
+        <category>API results aggregated</category>
+        <description>Custom factor display</description>
+    </info>
+
+    <connector type="HTTPConnector">
+        <parameter name="url" eval="property('api.custom.factors')"></parameter>
+        <parameter name="certificate" eval="property('certificate.path')"/>
+        <parameter name="passphrase" eval="property('certificate.password')"/>
+        <parameter name="force-redirect">true</parameter>
+    </connector>
+
+    <cache type="FileCache">
+        <!--<trigger type="ViewCreatedTrigger"/>-->
+        <trigger type="DeltaTimeTrigger">
+            <parameter name="hours">4</parameter>
+        </trigger>
+        <trigger type="ViewNotifiedTrigger"/>
+        <trigger type="ViewCreatedTrigger"/>
+    </cache>
+
+    </view>
 
     <view name="customFactors">
 

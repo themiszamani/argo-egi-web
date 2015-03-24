@@ -12,8 +12,38 @@
     <section class="content-header" id="content-header">
         <h1>
             Availabilities Reliabilities Reports
-            <small>League Report</small>
+            <small>Customized Report</small>
+            <button type="button" class="pull-right btn btn-primary" data-toggle="modal" data-target="#myHelp">
+                <div class="fa fa-info"></div>
+            </button>
+
+
         </h1>
+
+
+
+
+        <div class="modal fade " id="myHelp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+                        <h3 class="modal-title" id="myModalLabel">Help  <i class="ion ion-clipboard"></i></h3>
+                    </div>
+                    <div class="modal-body">
+                        <ul>
+                            <li>Please select a  period, an entity, a profile and the granularity . </li>
+                            <li class="info-box-text">Then by clicking on the button you will generate the availability/reliability figures for these parameters</li>
+                            <li class="info-box-text">The entity selection is working by auto-completion</li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </section>
 
@@ -28,11 +58,11 @@
 
                     <div class="box  col-md-5" style="margin:20px;padding:20px;height:180px ">
 
-                        <div class="box-header"><H3 class="box-title">Period</H3></div>
+                        <div class="box-header"><H3 class="box-title"> <i class="fa fa-calendar"> </i>   Period</H3></div>
                         <div class="box-body">
                             <div class="row">
 
-                                <label> <i class="fa fa-calendar"> </i>   Date range:</label>
+                                <label>  Date range:</label>
                                 <input  id="reportrange" type="text" /><span></span><br/>
 
 
@@ -46,9 +76,9 @@
 
 
 
-                    <div class="box  col-md-5 " style="margin:20px;padding:20px;height:180px ">
+                    <div class="box  col-md-6 " style="margin:20px;padding:20px;height:180px ">
 
-                        <div class="box-header"><H3 class="box-title">Entity</H3></div>
+                        <div class="box-header"><H3 class="box-title"> <i class="fa fa-globe"> </i>   Entity</H3></div>
 
                         <div class="box-body">
 
@@ -56,7 +86,7 @@
 
 
 
-                                <label>NGI </label>
+                                <label>NGI</label>
                                 <input type="text" style="margin-left:20px" name="ngi" id="filters-ngi" placeholder="Enter Search "/><br/>
 
 
@@ -74,7 +104,7 @@
 
                     <div class="box  col-md-5 " style="margin:20px;padding:20px;height:180px ">
 
-                        <div class="box-header"><H3 class="box-title">Profiles</H3></div>
+                        <div class="box-header"><H3 class="box-title"> <i class="fa fa-group"> </i>   Profiles</H3></div>
 
                         <div class="box-body">
 
@@ -94,7 +124,7 @@
 
                 <div class="box  col-md-5 " style="margin:20px;padding:20px;height:180px ">
 
-                    <div class="box-header"><H3 class="box-title">Granularity</H3></div>
+                    <div class="box-header"><H3 class="box-title"> <i class="fa fa-gear"> </i>   Granularity</H3></div>
                     <div class="box-body">
                         <div class="form_group">
                             <input type="radio" value="DAILY" name="granularity"

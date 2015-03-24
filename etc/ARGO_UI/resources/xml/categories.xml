@@ -2,7 +2,7 @@
 
     <categories bg="bg-aqua" icon="fa fa-dashboard" title="Status" >
 
-        <category link="/lavoisier/choiceNgi?accept=html" icon="fa fa-globe"> Ngi Status Report</category>
+        <category link="/lavoisier/choiceNgi?accept=html" icon="fa fa-globe"> NGI Status Report</category>
         <category link="/lavoisier/choiceSite?accept=html" icon="fa fa-home"> Site Status Report</category>
         <category link="/lavoisier/site_status?report=cloud&amp;ngi=all&amp;accept=html" icon="fa fa-cloud">Cloud Status Report</category>
         <category link="/lavoisier/status_form?accept=html" icon="fa fa-list"> Customized Report</category>
@@ -26,9 +26,10 @@
     </categories>
    <categories bg="bg-light-blue" icon="fa fa-comments" title="About ARGO">
        <category link="/lavoisier" icon="fa fa-home"> Start Page</category>
-       <category link="http://argoeu.github.io/" icon="fa fa-book"> Documentation</category>
+       <category link="http://argoeu.github.io" icon="fa fa-eye">ARGO Web Site</category>
+       <category link="http://argoeu.github.io/overview" icon="fa fa-book"> Documentation</category>
        <category link="https://github.com/ARGOeu" icon="fa fa-github-alt"> GitHub</category>
-       <category link="mailto:&#97;&#114;%67o&#64;&#101;%67i%2e&#101;u">" icon="fa fa-envelope">Contact Us</category>
+       <category link="mailto:&#97;&#114;%67o&#64;&#101;%67i%2e&#101;u" icon="fa fa-envelope">Contact Us</category>
 
    </categories>
 </menu>

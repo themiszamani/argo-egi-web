@@ -11,7 +11,37 @@
                 Custom Factors
                 <small>Tree Map Page</small>
 
+                <button type="button" class="pull-right btn btn-primary" data-toggle="modal" data-target="#myHelp">
+                    <div class="fa fa-info"></div>
+                </button>
+
+
             </h1>
+
+
+
+
+            <div class="modal fade " id="myHelp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+                            <h3 class="modal-title" id="myModalLabel">Help  <i class="ion ion-clipboard"></i></h3>
+                        </div>
+                        <div class="modal-body">
+                            <ul>
+                                <li>The size of the square is determined by the weight of the sites belonging to the ngi (1st level) or the weight of the site itself (2d level)</li>
+                                <li class="info-box-text">The color is determined by the availability of the NGI or by the availability of the site itself</li>
+                                <li class="info-box-text">Left-click to move down the tree and right-click on the graph to move back up the tree</li>
+                            </ul>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </section>
 

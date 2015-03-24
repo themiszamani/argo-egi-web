@@ -68,6 +68,34 @@
             <insert match="/e:entries"  nodes="new_attribute('related_view','ngi_ar')"></insert>
             <insert match="/e:entries"  nodes="new_attribute('ngi','all')"></insert>
             <insert match="/e:entries"  nodes="new_attribute('poems','ch.cern.sam.ROC_CRITICAL')"></insert>
+
+
+
+            <element in="e:entries" if="@ngi='all'">
+                <set variable="last">0</set>
+                <element in="e:entry" future="true">
+                    <set variable="last">.</set>
+                </element>
+                <element-create as="last-child">entries($last)</element-create>
+            </element>
+
+            <element in="e:entries" if="@ngi='all'">
+                <element-ignore in="e:entries">
+                    <element in="e:entry">
+                        <attribute in="key">'EGI'</attribute>
+                        <element in="Ngi">
+                            <attribute in="NGI">'EGI'</attribute>
+                            <element in="Availability">
+                                <attribute in="availability">(sum(/e:entries/e:entry/Ngi[@NGI!='EGI']/Availability[@timestamp=current()/../@timestamp]/@availability)) div count(/e:entries/e:entry/Ngi[@NGI!='EGI']/Availability[@timestamp=current()/../@timestamp]/@availability) </attribute>
+                                <attribute in="reliability">(sum(/e:entries/e:entry/Ngi[@NGI!='EGI']/Availability[@timestamp=current()/../@timestamp]/@reliability)) div count(/e:entries/e:entry/Ngi[@NGI!='EGI']/Availability[@timestamp=current()/../@timestamp]/@reliability) </attribute>
+                            </element>
+                        </element>
+                    </element>
+
+                </element-ignore>
+
+            </element>
+
         </processors>
 
         <pre-renderers>
@@ -153,7 +181,7 @@
 
             <insert match="/e:entries"  nodes="new_attribute('month4',substring(date:add(date:date-time(),'-P2D'),  0,8))|new_attribute('month3',substring(date:add(date:date-time(),'-P1M'),  0,8))|new_attribute('month2',substring(date:add(date:date-time(),'-P2M'),  0,8))|new_attribute('month1',substring(date:add(date:date-time(),'-P3M'),  0,8))"></insert>
 
-            <insert match="/e:entries"  nodes="new_attribute('description','Site League Report')"></insert>
+            <insert match="/e:entries"  nodes="new_attribute('description','EGI Federated Cloud  Report')"></insert>
             <insert match="/e:entries"  nodes="new_attribute('view','cloud_reports')"></insert>
             <insert match="/e:entries"  nodes="new_attribute('ngi',$ngi)"></insert>
             <insert match="/e:entries"  nodes="new_attribute('related_view','cloud_ar')"></insert>
@@ -350,12 +378,31 @@
             </processor>
 
 
-            <elements path="e:entries/e:entry/Ngi">
+            <elements path="e:entries">
+                <attribute-create out="type">$type</attribute-create>
+                <element in="e:entry">
+                <element in="Ngi" out="group">
                 <element in="Availability">
                     <attribute-create out="color_av" if="../@availability &gt;= 80" >'green'</attribute-create>
                     <attribute-create out="color_av" if="../@availability &lt; 80">'red'</attribute-create>
-                    <attribute-create out="color_re" if="../@availability &gt;= 85">'green'</attribute-create>
-                    <attribute-create out="color_re" if="../@availability &lt; 85">'red'</attribute-create>
+                    <attribute-create out="color_re" if="../@reliability &gt;= 85">'green'</attribute-create>
+                    <attribute-create out="color_re" if="../@reliability &lt; 85">'red'</attribute-create>
+                </element>
+                </element>
+            </element>
+            </elements>
+
+
+            <elements path="e:entries">
+                <element in="e:entry">
+                    <element in="Site" out="group">
+                        <element in="Availability">
+                            <attribute-create out="color_av" if="../@availability &gt;= 80" >'green'</attribute-create>
+                            <attribute-create out="color_av" if="../@availability &lt; 80">'red'</attribute-create>
+                            <attribute-create out="color_re" if="../@reliability &gt;= 85">'green'</attribute-create>
+                            <attribute-create out="color_re" if="../@reliability &lt; 85">'red'</attribute-create>
+                        </element>
+                    </element>
                 </element>
             </elements>
         </processors>
@@ -363,11 +410,11 @@
 
         <renderers>
             <renderer type="DefaultRenderer">
-                <parameter name="template">/ARGO_UI/resources/html/calendarmap.html</parameter>
+                <parameter name="template">/ARGO_UI/resources/html/avrecharts.html</parameter>
 
             </renderer>
             <renderer type="HTMLRenderer">
-                <parameter name="template">/ARGO_UI/resources/html/calendarmap.html</parameter>
+                <parameter name="template">/ARGO_UI/resources/html/avrecharts.html</parameter>
 
             </renderer>
         </renderers>

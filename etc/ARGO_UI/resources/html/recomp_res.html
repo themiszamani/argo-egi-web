@@ -28,16 +28,11 @@
              </div>
             <br/><br/>
 
-            <table class="table table-condensed table-striped ">
-                <thead>
-                    <tr><th tpl:foreach="e:entries/*">{{name()}}</th></tr>
-                </thead>
-                <tbody>
-                <tr>
-                <tr><td tpl:foreach="e:entries/*/text()">{{.}}</td></tr>
+            <table class="table table-bordered table-condensed table-striped ">
+                <tr tpl:foreach="e:entries/e:entry">
+                    <th>{{@key}}</th>
+                    <td>{{text()}}</td>
                 </tr>
-
-                </tbody>
 
             </table>
 

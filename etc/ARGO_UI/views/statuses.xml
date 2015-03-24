@@ -513,8 +513,10 @@
         <variable name="end_time" eval="view('dates_timeline',entry('view',$data))/root/@end_time"></variable>
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view_path($data,concat('/root/entry/group[@name=',quot($ngi),' or group/@name=',quot($site),']'),arguments())"></parameter>
+            <!--<parameter name="content" eval="view_path($data,concat('/root/entry/group[@name=',quot($ngi),' or group/@name=',quot($site),']'),arguments())"></parameter>-->
+            <parameter name="content" eval=" view_path($data, concat('/root/entry/group[@name=',quot($ngi),' or contains(',quot(IN2P3),',group/@name)]'),arguments())"></parameter>
         </connector>
+
 
         <processors>
 
@@ -574,6 +576,8 @@
             </renderer>
         </renderers>
     </view>
+
+
 
 
     <view name="sitesf_status_report" xmlns:math="http://exslt.org/math" post-processors="status_algorithm">

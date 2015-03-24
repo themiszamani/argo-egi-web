@@ -34,7 +34,35 @@
             Status Reports
             <small>Click on individual bar to access details</small>
 
+            <button type="button" class="pull-right btn btn-primary" data-toggle="modal" data-target="#myHelp">
+                <div class="fa fa-info"></div>
+            </button>
+
+
+
         </h1>
+
+        <div class="modal fade" id="myHelp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+                        <h4 class="modal-title" id="myModalLabel">Help</h4>
+                    </div>
+                    <div class="modal-body">
+                        <ul>
+                            <li>The statuses are the following  <span class="badge badge-OK">OK</span> <span class="badge badge-UNKNOWN">UNKNOWN</span> <span class="badge badge-CRITICAL">CRITICAL</span> <span class="badge badge-WARNING">WARNING</span> <span class="badge badge-MISSING">MISSING</span></li>
+                            <li class="info-box-text">You can click on the bar to access to the next level of granularity</li>
+                            <li class="info-box-text">Left-click to move down the tree and right-click on the graph to move back up the tree</li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </section>
 

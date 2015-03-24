@@ -49,8 +49,8 @@
 
             <div class="box-header">
                         <h3 class="box-title">{{/e:entries/Entity/@name}} <br/>
-                            <a  title="CSV report"><span style="margin:10px" class="btn btn-primary" onclick="javascript:add_location('accept=csv');">CSV</span> </a>
-                            <a  title="XML report"><span style="margin:10px" class="btn btn-primary" onclick="javascript:add_location('accept=xml')">XML</span></a>
+                            <a  title="CSV report" target="_blank"><span style="margin:10px" class="btn btn-primary" onclick="javascript:add_location('accept=csv');">CSV</span> </a>
+                            <a  title="XML report" target="_blank"><span style="margin:10px" class="btn btn-primary" onclick="javascript:add_location('accept=xml')">XML</span></a>
                             <a  title="Chart report"><span style="margin:10px" class="btn btn-primary" onclick="javascript:add_location('accept=chart')">CHART</span></a>
 
                             <input type="button" style="margin:10px;display: none" class="btn btn-primary"   id="tableButton" value="TABLE"/>
@@ -64,7 +64,8 @@
             <a name="{{@Flavor}}"> </a>
             <div class="box-header">
                 <h3 class="box-title">
-                    Availabilities Reliabilities Table - {{@Flavor}}
+                    <a   onclick="change_url('services_ar','site_ar')">{{ancestor::Entity/@name}}</a> >
+                     {{@Flavor}}
 
                 </h3>
             </div>
