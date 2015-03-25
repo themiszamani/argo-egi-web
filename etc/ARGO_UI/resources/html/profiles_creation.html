@@ -144,7 +144,8 @@
                             <xsl:template name="concatvalues" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                 <xsl:attribute name="value">
                                     <xsl:for-each select="Group">
-                                        "<xsl:value-of select="@service_flavor"></xsl:value-of>",
+                                        "<xsl:value-of select="@service_flavor"></xsl:value-of>"
+                                        <xsl:if test='position()!=last()'>,</xsl:if>
                                     </xsl:for-each>
                                 </xsl:attribute>
                                 </xsl:template>
