@@ -74,42 +74,6 @@
 
     </view>
 
-    <view xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" name="updateProfile" authenticators="AuthenticatedUsers">
-        <info>
-            <description>creation of Profile</description>
-            <category>rofile</category>
-        </info>
-
-        <argument name="profileId"></argument>
-        <connector type="XMLConnector">
-            <parameter name="content" eval="view('goc.ServiceFlavours')"></parameter>
-        </connector>
-
-        <processors>
-            <insert match="/results"
-                    nodes="new_attribute('admin',boolean(view('administratorsList')/admins/admin/CertDN[text()=user()]))
-                     |new_attribute('user',user())">
-            </insert>
-            <element in="results">
-                <element-create>view('poems')</element-create>
-            </element>
-            <element in="results">
-                <attribute-create out="mode">'edition'</attribute-create>
-                <element-create>view('listProfilesRaw')/root/profile[@id=$profileId]</element-create>
-            </element>
-        </processors>
-
-
-        <renderers>
-            <renderer type="DefaultRenderer">
-                <parameter name="template">/ARGO_UI/resources/html/profiles_creation.html</parameter>
-            </renderer>
-            <renderer type="HTMLRenderer">
-                <parameter name="template">/ARGO_UI/resources/html/profiles_creation.html</parameter>
-            </renderer>
-        </renderers>
-
-    </view>
 
     <view name="listProfilesRaw">
         <info>
@@ -237,12 +201,13 @@
     </view>
 
     <view name="form_recomputation_results">
-        <argument name="Id">0</argument>
+
+        <argument name="recompId">0</argument>
 
         <connector type="RotatingCacheConnector">
             <parameter name="content" eval="view_post('form_recomputation_results_INTERNAL', post())"/>
 
-            <parameter name="key" eval="$Id"/>
+            <parameter name="key" eval="$recompId"/>
             <parameter name="size">100</parameter>
         </connector>
 
@@ -264,22 +229,30 @@
             <description>Build your AR data</description>
         </info>
 
-        <connector type="XMLConnector">
-            <parameter name="content" eval="view_post('format_post', post()) "/>
+        <!--<connector type="XMLConnector">-->
+            <!--<parameter name="content" eval="view_post('format_post', post()) "/>          -->
+        <!--</connector>-->
 
-            <!--<parameter name="url">https://operations-portal.egi.eu/cron/sendEmail</parameter>-->
-            <!--<parameter name="certificate" eval="property('certificate.path')"/>-->
-            <!--<parameter name="passphrase" eval="property('certificate.password')"/>-->
+        <connector type="HTTPConnector">
+        <!--<parameter name="url" eval="concat(property('api.availabilities.profiles'),'/',$profileId)"></parameter>-->
+            <parameter name="method">POST</parameter>
+
+            <parameter name="url">https://operations-portal.egi.eu/cron/sendEmail</parameter>
+            <parameter name="post" eval="post()"></parameter>
+            <parameter name="certificate" eval="property('certificate.path')"/>
+            <parameter name="passphrase" eval="property('certificate.password')"/>
+            <parameter name="force-redirect">true</parameter>
         </connector>
 
-        <renderers>
-            <renderer type="DefaultRenderer">
-                <parameter name="template">/ARGO_UI/resources/html/recomp_res.html</parameter>
-            </renderer>
-            <renderer type="HTMLRenderer">
-                <parameter name="template">/ARGO_UI/resources/html/recomp_res.html</parameter>
-            </renderer>
-        </renderers>
+        <serializer type="EncapsulateSerializer"></serializer>
+        <!--<renderers>-->
+            <!--<renderer type="DefaultRenderer">-->
+                <!--<parameter name="template">/ARGO_UI/resources/html/recomp_res.html</parameter>-->
+            <!--</renderer>-->
+            <!--<renderer type="HTMLRenderer">-->
+                <!--<parameter name="template">/ARGO_UI/resources/html/recomp_res.html</parameter>-->
+            <!--</renderer>-->
+        <!--</renderers>-->
 
     </view>
 
@@ -307,6 +280,44 @@
         </renderers>
 
     </view>
+
+    <view xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" name="updateProfile" authenticators="AuthenticatedUsers">
+        <info>
+            <description>creation of Profile</description>
+            <category>Profile</category>
+        </info>
+
+        <argument name="profileId"></argument>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('goc.ServiceFlavours')"></parameter>
+        </connector>
+
+        <processors>
+            <insert match="/results"
+                    nodes="new_attribute('admin',boolean(view('administratorsList')/admins/admin/CertDN[text()=user()]))
+                     |new_attribute('user',user())">
+            </insert>
+            <element in="results">
+                <element-create>view('poems')</element-create>
+            </element>
+            <element in="results">
+                <attribute-create out="mode">'edition'</attribute-create>
+                <element-create>view('listProfilesRaw')/root/profile[@id=$profileId]</element-create>
+            </element>
+        </processors>
+
+
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/ARGO_UI/resources/html/profiles_creation.html</parameter>
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/ARGO_UI/resources/html/profiles_creation.html</parameter>
+            </renderer>
+        </renderers>
+
+    </view>
+
 
     <view name="profileDeletion">
         <info>
@@ -339,6 +350,47 @@
                 <parameter name="template">/ARGO_UI/resources/html/message.html</parameter>
             </renderer>
         </renderers>
+    </view>
+
+    <view name="profileUpdate">
+        <info>
+            <category>Profile</category>
+            <description>Delete a profile</description>
+        </info>
+        <argument name="id"></argument>
+        <argument name="json"></argument>
+
+
+        <connector type="HTTPConnector">
+            <parameter name="url" eval="concat(property('api.availabilities.profiles'),'/',$id)"></parameter>
+            <parameter name="method">POST</parameter>
+            <parameter name="certificate" eval="property('certificate.path')"/>
+            <parameter name="passphrase" eval="property('certificate.password')"/>
+            <parameter name="post" eval="$json"></parameter>
+            <parameter name="header">
+                <entry key="x-api-key" eval="property('argo.api.key')"></entry>
+                <entry key="Content-Type">application/json</entry>
+            </parameter>
+        </connector>
+
+        <processors>
+            <element>
+                <element-create>view('triggerProfileList')/null</element-create>
+            </element>
+        </processors>
+
+
+
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/ARGO_UI/resources/html/message.html</parameter>
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/ARGO_UI/resources/html/message.html</parameter>
+            </renderer>
+        </renderers>
+
+
     </view>
 
     <view name="profileAddition">
@@ -396,46 +448,7 @@
 
     </view>
 
-    <view name="profileUpdate">
-        <info>
-            <category>Profile</category>
-            <description>Delete a profile</description>
-        </info>
-        <argument name="id"></argument>
-        <argument name="json"></argument>
 
-
-        <connector type="HTTPConnector">
-            <parameter name="url" eval="concat(property('api.availabilities.profiles'),'/',$id)"></parameter>
-            <parameter name="method">POST</parameter>
-            <parameter name="certificate" eval="property('certificate.path')"/>
-            <parameter name="passphrase" eval="property('certificate.password')"/>
-            <parameter name="post" eval="$json"></parameter>
-            <parameter name="header">
-                <entry key="x-api-key" eval="property('argo.api.key')"></entry>
-                <entry key="Content-Type">application/json</entry>
-            </parameter>
-        </connector>
-
-        <processors>
-            <element>
-                <element-create>view('triggerProfileList')/null</element-create>
-            </element>
-        </processors>
-
-
-
-        <renderers>
-            <renderer type="DefaultRenderer">
-                <parameter name="template">/ARGO_UI/resources/html/message.html</parameter>
-            </renderer>
-            <renderer type="HTMLRenderer">
-                <parameter name="template">/ARGO_UI/resources/html/message.html</parameter>
-            </renderer>
-        </renderers>
-
-
-    </view>
 
     <view name="poems">
     <info>
