@@ -43,7 +43,7 @@
 
 
 
-            <div tpl:foreach="e:entries/e:entry[not(starts-with(@key,'group')) and not(starts-with(@key,'poem'))]" class="hidden" name="data" id="{{@key}}">{{text()}}</div>
+            <div tpl:foreach="e:entries/e:entry[not(starts-with(@key,'group')) and not(starts-with(@key,'poem')) and not(starts-with(@key,'profile'))]" class="hidden" name="data" id="{{@key}}">{{text()}}</div>
             <div tpl:foreach="e:entries/e:entry[starts-with(@key,'group')]" class="hidden"   name="dataGroup" id="{{@key}}">{{substring(text(),1,string-length(text())-1)}}</div>
 
             <div tpl:foreach="e:entries/e:entry[starts-with(@key,'poem')]" class="hidden"   name="dataGroupPoem" id="{{@key}}">{{text()}}</div>
@@ -105,6 +105,7 @@
 
 
             $("#json").val(jsondata);
+            alert(jsondata);
 
             $("#jsonform").submit();
 
