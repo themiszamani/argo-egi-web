@@ -14,7 +14,7 @@
     <view xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" name="listProfiles" authenticators="AuthenticatedUsers">
         <info>
             <description>List of Profile html</description>
-            <category>Administration</category>
+            <category>Profile</category>
         </info>
 
         <connector type="XMLConnector">
@@ -45,7 +45,7 @@
     <view xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" name="CreationProfiles" authenticators="AuthenticatedUsers">
         <info>
             <description>creation of Profile</description>
-            <category>Administration</category>
+            <category>Profile</category>
         </info>
 
         <connector type="XMLConnector">
@@ -77,7 +77,7 @@
     <view xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" name="updateProfile" authenticators="AuthenticatedUsers">
         <info>
             <description>creation of Profile</description>
-            <category>Administration</category>
+            <category>rofile</category>
         </info>
 
         <argument name="profileId"></argument>
