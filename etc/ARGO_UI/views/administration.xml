@@ -130,12 +130,11 @@
         </trigger>
         <trigger type="ViewNotifiedTrigger"/>
         <trigger type="ViewCreatedTrigger"/>
-            <!--<trigger type="DependencyRefreshedTrigger">-->
-                <!--<parameter name="views">-->
-                    <!--<entry>profileAddition</entry>-->
-                    <!--<entry>profileDeletion</entry>-->
-                <!--</parameter>-->
-            <!--</trigger>-->
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="views">
+                    <entry>triggerProfileList</entry>
+                </parameter>
+            </trigger>
         </cache>
 
     </view>
@@ -327,8 +326,11 @@
         </connector>
 
 
-<serializer type="HTMLSerializer"></serializer>
-
+        <processors>
+            <element>
+                <element-create>view('triggerProfileList')/null</element-create>
+            </element>
+        </processors>
         <renderers>
             <renderer type="DefaultRenderer">
                 <parameter name="template">/ARGO_UI/resources/html/message.html</parameter>
@@ -359,7 +361,11 @@
             </parameter>
         </connector>
 
-
+        <processors>
+            <element>
+                <element-create>view('triggerProfileList')/null</element-create>
+            </element>
+        </processors>
 
 
         <renderers>
@@ -371,6 +377,22 @@
             </renderer>
         </renderers>
 
+
+    </view>
+
+    <view name="triggerProfileList">
+        <info>
+            <category>Profile</category>
+            <description>Trigger the refresh of the profile list</description>
+        </info>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="entry('test','test')">
+            </parameter>
+        </connector>
+
+        <cache type="EmptyCache">
+            <trigger type="ViewAccessedTrigger"></trigger>
+        </cache>
 
     </view>
 
@@ -395,6 +417,11 @@
             </parameter>
         </connector>
 
+        <processors>
+            <element>
+                <element-create>view('triggerProfileList')/null</element-create>
+            </element>
+        </processors>
 
 
 
