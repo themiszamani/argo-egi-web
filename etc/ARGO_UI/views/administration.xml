@@ -129,7 +129,7 @@
         <parameter name="hours">4</parameter>
         </trigger>
         <trigger type="ViewNotifiedTrigger"/>
-        <trigger type="ViewCreatedTrigger"/>
+
             <trigger type="DependencyRefreshedTrigger">
                 <parameter name="views">
                     <entry>triggerProfileList</entry>
