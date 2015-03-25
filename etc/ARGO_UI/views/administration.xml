@@ -114,7 +114,7 @@
     <view name="listProfilesRaw">
         <info>
             <description>List of Profile Raw</description>
-            <category>Administration</category>
+            <category>Profile</category>
         </info>
         <connector type="HTTPConnector">
 
