@@ -33,6 +33,32 @@
     </renderers>
 
 </view>
+
+    <view name="default">
+        <info>
+            <category>Hidden</category>
+            <description>The default page</description>
+        </info>
+
+        <connector type="FileConnector">
+            <parameter name="path" eval="concat(property('directory.name'),'/resources/xml/categories.xml')"/>
+        </connector>
+        <cache type="FileCache">
+            <trigger type="ViewNotifiedTrigger"></trigger>
+            <trigger type="ViewCreatedTrigger"></trigger>
+        </cache>
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="template" eval="concat('/',property('directory.name'),'/resources/html/index.html')"/>
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template" eval="concat('/',property('directory.name'),'/resources/html/default.html')"/>
+            </renderer>
+        </renderers>
+
+    </view>
+
+
     <view name="listViews">
         <info>
             <category>Hidden</category>
@@ -617,4 +643,30 @@
             </row>
         </pre-renderers>
     </view>
+
+    <view name="unknown_route">
+        <info>
+            <category>Hidden</category>
+        </info>
+        <connector type="XMLConnector">
+            <parameter name="content">
+                <entry></entry>
+            </parameter>
+        </connector>
+
+
+            <renderers>
+                <renderer type="DefaultRenderer">
+                    <parameter name="template" eval="concat('/',property('directory.name'),'/resources/html/404.html')"/>
+                </renderer>
+                <renderer type="HTMLRenderer">
+                    <parameter name="template" eval="concat('/',property('directory.name'),'/resources/html/404.html')"/>
+                </renderer>
+            </renderers>
+
+    </view>
+
+
+
+
 </config>
