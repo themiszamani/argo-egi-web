@@ -100,4 +100,16 @@
             </renderer>
         </renderers>
     </view>
+
+    <view name="controller">
+        <argument name="view"/>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view($view, arguments())"/>
+            <fallback eval="view('unknown_route')">
+                <exception type="java.lang.Exception"/>
+            </fallback>
+        </connector>
+    </view>
+
+
 </config>

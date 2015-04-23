@@ -648,10 +648,8 @@
         <info>
             <category>Hidden</category>
         </info>
-        <connector type="XMLConnector">
-            <parameter name="content">
-                <entry></entry>
-            </parameter>
+        <connector type="FileConnector">
+            <parameter name="path" eval="concat(property('directory.name'),'/resources/xml/categories.xml')"/>
         </connector>
 
 

@@ -46,8 +46,6 @@
                         <attribute-ignore></attribute-ignore>
                         <attribute-create out="ngi">current()/../parent::Ngi/@key</attribute-create>
                         <text-create>new_text(current()/../@NAME)</text-create>
-
-
                     </element>
                 </element-ignore>
             </element>
@@ -639,7 +637,10 @@
 
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="choose($report='false',view('Site_Statuses_NGI'),choose($report='cloud',view('Site_Statuses_NGI_Cloud'),view('data_status_report_lastweek',arguments())))"></parameter>
+            <parameter name="content" eval="choose(
+            $report='false',view('Site_Statuses_NGI'),
+            choose($report='cloud',view('Site_Statuses_NGI_Cloud'),view('data_status_report_lastweek',
+            arguments())))"></parameter>
         </connector>
 
         <processors>
@@ -682,6 +683,9 @@
 
 
             <!-- create sorted of timestamps -->
+            <elements path="root">
+                <element-ignore in="group" if="count(group)=0"></element-ignore>
+            </elements>
 
             <elements path="root/group/group">
                 <element-ignore in="status"></element-ignore>

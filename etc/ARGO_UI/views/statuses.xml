@@ -173,6 +173,7 @@
         <variable name="start_time_timestamp" eval="date:seconds(concat(substring(date:add(date:date-time(),concat('-P',7,'D')), 0,11),'T00:00:00'))"/>
         <variable name="end_time_timestamp" eval="date:seconds(concat(substring(date:add(date:date-time(),concat('-P',1,'D')), 0,11),'T23:59:59'))"/>
 
+
         <connector type="XMLConnector">
             <parameter name="content" eval="view('data_status_report',entry('start_time_timestamp',$start_time_timestamp)|entry('end_time_timestamp',$end_time_timestamp))"></parameter>
         </connector>
@@ -181,6 +182,7 @@
             <elements path="root">
                 <attribute-create out="start_time">concat(substring(date:add(date:date-time(),concat('-P',7,'D')), 0,11),'T00:00:00Z')</attribute-create>
                 <attribute-create out="end_time">concat(substring(date:add(date:date-time(),concat('-P',1,'D')), 0,11),'T23:59:59Z')</attribute-create>
+
             </elements>
         </processors>
         <cache type="IndexedFileCache">
@@ -348,9 +350,6 @@
     <processors name="status_algorithm">
 
 
-        <!--<elements path="root/group/group">-->
-            <!--<element in="status" if="date:seconds(substring(@endtime,0,20)) &gt; date:seconds(substring(../ancestor::root/@start_time,0,20))"></element>-->
-        <!--</elements>-->
 
         <!-- create sorted by group -->
 
@@ -498,6 +497,7 @@
 
     </processors>
 
+
     <view name="site_status_report" xmlns:math="http://exslt.org/math" post-processors="status_algorithm">
 
         <info>
@@ -512,17 +512,28 @@
         <variable name="start_time" eval="view('dates_timeline',entry('view',$data))/root/@start_time"></variable>
         <variable name="end_time" eval="view('dates_timeline',entry('view',$data))/root/@end_time"></variable>
 
+        <variable name="sitePath" eval="choose($site='','false',$site)"></variable>
+        <variable name="ngiPath" eval="choose($ngi='','all',$ngi)"></variable>
+
         <connector type="XMLConnector">
-            <parameter name="content" eval="view_path($data,concat('/root/entry/group[@name=',quot($ngi),' or group/@name=',quot($site),']'),arguments())"></parameter>
-            <!--<parameter name="content" eval=" view_path($data, concat('/root/entry/group[@name=',quot($ngi),' or contains(',quot(IN2P3),',group/@name)]'),arguments())"></parameter>-->
+            <parameter name="content" eval="
+            choose(
+            $ngiPath='all',
+            view_path($data,concat('/root/entry/group[group[contains(',quot($sitePath),',@name)]]')),
+            view_path($data,concat('/root/entry/group[@name=',quot($ngiPath),' or group[contains(',quot($sitePath),',@name)]]'))
+            )"></parameter>
         </connector>
 
 
+
         <processors>
+            <element in="e:entries">
+                <attribute-create out="xpath">concat($data,'/root/entry/group[@name=',quot($ngiPath),' or group[contains(',quot($sitePath),',@name)]]')</attribute-create>
+            </element>
 
             <element in="e:entries" out="root">
                                 <element-ignore in="group">
-                                    <element in="group" if="@name=$site or $site='false'">
+                                    <element in="group" if="contains($sitePath,@name) or $sitePath='false'">
                                         <element-ignore in="group">
                                             <element-ignore in="host">
 
@@ -549,8 +560,8 @@
                 <attribute-create out="start_time">$start_time</attribute-create>
                 <attribute-create out="end_time">$end_time</attribute-create>
 
-                <attribute-create out="ngi" if="$ngi!='all'">$ngi</attribute-create>
-                <attribute-create out="site" if=" $site != 'false' ">$site</attribute-create>
+                <attribute-create out="ngi" if="$ngiPath!='all'">$ngi</attribute-create>
+                <attribute-create out="site" if=" $sitePath != 'false' ">$site</attribute-create>
                 <attribute-create out="view">'sf_status_report'</attribute-create>
                 <attribute-create out="data">$data</attribute-create>
                 <attribute-create out="entity">concat('&amp;ngi=',$ngi,'&amp;site')</attribute-create>
@@ -580,7 +591,7 @@
 
 
 
-    <view name="sitesf_status_report" xmlns:math="http://exslt.org/math" post-processors="status_algorithm">
+    <view name="sitesf_status_report" xmlns:math="http://exslt.org/math" xmlns:str="http://exslt.org/strings" post-processors="status_algorithm">
 
         <info>
             <category>Status</category>
@@ -595,21 +606,33 @@
         <variable name="start_time" eval="view('dates_timeline',entry('view',$data))/root/@start_time"></variable>
         <variable name="end_time" eval="view('dates_timeline',entry('view',$data))/root/@end_time"></variable>
 
+        <variable name="sitePath" eval="choose($site='','false',$site)"></variable>
+        <variable name="ngiPath" eval="choose($ngi='','all',$ngi)"></variable>
+
         <connector type="XMLConnector">
-            <parameter name="content" eval="view_path($data,concat('/root/entry/group[@name=',quot($ngi),' or group/@name=',quot($site),']'),arguments())"></parameter>
+            <parameter name="content" eval="
+            choose(
+            $ngiPath='all',
+            view_path($data,concat('/root/entry/group[group[contains(',quot($sitePath),',@name)]]')),
+            view_path($data,concat('/root/entry/group[@name=',quot($ngiPath),' or group[contains(',quot($sitePath),',@name)]]'))
+            )"></parameter>
         </connector>
 
         <processors>
 
-            <elements path="e:entries/group/group">
-                <element-ignore in="group" if="@name!=$sf"></element-ignore>
+            <elements path="e:entries/group">
+                <element in="group" if="contains($sitePath,@name) or $sitePath='false'" >
+                    <element in="group" if="contains($sf,@name)"></element>
+                    <element-ignore></element-ignore>
+                </element>
+                <element-ignore></element-ignore>
             </elements>
 
             <element in="e:entries" out="root">
                 <element-ignore in="group">
-                    <element in="group" if="@name=$site or $site='false'">
-                        <attribute in="name">concat(.,' - ',$sf)</attribute>
-                        <element-ignore in="group">
+                    <element-ignore in="group">
+                        <element in="group" >
+                            <attribute in="name">concat(ancestor::group[@type='site']/@name,' - ',.)</attribute>
                             <element-ignore in="host">
 
                                 <element-ignore in="metric">
@@ -624,8 +647,8 @@
                                 </element-ignore>
 
                             </element-ignore>
-                        </element-ignore>
-                    </element>
+                        </element>
+                    </element-ignore>
                 </element-ignore>
 
             </element>
@@ -681,7 +704,7 @@
         <variable name="end_time" eval="view('dates_timeline',entry('view',$data))/root/@end_time"></variable>
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view_path($data,concat('/root/entry/group/group[@name=',quot($site),']'),arguments())"></parameter>
+            <parameter name="content" eval="view_path($data,concat('/root/entry/group/group[contains(',quot($site),',@name)]'),arguments())"></parameter>
         </connector>
 
         <processors>
@@ -756,7 +779,7 @@
 
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view_path($data,concat('/root/entry/group/group[@name=',quot($site),']'),arguments())"></parameter>
+            <parameter name="content" eval="view_path($data,concat('/root/entry/group/group[contains(',quot($site),',@name)]'),arguments())"></parameter>
         </connector>
 
         <processors>
@@ -765,7 +788,7 @@
             <element in="e:entries" out="root" attributes="group/@*">
             <element-ignore in="group"> <!-- site -->
                 <element-ignore in="group"> <!-- sf -->
-                    <element in="host" out="group" if="parent::group/@name=$sf">
+                    <element in="host" out="group" if="contains($sf,parent::group/@name)">
                         <element-ignore in="metric">
                             <element-ignore in="status" if="@status = preceding-sibling::status[1]/@status"/>
                             <element in="status">
@@ -832,7 +855,7 @@
 
 
     <connector type="XMLConnector">
-        <parameter name="content" eval="view_path($data,concat('/root/entry/group/group[@name=',quot($site),']'),arguments())"></parameter>
+        <parameter name="content" eval="view_path($data,concat('/root/entry/group/group[contains(',quot($site),',@name)]'))"></parameter>
     </connector>
 
     <processors>
@@ -842,8 +865,14 @@
         <element-ignore in="group"> <!-- site -->
             <element-ignore in="group"> <!-- sf -->
                 <element-ignore in="host">
-                    <element in="metric" out="group" if="parent::host/@name=$host and parent::host/parent::group/@name=$sf">
-                        <!--<element-ignore in="status" if="@status = preceding-sibling::status[1]/@status"/>-->
+                    <element in="metric" out="group" if="contains($host,parent::host/@name) and contains($sf,parent::host/parent::group/@name)">
+
+
+                        <attribute in="name">concat( concat('metric_output?site=',../ancestor::group[@type='site']/@name,
+                            '&amp;sf=',../ancestor::group[@type='service_type']/@name,
+                            '&amp;host=',../ancestor::host/@name,
+                            '&amp;metric=',../@name), '----' ,../ancestor::host/@name,'#',.)</attribute>
+
                         <element in="status">
                             <attribute-create out="metric">ancestor::metric/@name</attribute-create>
                             <attribute-create out="host">ancestor::host/@name</attribute-create>
@@ -865,7 +894,8 @@
             <attribute-create out="sf">$sf</attribute-create>
             <attribute-create out="host">$host</attribute-create>
             <attribute-create out="data">$data</attribute-create>
-            <attribute-create out="url">concat('metric_output?site=',$site,'&amp;host=',$host,'&amp;sf=',$sf)</attribute-create>
+            <attribute-create out="url">true()</attribute-create>
+
         </element>
 
 
