@@ -71,15 +71,24 @@
 
 
 
-        <div  id="local_groups" style="display: none">
+        <div  id="local_groups" tpl:if="not(/root/@url)" style="display: none">
             <div tpl:foreach="/root/group/group_ts" >{{ancestor::group/@name}},{{@value}}_{{position()}},{{@timestamp}},{{@endtime}},{{@color}}</div>
         </div>
+
+            <div  id="local_groups" tpl:else="" style="display: none">
+                <div tpl:foreach="/root/group/group_ts" >{{substring-after(ancestor::group/@name,'----')}},{{@value}}_{{position()}},{{@timestamp}},{{@endtime}},{{@color}}</div>
+            </div>
+
 
 
 
         <div  id="local_links" tpl:if="/root/@url" style="display: none">
-            <div  tpl:foreach="/root/group/group_ts[@previous_timestamp]" >/lavoisier/{{ancestor::root/@url}}&amp;metric={{ancestor::group/@name}}&amp;timestamp={{@previous_timestamp}}</div>
-            <div  tpl:foreach="/root/group/group_ts[not(@previous_timestamp)]" >/lavoisier/{{ancestor::root/@url}}&amp;metric={{ancestor::group/@name}}&amp;timestamp={{@timestamp}}</div>
+            <div  tpl:foreach="/root/group/group_ts[@previous_timestamp]" >
+                /lavoisier/{{substring-before(ancestor::group/@name,'----')}}&amp;timestamp={{@previous_timestamp}}
+            </div>
+            <div  tpl:foreach="/root/group/group_ts[not(@previous_timestamp)]" >
+                /lavoisier/{{substring-before(ancestor::group/@name,'----')}}&amp;timestamp={{@timestamp}}
+            </div>
         </div>
         <div   tpl:else="" style="display: none">
             <div id="local_links" tpl:if="/root/@sf_report">
