@@ -29,7 +29,7 @@
         <div  class="box box-primary">
 
             <div class="box-header" tpl:if="count(/e:entries/Entity) &gt; 0">
-                        <h3 class="box-title" ><a onclick="change_url('site={{/e:entries/Entity/@name}}','ngi={{/e:entries/Entity/@NGI}}')">{{/e:entries/Entity/@NGI}} </a> <span tpl:if="not(/e:entries/Entity/@NGI)">  {{/e:entries/Entity/@name}} </span><br/>
+                        <h3 class="box-title" >SUMMARY<br/>
                             <a  title="CSV report" target="_blank"><span style="margin:10px" class="btn btn-primary" onclick="javascript:add_location('accept=csv');">CSV</span> </a>
                             <a  title="XML report" target="_blank"><span style="margin:10px" class="btn btn-primary" onclick="javascript:add_location('accept=xml')">XML</span></a>
                             <a  title="Chart report"><span style="margin:10px" class="btn btn-primary" onclick="javascript:add_location('accept=chart')">CHART</span></a>
@@ -52,8 +52,11 @@
                                     <a tpl:else="" href="/lavoisier/site_reports?ngi={{@NGI}}">{{@NGI}}</a>
                                     > {{@name}}
 
-                                    <a tpl:if="/e:entries/Entity[@name and @NGI]"  title="detailed report">
-                                        <span style="margin:10px" class="btn btn-primary" onclick="change_url('{{/e:entries/@view}}','{{/e:entries/@view_details}}')">DETAILS</span>
+                                    <!--<a tpl:if="/e:entries/Entity[@name and @NGI]"  title="detailed report">-->
+                                        <!--<span style="margin:10px" class="btn btn-primary" onclick="change_url('{{/e:entries/@view}}','{{/e:entries/@view_details}}')">DETAILS</span>-->
+                                    <!--</a>-->
+                                    <a tpl:if="/e:entries/Entity[@name and @NGI]" href="{{ancestor::e:entries/@url}}&amp;site={{@name}}" title="detailed report">
+                                        <span style="margin:10px" class="btn btn-primary">DETAILS</span>
                                     </a>
                                 </h3>
 
@@ -85,8 +88,15 @@
                                     </td>
 
                                </tr>
+
                                 </tbody>
-                                <tfoot></tfoot>
+                                <tfoot>
+                                    <tr>
+                                        <th>Average</th>
+                                        <th>{{format-number(sum(Availability/@availability) div count(Availability/@availability),'#.00') }}</th>
+                                        <th>{{format-number(sum(Availability/@reliability) div count(Availability/@reliability),'#.00') }}</th>
+                                    </tr>
+                                </tfoot>
 
                                 </table>
                             </div>
