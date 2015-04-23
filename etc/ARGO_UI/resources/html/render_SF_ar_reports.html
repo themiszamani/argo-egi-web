@@ -98,7 +98,13 @@
 
                                </tr>
                                 </tbody>
-                                <tfoot></tfoot>
+                                <tfoot>
+                                <tr>
+                                    <th>Average</th>
+                                    <th>{{format-number(sum(Availability/@availability) div count(Availability/@availability),'#.00') }}</th>
+                                    <th>{{format-number(sum(Availability/@reliability) div count(Availability/@reliability),'#.00') }}</th>
+                                </tr>
+                                </tfoot>
 
                                 </table>
                             </div>
