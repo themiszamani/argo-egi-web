@@ -36,6 +36,8 @@
                     <div class="modal-body">
                         <ul>
                             <li>Please select a predefined period , an entity or a combination of entities and a profile . </li>
+                            <li>You can select only one level of entity : Operations Center, site or host</li>
+                            <li>But you can filter site or Operations Center with a service type</li>
                             <li class="info-box-text">Then by clicking on the button you will generate the status report for these parameters</li>
                             <li class="info-box-text">The entity selection is working by auto-completion</li>
                         </ul>
@@ -55,6 +57,7 @@
         <div id="id_content" class="hidden"></div>
 
 
+        <form method="post" id="Statusform">
 
             <div class="box box-primary">
 
@@ -94,13 +97,13 @@
 
 
                                 <label>OPERATIONS CENTER</label>
-                                <input type="text" style="margin-left:20px" name="ngi" id="filters-ngi" placeholder="Enter Search "/><br/>
+                                <input type="text" style="margin-left:20px" name="ngi" id="filters-ngi" placeholder="Enter Search " /><br/>
 
 
 
 
                                 <label>SITE </label>
-                                <input type="text" style="margin-left:20px" name="site" id="filters-site" placeholder="Enter Search "/><br/>
+                                <input type="text" style="margin-left:20px" name="site" id="filters-site" placeholder="Enter Search " /><br/>
 
 
                                 <label>SERVICE TYPE </label>
@@ -144,7 +147,7 @@
 
 
                 <div class="row" style="margin:30px;padding:20px">
-                    <input type="submit" class="btn btn-primary offset1" id="buttonAR" value="Generate Reports"/>
+                    <input class="btn btn-primary offset1" id="buttonAR" value="Generate Reports"/>
                 </div>
 
             </div>
@@ -154,19 +157,32 @@
 
             <div class="hidden" id="listNgi" tpl:foreach="/root/ngis">{{text()}}</div>
             <div class="hidden" id="listSite" tpl:foreach="/root/sites">{{text()}}</div>
-        <div  id="listHost"  class="hidden"  tpl:foreach="/root/hosts">{{text()}}</div>
+            <div  id="listHost"  class="hidden"  tpl:foreach="/root/hosts">{{text()}}</div>
 
             <div    id="listSf" class="hidden">
                 <div tpl:foreach="root/profile/AND/OR/Group">{{@service_flavor}}</div>
                 </div>
 
+            <!--<input class="hidden" name="site" if="listsites" value=""/>-->
+            <!--<input class="hidden" name="ngi" if="listngi" value=""/>-->
 
         <script src="/resource/ARGO_UI/resources/js/plugins/daterangepicker/daterangepicker.js" type="text/javascript"></script>
 
 
         <script>
 <!--
+
+                function split( val ) {
+                    return val.split( /,\s*/ );
+                }
+                function extractLast( term ) {
+                    return split( term ).pop();
+                }
+
+
             $(document).ready(function ($) {
+
+
 
 
 
@@ -175,6 +191,12 @@
                 var availableNgis =  $("#listNgi").text();
                 var availableSites =   $("#listSite").text();
                 var availableHosts =   $("#listHost").text();
+
+
+
+                // #####################################
+                // Build a table of mapping host - sites , host - ngi
+                // #####################################
 
 
                 var tabavailableNgis=  availableNgis.split(',');
@@ -187,28 +209,36 @@
                 var tabavailableHostList= [];
                 var tabavailableHostHost= [];
                 var tabavailableHostSf= [];
-
                 var tabavailableSf= [];
 
                 $.each(tabavailableHost, function( index, value ) {
-                   var tabsHost= value.split('___');
 
-                    tabavailableHostNgi[tabsHost[2] + ' (' + tabsHost[3] + ')']=tabsHost[0];
-                    tabavailableHostSite[tabsHost[2] + ' (' + tabsHost[3] + ')']=tabsHost[1];
-                    tabavailableHostHost[tabsHost[2] + ' (' + tabsHost[3] + ')']=tabsHost[2];
+                    var tabsHost = value.split('___');
+
+                    tabavailableHostNgi[tabsHost[2] + ' (' + tabsHost[3] + ')'] = tabsHost[0];
+                    tabavailableHostSite[tabsHost[2] + ' (' + tabsHost[3] + ')'] = tabsHost[1];
+                    tabavailableHostHost[tabsHost[2] + ' (' + tabsHost[3] + ')'] = tabsHost[2];
                     tabavailableHostList.push(tabsHost[2] + ' (' + tabsHost[3] + ')');
-                    tabavailableHostSf[tabsHost[2] + ' (' + tabsHost[3] + ')']=tabsHost[3];
+                    tabavailableHostSf[tabsHost[2] + ' (' + tabsHost[3] + ')'] = tabsHost[3];
+
                 });
 
 
+                // Build the service flavour List
                 var divSf= document.getElementById('listSf').getElementsByTagName('div');
-
 
                 for (i=0; i<divSf.length; i++) {
                     tabavailableSf.push(divSf[i].textContent);
                 }
 
 
+                //  ################################
+                //  Autocompletion fonctions
+                // ##############################
+
+
+                // call the autocomplete functions
+                // Add eventually (sites , host ) the possibility to select multiple values and concatenate it
 
                 $("#filters-ngi").autocomplete({
                     search:true,
@@ -218,22 +248,90 @@
                 });
 
                 $("#filters-site").autocomplete({
-                    source: tabavailableSite,
-                    autoFocus: true
+
+                    source: function( request, response ) {
+                        // delegate back to autocomplete, but extract the last term
+                        response( $.ui.autocomplete.filter(
+                                tabavailableSite, extractLast( request.term ) ) );
+                    },
+                    focus: function() {
+                        // prevent value inserted on focus
+                        return false;
+                    },
+                    select: function( event, ui ) {
+                        var terms = split( this.value );
+                        // remove the current input
+                        terms.pop();
+                        // add the selected item
+                        terms.push( ui.item.value );
+                        // add placeholder to get the comma-and-space at the end
+                        terms.push( "" );
+                        this.value = terms.join( ", " );
+                        return false;
+                    }
                 });
+
+
 
 
 
                 $("#filters-host").autocomplete({
-                    source: tabavailableHostList,
-                    autoFocus: true
+
+                    source: function( request, response ) {
+                        // delegate back to autocomplete, but extract the last term
+                        response( $.ui.autocomplete.filter(
+                                tabavailableHostList, extractLast( request.term ) ) );
+                    },
+                    focus: function() {
+                        // prevent value inserted on focus
+                        return false;
+                    },
+                    select: function( event, ui ) {
+                        var terms = split( this.value );
+                        // remove the current input
+                        terms.pop();
+                        // add the selected item
+                        terms.push( ui.item.value );
+                        // add placeholder to get the comma-and-space at the end
+                        terms.push( "" );
+                        this.value = terms.join( ", " );
+                        return false;
+                    }
                 });
 
                 $("#filters-sf").autocomplete({
-                    source: tabavailableSf,
-                    autoFocus: true
+
+
+                    source: function( request, response ) {
+                        // delegate back to autocomplete, but extract the last term
+                        response( $.ui.autocomplete.filter(
+                                tabavailableSf, extractLast( request.term ) ) );
+                    },
+                    focus: function() {
+                        // prevent value inserted on focus
+                        return false;
+                    },
+                    select: function( event, ui ) {
+                        var terms = split( this.value );
+                        // remove the current input
+                        terms.pop();
+                        // add the selected item
+                        terms.push( ui.item.value );
+                        // add placeholder to get the comma-and-space at the end
+                        terms.push( "" );
+                        this.value = terms.join( ", " );
+                        return false;
+                    }
                 });
 
+
+
+
+
+
+                        // #######################
+                        // Treatment of the form
+                        // ####################
 
 
                 $("#buttonAR").click(function () {
@@ -242,12 +340,12 @@
 
                     var FormValid=true;
 
-                    // NGI or Site should be filled
+                 // NGI or Site should be filled
                     if ( ($('input[id=filters-ngi]').val()  && $('input[id=filters-site]').val() && $('input[id=filters-host]').val()) || ($('input[id=filters-ngi]').val() == '' && $('input[id=filters-site]').val() == '' && $('input[id=filters-host]').val() == '' ) )
                     {
                         alert("Please select a NGI Name OR a site Or a Host");
-                        FormValid=false;
-                    }
+                       FormValid=false;
+                   }
 
 
 
@@ -256,28 +354,16 @@
                     if (FormValid==true)
                     {
 
-                        var baseview= 'site_status_report?';
+
+                        var view='site_status_report?';
 
                         if ($('input[id=filters-sf]').val()!='') {
-                            baseview= 'sitesf_status_report?sf=' + $('input[id=filters-sf]').val();
+                            view= 'sitesf_status_report?';
 
                         }
 
 
 
-                        if ($('input[id=filters-ngi]').val()!='')
-                            view= baseview + '&ngi=' + $('input[id=filters-ngi]').val();
-
-                        if ($('input[id=filters-site]').val()!='')
-                            view= baseview + '&ngi=all&site=' + $('input[id=filters-site]').val();
-
-                        if ($('input[id=filters-host]').val()!='') {
-
-                            var host=$('input[id=filters-host]').val().split('  ');
-
-                            view = 'metric_status_report?ngi='+ tabavailableHostNgi[host] +'&site=' + tabavailableHostSite[host] + '&sf=' +  tabavailableHostSf[host]  + '&host=' + tabavailableHostHost[host] ;
-
-                        }
 
 
 
@@ -289,9 +375,49 @@
                             range = range + '_cloud';
                         }
 
-                        var link ='/lavoisier/'  + view  + '&data=' + range + '&profile=' + profile + '&accept=html' ;
 
-                        window.location= link;
+
+
+
+                        var ListSites = ""
+                        var ListHost="";
+                        var ListSf="";
+
+
+                        if ($('input[id=filters-host]').val()) {
+
+                            view = 'metric_status_report?';
+
+                            var tabHosts=$('input[id=filters-host]').val().split(',');
+                            tabHosts.pop();
+
+                            $.each(tabHosts, function( index, value ) {
+
+                                    if (tabavailableHostSite[value.trim()]!='undefined')
+                                        ListSites = ListSites + "," + tabavailableHostSite[value.trim()];
+                                    if (tabavailableHostHost[value.trim()]!='undefined')
+                                        ListHost = ListHost + "," + tabavailableHostHost[value.trim()];
+
+                                if (tabavailableHostSf[value.trim()]!='undefined')
+                                    ListSf = ListSf + "," + tabavailableHostSf[value.trim()];
+
+                                });
+                            $('input[id=filters-host]').val(ListHost);
+                            $('input[id=filters-site]').val(ListSites);
+                            $('input[id=filters-sf]').val(ListSf);
+
+                        }
+
+
+
+
+
+
+
+                        var link ='/lavoisier/'  + view  + '&data=' + range +  '&accept=html' ;
+
+                        $('#Statusform').get(0).setAttribute('action', link);
+                        $('#Statusform').submit();
 
                     }
 
@@ -309,7 +435,7 @@
 
         </script>
 
-
+        </form>
     </section>
     <!-- /.content -->
 

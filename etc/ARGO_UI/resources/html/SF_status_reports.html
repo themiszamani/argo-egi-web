@@ -43,13 +43,13 @@
 
 
             <div  id="local_groups" style="display: none">
-                <div tpl:foreach="/root/group/group/group_ts" >{{ancestor::group/@name}},{{@value}}_{{position()}},{{@timestamp}},{{@endtime}},{{@color}}</div>
+                <div tpl:foreach="/root//group_ts" >{{ancestor::group/@name}},{{@value}}_{{position()}},{{@timestamp}},{{@endtime}},{{@color}}</div>
             </div>
 
 
 
             <div  id="local_links" style="display: none">
-                <div tpl:foreach="/root/group/group/group_ts" >/lavoisier/host_status?sf={{ancestor::root/@site}}&amp;entity={{ancestor::group/@name}}&amp;accept=html</div>
+                <div tpl:foreach="/root//group_ts" >/lavoisier/host_status?sf={{ancestor::root/@site}}&amp;entity={{ancestor::group/@name}}&amp;accept=html</div>
             </div>
 
 

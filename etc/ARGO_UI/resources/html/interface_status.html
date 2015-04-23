@@ -80,7 +80,6 @@
 
             <div class="hidden" tpl:foreach="/e:entries">
                 <input  id="entity" value="{{@entity}}"/>
-
             </div>
 
 
@@ -91,8 +90,13 @@
 
                         <label tpl:if="/e:entries/@entity='ngi'">OPERATION CENTER</label>
                         <label tpl:else="">SITE </label>
-                        <input type="text" style="margin-left:20px" name="ngi" id="filters-entity" placeholder="Enter Search "/><br/>
+                    
+                        <input tpl:if="/e:entries/@entity='ngi'" type="text" style="margin-left:20px" name="ngi" id="filters-ngi" placeholder="Enter Search "/><br/>
+                        <input tpl:else="" type="text" style="margin-left:20px" name="ngi" id="filters-ngi" class="hidden"/><br/>
 
+                    <input tpl:if="/e:entries/@entity='site'" type="text" style="margin-left:20px" name="site" id="filters-site" placeholder="Enter Search "/><br/>
+                    <input tpl:else="" type="text" style="margin-left:20px" name="site" id="filters-site" class="hidden"/><br/>
+                    
                         <div class="row" style="margin:30px;padding:20px">
                             <input type="submit" class="btn btn-primary offset1" id="buttonfilter" value="Status Report"/>
                         </div>
@@ -109,42 +113,63 @@
 
     <script>
         <!--
+
+        function split( val ) {
+            return val.split( /,\s*/ );
+        }
+        function extractLast( term ) {
+            return split( term ).pop();
+        }
+
+
         $(document).ready(function() {
-
-
-
-            var availableItems = [];
-            var tabNgiSite= [];
-
-
+            var availableItems = [];     
             var listItems = document.getElementById('listItems').getElementsByTagName('div');
-
-
-
             for (j = 0; j < listItems .length; j++) {
-
                 availableItems.push(listItems[j].textContent);
-                tabNgiSite[listItems[j].textContent]=listItems[j].getAttribute('id');
 
             }
 
 
-            $("#filters-entity").autocomplete({
+            $("#filters-ngi").autocomplete({
                 search:true,
                 source: availableItems,
                 TextHint : "Enter search or Double click to have the whole list"
 
             });
 
+            $("#filters-site").autocomplete({
+
+                source: function( request, response ) {
+                    // delegate back to autocomplete, but extract the last term
+                    response( $.ui.autocomplete.filter(
+                            availableItems, extractLast( request.term ) ) );
+                },
+                focus: function() {
+                    // prevent value inserted on focus
+                    return false;
+                },
+                select: function( event, ui ) {
+                    var terms = split( this.value );
+                    // remove the current input
+                    terms.pop();
+                    // add the selected item
+                    terms.push( ui.item.value );
+                    // add placeholder to get the comma-and-space at the end
+                    terms.push( "" );
+                    this.value = terms.join( ", " );
+                    return false;
+                }
+            });
+            
+            
+
             $("#buttonfilter").click(function () {
 
-                var entity = $('input[id=entity]').val();
-                var entityName=$('input[id=filters-entity]').val();
-
-                if (tabNgiSite[entityName])
-                var link = '/lavoisier/site_status?ngi='+tabNgiSite[entityName]+'&'+entity+'=' + entityName +'&accept=html';
-                else
-                    var link = '/lavoisier/site_status?'+entity+'=' + entityName +'&accept=html';
+                
+                var entity = $('input[id=entity]').val();                
+                var entityName=$('input[id=filters-'+entity+']').val();
+                var link = '/lavoisier/site_status?'+entity+'=' + entityName +'&accept=html';
                 window.location = link;
             });
 
