@@ -100,7 +100,6 @@
                 </parameter>
             </trigger>
         </cache>
-
     </view>
 
     <view name="recomputation" authenticators="AuthenticatedUsers" >
