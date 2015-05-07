@@ -362,7 +362,7 @@
 
         <connector type="HTTPConnector">
             <parameter name="url" eval="concat(property('api.availabilities.profiles'),'/',$id)"></parameter>
-            <parameter name="method">POST</parameter>
+            <parameter name="method">PUT</parameter>
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>
             <parameter name="post" eval="$json"></parameter>
