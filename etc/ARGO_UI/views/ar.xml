@@ -165,8 +165,8 @@
             <select match="/root/Profile"></select>
 
 
-            <processor match="/e:entries/Profile/Site[@site=$site]" type="SelectProcessor" disabled="$ngi!='false'"></processor>
-            <processor match="/e:entries/Profile/Site[@NGI=$ngi]" type="SelectProcessor" disabled="$ngi='false'"></processor>
+            <processor match="/e:entries/Profile/Site[contains($site,@site)]" type="SelectProcessor" disabled="$ngi!='false'"></processor>
+            <processor match="/e:entries/Profile/Site[contains($ngi,@NGI)]" type="SelectProcessor" disabled="$ngi='false'"></processor>
             <insert match="/e:entries" nodes="new_attribute('start_timestamp',date:seconds($start_date))"></insert>
             <insert match="/e:entries" nodes="new_attribute('end_timestamp',date:seconds($end_date))"></insert>
             <insert match="/e:entries" nodes="new_attribute('view','site_ar')"></insert>
@@ -176,6 +176,13 @@
             <remove match="/e:entries/Site/Availability[date:seconds(@timestamp) &gt; ancestor::e:entries/@end_timestamp ]"></remove>
             <rename match="/e:entries/Site" name="Entity"></rename>
             <rename match="/e:entries/Entity/@site" name="name"></rename>
+
+            <element in="e:entries">
+                <attribute-create out="url">concat('/lavoisier/',$view_details,'?profile=',$profile,
+                    '&amp;end_date=',$end_date,'&amp;start_date=',$start_date,'&amp;granularity=',$granularity)
+                </attribute-create>
+            </element>
+
 
         </processors>
 
@@ -323,6 +330,20 @@
             </trigger>
 
         </cache>
+
+        <pre-renderers>
+            <row foreach="/root/Profile/Site/Availability">
+                <column label="site">ancestor::Site/@site</column>
+                <column label="ngi">ancestor::Site/@NGI</column>
+                <column label="month">@timestamp</column>
+                <column label="av_argo">@availability</column>
+                <column label="av_cern">@availability_cern</column>
+                <column label="av_diff">@error_av</column>
+            </row>
+
+        </pre-renderers>
+
+
 
 
 
