@@ -51,7 +51,7 @@ cd $OLD_DIR
     if [ $? -ne 0 ]; then echo "Failed to unzip old version"; exit 1; fi
 cd -
 cd $BASEDIR/etc/
-    diff -ruN $OLD_DIR/*/etc/ . > $BASEDIR/upgrade/etc.patch
+    diff --exclude=.svn -ruN $OLD_DIR/*/etc/ . > $BASEDIR/upgrade/etc.patch
 cd -
 rm -rf $OLD_DIR
 
@@ -117,6 +117,12 @@ cd $NEW_DIR/*
     mv $NEW_DIR/*.zip upgrade
     mv $BASEDIR/upgrade/etc.patch upgrade
 
+    if [ -d $BASEDIR/data/ ] ; then
+        echo "###"
+        echo "### Copy data directory..."
+        echo "###"
+        cp -r $BASEDIR/data .
+    fi
     if [ -d $BASEDIR/.git/ ] ; then
         echo "###"
         echo "### Copy GIT files..."
@@ -125,12 +131,21 @@ cd $NEW_DIR/*
         cp $BASEDIR/.gitattributes .
         cp $BASEDIR/.gitignore .
     fi
-
     if [ -d $BASEDIR/.idea/ ] ; then
         echo "###"
         echo "### Copy IDE files..."
         echo "###"
         cp -r $BASEDIR/.idea .
+        cp $BASEDIR/*.iml .
+    fi
+    DESTINATION=$PWD
+cd -
+cd $BASEDIR
+    if [ -d $BASEDIR/.svn/ ] ; then
+        echo "###"
+        echo "### Copy SVN files..."
+        echo "###"
+        find . -name .svn -exec cp -r {} $DESTINATION/{} \;
     fi
 cd -
 
