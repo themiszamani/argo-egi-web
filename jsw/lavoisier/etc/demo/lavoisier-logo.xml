@@ -1,22 +1,26 @@
 <config xmlns="http://software.in2p3.fr/lavoisier/config.xsd" version="14">
     <view name="logo">
-        <argument name="ratio" pattern="\d+"/>
+        <info>
+            <category>Main</category>
+            <description>The logo of Lavoisier</description>
+        </info>
+        <argument name="ratio" pattern="\d+">100</argument>
         <argument name="hair" path-format="name_value">grey</argument>
         <connector type="XMLConnector">
             <parameter name="content" eval="document('rsc/logo.svg')"/>
         </connector>
         <processors xmlns:svg="http://www.w3.org/2000/svg">
-            <!-- use ratio to change height and width -->
-            <processor type="ReplaceProcessor" match="/svg:svg/@height">
-                <parameter name="nodes" eval="concat(substring-before(., 'px') * number($ratio div 100), 'px')"/>
-            </processor>
-            <processor type="ReplaceProcessor" match="/svg:svg/@width">
-                <parameter name="nodes" eval="concat(substring-before(., 'px') * number($ratio div 100), 'px')"/>
-            </processor>
-            <!-- change hair color -->
-            <processor type="ReplaceProcessor" match="//svg:path[@id='hair']/@fill">
-                <parameter name="$hair"/>
-            </processor>
+            <element in="svg:svg">
+                <!-- use ratio to change height and width -->
+                <attribute in="height">concat(substring-before(., 'px') * number($ratio div 100), 'px')</attribute>
+                <attribute in="width">concat(substring-before(., 'px') * number($ratio div 100), 'px')</attribute>
+                <!-- change hair color -->
+                <element in="svg:g">
+                    <element in="svg:path" if="@id='hair'">
+                        <attribute in="fill">$hair</attribute>
+                    </element>
+                </element>
+            </element>
         </processors>
         <renderers>
             <renderer type="DefaultRenderer">

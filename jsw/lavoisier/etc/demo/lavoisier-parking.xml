@@ -42,7 +42,8 @@ new_attribute('lng', substring-before(text(),','))"/>
 
     <view name="park">
         <info>
-            <category>demo</category>
+            <category>Main</category>
+            <description>Plan route to a selected parking close to your destination (in Lyon city)</description>
         </info>
         <argument name="destination" path-format="none"/>
         <argument name="distance" path-format="none">400</argument>

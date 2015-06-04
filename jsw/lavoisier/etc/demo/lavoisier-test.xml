@@ -16,6 +16,9 @@
         </authenticator>
     </authenticators>
     <view name="restricted" authenticators="auth_chain">
+        <info>
+            <category>test</category>
+        </info>
         <connector type="StringConnector">
             <parameter name="content" eval="user()"/>
         </connector>
@@ -35,6 +38,9 @@
         </authenticator>
     </authenticators>
     <view name="restricted_chained" authenticators="chained">
+        <info>
+            <category>test</category>
+        </info>
         <connector type="StringConnector">
             <parameter name="content">SECRET</parameter>
         </connector>
@@ -43,63 +49,15 @@
         </serializer>
     </view>
 
-    <authenticators name="google">
-        <authenticator type="OAuth2Authenticator">
-            <parameter name="authz_location">https://accounts.google.com/o/oauth2/auth</parameter>
-            <parameter name="token_location">https://accounts.google.com/o/oauth2/token</parameter>
-            <!-- Create your client ID here: https://console.developers.google.com/ -->
-            <parameter name="client_id" eval="property('google.oauth2.client.id')"/>
-            <parameter name="client_secret" eval="property('google.oauth2.client.secret')"/>
-            <parameter name="scope">email profile</parameter>
-        </authenticator>
-    </authenticators>
-    <view name="myGoogleProfile" authenticators="google">
-        <connector type="HTTPConnector">
-            <parameter name="url" eval="concat('https://www.googleapis.com/oauth2/v1/userinfo?access_token=', user())"/>
-        </connector>
-        <serializer type="JSONSerializer"/>
-    </view>
-    
-    <authenticators name="fb">
-        <authenticator type="OAuth2Authenticator">
-            <parameter name="authz_location">https://graph.facebook.com/oauth/authorize</parameter>
-            <parameter name="token_location">https://graph.facebook.com/oauth/access_token</parameter>
-            <parameter name="client_id" eval="property('fb.oauth2.client.id')"/>
-            <parameter name="client_secret" eval="property('fb.oauth2.client.secret')"/>
-            <parameter name="scope">email</parameter>
-        </authenticator>
-    </authenticators>
-    <view name="myFBProfile" authenticators="fb">
-        <connector type="HTTPConnector">
-            <parameter name="url" eval="concat('https://graph.facebook.com/me?access_token=', user())"></parameter>
-        </connector>
-        <serializer type="JSONSerializer">
-        </serializer>
-    </view>
-    
-    <authenticators name="github">
-        <authenticator type="OAuth2Authenticator">
-            <parameter name="authz_location">https://github.com/login/oauth/authorize</parameter>
-            <parameter name="token_location">https://github.com/login/oauth/access_token</parameter>
-            <parameter name="client_id" eval="property('github.oauth2.client.id')"/>
-            <parameter name="client_secret" eval="property('github.oauth2.client.secret')"/>
-            <parameter name="scope">user</parameter>
-        </authenticator>
-    </authenticators>
-    <view name="myGithubProfile" authenticators="github">
-        <connector type="HTTPConnector">
-            <parameter name="url" eval="concat('https://api.github.com/user?access_token=', user())"></parameter>
-        </connector>
-        <serializer type="JSONSerializer">
-        </serializer>
-    </view>
-    
     <authenticators name="password_dummy">
         <authenticator type="HTTPBasicAuthenticator" authorized="user()='dummy'">
             <parameter name="passwords" eval="view_path('properties', '/security/passwords.properties')"/>
         </authenticator>
     </authenticators>
     <view name="restricted_password_dummy" authenticators="password_dummy">
+        <info>
+            <category>test</category>
+        </info>
         <connector type="StringConnector">
             <parameter name="content">SECRET</parameter>
         </connector>
@@ -140,7 +98,9 @@
 
     <view name="example">
         <info>
+            <category>Main</category>
             <accept>chart</accept>
+            <description>Test rendering of a simple XML data view</description>
         </info>
         <argument name="axis" path-format="none" pattern="normal|inverted|polar">polar</argument>
         <argument name="stacking" path-format="none" pattern="none|normal|percent">none</argument>

@@ -335,7 +335,7 @@
             </renderer>
         </renderers>
     </view>
-    <view name="build">
+    <view name="build" authenticators="admin">
         <info>
             <category>Environment</category>
             <description>Properties about the build</description>
@@ -350,7 +350,7 @@
             </processor>
         </processors>
     </view>
-    <view name="system-properties">
+    <view name="system-properties" authenticators="admin">
         <info>
             <category>Environment</category>
             <description>Runtime system properties of the JVM</description>
@@ -374,7 +374,7 @@
             </row>
         </pre-renderers>
     </view>
-    <view name="os">
+    <view name="os" authenticators="admin">
         <info>
             <category>Environment</category>
             <description>Information about the Operating System</description>
@@ -405,6 +405,18 @@
         </connector>
         <processors>
             <processor type="EncodeProcessor" match="/jmx/domain/group/mbean/attribute/value/text()"/>
+            <elements path="jmx/domain/group/mbean">
+                <attribute-create out="status">3</attribute-create>
+            </elements>
+            <elements path="jmx/domain/group/mbean">
+                <attribute in="status" if="../attribute[@name='LastException']/value/text()!='null' and ../attribute[@name='LastErrorDate']/value/text()!='null'">1</attribute>
+                <attribute in="status" if="../attribute[@name='CurrentBuildStartDate']/value/text()!='null'">2</attribute>
+                <attribute in="status" if="../attribute[@name='LastBuildDate']/value/text()='null'">4</attribute>
+            </elements>
+            <elements path="jmx/domain/group">
+                <element-ignore in="mbean"/>
+                <element-create>sort_by_string(../mbean,'@status')</element-create>
+            </elements>
         </processors>
         <renderers>
             <renderer type="HTMLRenderer">
@@ -454,7 +466,7 @@
                 'Stack Trace: ', $stacktrace)"/>
         </processors>
     </view>
-    <view name="logs">
+    <view name="logs" authenticators="admin">
         <info>
             <category>Monitoring</category>
             <description>Log messages</description>
@@ -472,7 +484,7 @@
             </row>
         </pre-renderers>
     </view>
-    <view name="cache_content">
+    <view name="cache_content" authenticators="admin">
         <info>
             <category>Hidden</category>
         </info>
@@ -504,7 +516,7 @@
             <insert match="/*/*" nodes="concat(property('cache.baseDirectory'), path())"/>
         </processors>
     </view>
-    <view name="cache">
+    <view name="cache" authenticators="admin">
         <info>
             <category>Monitoring</category>
             <description>List of disk caches</description>
@@ -527,7 +539,7 @@
             </row>
         </pre-renderers>
     </view>
-    <view name="daemon">
+    <view name="daemon" authenticators="admin">
         <info>
             <category>Environment</category>
             <description>Information about the JSW daemon</description>
@@ -544,20 +556,30 @@
             </row>
         </pre-renderers>
     </view>
-    <view name=""
-    <view name="restart">
+    <view name="parse_configuration">
+        <info>
+            <category>Configuration</category>
+            <description>Parse current configuration file</description>
+            <accept>txt</accept>
+        </info>
+        <connector type="ConfigurationCheckingConnector"/>
+        <processors xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
+            <element out="e:entries">
+                <element-ignore/>
+                <element-create>new_element('e:entry', 'OK')</element-create>
+            </element>
+        </processors>
+    </view>
+    <view name="restart" authenticators="admin">
         <info>
             <category>Monitoring</category>
             <description>*** WARNING: clicking of this link will restart Lavoisier service! ***</description>
         </info>
-
         <connector type="JMXOperationConnector">
             <parameter name="domain">fr.in2p3.lavoisier.engine.jmx</parameter>
             <parameter name="type">daemon</parameter>
             <parameter name="operation">restart</parameter>
         </connector>
-
-
         <renderers>
             <renderer type="HTMLRenderer">
                 <parameter name="template">xsl/restart.xsl</parameter>
