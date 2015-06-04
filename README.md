@@ -7,6 +7,7 @@ title: Web UI | ARGO
 
 * based on Lavoisier Framework - http://software.in2p3.fr/lavoisier
 * prerequisites : a server certificate and java (version prior to 1.8 or 8 ) 
+* no services running on port 80
 
 
 ## Installation 
@@ -37,7 +38,7 @@ title: Web UI | ARGO
 ### Start the service 
 
 * ./bin/lavoisier.sh console
-* check the logs and access to the interface : http://yourmachine:8080/lavoisier
+* check the logs and access to the interface : http://yourmachine/lavoisier
 * if everything goes well 
 *  ./bin/lavoisier.sh restart
 
