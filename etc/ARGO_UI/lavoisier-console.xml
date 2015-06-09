@@ -10,14 +10,15 @@
         </authenticator>
     </authenticators>
 
+
     <view>
     <info>
         <category>Hidden</category>
         <description>The default page</description>
     </info>
 
-    <connector type="FileConnector">
-        <parameter name="path" eval="concat(property('directory.name'),'/resources/xml/categories.xml')"/>
+    <connector type="XMLConnector">
+        <parameter name="content" eval="view('categories')"/>
     </connector>
     <cache type="FileCache">
         <trigger type="ViewNotifiedTrigger"></trigger>
@@ -31,10 +32,9 @@
             <parameter name="template" eval="concat('/',property('directory.name'),'/resources/html/default.html')"/>
         </renderer>
     </renderers>
-
 </view>
 
-    <view name="default">
+    <view name="categories">
         <info>
             <category>Hidden</category>
             <description>The default page</description>
@@ -42,6 +42,30 @@
 
         <connector type="FileConnector">
             <parameter name="path" eval="concat(property('directory.name'),'/resources/xml/categories.xml')"/>
+
+        </connector>
+
+        <processors>
+            <elements path="menu/categories/category">
+                <attribute in="link" if="starts-with(.,'/')">concat(property('server.baseUrl'),':',property('lavoisier.http.port'),.)</attribute>
+            </elements>
+        </processors>
+        <cache type="FileCache">
+            <trigger type="ViewNotifiedTrigger"></trigger>
+            <trigger type="ViewCreatedTrigger"></trigger>
+        </cache>
+
+
+    </view>
+
+    <view name="default">
+        <info>
+            <category>Hidden</category>
+            <description>The default page</description>
+        </info>
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('categories')"/>
         </connector>
         <cache type="FileCache">
             <trigger type="ViewNotifiedTrigger"></trigger>
