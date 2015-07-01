@@ -1,5 +1,5 @@
 <config xmlns="http://software.in2p3.fr/lavoisier/config.xsd" xmlns:xi="http://www.w3.org/2001/XInclude" version="14">
-    <xi:include href="lavoisier-commons.xml" xpointer="element(/1/*)"/>
+    <!--<xi:include href="lavoisier-commons.xml" xpointer="element(/1/*)"/>-->
 
     <authenticators name="admin">
         <authenticator type="IPAddressAuthenticator">
@@ -10,13 +10,94 @@
         </authenticator>
     </authenticators>
 
+    <authenticators name="console">
+        <authenticator type="HTTPBasicAuthenticator">
+            <parameter name="passwords">
+                <entry key="admin">argo(pwd)</entry>
+            </parameter>
+        </authenticator>
+    </authenticators>
+
     <view>
+        <info>
+            <category>Hidden</category>
+            <description>The default page</description>
+        </info>
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('categories')"/>
+        </connector>
+        <cache type="FileCache">
+            <trigger type="ViewNotifiedTrigger"></trigger>
+            <trigger type="ViewCreatedTrigger"></trigger>
+        </cache>
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="template" eval="concat('/',property('directory.name'),'/resources/html/index.html')"/>
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template" eval="concat('/',property('directory.name'),'/resources/html/default.html')"/>
+            </renderer>
+        </renderers>
+
+    </view>
+
+    <view name="categories">
+        <info>
+            <category>Hidden</category>
+            <description>The default page</description>
+        </info>
+
+        <connector type="FileConnector">
+            <parameter name="path" eval="concat(property('directory.name'),'/resources/xml/categories.xml')"/>
+
+        </connector>
+
+        <processors>
+            <elements path="menu/categories/category">
+                <attribute in="link" if="starts-with(.,'/')">concat(property(server.baseUrl),':',property(lavoisier.http.port),.)</attribute>
+            </elements>
+        </processors>
+        <cache type="FileCache">
+            <trigger type="ViewNotifiedTrigger"></trigger>
+            <trigger type="ViewCreatedTrigger"></trigger>
+        </cache>
+
+
+    </view>
+
+    <view name="default">
+        <info>
+            <category>Hidden</category>
+            <description>The default page</description>
+        </info>
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('categories')"/>
+        </connector>
+        <cache type="FileCache">
+            <trigger type="ViewNotifiedTrigger"></trigger>
+            <trigger type="ViewCreatedTrigger"></trigger>
+        </cache>
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="template" eval="concat('/',property('directory.name'),'/resources/html/index.html')"/>
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template" eval="concat('/',property('directory.name'),'/resources/html/default.html')"/>
+            </renderer>
+        </renderers>
+
+    </view>
+
+
+    <view name="listViews" authenticators="console">
         <info>
             <category>Hidden</category>
             <description>The console home page</description>
         </info>
         <connector type="XSLTConnector">
-            <parameter name="stylesheet" eval="document('xsl/others.xsl')"/>
+            <parameter name="stylesheet"  eval="document('xsl/others.xsl')"/>
             <parameter name="input" eval="document('rsc/categories.xml')"/>
             <parameter name="documents">
                 <entry key="conf_view" eval="view('configuration')"/>
@@ -152,7 +233,7 @@
             </renderer>
         </renderers>
     </view>
-    <view name="configuration" xmlns:cfg="http://software.in2p3.fr/lavoisier/config.xsd">
+    <view name="configuration">
         <info>
             <category>Configuration</category>
             <description>Preprocessed service configuration</description>
@@ -335,7 +416,7 @@
             </renderer>
         </renderers>
     </view>
-    <view name="build" authenticators="admin">
+    <view name="build" authenticators="console">
         <info>
             <category>Environment</category>
             <description>Properties about the build</description>
@@ -350,7 +431,7 @@
             </processor>
         </processors>
     </view>
-    <view name="system-properties" authenticators="admin">
+    <view name="system-properties" authenticators="console">
         <info>
             <category>Environment</category>
             <description>Runtime system properties of the JVM</description>
@@ -374,7 +455,7 @@
             </row>
         </pre-renderers>
     </view>
-    <view name="os" authenticators="admin">
+    <view name="os" authenticators="console">
         <info>
             <category>Environment</category>
             <description>Information about the Operating System</description>
@@ -405,18 +486,23 @@
         </connector>
         <processors>
             <processor type="EncodeProcessor" match="/jmx/domain/group/mbean/attribute/value/text()"/>
+
+
             <elements path="jmx/domain/group/mbean">
                 <attribute-create out="status">3</attribute-create>
             </elements>
+
             <elements path="jmx/domain/group/mbean">
+
                 <attribute in="status" if="../attribute[@name='LastException']/value/text()!='null' and ../attribute[@name='LastErrorDate']/value/text()!='null'">1</attribute>
                 <attribute in="status" if="../attribute[@name='CurrentBuildStartDate']/value/text()!='null'">2</attribute>
                 <attribute in="status" if="../attribute[@name='LastBuildDate']/value/text()='null'">4</attribute>
             </elements>
             <elements path="jmx/domain/group">
-                <element-ignore in="mbean"/>
+                <element-ignore in="mbean"></element-ignore>
                 <element-create>sort_by_string(../mbean,'@status')</element-create>
             </elements>
+
         </processors>
         <renderers>
             <renderer type="HTMLRenderer">
@@ -466,7 +552,7 @@
                 'Stack Trace: ', $stacktrace)"/>
         </processors>
     </view>
-    <view name="logs" authenticators="admin">
+    <view name="logs">
         <info>
             <category>Monitoring</category>
             <description>Log messages</description>
@@ -484,7 +570,7 @@
             </row>
         </pre-renderers>
     </view>
-    <view name="cache_content" authenticators="admin">
+    <view name="cache_content">
         <info>
             <category>Hidden</category>
         </info>
@@ -516,7 +602,7 @@
             <insert match="/*/*" nodes="concat(property('cache.baseDirectory'), path())"/>
         </processors>
     </view>
-    <view name="cache" authenticators="admin">
+    <view name="cache">
         <info>
             <category>Monitoring</category>
             <description>List of disk caches</description>
@@ -539,7 +625,7 @@
             </row>
         </pre-renderers>
     </view>
-    <view name="daemon" authenticators="admin">
+    <view name="daemon">
         <info>
             <category>Environment</category>
             <description>Information about the JSW daemon</description>
@@ -556,21 +642,7 @@
             </row>
         </pre-renderers>
     </view>
-    <view name="parse_configuration">
-        <info>
-            <category>Configuration</category>
-            <description>Parse current configuration file</description>
-            <accept>txt</accept>
-        </info>
-        <connector type="ConfigurationCheckingConnector"/>
-        <processors xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
-            <element out="e:entries">
-                <element-ignore/>
-                <element-create>new_element('e:entry', 'OK')</element-create>
-            </element>
-        </processors>
-    </view>
-    <view name="restart" authenticators="admin">
+    <view name="restart">
         <info>
             <category>Monitoring</category>
             <description>*** WARNING: clicking of this link will restart Lavoisier service! ***</description>
@@ -580,6 +652,7 @@
             <parameter name="type">daemon</parameter>
             <parameter name="operation">restart</parameter>
         </connector>
+
         <renderers>
             <renderer type="HTMLRenderer">
                 <parameter name="template">xsl/restart.xsl</parameter>
@@ -602,4 +675,28 @@
             </row>
         </pre-renderers>
     </view>
+
+    <view name="unknown_route">
+        <info>
+            <category>Hidden</category>
+        </info>
+        <connector type="FileConnector">
+            <parameter name="path" eval="concat(property('directory.name'),'/resources/xml/categories.xml')"/>
+        </connector>
+
+
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="template" eval="concat('/',property('directory.name'),'/resources/html/404.html')"/>
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template" eval="concat('/',property('directory.name'),'/resources/html/404.html')"/>
+            </renderer>
+        </renderers>
+
+    </view>
+
+
+
+
 </config>
