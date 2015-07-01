@@ -11,6 +11,12 @@
     </authenticators>
 
 
+    <authenticators name="console">
+        <authenticator type="HTTPBasicAuthenticator">
+            <parameter name="passwords" eval="view_path('properties', '/security/passwords.properties')"/>
+        </authenticator>
+    </authenticators>
+
     <view>
     <info>
         <category>Hidden</category>
@@ -83,7 +89,7 @@
     </view>
 
 
-    <view name="listViews">
+    <view name="listViews" authenticators="console">
         <info>
             <category>Hidden</category>
             <description>The console home page</description>
@@ -408,7 +414,7 @@
             </renderer>
         </renderers>
     </view>
-    <view name="build">
+    <view name="build" authenticators="console">
         <info>
             <category>Environment</category>
             <description>Properties about the build</description>
@@ -423,7 +429,7 @@
             </processor>
         </processors>
     </view>
-    <view name="system-properties">
+    <view name="system-properties" authenticators="console">
         <info>
             <category>Environment</category>
             <description>Runtime system properties of the JVM</description>
@@ -467,7 +473,7 @@
             </row>
         </pre-renderers>
     </view>
-    <view name="status">
+    <view name="status" authenticators="console">
         <info>
             <category>Monitoring</category>
             <description>Statuses of the data views</description>
@@ -544,7 +550,7 @@
                 'Stack Trace: ', $stacktrace)"/>
         </processors>
     </view>
-    <view name="logs">
+    <view name="logs" authenticators="console">
         <info>
             <category>Monitoring</category>
             <description>Log messages</description>
@@ -634,7 +640,7 @@
             </row>
         </pre-renderers>
     </view>
-    <view name="restart">
+    <view name="restart" authenticators="console">
         <info>
             <category>Monitoring</category>
             <description>*** WARNING: clicking of this link will restart Lavoisier service! ***</description>

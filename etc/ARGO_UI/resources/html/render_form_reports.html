@@ -10,8 +10,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header" id="content-header">
         <h1>
-            Availabilities Reliabilities Customized Report
-            <small>Customized Report</small>
+            Availabilities Reliabilities Report
         </h1>
 
     </section>
@@ -90,13 +89,13 @@
                                </tr>
 
                                 </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <th>Average</th>
-                                        <th>{{format-number(sum(Availability/@availability) div count(Availability/@availability),'#.00') }}</th>
-                                        <th>{{format-number(sum(Availability/@reliability) div count(Availability/@reliability),'#.00') }}</th>
-                                    </tr>
-                                </tfoot>
+                                <!--<tfoot>-->
+                                    <!--<tr>-->
+                                        <!--<th>Average</th>-->
+                                        <!--<th>{{format-number(sum(Availability/@availability) div count(Availability/@availability),'#.00') }}</th>-->
+                                        <!--<th>{{format-number(sum(Availability/@reliability) div count(Availability/@reliability),'#.00') }}</th>-->
+                                    <!--</tr>-->
+                                <!--</tfoot>-->
 
                                 </table>
                             </div>
@@ -118,8 +117,6 @@
             <div class="box-body" id="container2" style="width:900px;min-height: 600px; max-height: 1800px; "/>
 
        </div>
-
-
 
 
     </section><!-- /.content -->

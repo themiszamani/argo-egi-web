@@ -12,4 +12,7 @@
     <xi:include href="ARGO_UI/views/ar.xml" xpointer="element(/1/*)"/>
     <xi:include href="ARGO_UI/views/status.xml" xpointer="element(/1/*)"/>
     <xi:include href="ARGO_UI/views/statuses.xml" xpointer="element(/1/*)"/>
+
+
+
 </config>

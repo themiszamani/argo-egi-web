@@ -185,7 +185,7 @@
             <insert match="/e:entries"  nodes="new_attribute('view','cloud_reports')"></insert>
             <insert match="/e:entries"  nodes="new_attribute('ngi',$ngi)"></insert>
             <insert match="/e:entries"  nodes="new_attribute('related_view','cloud_ar')"></insert>
-            <insert match="/e:entries"  nodes="new_attribute('poems','ch.cern.sam.CLOUD-MON')"></insert>
+            <insert match="/e:entries"  nodes="new_attribute('poems','ch.cern.sam.CLOUD-MON_CRITICAL')"></insert>
         </processors>
 
         <pre-renderers>
