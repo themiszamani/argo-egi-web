@@ -3,43 +3,7 @@
         xmlns:xi="http://www.w3.org/2001/XInclude"
         xmlns:str="http://exslt.org/strings"
         xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
-    <!--<view name="ngi_daily_results">-->
-        <!--<info>-->
-            <!--<category>API calls</category>-->
-            <!--<description>NGI Availability in Profile - Daily option - key : profile</description>-->
-        <!--</info>-->
 
-
-
-
-        <!--<connector type="XMLConnector">-->
-            <!--<parameter name="content" eval="view('listProfilesRaw')"></parameter>-->
-        <!--</connector>-->
-
-
-        <!--<processors>-->
-            <!--<insert match="/root/profile">-->
-                <!--<connector type="XMLConnector">-->
-                    <!--<parameter name="content" eval="view('ngi_daily_resultsByProfile',entry('profile',concat(parent_match()/@namespace,'-',parent_match()/@name)))"></parameter>-->
-
-                <!--</connector>-->
-            <!--</insert>-->
-            <!--<remove match="/root/profile/AND"></remove>-->
-
-        <!--</processors>-->
-
-
-
-        <!--<cache type="FileCache">-->
-            <!--&lt;!&ndash;<trigger type="ViewCreatedTrigger"/>&ndash;&gt;-->
-            <!--<trigger type="DeltaTimeTrigger">-->
-                <!--<parameter name="minutes">20</parameter>-->
-            <!--</trigger>-->
-            <!--<trigger type="ViewNotifiedTrigger"/>-->
-            <!--<trigger type="ViewCreatedTrigger"/>-->
-        <!--</cache>-->
-
-    <!--</view>-->
 
     <view name="group_availability_results">
         <info>

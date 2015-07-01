@@ -90,7 +90,7 @@
         <argument name="start_date"></argument>
         <argument name="end_date"></argument>
         <argument name="view_details">services_ar</argument>
-        <argument name="poems">ch.cern.sam.CLOUD-MON</argument>
+        <argument name="poems">ch.cern.sam.CLOUD-MON_CRITICAL</argument>
         <argument name="profile">egi-fedcloud</argument>
 
         <!--<connector type="XMLConnector">-->

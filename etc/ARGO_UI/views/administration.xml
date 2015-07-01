@@ -11,6 +11,7 @@
     </authenticators>
 
 
+
     <view xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" name="listProfiles" authenticators="AuthenticatedUsers">
         <info>
             <description>List of Profile html</description>
@@ -85,6 +86,7 @@
             <parameter name="url" eval="property('api.availabilities.profiles')"/>
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>
+            <parameter name="force-redirect">true</parameter>
         </connector>
 
         <cache type="FileCache">
@@ -244,14 +246,7 @@
         </connector>
 
         <serializer type="EncapsulateSerializer"></serializer>
-        <!--<renderers>-->
-            <!--<renderer type="DefaultRenderer">-->
-                <!--<parameter name="template">/ARGO_UI/resources/html/recomp_res.html</parameter>-->
-            <!--</renderer>-->
-            <!--<renderer type="HTMLRenderer">-->
-                <!--<parameter name="template">/ARGO_UI/resources/html/recomp_res.html</parameter>-->
-            <!--</renderer>-->
-        <!--</renderers>-->
+
 
     </view>
 
@@ -329,6 +324,7 @@
             <parameter name="method">DELETE</parameter>
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>
+            <parameter name="force-redirect">true</parameter>
 
             <parameter name="header">
                 <entry key="x-api-key" eval="property('argo.api.key')"></entry>
@@ -366,6 +362,7 @@
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>
             <parameter name="post" eval="$json"></parameter>
+            <parameter name="force-redirect">true</parameter>
             <parameter name="header">
                 <entry key="x-api-key" eval="property('argo.api.key')"></entry>
                 <entry key="Content-Type">application/json</entry>
@@ -406,6 +403,7 @@
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>
             <parameter name="post" eval="$json"></parameter>
+            <parameter name="force-redirect">true</parameter>
             <parameter name="header">
                 <entry key="x-api-key" eval="property('argo.api.key')"></entry>
                 <entry key="Content-Type">application/json</entry>
@@ -458,6 +456,7 @@
             <parameter name="url" eval="property('api.availabilities.poems')"></parameter>
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>
+            <parameter name="force-redirect">true</parameter>
         </connector>
 
    </view>
