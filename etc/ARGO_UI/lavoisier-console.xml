@@ -12,7 +12,9 @@
 
 
     <authenticators name="console">
-            <authenticator type="X509Authenticator"  authorized="view('administratorsList')/admins/admin/DN[text()=user()]"/>
+        <authenticator type="HTTPBasicAuthenticator">
+            <parameter name="passwords" eval="view_path('properties', '/security/passwords.properties')"/>
+        </authenticator>
     </authenticators>
 
     <view>
