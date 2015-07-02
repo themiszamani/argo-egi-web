@@ -132,11 +132,12 @@
                             <div class="form-group profile">
 
 
-                                <input  tpl:foreach="/root/profile" tpl:with-order="@namespace" type="radio" class="profile" name="profile" value="{{@poems}}" checked="true"> {{concat(@namespace,'-',@name)}} <br/></input>
+                                <input  tpl:foreach="/root/profile" tpl:with-order="@namespace" type="radio" class="profile" name="profile" value="{{concat(@namespace,'-',@name)}}" checked="true"> {{@poems}} <br/></input>
 
 
 
                             </div>
+
                         </div>
                     </div>
 
