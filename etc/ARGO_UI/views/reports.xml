@@ -60,7 +60,7 @@
 
 
 
-            <insert match="/e:entries" nodes="new_attribute('month4',substring(date:add(date:date-time(),'-P2D'),  0,8))|new_attribute('month3',substring(date:add(date:date-time(),'-P1M'),  0,8))|new_attribute('month2',substring(date:add(date:date-time(),'-P2M'),  0,8))|new_attribute('month1',substring(date:add(date:date-time(),'-P3M'),  0,8))"></insert>
+            <insert match="/e:entries" nodes="new_attribute('month4',substring(date:add(date:date-time(),'-P1D'),  0,8))|new_attribute('month3',substring(date:add(date:date-time(),'-P1M'),  0,8))|new_attribute('month2',substring(date:add(date:date-time(),'-P2M'),  0,8))|new_attribute('month1',substring(date:add(date:date-time(),'-P3M'),  0,8))"></insert>
 
             <insert match="/e:entries"  nodes="new_attribute('description','NGI League Report')"></insert>
             <insert match="/e:entries" nodes="new_attribute('details','site_reports')"></insert>
@@ -176,7 +176,7 @@
 
 
 
-            <insert match="/e:entries"  nodes="new_attribute('month4',substring(date:add(date:date-time(),'-P2D'),  0,8))|new_attribute('month3',substring(date:add(date:date-time(),'-P1M'),  0,8))|new_attribute('month2',substring(date:add(date:date-time(),'-P2M'),  0,8))|new_attribute('month1',substring(date:add(date:date-time(),'-P3M'),  0,8))"></insert>
+            <insert match="/e:entries"  nodes="new_attribute('month4',substring(date:add(date:date-time(),'-P1D'),  0,8))|new_attribute('month3',substring(date:add(date:date-time(),'-P1M'),  0,8))|new_attribute('month2',substring(date:add(date:date-time(),'-P2M'),  0,8))|new_attribute('month1',substring(date:add(date:date-time(),'-P3M'),  0,8))"></insert>
 
             <insert match="/e:entries"  nodes="new_attribute('description','OpsMon Report')"></insert>
             <insert match="/e:entries"  nodes="new_attribute('view','opsmon_reports')"></insert>
@@ -259,7 +259,7 @@
 
 
 
-            <insert match="/e:entries"  nodes="new_attribute('month4',substring(date:add(date:date-time(),'-P2D'),  0,8))|new_attribute('month3',substring(date:add(date:date-time(),'-P1M'),  0,8))|new_attribute('month2',substring(date:add(date:date-time(),'-P2M'),  0,8))|new_attribute('month1',substring(date:add(date:date-time(),'-P3M'),  0,8))"></insert>
+            <insert match="/e:entries"  nodes="new_attribute('month4',substring(date:add(date:date-time(),'-P1D'),  0,8))|new_attribute('month3',substring(date:add(date:date-time(),'-P1M'),  0,8))|new_attribute('month2',substring(date:add(date:date-time(),'-P2M'),  0,8))|new_attribute('month1',substring(date:add(date:date-time(),'-P3M'),  0,8))"></insert>
 
             <insert match="/e:entries"  nodes="new_attribute('description','EGI Federated Cloud  Report')"></insert>
             <insert match="/e:entries"  nodes="new_attribute('view','cloud_reports')"></insert>
@@ -353,7 +353,7 @@
 
 
 
-            <insert match="/e:entries"  nodes="new_attribute('month4',substring(date:add(date:date-time(),'-P2D'),  0,8))|new_attribute('month3',substring(date:add(date:date-time(),'-P1M'),  0,8))|new_attribute('month2',substring(date:add(date:date-time(),'-P2M'),  0,8))|new_attribute('month1',substring(date:add(date:date-time(),'-P3M'),  0,8))"></insert>
+            <insert match="/e:entries"  nodes="new_attribute('month4',substring(date:add(date:date-time(),'-P1D'),  0,8))|new_attribute('month3',substring(date:add(date:date-time(),'-P1M'),  0,8))|new_attribute('month2',substring(date:add(date:date-time(),'-P2M'),  0,8))|new_attribute('month1',substring(date:add(date:date-time(),'-P3M'),  0,8))"></insert>
 
             <insert match="/e:entries"  nodes="new_attribute('description','Site League Report')"></insert>
             <insert match="/e:entries"  nodes="new_attribute('view','site_reports')"></insert>
