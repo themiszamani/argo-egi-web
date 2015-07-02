@@ -14,6 +14,7 @@
         <category link="/lavoisier/ngi_reports" icon="fa fa-globe"> NGI Report</category>
         <category link="/lavoisier/site_reports" icon="fa fa-home"> Site Report</category>
         <category link="/lavoisier/cloud_reports" icon="fa fa-cloud"> Cloud Report</category>
+        <category link="/lavoisier/opsmon_reports" icon="fa fa-cubes"> OpsMon Report</category>
         <category link="/lavoisier/report_form" icon="fa fa-list"> Customized Report</category>
         <category link="/lavoisier/customFactors?accept=html" icon="fa fa-th">Availability Treemap</category>
     </categories>
