@@ -181,7 +181,7 @@
             <insert match="/e:entries"  nodes="new_attribute('description','OpsMon Report')"></insert>
             <insert match="/e:entries"  nodes="new_attribute('view','opsmon_reports')"></insert>
             <insert match="/e:entries"  nodes="new_attribute('ngi',$ngi)"></insert>
-            <insert match="/e:entries"  nodes="new_attribute('related_view','sites_ar')"></insert>
+            <insert match="/e:entries"  nodes="new_attribute('related_view','opsmon_ar')"></insert>
             <insert match="/e:entries"  nodes="new_attribute('poems','ch.cern.sam-OPS_MONITOR_CRITICAL')"></insert>
         </processors>
 
