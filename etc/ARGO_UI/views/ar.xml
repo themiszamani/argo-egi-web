@@ -217,7 +217,7 @@
             <rename match="/e:entries/Entity/@site" name="name"></rename>
 
             <element in="e:entries">
-                <attribute-create out="url">concat('/lavoisier/',$view_details,'?profile=',$profile,
+                <attribute-create out="url">concat('/lavoisier/',$view_details,'?profile=',$profile,'&amp;poems=',$poems,
                     '&amp;end_date=',$end_date,'&amp;start_date=',$start_date,'&amp;granularity=',$granularity)
                 </attribute-create>
             </element>
