@@ -135,7 +135,87 @@
     </view>
 
 
+    <view name="opsmon_reports">
+        <info>
+            <category>Display</category>
+            <description>NGI League Reports</description>
+        </info>
 
+        <argument name="ngi">all</argument>
+
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('site_reports_cached',entry('availability_profile','egi-ops-monitor-critical'))"></parameter>
+        </connector>
+
+        <processors>
+
+
+
+
+            <select match="/root/root/Profile"></select>
+            <processor match="/e:entries/Profile/Site[@NGI!=$ngi]" type="RemoveProcessor" disabled="$ngi='all'"></processor>
+
+            <remove match="/e:entries/Profile" depth="1"></remove>
+
+
+
+            <select match="/e:entries/Site[*]">
+                <group by="@site" sort="text"></group>
+            </select>
+
+            <insert-parent match="/e:entries/e:entry/Site" name="Site"></insert-parent>
+
+            <merge match="/e:entries/e:entry/Site"></merge>
+            <remove match="/e:entries/e:entry/Site/Site" depth="1"></remove>
+            <remove match="/e:entries/e:entry" depth="1"/>
+            <select match="/e:entries/Site[*]">
+                <group by="@NGI" sort="text"></group>
+            </select>
+
+
+
+
+            <insert match="/e:entries"  nodes="new_attribute('month4',substring(date:add(date:date-time(),'-P2D'),  0,8))|new_attribute('month3',substring(date:add(date:date-time(),'-P1M'),  0,8))|new_attribute('month2',substring(date:add(date:date-time(),'-P2M'),  0,8))|new_attribute('month1',substring(date:add(date:date-time(),'-P3M'),  0,8))"></insert>
+
+            <insert match="/e:entries"  nodes="new_attribute('description','OpsMon Report')"></insert>
+            <insert match="/e:entries"  nodes="new_attribute('view','opsmon_reports')"></insert>
+            <insert match="/e:entries"  nodes="new_attribute('ngi',$ngi)"></insert>
+            <insert match="/e:entries"  nodes="new_attribute('related_view','sites_ar')"></insert>
+            <insert match="/e:entries"  nodes="new_attribute('poems','ch.cern.sam-OPS_MONITOR_CRITICAL')"></insert>
+        </processors>
+
+        <pre-renderers>
+            <title>/e:entries/@description</title>
+            <field label="month1">/e:entries/@month1</field>
+            <field label="month2">/e:entries/@month2</field>
+            <field label="month3">/e:entries/@month3</field>
+
+            <row foreach="/e:entries/e:entry/Site/Availability[@timestamp=/e:entries/@month1 or @timestamp=/e:entries/@month2 or @timestamp=/e:entries/@month3]">
+                <column label="Site">ancestor::Site/@site</column>
+                <column label="Ngi">ancestor::Site/@NGI</column>
+                <column label="Timestamp">@timestamp</column>
+                <column label="Availability" unit="percentage">@availability</column>
+                <column label="Reliability" unit="percentage">@reliability</column>
+            </row>
+        </pre-renderers>
+
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/ARGO_UI/resources/html/reports.html</parameter>
+
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/ARGO_UI/resources/html/reports.html</parameter>
+
+            </renderer>
+            <renderer type="ChartRenderer">
+                <parameter name="rotation">-45</parameter>
+
+            </renderer>
+        </renderers>
+
+    </view>
 
 
     <view name="cloud_reports">
@@ -185,7 +265,7 @@
             <insert match="/e:entries"  nodes="new_attribute('view','cloud_reports')"></insert>
             <insert match="/e:entries"  nodes="new_attribute('ngi',$ngi)"></insert>
             <insert match="/e:entries"  nodes="new_attribute('related_view','cloud_ar')"></insert>
-            <insert match="/e:entries"  nodes="new_attribute('poems','ch.cern.sam.CLOUD-MON_CRITICAL')"></insert>
+            <insert match="/e:entries"  nodes="new_attribute('poems','ch.cern.sam.CLOUD-MON')"></insert>
         </processors>
 
         <pre-renderers>
