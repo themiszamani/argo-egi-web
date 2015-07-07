@@ -72,7 +72,8 @@
         <!--<argument name="end_time" eval="concat(substring(date:add(date:date-time(),concat('-P',$diff,'M')), 0,8),'-01T00:00:00Z') "/>-->
 
         <argument name="starttime" eval="choose($diff=10,$start_time,concat(substring(date:add(date:date-time(),concat('-P',$diff+1,'M')), 0,8),'-01T00:00:00Z'))"></argument>
-        <argument name="endtime" eval="choose($diff=10,$end_time,concat(substring(date:add(date:date-time(),concat('-P',$diff,'M')), 0,8),'-01T00:00:00Z'))"></argument>
+
+        <argument name="endtime" eval="choose($diff=10,$end_time,concat(substring(date:add(date:date-time(),concat('-P',$diff,'M1s')), 0,8),'-01T00:00:00Z'))"></argument>
 
 
 
