@@ -237,12 +237,12 @@
 
         <processors>
             <element in="menu">
-                <set variable="triggerdelete1">view('status_data_cached_cloud',entry('delete',true())|entry('diff',2))</set>
-                <set variable="triggerdelete2">view('status_data_cached',entry('delete',true())|entry('diff',2))</set>
+                <set variable="triggerdelete1">view('status_data_cached_cloud',entry('delete',true())|entry('diff','2'))</set>
+                <set variable="triggerdelete2">view('status_data_cached',entry('delete',true())|entry('diff','2'))</set>
             </element>
             <element in="menu">
-                <set variable="triggerbuild1">view('status_data_cached_cloud',entry('diff',2))</set>
-                <set variable="triggerbuild2">view('status_data_cached',entry('diff',2))</set>
+                <set variable="triggerbuild1">view('status_data_cached_cloud',entry('diff','2'))</set>
+                <set variable="triggerbuild2">view('status_data_cached',entry('diff','2'))</set>
             </element>
 
         </processors>
@@ -252,6 +252,7 @@
             <trigger type="FixedTimeTrigger">
                 <parameter name="hour">5</parameter>
             </trigger>
+            <trigger type="ViewNotifiedTrigger"></trigger>
         </cache>
     </view>
 
