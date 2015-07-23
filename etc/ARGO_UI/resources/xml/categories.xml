@@ -2,11 +2,11 @@
 
     <categories bg="bg-aqua" icon="fa fa-dashboard" title="Status" >
 
-        <category link="/lavoisier/choiceNgi?accept=html" icon="fa fa-globe"> NGI Status Report</category>
-        <category link="/lavoisier/choiceSite?accept=html" icon="fa fa-home"> Site Status Report</category>
-        <category link="/lavoisier/site_status?report=cloud&amp;ngi=all&amp;accept=html" icon="fa fa-cloud">Cloud Status Report</category>
-        <category link="/lavoisier/status_form?accept=html" icon="fa fa-list"> Customized Report</category>
-        <category link="/lavoisier/StatusTreeMap?accept=html" icon="fa fa-th">Status Treemap</category>
+        <category link="http://mon.egi.eu/myegi/ss/" icon="fa fa-globe">Status Report</category>
+        <!--<category link="/lavoisier/choiceSite?accept=html" icon="fa fa-home"> Site Status Report</category>-->
+        <!--<category link="/lavoisier/site_status?report=cloud&amp;ngi=all&amp;accept=html" icon="fa fa-cloud">Cloud Status Report</category>-->
+        <!--<category link="/lavoisier/status_form?accept=html" icon="fa fa-list"> Customized Report</category>-->
+        <!--<category link="/lavoisier/StatusTreeMap?accept=html" icon="fa fa-th">Status Treemap</category>-->
 
     </categories>
 
