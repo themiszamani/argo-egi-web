@@ -35,4 +35,10 @@
        <category link="mailto:%6d&#97;%69&#108;to&#58;%61r&#103;&#111;%2d&#103;g%75%73&#45;s&#117;&#112;p&#111;&#114;%74&#64;&#103;r%6e%65t%2e%67r" icon="fa fa-envelope">Contact Us</category>
 
    </categories>
+
+    <release>
+        <version>2.0</version>
+        <date>2015, October 28th</date>
+        <repository link="https://github.com/ARGOeu" icon="fa fa-github"></repository>
+    </release>
 </menu>
