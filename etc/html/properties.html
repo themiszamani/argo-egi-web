@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:tpl="http://software.in2p3.fr/lavoisier/template.xsd"
+      xmlns:cfg="http://software.in2p3.fr/lavoisier/config.xsd"
+      xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd"
+      tpl:extends="/resource/html/base.html">
+
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title>Properties</title>
+
+
+</head>
+<body>
+
+<div class="wrapper" id="wrapper">
+    <div class="content-wrapper">
+
+        <div class="row" >
+
+            <table id="dataProperties" class="display">
+                <thead>
+                <tr>
+                    <th>Property</th>
+                    <th>Value</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr tpl:foreach="/e:entries/value">
+                    <td>{{@key}}</td>
+                    <td>{{@value}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+
+</div>
+
+</body>
+
+<script>
+    <!--
+    $("#dataProperties").dataTable();
+    $("#properties").addClass('active');
+    -->
+</script>
+
+</html>
+

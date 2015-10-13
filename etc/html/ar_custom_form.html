@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd"
+      xmlns:tpl="http://software.in2p3.fr/lavoisier/template.xsd" tpl:extends="/lavoisier/_default_?accept=html">
+
+
+<body>
+<!-- Right side column. Contains the navbar and content of the page -->
+<div id="wrapper">
+
+<div class="content-wrapper">
+
+    <!-- Content Header (Page header) -->
+
+    <!-- Main content -->
+    <section class="content" id="content">
+    <section class="content-header" id="content-header">
+        <h1>
+            Availabilities Reliabilities Reports
+            <small>Customized Report</small>
+            <button type="button" class="pull-right btn btn-primary" data-toggle="modal" data-target="#myHelp">
+                <div class="fa fa-info"></div>
+            </button>
+
+
+        </h1>
+
+
+
+
+        <div class="modal fade " id="myHelp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+                        <h3 class="modal-title" id="myModalLabel">Help  <i class="ion ion-clipboard"></i></h3>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                        <ul>
+                            <li>Please select a  period, an entity, a type of reports  and the granularity . </li>
+                            <li>Then by clicking on the button you will generate the availability/reliability figures for these parameters</li>
+                            <li>The entity selection is working by auto-completion</li>
+                        </ul>
+                        </p>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <div id="id_content" class="hidden"></div>
+
+
+            <div class="box box-primary">
+
+                <div class="row" style="margin:20px;padding:20px">
+
+                    <div class="box  col-md-5" style="margin:20px;padding:20px;height:180px ">
+
+                        <div class="box-header"><H3 class="box-title"> <i class="fa fa-calendar"> </i>   Period</H3></div>
+                        <div class="box-body">
+                            <div class="row">
+
+                                <label>  Date range:</label>
+                                <input  id="reportrange" type="text" /><span></span><br/>
+
+
+
+
+                            </div><!-- /.input group -->
+
+
+                        </div>
+                    </div>
+
+
+
+                    <div class="box  col-md-6 " style="margin:20px;padding:20px;height:180px ">
+
+                        <div class="box-header"><H3 class="box-title"> <i class="fa fa-globe"> </i>   Entity</H3></div>
+
+                        <div class="box-body">
+
+                            <div class="form-group ">
+
+
+
+                                <label>NGI</label>
+                                <input type="text" style="margin-left:20px" name="ngi" id="filters-ngi" placeholder="Enter Search "/><br/>
+
+
+
+
+                                <label>SITE </label>
+                                <input type="text" style="margin-left:20px" name="site" id="filters-site" placeholder="Enter Search "/>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="box  col-md-5 " style="margin:20px;padding:20px;height:180px ">
+
+                        <div class="box-header"><H3 class="box-title"> <i class="fa fa-group"> </i>   Profiles</H3></div>
+
+                        <div class="box-body">
+
+                            <div class="form-group ">
+
+
+
+                               <!--<select name="profile" id="profile">-->
+                                   <!--<option tpl:foreach="/root/profile" value="{{concat(@namespace,'-',@name)}}">{{@poems}}</option>-->
+                               <!--</select>-->
+
+                                <select name="report" id="report">
+                                    <option value="Critical" selected="true">EGI Critical Profile</option>
+                                    <option value="Cloud">EGI Cloud Profile</option>
+                                    <option value="OPS-MONITOR-Critical">EGI OPSMON profile</option>
+                                </select>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                <div class="box  col-md-5 " style="margin:20px;padding:20px;height:180px ">
+
+                    <div class="box-header"><H3 class="box-title"> <i class="fa fa-gear"> </i>   Granularity</H3></div>
+                    <div class="box-body">
+                        <div class="form_group">
+                            <input type="radio" value="DAILY" name="granularity"
+                                   id="granularity1" checked="true"/> daily
+                            <input style="margin-left:20px" type="radio" value="MONTHLY" name="granularity"
+                                   id="granularity2"/> monthly
+                        </div>
+                    </div>
+                </div>
+
+                <div class="box   col-md-5" style="margin:20px;padding:20px;height:180px ;display:none">
+
+                    <div class="box-header"><H3 style="margin-left:60px">Status</H3></div>
+
+                    <div class="box-body">
+                        <div class="form_group">
+                            <input type="checkbox" checked="true" value="prod"/> PRODUCTION
+                            <input style="margin-left:20px" type="checkbox" readonly="readonly" value="preprod"/> PRE-PRODUCTION
+                        </div>
+                    </div>
+
+                </div>
+
+
+                </div>
+
+                <div class="row" style="margin:30px;padding:20px">
+                    <input type="submit" class="btn btn-primary offset1" id="buttonAR" value="Generate Reports"/>
+                </div>
+
+            </div>
+
+
+            <div class="hidden" id="listNgi" tpl:foreach="/root/ngis">{{text()}}</div>
+        <div class="hidden" id="listSite" tpl:foreach="/root/sites">{{text()}}</div>
+
+
+
+        <script src="/resource/js/daterangepicker.js" type="text/javascript"></script>
+
+
+        <script>
+            <!--
+
+            function split( val ) {
+                return val.split( /,\s*/ );
+            }
+            function extractLast( term ) {
+                return split( term ).pop();
+            }
+
+            $(document).ready(function ($) {
+
+
+
+                $('#reportrange').daterangepicker(
+                        {
+                            format: 'YYYY-MM-DD',
+                            ranges: {
+                                'Last 30 Days': [moment().subtract('days', 29), moment()],
+                                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                                'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')],
+                                'Last 3 Months': [moment().subtract('month', 3).startOf('month'), moment().subtract('month', 1).endOf('month')],
+                                'Last 6 Months': [moment().subtract('month', 6).startOf('month'), moment().subtract('month', 1).endOf('month')]
+                            },
+                            startDate: moment().subtract('days', 29),
+                            endDate: moment()
+                        }
+
+                );
+
+                // Variable initialisation for the autocomplete
+                var availableNgis = "ALL" + $("#listNgi").text();
+                var availableSites =  "ALL" + $("#listSite").text();
+                var tabavailableNgis=  availableNgis.split(',');
+                var tabavailableSite= availableSites.split(',');
+
+                $("#filters-ngi").autocomplete({
+                    search:true,
+                    source: tabavailableNgis,
+                    TextHint : "Enter search or Double click to have the whole list"
+
+                });
+
+                $("#filters-site").autocomplete({
+
+                    source: function( request, response ) {
+                        // delegate back to autocomplete, but extract the last term
+                        response( $.ui.autocomplete.filter(
+                                tabavailableSite, extractLast( request.term ) ) );
+                    },
+                    focus: function() {
+                        // prevent value inserted on focus
+                        return false;
+                    },
+                    select: function( event, ui ) {
+                        var terms = split( this.value );
+                        // remove the current input
+                        terms.pop();
+                        // add the selected item
+                        terms.push( ui.item.value );
+                        // add placeholder to get the comma-and-space at the end
+                        terms.push( "" );
+                        this.value = terms.join( ", " );
+                        return false;
+                    }
+                });
+
+
+
+
+
+                //date picker load
+
+
+
+
+            });
+
+
+            $("#buttonAR").click(function () {
+
+
+
+                var FormValid=true;
+
+               // NGI or Site should be filled
+
+                if ( ($('input[id=filters-ngi]').val()  && ($('input[id=filters-site]').val()) || ($('input[id=filters-ngi]').val() == '' && $('input[id=filters-site]').val() == '' ) ))
+                {
+                    alert("Please select a NGI Name OR a site");
+                    FormValid=false;
+                }
+
+
+
+                if ( $('#reportrange').val()=='')
+                {
+                    alert("Please select a period for the report");
+                    FormValid=false;
+                }
+
+                if (FormValid==true)
+                {
+                    var view='cloud_ar';
+
+                    if ($('input[id=filters-ngi]').val()!='')
+                        view= 'ngi_ar?ngi=' + $('input[id=filters-ngi]').val();
+
+                    if ($('input[id=filters-site]').val()!='')
+                        view= 'site_ar?site=' + $('input[id=filters-site]').val();
+
+                    var range = 'start_date=' + $('#reportrange').val().replace(' - ','&end_date=');
+
+                    var link ='/lavoisier/'  + view  + '&cr=1' + '&' + range + '&granularity='   +  $('input[name=granularity]:checked').val() + '&report=' +  $('#report :selected').val();
+                    window.location= link;
+
+                }
+
+            });
+
+
+-->
+        </script>
+
+
+    </section>
+    <!-- /.content -->
+
+</div>
+<!-- /.right-side -->
+
+
+</div>
+</body>
+
+<style type="text/css">
+    .form-group label {
+        margin-left:10px;
+        width : 100px;
+
+    }
+
+</style>
+
+</html>
+

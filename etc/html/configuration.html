@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:tpl="http://software.in2p3.fr/lavoisier/template.xsd"
+      xmlns:cfg="http://software.in2p3.fr/lavoisier/config.xsd"
+      xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd"
+      tpl:extends="/resource/html/base.html">
+
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title>Configuration</title>
+
+
+</head>
+<body>
+
+
+<div class="wrapper" id="wrapper">
+    <div class="content-wrapper" tpl:foreach="e:entries/cfg:view">
+
+        <h2 class="page-title text-center">Configuration</h2>
+        <pre style="margin:0;padding:0">
+            <p  tpl:call-function="view"></p>
+        </pre>
+
+    </div>
+
+    <div class="hidden">
+        <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform"  name="view">
+            <xsl:apply-templates><xsl:with-param name="indent"><xsl:text>
+        </xsl:text></xsl:with-param></xsl:apply-templates>            
+        </xsl:template>    
+        <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform"  match="@type[not(parent::cfg:parameter|parent::cfg:entry)]">
+            <xsl:variable name="adaptor">
+                <xsl:call-template name="substring-after-last-dot">
+                    <xsl:with-param name="string" select="."/>
+                </xsl:call-template>
+            </xsl:variable>
+            <xsl:text> </xsl:text><xsl:value-of select="local-name()"/>="<xsl:text/>
+            <a href="http://software.in2p3.fr/lavoisier/adaptors.html#{$adaptor}">
+                <i>
+                    <xsl:value-of select="."/>
+                </i>
+            </a>
+            <xsl:text>"</xsl:text>
+        </xsl:template>
+        <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform"  name="substring-after-last-dot">
+            <xsl:param name="string"/>
+            <xsl:choose>
+                <xsl:when test="contains($string,'.')">
+                    <xsl:call-template name="substring-after-last-dot">
+                        <xsl:with-param name="string" select="substring-after($string, '.')"/>
+                    </xsl:call-template>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$string"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:template>
+
+        <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform"  match="cfg:view[not(contains(cfg:connector/@type,'.'))]/@name">
+            <xsl:text> </xsl:text><xsl:value-of select="local-name()"/>="<xsl:text/>
+            <a href="/lavoisier/configuration/cfg:config/cfg:view[@name='{.}']">
+                <i>
+                    <xsl:value-of select="."/>
+                </i>
+            </a>
+            <xsl:text>"</xsl:text>
+        </xsl:template>
+
+        <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+                match="*[namespace-uri()='http://software.in2p3.fr/lavoisier/entries.xsd' and local-name()='entries']">
+            <xsl:param name="indent"/>
+            <xsl:choose>
+                <xsl:when test="count(*) > 1">
+                    <ul>
+                        <xsl:for-each select="*">
+                            <li>
+                            <pre>
+                                <xsl:apply-templates select=".">
+                                    <xsl:with-param name="indent"><xsl:text>
+                                    </xsl:text>
+                                    </xsl:with-param>
+                                </xsl:apply-templates>
+                            </pre>
+                            </li>
+                        </xsl:for-each>
+                    </ul>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates>
+                        <xsl:with-param name="indent" select="concat($indent,'    ')"/>
+                    </xsl:apply-templates>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:template>
+        <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform"  match="*[namespace-uri()='http://software.in2p3.fr/lavoisier/entries.xsd' and local-name()='entry']">
+            <xsl:value-of select="text()"/>
+        </xsl:template>
+
+        <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform"  match="*">
+            <xsl:param name="indent"/>
+            <xsl:if test="parent::cfg:* and namespace-uri()!='http://software.in2p3.fr/lavoisier/config.xsd'">&lt;![CDATA[</xsl:if>
+            <xsl:value-of select="$indent"/>&lt;<xsl:call-template name="processors_tag"/><xsl:apply-templates select="@*"/>
+            <xsl:choose>
+                <xsl:when test="*|comment()"><xsl:text>&gt;</xsl:text><xsl:apply-templates><xsl:with-param name="indent" select="concat($indent,'    ')"/></xsl:apply-templates>
+                    <xsl:value-of select="$indent"/>&lt;/<xsl:call-template name="processors_tag"/>&gt;<xsl:text/>
+                </xsl:when>
+                <xsl:when test="text()">
+                    <xsl:text>&gt;</xsl:text>
+                    <xsl:apply-templates select="text()"/>
+                    <xsl:text/>&lt;/<xsl:call-template name="processors_tag"/>&gt;<xsl:text/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>/&gt;</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:if test="parent::cfg:* and namespace-uri()!='http://software.in2p3.fr/lavoisier/config.xsd'">
+                ]]&gt;</xsl:if>
+        </xsl:template>
+        <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform"  match="@*">
+            <xsl:text> </xsl:text>
+            <xsl:call-template name="processors_attribute_name"/>="<xsl:call-template
+                name="processors_attribute_value"/>"<xsl:text/>
+        </xsl:template>
+
+        <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform"  match="comment()">
+            <xsl:param name="indent"/>
+            <xsl:value-of select="$indent"/>
+            <font color="#385">&lt;!--<xsl:value-of select="."/>--&gt;
+            </font>
+        </xsl:template>
+        <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform"  match="text()">
+            <xsl:value-of select="normalize-space(.)"/>
+        </xsl:template>
+
+        <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform"  name="processors_tag"><b><font color="#a05"><xsl:value-of select="name()"/></font></b></xsl:template>
+        <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform"  name="processors_attribute_name"><font color="#b48"><xsl:value-of select="local-name()"/></font></xsl:template>
+        <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform"  name="processors_attribute_value"><i><font color="#46a"><xsl:value-of select="."/></font></i>
+        </xsl:template>
+    </div>
+
+</div>
+
+</body>
+
+
+
+
+</html>
+
+
+
+
+
+
+

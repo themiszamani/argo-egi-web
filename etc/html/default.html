@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns:tpl="http://software.in2p3.fr/lavoisier/template.xsd">
+<head>
+    <meta charset="UTF-8" />
+    <title>ARGO</title>
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport' />
+
+
+    <!-- bootstrap 3.0.2 -->
+    <link rel="stylesheet" href="/resource/css/AdminLTE.css"/>
+    <link rel="stylesheet" href="/resource/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/resource/css/font-awesome.css"/>
+    <link rel="stylesheet" href="/resource/css/ionicons.min.css"/>
+    <link rel="stylesheet" href="/resource/css/jquery-ui.css"/>
+    <link href="/resource/css/bootstrap-timepicker.min.css" rel="stylesheet"/>
+    <link href="/resource/css/daterangepicker-bs3.css" rel="stylesheet" type="text/css" />
+    <link href="/resource/css/multiselect.css" rel="stylesheet" type="text/css"/>
+    <link href="/resource/css/skin-argo.css" rel="stylesheet" type="text/css" />
+    <link href="/resource/css/font-beba.css" rel="stylesheet" type="text/css"/>
+
+    <script src="/resource/js/jquery.min.js"/>
+    <script src="/resource/js/jquery-ui-1.10.3.js"/>
+    <script src="/resource/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/resource/js/multiselect.js"></script>
+
+
+    <script src="/resource/js/jquery.dataTables.js"></script>
+    <script src="/resource/js/dataTables.bootstrap.js"></script>
+    <link href="/resource/css/dataTables.bootstrap.css" rel="stylesheet" type="text/css"/>
+    <link href="/resource/css/jquery.dataTables.css" rel="stylesheet" type="text/css"/>
+
+
+    <script src="/resource/js/app.js"></script>
+    <script src="/resource/js/scripts.js"></script>
+
+    <link rel="shortcut icon" href="/resource/img/favicon.ico"/>
+
+
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-65947937-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+</head>
+<body class="skin-blue sidebar-mini">
+
+<div class="wrapper" id="wrapper">
+
+    <header class="main-header">
+
+
+
+
+
+
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top" role="navigation">
+    <!-- Sidebar toggle button-->
+    <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+        <span class="sr-only">Toggle navigation</span>
+    </a>
+        <a class="navbar-brand" ib="brand" href="/lavoisier"><img src="/resource/img/logo.png" alt="Argo"  /></a>
+    <!-- Navbar Right Menu -->
+    <div class="navbar-custom-menu navbar-collapse collapse">
+
+
+    <ul class="nav navbar-nav">
+
+
+    <!-- Control Sidebar Toggle Button -->
+        <li class="active"><a href="#">ARGO WEB UI</a></li>
+
+    </ul>
+    </div>
+
+    </nav>
+
+
+
+ </header>
+
+
+    <aside class="main-sidebar sidebar-offcanvas">
+
+        <section class="sidebar">
+
+
+
+            <ul class="sidebar-menu">
+
+                <li tpl:foreach="/menu/categories" class="treeview" id="sidebar-menu">
+                    <a href="#">
+                        <i class="{@icon}"></i> <span>{{@title}}</span>
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li tpl:foreach="category" ><a href="{{@link}}"><i class="{@icon}"></i>{{text()}}</a></li>
+
+                    </ul>
+                </li>
+
+
+            </ul>
+
+        </section>
+        <!-- /.sidebar -->
+    </aside>
+
+    <!-- Right side column. Contains the navbar and content of the page -->
+
+        <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+
+
+
+        <!-- Main content -->
+        <section class="content" id="content">
+
+            <section class="content-header" id="content-header">
+                <h1>
+                    Home Page
+                    <small>Start page</small>
+                </h1>
+
+            </section>
+
+
+        </section><!-- /.content -->
+        </div>
+
+
+
+</div><!-- ./wrapper -->
+
+
+
+
+<!-- Bootstrap -->
+
+
+</body>
+<aside class="control-sidebar control-sidebar-dark" >
+
+
+        <div class="tab-content">
+
+                <h3 class="control-sidebar-heading">Release</h3>
+
+                <ul class="control-sidebar-menu">
+                    <li>
+                        <div class="menu-info">
+                            <h4 class="control-sidebar-subheading">Version:</h4>
+                            <p>2.0</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="menu-info">
+                            <h4 class="control-sidebar-subheading">Date:</h4>
+                            <p>2015, September 23th</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="menu-info">
+                            <h4 class="control-sidebar-subheading"> Repository
+                            <a href="https://github.com/ARGOeu"> <span class="fa fa-github" style="font-size: larger"> </span></a></h4>
+                        </div>
+
+                    </li>
+                </ul>
+
+
+        </div>
+
+
+
+
+
+</aside>
+</html>

@@ -1,0 +1,129 @@
+<config xmlns="http://software.in2p3.fr/lavoisier/config.xsd" version="14">
+    <!-- post-processors -->
+    <processors>
+        <processor type="SelectWindowProcessor" match="/*/*" disabled="not(arguments()[@key='_window_']/text())">
+            <parameter name="offset" eval="substring-before(arguments()[@key='_window_']/text(), '-')"/>
+            <parameter name="length" eval="substring-after(arguments()[@key='_window_']/text(), '-') - number(substring-before(arguments()[@key='_window_']/text(), '-')) + 1"/>
+        </processor>
+        <processor type="ExtractProcessor" match="/*" disabled="not(arguments()[@key='_extract_'])"/>
+        <processor type="SkeletonProcessor" match="/*" disabled="not(arguments()[@key='_skeleton_'])"/>
+    </processors>
+
+    <!-- helper views -->
+    <view name="list">
+        <info>
+            <category>Hidden</category>
+        </info>
+        <argument name="disable-default-XPath">true</argument>
+        <connector type="FileConnector">
+            <parameter name="path" eval="concat('./',path())"/>
+        </connector>
+        <serializer type="ListSerializer"/>
+    </view>
+    <view name="properties">
+        <info>
+            <category>Hidden</category>
+        </info>
+        <argument name="disable-default-XPath">true</argument>
+        <connector type="FileConnector">
+            <parameter name="path" eval="concat('./',path())"/>
+        </connector>
+        <serializer type="PropertiesSerializer"/>
+    </view>
+
+    <!-- generated rendering stylesheets -->
+    <view name="base">
+        <info>
+            <category>Hidden</category>
+        </info>
+        <connector type="MemoryCacheConnector">
+            <parameter name="key">!user_configuration!</parameter>
+        </connector>
+        <renderers>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">html/base.html</parameter>
+            </renderer>
+        </renderers>
+    </view>
+    <view name="xsl">
+        <info>
+            <category>Hidden</category>
+        </info>
+        <argument name="disable-default-XPath">true</argument>
+        <connector type="FileConnector">
+            <parameter name="path" eval="concat('memory:/', path())"/>
+        </connector>
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="contentType">application/xslt+xml</parameter>
+            </renderer>
+        </renderers>
+    </view>
+
+    <!-- layout -->
+    <view name="head">
+        <info>
+            <category>Hidden</category>
+        </info>
+        <connector type="XSLTConnector">
+            <parameter name="stylesheet" eval="document('xsl/head.xsl')"/>
+        </connector>
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="contentType">application/xslt+xml</parameter>
+            </renderer>
+        </renderers>
+    </view>
+    <view name="navbar">
+        <info>
+            <category>Hidden</category>
+        </info>
+        <connector type="XSLTConnector">
+            <parameter name="stylesheet" eval="document('xsl/navbar.xsl')"/>
+            <parameter name="input" eval="document('rsc/categories.xml')"/>
+            <parameter name="documents">
+                <entry key="conf" eval="view('configuration')"/>
+            </parameter>
+        </connector>
+        <processors xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+            <insert-parent match="/*" name="xsl:template"/>
+            <insert match="/*" nodes="new_attribute('name', 'navbar')"/>
+            <insert-parent match="/*" name="xsl:stylesheet"/>
+            <insert match="/*" nodes="new_attribute('version', '1.0')"/>
+        </processors>
+        <cache type="FileCache">
+            <trigger type="ViewCreatedTrigger"/>
+        </cache>
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="contentType">application/xslt+xml</parameter>
+            </renderer>
+        </renderers>
+    </view>
+
+    <view name="controller">
+        <argument name="view"/>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view($view, arguments())"/>
+            <fallback eval="view('unknown_route')">
+                <exception type="java.lang.Exception"/>
+            </fallback>
+        </connector>
+    </view>
+    
+    <view name="unknown_route">
+        <argument name="route"/>
+        <connector type="XMLConnector">
+          <parameter name="content"><![CDATA[<error code='404'>Unknown_route : Page Not Found</error>]]></parameter>
+        </connector>
+
+        <renderers>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/html/error.html</parameter>
+            </renderer>
+
+        </renderers>
+    </view>
+
+
+</config>

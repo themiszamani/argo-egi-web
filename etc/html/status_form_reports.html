@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html  xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd"
+       xmlns:tpl="http://software.in2p3.fr/lavoisier/template.xsd"
+       tpl:extends="/lavoisier/_default_?accept=html">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>STATUS REPORT FORM</title>
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport' />
+
+</head>
+
+
+<body>
+<!-- Right side column. Contains the navbar and content of the page -->
+<div id="wrapper">
+
+
+
+<div class="content-wrapper">
+
+
+
+    <!-- Main content -->
+    <section class="content" id="content">
+
+    <section class="content-header" id="content-header">
+        <h1>
+            Status Reports
+            <small>Customized report</small>
+            <button type="button" class="pull-right btn btn-primary" data-toggle="modal" data-target="#myHelp">
+                <div class="fa fa-info"></div>
+            </button>
+
+
+        </h1>
+
+
+
+
+        <div class="modal fade " id="myHelp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+                        <h3 class="modal-title" id="myModalLabel">Help  <i class="ion ion-clipboard"></i></h3>
+                    </div>
+                    <div class="modal-body">
+                        <ul>
+                            <li>Please select a predefined period , an entity or a combination of entities and a profile . </li>
+                            <li>You can select only one level of entity : Operations Center, site or host</li>
+                            <li>But you can filter site or Operations Center with a service type</li>
+                            <li class="info-box-text">Then by clicking on the button you will generate the status report for these parameters</li>
+                            <li class="info-box-text">The entity selection is working by auto-completion</li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+        <div id="id_content" class="hidden"></div>
+
+
+
+
+            <div class="box box-primary">
+
+                <div class="row" style="margin:20px;padding:20px">
+
+                    <div class="box  col-md-3" style="margin:20px;padding:20px;height:400px ">
+
+                        <div class="box-header"><H3 class="box-title"> <label> <i class="fa fa-calendar"> </i>   Date range:</label></H3></div>
+                        <div class="box-body">
+                            <div class="row">
+
+                                <label>  Date range:</label>
+                                <input  id="reportrange" type="text" /><span></span><br/>
+
+
+
+
+                            </div><!-- /.input group -->
+
+
+                        </div>
+                        </div>
+
+
+
+
+                    <div class="box  col-md-3 " style="margin:20px;padding:20px;height:400px">
+
+                        <div class="box-header"><H3 class="box-title"> <label> <i class="fa fa-globe"> </i>   Entity :</label></H3></div>
+
+                        <div class="box-body">
+
+                            <div class="form-group ">
+
+
+
+                                <label>OPERATIONS CENTER</label>
+                                <input type="text" style="margin-left:20px" name="ngi" id="filters-ngi" placeholder="Enter Search " /><br/>
+
+
+
+
+                                <label>SITE </label>
+                                <input type="text" style="margin-left:20px" name="site" id="filters-site" placeholder="Enter Search " /><br/>
+
+
+                                <!--<label>SERVICE TYPE </label>-->
+
+                                <!--<input type="text" style="margin-left:20px" name="sf" id="filters-sf" placeholder="Enter Search "/><br/>-->
+
+
+
+
+                                <label>HOST </label>
+                                <input type="text" style="margin-left:20px" name="host" id="filters-host" placeholder="Enter Search "/>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="box  col-md-4 " style="margin:20px;padding:20px;height:400px">
+
+                        <div class="box-header"><H3 class="box-title"><i class="fa fa-group"> </i>  Profiles</H3></div>
+
+                        <div class="box-body">
+
+                            <div class="form-group profile">
+
+
+                                <!--<input  tpl:foreach="/root/profile" tpl:with-order="@namespace" type="radio" class="profile" name="profile" value="{{concat(@namespace,'-',@name)}}" checked="true"> {{@poems}} <br/></input>-->
+
+                                <select name="report" id="report">
+                                    <option value="Critical" selected="true">EGI Critical Profile</option>
+                                    <option value="Cloud">EGI Cloud Profile</option>
+                                    <option value="OPS-MONITOR-Critical">EGI OPSMON profile</option>
+                                </select>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+
+
+                <div class="row" style="margin:30px;padding:20px">
+                    <input class="btn btn-primary offset1" id="buttonAR" value="Generate Reports"/>
+                </div>
+
+            </div>
+
+
+
+
+            <div class="hidden" id="listNgi" tpl:foreach="/root/ngis">{{text()}}</div>
+            <div class="hidden" id="listSite" tpl:foreach="/root/sites">{{text()}}</div>
+            <div  id="listHost"  class="hidden"  tpl:foreach="/root/hosts">{{text()}}</div>
+
+            <div    id="listSf" class="hidden">
+                <div tpl:foreach="root/profile/AND/OR/Group">{{@service_flavor}}</div>
+                </div>
+
+
+            <!--<input class="hidden" name="site" if="listsites" value=""/>-->
+            <!--<input class="hidden" name="ngi" if="listngi" value=""/>-->
+
+
+            <script src="/resource/js/daterangepicker.js" type="text/javascript"></script>
+
+        <script>
+<!--
+
+                function split( val ) {
+                    return val.split( /,\s*/ );
+                }
+                function extractLast( term ) {
+                    return split( term ).pop();
+                }
+
+
+            $(document).ready(function ($) {
+
+
+                $('#reportrange').daterangepicker(
+                        {
+                            format: 'YYYY-MM-DD',
+                            ranges: {
+
+                                'Last 3 Days': [moment().subtract('days', 3), moment()],
+                                'Last 10 Days': [moment().subtract('days', 10), moment()],
+                                'Last 30 Days': [moment().subtract('days', 29), moment()]
+
+                            },
+                            startDate: moment().subtract('days', 29),
+                            endDate: moment()
+                        }
+
+                );
+
+
+
+                // Variable initialisation for the autocomplete
+                var availableNgis =  $("#listNgi").text();
+                var availableSites =   $("#listSite").text();
+                var availableHosts =   $("#listHost").text();
+
+
+
+                // #####################################
+                // Build a table of mapping host - sites , host - ngi
+                // #####################################
+
+
+                var tabavailableNgis=  availableNgis.split(',');
+                var tabavailableSite= availableSites.split(',');
+                var tabavailableHost= availableHosts.split(',');
+                tabavailableHost.shift();
+
+                var tabavailableHostNgi= [];
+                var tabavailableHostSite= [];
+                var tabavailableHostList= [];
+                var tabavailableHostHost= [];
+                var tabavailableHostSf= [];
+                var tabavailableSf= [];
+
+                $.each(tabavailableHost, function( index, value ) {
+
+                    var tabsHost = value.split('___');
+
+                    tabavailableHostNgi[tabsHost[2] + ' (' + tabsHost[3] + ')'] = tabsHost[0];
+                    tabavailableHostSite[tabsHost[2] + ' (' + tabsHost[3] + ')'] = tabsHost[1];
+                    tabavailableHostHost[tabsHost[2] + ' (' + tabsHost[3] + ')'] = tabsHost[2];
+                    tabavailableHostList.push(tabsHost[2] + ' (' + tabsHost[3] + ')');
+                    tabavailableHostSf[tabsHost[2] + ' (' + tabsHost[3] + ')'] = tabsHost[3];
+
+                });
+
+
+                // Build the service flavour List
+                var divSf= document.getElementById('listSf').getElementsByTagName('div');
+
+                for (i=0; i<divSf.length; i++) {
+                    tabavailableSf.push(divSf[i].textContent);
+                }
+
+
+                //  ################################
+                //  Autocompletion fonctions
+                // ##############################
+
+
+                // call the autocomplete functions
+                // Add eventually (sites , host ) the possibility to select multiple values and concatenate it
+
+                $("#filters-ngi").autocomplete({
+                    search:true,
+                    source: tabavailableNgis,
+                    TextHint : "Enter search or Double click to have the whole list"
+
+                });
+
+                $("#filters-site").autocomplete({
+
+                    source: function( request, response ) {
+                        // delegate back to autocomplete, but extract the last term
+                        response( $.ui.autocomplete.filter(
+                                tabavailableSite, extractLast( request.term ) ) );
+                    },
+                    focus: function() {
+                        // prevent value inserted on focus
+                        return false;
+                    },
+                    select: function( event, ui ) {
+                        var terms = split( this.value );
+                        // remove the current input
+                        terms.pop();
+                        // add the selected item
+                        terms.push( ui.item.value );
+                        // add placeholder to get the comma-and-space at the end
+                        terms.push( "" );
+                        this.value = terms.join( ", " );
+                        return false;
+                    }
+                });
+
+
+
+
+
+                $("#filters-host").autocomplete({
+
+
+                    source:tabavailableHostList
+
+                });
+
+//                $("#filters-sf").autocomplete({
+//
+//
+//                    source: function( request, response ) {
+//                        // delegate back to autocomplete, but extract the last term
+//                        response( $.ui.autocomplete.filter(
+//                                tabavailableSf, extractLast( request.term ) ) );
+//                    },
+//                    focus: function() {
+//                        // prevent value inserted on focus
+//                        return false;
+//                    },
+//                    select: function( event, ui ) {
+//                        var terms = split( this.value );
+//                        // remove the current input
+//                        terms.pop();
+//                        // add the selected item
+//                        terms.push( ui.item.value );
+//                        // add placeholder to get the comma-and-space at the end
+//                        terms.push( "" );
+//                        this.value = terms.join( ", " );
+//                        return false;
+//                    }
+//                });
+
+
+
+
+
+
+                        // #######################
+                        // Treatment of the form
+                        // ####################
+
+
+                $("#buttonAR").click(function () {
+
+
+
+                    var FormValid=true;
+
+                    // period should be filled
+
+                    if ( $('#reportrange').val()=='')
+                    {
+                        alert("Please select a period for the report");
+                        FormValid=false;
+                    }
+
+                    var range = '&start=' + $('#reportrange').val().replace(' - ','&end=');
+
+
+                    // NGI or Site should be filled
+                    if ( ($('input[id=filters-ngi]').val()  && $('input[id=filters-site]').val() && $('input[id=filters-host]').val()) || ($('input[id=filters-ngi]').val() == '' && $('input[id=filters-site]').val() == '' && $('input[id=filters-host]').val() == '' ) )
+                    {
+                        alert("Please select a NGI Name OR a site Or a Host");
+                       FormValid=false;
+                   }
+
+
+
+
+                    if (FormValid==true)
+                    {
+
+
+                        if ($('input[id=filters-ngi]').val())
+                            var view='status_report-site?ngi=' + $('input[id=filters-ngi]').val();
+
+                        if ($('input[id=filters-site]').val())
+                        var view='status_report-site?site=' + $('input[id=filters-site]').val();
+
+//
+//                        if ($('input[id=filters-sf]').val()!='') {
+//                            view= 'status_report-sf?site=' + $('input[id=filters-site]').val()+'&service='+$('input[id=filters-sf]').val();
+//
+//                        }
+
+
+
+                        var profile = $( ".profile input:checked" ).val();
+
+                        var report= $("#report").val();
+
+
+                        var ListSites = ""
+                        var ListHost="";
+                        var ListSf="";
+
+
+                        if ($('input[id=filters-host]').val()!='') {
+
+
+
+
+                            var Host=$('input[id=filters-host]').val();
+                            var HostName= tabavailableHostHost[Host];
+                            var Site= tabavailableHostSite[Host];
+                            var Sf= tabavailableHostSf[Host];
+
+
+                            view = 'status_report-metrics?site='+ Site + '&service=' +  Sf +'&endpoint=' + HostName;
+
+                        }
+
+
+
+                        var link ='/lavoisier/'  + view   + range + '&report='+ report +  '&accept=html' ;
+                        console.log(link);
+                        window.location.href = link;
+
+
+
+                    }
+
+                });
+
+
+
+
+
+            });
+
+
+
+-->
+
+        </script>
+
+
+    </section>
+    <!-- /.content -->
+
+
+<!-- /.right-side -->
+
+
+</div>
+
+</div>
+</body>
+
+<style type="text/css">
+    .form-group label {
+        margin-left:10px;
+        width : 100px;
+
+    }
+
+</style>
+
+</html>
+

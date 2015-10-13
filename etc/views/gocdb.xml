@@ -1,0 +1,276 @@
+<config xmlns="http://software.in2p3.fr/lavoisier/config.xsd"
+        xmlns:date="http://exslt.org/dates-and-times"
+        xmlns:xi="http://www.w3.org/2001/XInclude"
+        xmlns:str="http://exslt.org/strings"
+        xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
+
+<view xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" name="listNgi">
+
+    <info>
+        <description>GOC DB : List of Ngi</description>
+        <category>GOC DB</category>
+    </info>
+    <connector type="XMLConnector">
+        <parameter name="content" eval="view('goc.siteList')/results/SITE[not(ROC/text()=preceding-sibling::SITE/ROC/text())]/ROC/text()"/>
+    </connector>
+
+    <!--<processors>-->
+    <!--<replace match="/e:entries/e:entry/text()" nodes="concat('&quot;',text(),'&quot;,')"/>-->
+    <!--</processors>-->
+
+    <cache type="FileCache">
+        <!--<trigger type="ViewCreatedTrigger"/>-->
+        <trigger type="DeltaTimeTrigger">
+            <parameter name="hours">2</parameter>
+        </trigger>
+        <trigger type="ViewNotifiedTrigger"/>
+        <trigger type="ViewCreatedTrigger"/>
+    </cache>
+
+</view>
+
+
+
+<view xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" name="listSite">
+<info>
+    <description>GOC DB : List of Sites</description>
+    <category>GOC DB</category>
+</info>
+
+
+<connector type="XMLConnector">
+    <parameter name="content" eval="view('goc.siteList')/results/SITE[not(@NAME=preceding-sibling::SITE/@NAME)]/@NAME"/>
+</connector>
+
+<cache type="FileCache">
+    <!--<trigger type="ViewCreatedTrigger"/>-->
+    <trigger type="DeltaTimeTrigger">
+        <parameter name="hours">2</parameter>
+    </trigger>
+    <trigger type="ViewNotifiedTrigger"/>
+    <trigger type="ViewCreatedTrigger"/>
+</cache>
+
+
+</view>
+
+<view xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" name="listSitesbyNgi">
+<info>
+    <description>GOC DB : List of Sites per Ngi</description>
+    <category>GOC DB</category>
+</info>
+
+
+<connector type="XMLConnector">
+    <parameter name="content" eval="view('goc.siteList')"/>
+</connector>
+
+
+<processors>
+
+    <element in="results">
+        <element in="SITE">
+            <attribute-create out="key">../ROC/text()</attribute-create>
+            <element-ignore/>
+        </element>
+    </element>
+    <element in="results">
+        <element-ignore/>
+        <element-create>sort_by_string(../SITE, '@key')</element-create>
+    </element>
+    <element in="results">
+        <element-create-as-parent out="Ngi" group-by="@key" attributes="@key">
+            <element in="SITE">
+                <attribute-ignore in="key"/>
+            </element>
+        </element-create-as-parent>
+    </element>
+</processors>
+
+
+</view>
+
+<view name="goc.siteList">
+<info>
+    <description>GOC DB : List of Raw Sites</description>
+    <category>GOC DB</category>
+</info>
+
+<connector type="HTTPConnector">
+    <parameter name="url" eval="property('goc.siteList')"></parameter>
+    <parameter name="certificate" eval="property('certificate.path')"/>
+    <parameter name="passphrase" eval="property('certificate.password')"/>
+    <parameter name="force-redirect">true</parameter>
+</connector>
+
+<cache type="FileCache">
+    <!--<trigger type="ViewCreatedTrigger"/>-->
+    <trigger type="DeltaTimeTrigger">
+        <parameter name="hours">4</parameter>
+    </trigger>
+    <trigger type="ViewNotifiedTrigger"/>
+    <trigger type="ViewCreatedTrigger"/>
+</cache>
+
+</view>
+
+    <view name="ngiContactsList">
+
+        <info>
+            <description>list of ngi for the form</description>
+            <category>GOC DB</category>
+        </info>
+
+        <connector type="HTTPConnector">
+            <parameter name="url" eval="property('goc.ngiContactsList')"></parameter>
+            <parameter name="certificate" eval="property('certificate.path')"/>
+            <parameter name="passphrase" eval="property('certificate.password')"/>
+            <parameter name="force-redirect">true</parameter>
+        </connector>
+
+
+        <cache type="FileCache">
+            <!--<trigger type="ViewCreatedTrigger"/>-->
+            <trigger type="DeltaTimeTrigger">
+                <parameter name="hours">4</parameter>
+            </trigger>
+            <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="ViewCreatedTrigger"/>
+        </cache>
+    </view>
+
+    <view name="RolesUsers">
+        <info>
+            <description>list of ngi roles for user for the form</description>
+            <category>GOC DB</category>
+        </info>
+        <argument name="user"></argument>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('ngiContactsList')"></parameter>
+
+        </connector>
+
+        <processors>
+            <insert match="/results" nodes="new_attribute('user',str:concat(eval('concat(&quot;/&quot;,.)', reverse(str:split($user, ', ')))))"></insert>
+            <insert match="/results/ROC/CONTACT" nodes="new_attribute('ngi',ancestor::ROC/@ROC_NAME)"/>
+            <processor match="/results/ROC/CONTACT[CERTDN/text()=str:concat(eval('concat(&quot;/&quot;,.)', reverse(str:split($user, ', ')))) ]" type="SelectProcessor"></processor>
+            <insert match="/e:entries/CONTACT" nodes="view('goc.siteList')/results/SITE[not(@NAME=preceding-sibling::SITE/@NAME) and ROC/text()=match()/@ngi]"></insert>
+            <remove match="/e:entries/CONTACT/SITE/*"></remove>
+        </processors>
+
+    </view>
+
+    <view name="RolesUsers2">
+        <info>
+            <description>list of ngi roles for user for the form</description>
+            <category>GOC DB</category>
+        </info>
+        <argument name="user"></argument>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('ngiContactsList')"></parameter>
+
+        </connector>
+
+        <processors>
+            <element in="results">
+                <attribute-create out="user">str:concat(eval('concat(&quot;/&quot;,.)', reverse(str:split($user, ', '))))</attribute-create>
+                <element in="ROC">
+                    <element in="CONTACT">
+                        <attribute-create out="ngi">../ancestor::ROC/@ROC_NAME</attribute-create>
+                    </element>
+                </element>
+            </element>
+
+            <elements path="/results/ROC">
+                <element in="CONTACT" if="CERTDN/text() = str:concat(eval('concat(&quot;/&quot;,.)', reverse(str:split($user, ', '))))"></element>
+                <element-ignore></element-ignore>
+            </elements>
+
+            <element in="results" out="e:entries">
+                <set variable="siteList">view('goc.siteList')</set>
+                <element in="CONTACT">
+                    <element-create>$siteList/results/SITE[not(@NAME=preceding-sibling::SITE/@NAME) and ROC/text()=current()/@ngi]</element-create>
+                </element>
+            </element>
+            <elements path="/e:entries/CONTACT/SITE">
+                <element-ignore></element-ignore>
+            </elements>
+
+
+        </processors>
+
+    </view>
+
+
+
+
+    <view name="goc.ServiceFlavours">
+
+        <info>
+            <description>GOC : Service Flavours List</description>
+            <category>GOC DB</category>
+        </info>
+
+        <connector type="HTTPConnector">
+            <parameter name="url" eval="property('goc.serviceFlavours')"></parameter>
+            <parameter name="certificate" eval="property('certificate.path')"/>
+            <parameter name="passphrase" eval="property('certificate.password')"/>
+            <parameter name="force-redirect">true</parameter>
+        </connector>
+        <cache type="FileCache">
+            <!--<trigger type="ViewCreatedTrigger"/>-->
+            <trigger type="DeltaTimeTrigger">
+                <parameter name="hours">4</parameter>
+            </trigger>
+            <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="ViewCreatedTrigger"/>
+        </cache>
+
+    </view>
+
+    <view name="goc.HostList">
+        <info>
+            <description>GOC : Hostname List</description>
+            <category>GOC DB</category>
+        </info>
+
+        <connector type="HTTPConnector">
+            <parameter name="url" eval="property('goc.hostList')"></parameter>
+            <parameter name="certificate" eval="property('certificate.path')"/>
+            <parameter name="passphrase" eval="property('certificate.password')"/>
+            <parameter name="force-redirect">true</parameter>
+        </connector>
+
+
+        <processors>
+            <element in="results" out="e:entries">
+                <element in="SERVICE_ENDPOINT" out="e:entry" >
+
+
+                    <attribute-create out="hostname">../HOSTNAME/text()</attribute-create>
+                    <attribute-create out="site">../SITENAME/text()</attribute-create>
+                    <attribute-create out="ngi">../ROC_NAME/text()</attribute-create>
+                    <attribute-create out="service">../SERVICE_TYPE/text()</attribute-create>
+                    <element-ignore></element-ignore>
+                </element>
+
+            </element>
+            <element in="e:entries">
+                <element in="e:entry">
+                    <attribute-ignore></attribute-ignore>
+                    <text-create>concat(../@ngi,'___',../@site,'___',../@hostname,'___',../@service)</text-create>
+                </element>
+            </element>
+        </processors>
+        <cache type="FileCache">
+            <!--<trigger type="ViewCreatedTrigger"/>-->
+            <trigger type="DeltaTimeTrigger">
+                <parameter name="hours">4</parameter>
+            </trigger>
+            <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="ViewCreatedTrigger"/>
+        </cache>
+
+    </view>
+
+</config>

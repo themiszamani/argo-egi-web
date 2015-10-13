@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd"
+      xmlns:tpl="http://software.in2p3.fr/lavoisier/template.xsd"
+      tpl:extends="/lavoisier/_default_?accept=html">
+<meta charset="UTF-8" />
+<title>ARGO AR REPORTS</title>
+<meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport' />
+
+<body>
+<!-- Right side column. Contains the navbar and content of the page -->
+<div id="wrapper">
+
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+
+
+
+        <!-- Main content -->
+        <section class="content" id="content">
+
+            <section class="content-header" id="content-header">
+            <h1>
+                Recomputation
+                <small>Management page</small>
+            </h1>
+
+            </section>
+
+        <div class="box box-primary">
+
+            <div class="box-header">
+                <h3 class="box-title">Recomputation Form Submitted</h3>
+            </div>
+
+            <div class="box-body">
+
+                <span tpl:if="not(/entries/@mode)">
+                     Your request has been successfully submitted (details below).
+                You should wait now for the validation and will be informed by email .
+                </span>
+
+                <span tpl:else="">
+                     Here are the details about recomputation request #{{/entries/entries/entry[@key='recompId']/text()}}
+                </span>
+
+
+
+                <h3 tpl:foreach="/entries/entries">Request  #{{entry[@key='recompId']/text()}} </h3>
+
+                <table class="table table-bordered table-condensed table-striped ">
+
+                    <tr tpl:foreach="entries/entries/entry">
+                        <th>{{@key}}</th>
+                        <td>{{text()}}</td>
+                    </tr>
+                    <tr tpl:foreach="entries/entries/e:entry">
+                        <th>{{@key}}</th>
+                        <td>{{text()}}</td>
+                    </tr>
+                </table>
+
+            </div>
+
+                        <div class="box-footer" tpl:if="/entries/@mode">
+                          <input tpl:if="entries/@admin='true'" type="button" class="btn btn-primary" value="Trigger API"/>
+                            <input type="button" tpl:else="" class="btn btn-primary" value="Trigger API" disabled="true" title="You are not authorized to perform this action"/>
+                    </div>
+
+
+        </div>
+
+        </section>
+
+        <!-- /.content -->
+    </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html  xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd"
+       xmlns:tpl="http://software.in2p3.fr/lavoisier/template.xsd"
+       tpl:extends="/lavoisier/_default_?accept=html">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>STATUS REPORT</title>
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport' />
+
+</head>
+
+
+<body>
+<!-- Right side column. Contains the navbar and content of the page -->
+<div id="wrapper">
+
+<aside class="main-sidebar sidebar-offcanvas" >
+
+    <section class="sidebar">
+
+        <ul class="sidebar-menu">
+            <li class="hidden" style="display: block;height:100px;"><a href="#"><span> </span></a></li>
+            <li class="hidden"><a href="#"><span> </span></a></li>
+            <li class="hidden"><a href="#"><span> </span></a></li>
+            <li  tpl:foreach="root/group" style="font-size: lighter;background-color: #C7d2e1">
+                <a tpl:if="not(preceding-sibling::group/@group=@group)" href="/lavoisier/status_report-site?ngi={{@group}}&amp;start_date={{ancestor::root/@start_time}}&amp;end_date={{ancestor::root/@end_time}}&amp;report={{ancestor::root/@report}}&amp;accept=html">  <span >-- {{@group}} --</span> </a>
+            </li>
+        </ul>
+    </section>
+</aside>
+
+
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+
+
+
+        <!-- Main content -->
+        <section class="content" id="content" tpl:if="count(/root/group/status)&gt;0">
+
+            <section class="content-header" id="content-header">
+                <h1>
+                    ARGO Reports
+                    <small>Status Report</small>
+                </h1>
+
+            </section>
+
+
+
+            <div style="display: none" tpl:if="/root/@view='status_report-sf'"  id="local_groups">
+                <div  tpl:foreach="/root/group/status" > {{ancestor::group/@name}} - {{ancestor::group/@group}},{{@value}}_{{position()}},{{@timestamp}},{{@end_time}},{{@color}}</div>
+            </div>
+
+            <div style="display: none" tpl:else=""  id="local_groups">
+                <div  tpl:foreach="/root/group/status" > {{ancestor::group/@name}},{{@value}}_{{position()}},{{@timestamp}},{{@end_time}},{{@color}}</div>
+            </div>
+
+
+            <div  id="local_links"  tpl:if="/root/@view='status_report-sf'">
+                <ol class="breadcrumb">
+                    <li><a href="/lavoisier/status_report-site?start_date={{root/@start_time}}&amp;end_date={{root/@end_time}}&amp;report={{root/@report}}&amp;accept=html">EGI</a></li>
+                    <li class="active"><a tpl:if="root/@ngi!='all'" href="/lavoisier/status_report-site?start_date={{root/@start_time}}&amp;end_date={{root/@end_time}}&amp;report={{root/@report}}&amp;ngi={{root/@ngi}}&amp;report={{ancestor::root/@report}}&amp;accept=html">{{root/@ngi}}</a></li>
+                </ol>
+                <div style="display: none" tpl:foreach="/root/group/status" >/lavoisier/{{ancestor::root/@view}}?site={{ancestor::group/@name}}&amp;start_date={{ancestor::root/@start_time}}&amp;end_date={{ancestor::root/@end_time}}&amp;report={{ancestor::root/@report}}&amp;accept=html</div>
+            </div>
+
+            <div  id="local_links" tpl:if="/root/@view='status_report-endpoints'"  >
+                <ol class="breadcrumb">
+                    <li><a href="/lavoisier/status_report-site?start_date={{root/@start_time}}&amp;end_date={{root/@end_time}}&amp;report={{root/@report}}&amp;accept=html">EGI</a></li>
+                    <li><a href="/lavoisier/status_report-site?start_date={{root/@start_time}}&amp;end_date={{root/@end_time}}&amp;ngi={{root/@ngi}}&amp;report={{root/@report}}&amp;accept=html">{{root/@ngi}}</a></li>
+                    <li  class="active">{{/root/group/@group}}</li>
+
+                </ol>
+
+                <div style="display: none" tpl:foreach="/root/group/status" >/lavoisier/{{ancestor::root/@view}}?site={{ancestor::group/@group}}&amp;service={{ancestor::group/@name}}&amp;start_date={{ancestor::root/@start_time}}&amp;end_date={{ancestor::root/@end_time}}&amp;report={{ancestor::root/@report}}&amp;accept=html</div>
+            </div>
+
+
+            <div  id="local_links"  tpl:if="/root/@view='status_report-metrics'" >
+                <ol class="breadcrumb">
+                <li><a href="/lavoisier/status_report-site?start_date={{root/@start_time}}&amp;end_date={{root/@end_time}}&amp;accept=html">EGI</a></li>
+                    <li><a tpl:if="root/@ngi" href="/lavoisier/status_report-site?start_date={{root/@start_time}}&amp;end_date={{root/@end_time}}&amp;ngi={{root/@ngi}}&amp;report={{root/@report}}&amp;accept=html">{{root/@ngi}}</a></li>
+                <li><a href="/lavoisier/status_report-sf?site={{/root/group/@site}}&amp;start_date={{root/@start_time}}&amp;end_date={{root/@end_time}}&amp;report={{root/@report}}&amp;accept=html">{{/root/group/@site}}</a></li>
+                <li  class="active">{{/root/group/@group}}</li>
+                </ol>
+                <div style="display: none"  tpl:foreach="/root/group/status" >/lavoisier/{{ancestor::root/@view}}?site={{ancestor::group/@site}}&amp;service={{ancestor::group/@group}}&amp;endpoint={{ancestor::group/@name}}&amp;start_date={{ancestor::root/@start_time}}&amp;end_date={{ancestor::root/@end_time}}&amp;report={{ancestor::root/@report}}&amp;accept=html</div>
+            </div>
+
+
+
+            <div  id="local_links"  tpl:if="/root/@view='metric-output'">
+
+                <ol class="breadcrumb">
+                    <li><a href="/lavoisier/status_report-site?start_date={{root/@start_time}}&amp;end_date={{root/@end_time}}&amp;report={{root/@report}}&amp;accept=html">EGI</a></li>
+                    <li><a tpl:if="root/@ngi" href="/lavoisier/status_report-site?start_date={{root/@start_time}}&amp;end_date={{root/@end_time}}&amp;ngi={{root/@ngi}}&amp;report={{root/@report}}&amp;accept=html">{{root/@ngi}}</a></li>
+                    <li><a href="/lavoisier/status_report-sf?site={{/root/group/@site}}&amp;start_date={{root/@start_time}}&amp;end_date={{root/@end_time}}&amp;report={{root/@report}}&amp;accept=html">{{/root/group/@site}}</a></li>
+                    <li><a href="/lavoisier/status_report-endpoints?site={{/root/group/@site}}&amp;service={{/root/group/@service}}&amp;start_date={{root/@start_time}}&amp;report={{root/@report}}&amp;end_date={{root/@end_time}}&amp;accept=html">{{/root/group/@service}}</a></li>
+                    <li  class="active">{{/root/group/@endpoint}}</li>
+                </ol>
+                <div  style="display: none"   tpl:foreach="/root/group/status" >/lavoisier/{{ancestor::root/@view}}?endpoint={{ancestor::group/@endpoint}}&amp;metric={{ancestor::group/@name}}&amp;site={{ancestor::group/@site}}&amp;start_time={{ancestor::root/@start_time}}&amp;end_time={{ancestor::root/@end_time}}&amp;service={{ancestor::group/@service}}&amp;report={{ancestor::root/@report}}&amp;exec_time={{@exec_time}}&amp;accept=html</div>
+            </div>
+
+            <div id="div_timeline" style="width:100%;height:1000px"></div>
+
+
+        </section><!-- /.content -->
+
+        <section class="content" id="content" tpl:else="">
+            <section class="content-header" id="content-header">
+                <h1>
+                    ARGO Reports
+                    <small>Status Report</small>
+                </h1>
+
+            </section>
+
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    <h1 class="panel-title" style="font-weight: 800;font-variant-caps: all-petite-caps"><span class="glyphicon glyphicon-flash"> </span> The chart could not be displayed</h1>
+                </div>
+                <div class="panel-body">
+                    No data for this period
+                </div>
+            </div>
+
+
+        </section>
+
+
+    </div><!-- /.right-side -->
+
+    <style media="screen" type="text/css">
+
+        .badge-OK {
+            background-color: green;
+
+        }
+        .badge-UNKNOWN {
+            background-color: #d3d3d3;
+
+        }
+
+        .badge-MISSING {
+            background-color: #53424a;
+
+        }
+
+        .badge-WARNING {
+            background-color: orange
+
+        }
+
+        .badge-CRITICAL{
+            background-color:red;
+
+        }
+
+
+
+
+    </style>
+
+
+
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script src="/resource/js/jsapitimeline.js"></script>
+
+    <script>
+        <!--
+
+
+
+        $(document).ready(function() {
+            google.load('visualization', '1', {'packages':['timeline'], 'language': 'en'});
+
+            var newgroup = [];
+            var colorsgroup = [];
+            var links = [];
+
+
+            var local_groups = document.getElementById('local_groups').getElementsByTagName('div');
+            var local_links = document.getElementById('local_links').getElementsByTagName('div');
+
+
+            for (j = 0; j < local_groups.length; j++) {
+
+
+
+                var tempArray = local_groups[j].textContent.split(",");
+                var color = tempArray.pop();
+
+                tempArray[4]= '<div class="panel panel-default">' +
+                '<div class="panel-heading"><div class="panel-title"><h3>'+ tempArray[0] +'</h3></div></div>'
+                + '<div class="panel-body">' +
+                '<label> Status: &nbsp;<span class="badge badge-'+tempArray[1].split("_")[0] +'">'+tempArray[1].split("_")[0] + '</span></label><hr/>' +
+                '<label>Start Time : &nbsp;</label>' + tempArray[2] + '<hr/>' +
+                '<label>End Time : &nbsp;</label>' + tempArray[3] + '</div><div class="panel-footer"><em>Click on the bar to access the next granularity level</em></div></div>';
+
+                tempArray[2] = new Date(tempArray[2]);
+                tempArray[3] = new Date(tempArray[3]);
+
+
+                newgroup.push(tempArray);
+                colorsgroup.push(color);
+
+            }
+
+
+            for (m = 0; m < local_links.length; m++) {
+                links.push(local_links[m].textContent);
+            }
+
+            google.setOnLoadCallback(drawChart);
+
+            function drawChart() {
+                var container = document.getElementById('div_timeline');
+                var chart = new google.visualization.Timeline(container);
+
+                google.visualization.events.addListener(chart, 'select', function () {
+                    var selectedItem = chart.getSelection()[0].row;
+                    window.location = links[selectedItem];
+
+                });
+
+
+
+
+
+                var dataTable = new google.visualization.DataTable();
+                dataTable.addColumn({type: 'string', id: 'Service Flavour'});
+                dataTable.addColumn({type: 'string', id: 'Status'});
+                dataTable.addColumn({type: 'date', id: 'Start'});
+                dataTable.addColumn({type: 'date', id: 'End'});
+                dataTable.addColumn({'type': 'string', 'role': 'tooltip', 'p': {'html': true}});
+
+                dataTable.addRows(newgroup);
+
+                var options = {
+                    title: 'Status report',
+                    backgroundColor: '#fff',
+                    colors : colorsgroup,
+                    timeline: {
+                        groupByRowLabel: true,
+                        showBarLabels : false
+
+                    }
+
+                };
+
+
+                function myHandler(e){
+                    if(e.row != null){
+                        $(".google-visualization-tooltip").html(dataTable.getValue(e.row,4)).css({width:"auto",height:"auto"});
+                    }
+                }
+
+                google.visualization.events.addListener(chart, 'onmouseover', myHandler);
+
+                chart.draw(dataTable, options);
+            }
+
+
+
+
+
+        })
+
+
+
+
+        -->
+    </script>
+
+
+</div>
+</body>
+</html>

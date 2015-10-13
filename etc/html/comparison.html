@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:tpl="http://software.in2p3.fr/lavoisier/template.xsd" tpl:extends="/lavoisier/_default_?accept=html">
+
+<body>
+<!-- Right side column. Contains the navbar and content of the page -->
+<div id="wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-wrapper">
+
+
+        <!-- Main content -->
+        <section class="content" id="content">
+
+            <section class="content-header" id="content-header">
+                <h1>
+                    Comparison page
+                    <small>Compare the ARGO and MyEGI results</small>
+                </h1>
+            </section>
+
+
+
+
+
+               <table class="table table-condensed table-bordered table-striped"  tpl:foreach="/root/Profile/Site" tpl:with-order="@site">
+
+
+
+
+                       <tr>
+
+                       <td>{{@site}}</td>
+
+                       <td>
+                           <table class="table table-sorted table-bordered table-striped">
+
+                           <tr>
+                               <th>Source</th>
+                               <th tpl:foreach="Availability">{{@timestamp}}</th>
+                           </tr>
+                            <tr>
+                                <th>ARGO</th>
+                                <td tpl:foreach="Availability">{{@availability}}</td>
+                            </tr>
+                            <tr>
+                                <th>MyEGI</th>
+                                <td tpl:foreach="Availability">{{@availability_cern}}</td>
+                            </tr>
+                            <tr>
+                                <th>Diff</th>
+                                <td tpl:foreach="Availability">
+                                   <span tpl:if="@error_av &lt; 5" style="color:green">{{@error_av}}</span>
+                                   <span tpl:if="@error_av &gt;= 5 and @error_av &lt; 10" style="color:orange">{{@error_av}}</span>
+                                   <span tpl:if="@error_av &gt; 10" style="color:red">{{@error_av}}</span>
+                                </td>
+                            </tr>
+
+                       </table>
+                       </td>
+
+                        </tr>
+
+
+
+                   </table>
+
+    </section><!-- /.content -->
+</div>
+
+
+</div>
+
+</body>
+</html>

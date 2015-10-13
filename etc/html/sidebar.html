@@ -1,0 +1,85 @@
+<html xmlns:tpl="http://software.in2p3.fr/lavoisier/template.xsd"
+      xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd"
+      xmlns:cfg="http://software.in2p3.fr/lavoisier/config.xsd">
+
+
+    <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+        <li style="font-size: larger" class=" active">
+            <a data-toggle="tab" href="#control-sidebar-os">
+                <i class="glyphicon glyphicon-hdd"></i>
+            </a>
+        </li>
+
+        <li style="font-size: larger">
+            <a data-toggle="tab" href="#control-sidebar-settings">
+                <i class="glyphicon glyphicon-tags"></i>
+            </a>
+        </li>
+
+        <li style="font-size: larger">
+            <a data-toggle="tab" href="#control-sidebar-statistics">
+                <i class="glyphicon glyphicon-tasks"></i>
+            </a>
+        </li>
+
+
+    </ul>
+    <div class="tab-content">
+        <div id="control-sidebar-os" class="tab-pane active">
+            <h4 class="control-sidebar-heading">OS</h4>
+            <ul class="control-sidebar-menu">
+                <li tpl:foreach="/sidebar/os/jmx/domain/mbean/attribute">
+                    <div class="menu-info">
+                        <h4 class="control-sidebar-subheading">{{@name}} :</h4>
+
+                        <p>{{value/text()}}</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div id="control-sidebar-settings" class="tab-pane">
+            <h4 class="control-sidebar-heading">Build</h4>
+            <ul class="control-sidebar-menu">
+                <li tpl:foreach="/sidebar/build/mbean/attribute">
+                    <div class="menu-info">
+                        <h4 class="control-sidebar-subheading">{{@name}} :   </h4>
+
+                        <p>{{value/text()}}</p>
+                    </div>
+                </li>
+            </ul>
+
+        </div>
+
+
+        <div id="control-sidebar-statistics" class="tab-pane">
+            <h4 class="control-sidebar-heading">Statistics</h4>
+            <ul class="control-sidebar-menu">
+                <li>
+
+                    <div class="menu-info">
+                        <h3 class="control-sidebar-subheading" tpl:foreach="/sidebar/statistics/cfg:config">Nb Views: {{cfg:NbViews/text()}}</h3>
+                    </div>
+                </li >
+                <li ><div class="menu-info">
+                    <h3 class="control-sidebar-subheading" tpl:foreach="/sidebar/statistics/cfg:config">AvgNbProcessors: {{round(cfg:AvgNbProcessors/text())}}</h3>
+                </div></li>
+
+                <hr/>
+
+                <li tpl:foreach="/sidebar/statistics/cfg:config/e:entry">
+                    <div class="menu-info">
+
+                        <h4 class="control-sidebar-subheading"><label>{{@key}}</label> <p style="display:inline">: {{cfg:NbConnector/text()}} </p></h4>
+
+
+                    </div>
+                </li>
+            </ul>
+
+        </div>
+
+    </div>
+
+</html>

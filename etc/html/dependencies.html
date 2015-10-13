@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html xmlns:tpl="http://software.in2p3.fr/lavoisier/template.xsd"
+      xmlns:cfg="http://software.in2p3.fr/lavoisier/config.xsd"
+      xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd"
+      tpl:extends="/resource/html/base.html">
+
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title>Dependencies</title>
+
+
+
+</head>
+<body>
+
+
+
+<div class="wrapper" id="wrapper">
+
+    <div class="content-wrapper">
+
+        <div style="margin:10px">
+            <span class="btn btn-default" id="view" value="view" onclick="jQuery:$('#dependency1').toggle();jQuery:$('#dependency2').toggle();$('#view').toggle();$('#caches').toggle()">VIEW DEPENDENCIES</span>
+            <span  style="display:none"  class="btn btn-default" id="caches" value="cache" onclick="jQuery:$('#dependency2').toggle();jQuery:$('#dependency1').toggle();$('#view').toggle();$('#caches').toggle()">CACHE DEPENDENCIES</span>
+
+        </div>
+
+
+        <div style="overflow: auto;display:none" id="dependency1">
+
+            <div  style="margin: 20px" class="box box-success">
+            <!--<ul style="display: inline-block;list-style: none"  tpl:variable.mode="substring-before(substring-after(/*/*/text(),'digraph '),' {')">-->
+                <!--<li>Options: </li>-->
+                <!--<li>-->
+                    <!--<input tpl:if="contains($mode,'D')"  type="checkbox" class="mode"  id="dependencies" checked="true"></input>-->
+                    <!--<input tpl:else="" type="checkbox" class="mode"  id="dependencies"></input>Cache dependencies-->
+                <!--</li>-->
+                <!--<li>-->
+
+                    <!--<input tpl:if="contains($mode,'D')"  type="checkbox" class="mode"  id="triggers"  checked="true"></input>-->
+                    <!--<input tpl:else="" type="checkbox" class="mode"  id="triggers"></input>Triggers-->
+                <!--</li>-->
+                <!--<li class="no-breadcrumb">-->
+                    <!--<input tpl:if="contains($mode,'P')"  type="checkbox" class="mode"  id="processors"  checked="true"> </input>-->
+                    <!--<input tpl:else="" type="checkbox" class="mode"  id="processors"> </input> Processors-->
+                <!--</li>-->
+            <!--</ul>-->
+
+            <ul style="display: inline-block;list-style: none">
+                <li>Legend:</li>
+                <li><span class="badge" style="background-color:#6cbddf;color:black">Connector</span></li>
+                <li><span class="badge"  style="background-color:#66c89d;color:black">Serializer</span></li>
+                <li><span class="badge"  style="background-color:#e5a4f5;color:black">Validator</span></li>
+                <li><span class="badge"  style="background-color:#efefef;color:black">Processor</span></li>
+                <li><span class="badge"  style="background-color:#fbbf58;color:black">Cache</span></li>
+            </ul>
+        </div>
+
+        </div>
+
+        <div style="overflow: auto;" id="dependency2">
+
+        </div>
+    </div>
+
+
+
+
+
+</div>
+
+</body>
+
+<script src="/resource/js/viz.js"></script>
+
+<script type="text/vnd.graphviz" id="dot1" tpl:copy-of="/dependencies/views/e:entries/e:entry/text()">{{.}}</script>
+<script type="text/vnd.graphviz" id="dot2" tpl:copy-of="/dependencies/caches/e:entries/e:entry/text()">{{.}}</script>
+<script src="/resource/js/dependencies.js"></script>
+
+
+<!--<script>-->
+    <!--&lt;!&ndash;-->
+
+    <!--$(document).ready(function() {-->
+
+        <!--$(".mode").change(function () {-->
+            <!--console.log("change");-->
+            <!--var url = "/lavoisier/dependencies?";-->
+            <!--$(".mode").each(function () {-->
+                <!--url += $(this).attr("id") + "=" + $(this).is(':checked') + "&amp;";-->
+            <!--});-->
+            <!--url = url.slice(0, -1)-->
+            <!--self.location.href = url;-->
+        <!--});-->
+
+
+        <!--var color = new Object();-->
+        <!--color["C"] = "#6cbddf";-->
+        <!--color["S"] = 'darkgreen';-->
+        <!--color["V"] = "violet";-->
+        <!--color["P"] = 'gray';-->
+        <!--color["K"] = '#fbbf58';-->
+        <!--color["T"] = '#fbbf58';-->
+
+        <!--var plugin = new Object();-->
+        <!--plugin["C"] = "Connector";-->
+        <!--plugin["S"] = "Serializer";-->
+        <!--plugin["V"] = "Validator";-->
+        <!--plugin["P"] = "Processor";-->
+        <!--plugin["K"] = "Cache";-->
+        <!--plugin["T"] = "Trigger";-->
+
+
+        <!--createPluginBlocks();-->
+        <!--createHyperLinks();-->
+
+
+        <!--/**-->
+         <!--* Création des boites colorées derrière les textes-->
+         <!--**/-->
+        <!--function createPluginBlocks() {-->
+
+            <!--$("g.node").each(function () {-->
+                <!--var sequence = $($(this).attr("id").split("_"))[0].split("");-->
+                <!--var i = 0;-->
+                <!--$(this).find("text:gt(0)").each(function () {-->
+                    <!--var parentBox = $(this).prev("polyline").get(0).getBBox();-->
+                    <!--if ($(this).next("polyline").get(0)) {-->
+                        <!--var tmp = $(this).next("polyline").get(0).getBBox();-->
+                        <!--parentBox.height = tmp.y - parentBox.y;-->
+                    <!--} else {-->
+                        <!--var tmp = $(this).prevAll("polygon").get(0).getBBox();-->
+                        <!--parentBox.height = tmp.height + tmp.y - parentBox.y;-->
+                    <!--}-->
+                    <!--createBlock($(this).get(0), color[sequence[i]], parentBox);-->
+                    <!--i++;-->
+                <!--});-->
+            <!--});-->
+        <!--}-->
+
+        <!--/**-->
+         <!--* Fonction qui crée la boite derrière un élément texte-->
+         <!--**/-->
+        <!--function createBlock(textElem, color, parentBox) {-->
+
+            <!--var SVGRect = textElem.getBBox();-->
+            <!--var rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");-->
+            <!--rect.setAttribute("class", "block")-->
+            <!--rect.setAttribute("x", parentBox.x + 0.5);-->
+            <!--rect.setAttribute("y", parentBox.y + 0.5);-->
+            <!--rect.setAttribute("width", parentBox.width - 1);-->
+            <!--rect.setAttribute("height", parentBox.height - 1);-->
+            <!--rect.setAttribute("fill", color);-->
+            <!--$(rect).insertBefore(textElem);-->
+        <!--}-->
+
+        <!--/**-->
+         <!--* Décplacement du lien 'a' racine vers le 1er 'text' trouvé-->
+         <!--*/-->
+        <!--function createHyperLinks() {-->
+
+            <!--// On déplace tous les "g > a > *" à la racine de "g", donc "a" devient orphelin-->
+            <!--$("g.node").find("a").find("*").each(function () {-->
+                <!--$(this).clone().appendTo($(this).closest("g"));-->
+                <!--$(this).remove();-->
+            <!--});-->
+
+            <!--// On créer le lien sur le nom du plugin-->
+            <!--$("g.node").find("text:lt(1)").each(function () {-->
+                <!--$(this).css("font-style", "italic");-->
+                <!--$(this).wrap($(this).siblings("a"));-->
+                <!--$(this).closest("a").attr("xlink:title", "View");-->
+            <!--});-->
+
+            <!--// On crée des liens pour tous les aurtes blocks du plugin-->
+            <!--$("g.node").each(function () {-->
+                <!--var sequence = $($(this).attr("id").split("_"))[0].split("");-->
+                <!--var i = 0;-->
+                <!--$(this).find("text:gt(0)").each(function () {-->
+                    <!--$(this).wrap($(this).siblings("a"));-->
+                    <!--$(this).closest("a").attr("xlink:href", ($(this).closest("a").attr("xlink:href") + "#" + (i + 1)));-->
+                    <!--$(this).closest("a").attr("xlink:title", plugin[sequence[i]]);-->
+                    <!--i++;-->
+                <!--});-->
+            <!--});-->
+
+            <!--// On supprime le g > a orphelin-->
+            <!--$("g.node").each(function () {-->
+                <!--$(this).find("a").first().remove();-->
+            <!--});-->
+        <!--}-->
+
+        <!--// *** Intéractions souris-->
+        <!--$("a").mouseover(function () {-->
+            <!--$(this).css('opacity', 0.75);-->
+            <!--$("#debug").css("display", "block");-->
+            <!--$("#debug").html($(this).attr("xlink:href"));-->
+        <!--});-->
+
+        <!--$("a").mouseleave(function () {-->
+            <!--$(this).css('opacity', 1);-->
+            <!--$("#debug").css("display", "none");-->
+            <!--$("#debug").html("");-->
+        <!--});-->
+
+        <!--$("a").mousemove(function (event) {-->
+            <!--$("#debug").css("position", "absolute");-->
+            <!--$("#debug").css("z-index", 99999);-->
+            <!--$("#debug").css("top", event.pageY - 20);-->
+            <!--$("#debug").css("left", event.pageX + 20);-->
+        <!--});-->
+
+
+
+
+
+        <!--function printStackTrace(s) {-->
+            <!--return "<pre>" + s.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&quot;") + "</pre>"-->
+        <!--}-->
+
+        <!--function toSVG1() {-->
+            <!--try {-->
+                <!--return Viz(document.getElementById("dot1").innerHTML, "svg");-->
+            <!--} catch (e) {-->
+                <!--return printStackTrace(e.toString());-->
+            <!--}-->
+        <!--}-->
+
+        <!--function toSVG2() {-->
+            <!--try {-->
+                <!--return Viz(document.getElementById("dot2").innerHTML, "svg");-->
+            <!--} catch (e) {-->
+                <!--return printStackTrace(e.toString());-->
+            <!--}-->
+        <!--}-->
+
+        <!--document.getElementById('dependency1').innerHTML += toSVG1();-->
+        <!--document.getElementById('dependency2').innerHTML += toSVG2();-->
+
+
+    <!--});-->
+    <!--&ndash;&gt;-->
+
+<!--</script>-->
+
+
+
+
+</html>
+
+
+
