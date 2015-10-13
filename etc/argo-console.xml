@@ -12,9 +12,9 @@
 
 
     <authenticators name="console">
-        <!--<authenticator type="HTTPBasicAuthenticator">-->
-            <!--<parameter name="passwords" eval="view_path('properties', '/security/passwords.properties')"/>-->
-        <!--</authenticator>-->
+        <authenticator type="HTTPBasicAuthenticator">
+            <parameter name="passwords" eval="view_path('properties', '/security/passwords.properties')"/>
+        </authenticator>
         <authenticator type="IPAddressAuthenticator">
             <parameter name="addresses">
                 <entry>127.0.0.1</entry>
@@ -96,7 +96,7 @@
     </view>
 
 
-    <view name="listViews"  authenticators="console" xmlns:cfg="http://software.in2p3.fr/lavoisier/config.xsd" xmlns:str="http://exslt.org/strings">
+    <view name="views"  authenticators="console" xmlns:cfg="http://software.in2p3.fr/lavoisier/config.xsd" xmlns:str="http://exslt.org/strings">
         <info>
             <category>Hidden</category>
             <description>The console home page</description>
