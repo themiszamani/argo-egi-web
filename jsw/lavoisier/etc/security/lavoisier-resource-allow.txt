@@ -1,7 +1,0 @@
-css
-fonts
-html
-js
-rsc
-xsl
-lavoisier-config.xml

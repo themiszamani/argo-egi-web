@@ -1,3 +1,12 @@
 <config xmlns="http://software.in2p3.fr/lavoisier/config.xsd" xmlns:xi="http://www.w3.org/2001/XInclude" version="14">
-    <xi:include href="ARGO_UI/lavoisier-config.xml" xpointer="element(/1/*)"/>
+    <xi:include href="argo-console.xml" xpointer="element(/1/*)"/>
+
+    <xi:include href="views/apiCalls.xml" xpointer="element(/1/*)"/>
+    <xi:include href="views/gocdb.xml" xpointer="element(/1/*)"/>
+    <xi:include href="views/ar.xml" xpointer="element(/1/*)"/>
+    <xi:include href="views/status.xml" xpointer="element(/1/*)"/>
+    <xi:include href="views/reports.xml" xpointer="element(/1/*)"/>
+    <xi:include href="views/triggers.xml" xpointer="element(/1/*)"/>
+    <xi:include href="views/comparison.xml" xpointer="element(/1/*)"/>
+    <xi:include href="views/administration.xml" xpointer="element(/1/*)"/>
 </config>

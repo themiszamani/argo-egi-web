@@ -1,9 +1,0 @@
-<config xmlns="http://software.in2p3.fr/lavoisier/config.xsd" xmlns:xi="http://www.w3.org/2001/XInclude" version="14">
-    <xi:include href="lavoisier-console.xml" xpointer="element(/1/*)"/>
-
-    <!--<xi:include href="demo/lavoisier-authenticators.xml" xpointer="element(/1/*)"/>-->
-    <xi:include href="demo/lavoisier-test.xml" xpointer="element(/1/*)"/>
-    <xi:include href="demo/lavoisier-logo.xml" xpointer="element(/1/*)"/>
-    <xi:include href="demo/lavoisier-profit.xml" xpointer="element(/1/*)"/>
-    <xi:include href="demo/lavoisier-parking.xml" xpointer="element(/1/*)"/>
-</config>
