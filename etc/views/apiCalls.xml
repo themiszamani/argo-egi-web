@@ -395,6 +395,7 @@ node16.datagrid.cea.fr/org.nordugrid.ARC-CE-ARIS?exec_time=2015-06-01T00:01:20Z'
                 <entry key="Accept">application/xml</entry>
             </parameter>
         </connector>
+        <serializer type="JSONSerializer"></serializer>
 
         <cache type="FileCache">
             <!--<trigger type="ViewCreatedTrigger"/>-->
