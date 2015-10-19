@@ -373,23 +373,7 @@ node16.datagrid.cea.fr/org.nordugrid.ARC-CE-ARIS?exec_time=2015-06-01T00:01:20Z'
 
 
 
-    <view name="poems">
-        <info>
-            <category>API call</category>
-            <description>List of POEM Profiles</description>
-        </info>
-        <connector type="HTTPConnector">
-            <parameter name="url" eval="property('api.availabilities.poems')"></parameter>
-            <parameter name="certificate" eval="property('certificate.path')"/>
-            <parameter name="passphrase" eval="property('certificate.password')"/>
-            <parameter name="force-redirect">true</parameter>
-            <parameter name="header">
-                <entry key="x-api-key" eval="property('argo.api.key')"></entry>
-                <entry key="Accept">application/xml</entry>
-            </parameter>
-        </connector>
 
-    </view>
 
 
     <!-- *******************************************************************
@@ -432,7 +416,7 @@ node16.datagrid.cea.fr/org.nordugrid.ARC-CE-ARIS?exec_time=2015-06-01T00:01:20Z'
 
 
 
-    <view name="reports">
+    <view name="aggregation_profiles">
 
 
         <info>
@@ -441,7 +425,7 @@ node16.datagrid.cea.fr/org.nordugrid.ARC-CE-ARIS?exec_time=2015-06-01T00:01:20Z'
         </info>
 
         <connector type="HTTPConnector">
-            <parameter name="url" eval="property('api.reports')"></parameter>
+            <parameter name="url" eval="property('api.aggregation_profiles')"></parameter>
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>
             <parameter name="force-redirect">true</parameter>

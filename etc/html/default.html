@@ -151,23 +151,18 @@
 
                 <h3 class="control-sidebar-heading">Release</h3>
 
-                <ul class="control-sidebar-menu">
-                    <li>
-                        <div class="menu-info">
-                            <h4 class="control-sidebar-subheading">Version:</h4>
-                            <p>2.0</p>
+                <ul class="control-sidebar-menu" tpl:foreach="menu/release/*">
+                    <li tpl:if="not(@link)">
+                        <div class="menu-info" >
+                            <h4 class="control-sidebar-subheading">{{name()}}</h4>
+                            <p>{{text()}}</p>
                         </div>
                     </li>
-                    <li>
+
+                    <li tpl:else="">
                         <div class="menu-info">
-                            <h4 class="control-sidebar-subheading">Date:</h4>
-                            <p>2015, September 23th</p>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="menu-info">
-                            <h4 class="control-sidebar-subheading"> Repository
-                            <a href="https://github.com/ARGOeu"> <span class="fa fa-github" style="font-size: larger"> </span></a></h4>
+                            <h4 class="control-sidebar-subheading"> {{name()}}
+                            <a href="{{@link}}"> <span class="{{@icon}}" style="font-size: larger;padding-left: 5px"> </span></a></h4>
                         </div>
 
                     </li>

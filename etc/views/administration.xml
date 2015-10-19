@@ -46,70 +46,6 @@
     </view>
 
 
-    <view xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" name="listProfiles"
-          authenticators="AuthenticatedUsers">
-        <info>
-            <description>List of Profile html</description>
-            <category>Profile</category>
-        </info>
-
-        <connector type="XMLConnector">
-            <parameter name="content" eval="view('listProfilesRaw')"></parameter>
-        </connector>
-
-        <processors>
-            <insert match="/root"
-                    nodes="new_attribute('admin',boolean(view('administratorsList')/admins/admin/CertDN[text()=user()]))
-                     |new_attribute('user',user())">
-            </insert>
-        </processors>
-
-
-        <renderers>
-
-            <renderer type="DefaultRenderer">
-                <parameter name="template">/html/profiles.html</parameter>
-            </renderer>
-            <renderer type="HTMLRenderer">
-                <parameter name="template">/html/profiles.html</parameter>
-            </renderer>
-        </renderers>
-
-
-    </view>
-    <view xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" name="CreationProfiles"
-          authenticators="AuthenticatedUsers">
-        <info>
-            <description>creation of Profile</description>
-            <category>ADMIN</category>
-        </info>
-
-        <connector type="XMLConnector">
-            <parameter name="content" eval="view('goc.ServiceFlavours')"></parameter>
-        </connector>
-
-        <processors>
-            <insert match="/results"
-                    nodes="new_attribute('admin',boolean(view('administratorsList')/admins/admin/CertDN[text()=user()]))
-                     |new_attribute('user',user())">
-            </insert>
-            <element in="results">
-                <element-create>view('poems')</element-create>
-            </element>
-        </processors>
-
-
-        <renderers>
-            <renderer type="DefaultRenderer">
-                <parameter name="template">/html/profiles_creation.html</parameter>
-            </renderer>
-            <renderer type="HTMLRenderer">
-                <parameter name="template">/html/profiles_creation.html</parameter>
-            </renderer>
-        </renderers>
-
-    </view>
-
 
     <view name="recomputation" authenticators="AuthenticatedUsers">
         <info>
@@ -127,7 +63,7 @@
                     new_attribute('admin',boolean(view('administratorsList')/admins/admin/CertDN[text()=user()]))
                     |new_attribute('user',user())
                     |new_attribute('WebmasterEmail',property('contact.email'))
-                    |new_attribute('url',concat(property('server.baseUrl'),':',property('lavoisier.http.port'),'/lavoisier/recomputationInfo?recompId='))
+                    |new_attribute('url',concat(property('server.baseUrl'),':',property('lavoisier.http.port'),'/lavoisier/form_recomputation_results?recompId='))
                     ">
             </insert>
             <insert match="/root" nodes="view('listSitesbyNgi')"/>
@@ -253,7 +189,7 @@
 
 
         <connector type="RotatingCacheConnector">
-            <parameter name="content" eval="choose($key=0,view_post('form_recomputation_results_INTERNAL',post()),entries())"/>
+            <parameter name="content" eval="view_post('form_recomputation_results_INTERNAL',choose(post(false()),post(false()),entries()))"/>
             <parameter name="key" eval="$recompId"/>
             <parameter name="size">100</parameter>
         </connector>
@@ -282,7 +218,7 @@
 
         <connector type="HTTPConnector">
             <parameter name="method">POST</parameter>
-            <parameter name="url">https://operations-portal.egi.eu/test/frontend_test.php/cron/sendEmail</parameter>
+            <parameter name="url">https://operations-portal.egi.eu/cron/sendEmail</parameter>
             <parameter name="post" eval="post()"></parameter>
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>
@@ -356,6 +292,70 @@
 
     </view>
 
+    <view xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" name="listProfiles"
+          authenticators="AuthenticatedUsers">
+        <info>
+            <description>List of Profile html</description>
+            <category>Profile</category>
+        </info>
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('aggregation_profiles')"></parameter>
+        </connector>
+
+        <processors>
+            <insert match="/object"
+                    nodes="new_attribute('admin',boolean(view('administratorsList')/admins/admin/CertDN[text()=user()]))
+                     |new_attribute('user',user())">
+            </insert>
+        </processors>
+
+
+        <renderers>
+
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/html/profiles.html</parameter>
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/html/profiles.html</parameter>
+            </renderer>
+        </renderers>
+
+
+    </view>
+    <view xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" name="CreationProfiles"
+          authenticators="AuthenticatedUsers">
+        <info>
+            <description>creation of Profile</description>
+            <category>ADMIN</category>
+        </info>
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('goc.ServiceFlavours')"></parameter>
+        </connector>
+
+        <processors>
+            <insert match="/results"
+                    nodes="new_attribute('admin',boolean(view('administratorsList')/admins/admin/CertDN[text()=user()]))
+                     |new_attribute('user',user())">
+            </insert>
+            <!--<element in="results">-->
+            <!--<element-create>view('poems')</element-create>-->
+            <!--</element>-->
+        </processors>
+
+
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/html/profiles_creation.html</parameter>
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/html/profiles_creation.html</parameter>
+            </renderer>
+        </renderers>
+
+    </view>
+
     <view xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" name="updateProfile"
           authenticators="AuthenticatedUsers">
         <info>
@@ -373,12 +373,10 @@
                     nodes="new_attribute('admin',boolean(view('administratorsList')/admins/admin/CertDN[text()=user()]))
                      |new_attribute('user',user())">
             </insert>
-            <element in="results">
-                <element-create>view('poems')</element-create>
-            </element>
+
             <element in="results">
                 <attribute-create out="mode">'edition'</attribute-create>
-                <element-create>view('listProfilesRaw')/root/profile[@id=$profileId]</element-create>
+                <element-create>view('aggregation_profiles')/object/data/item/object[@uuid=$profileId]</element-create>
             </element>
         </processors>
 
@@ -395,6 +393,8 @@
     </view>
 
 
+
+
     <view name="profileDeletion">
         <info>
             <category>ADMIN</category>
@@ -402,7 +402,7 @@
         </info>
         <argument name="profileId"></argument>
         <connector type="HTTPConnector">
-            <parameter name="url" eval="concat(property('api.availabilities.profiles'),'/',$profileId)"></parameter>
+            <parameter name="url" eval="concat(property('api.aggregation_profiles'),'/',$profileId)"></parameter>
             <parameter name="method">DELETE</parameter>
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>
@@ -440,7 +440,7 @@
 
 
         <connector type="HTTPConnector">
-            <parameter name="url" eval="concat(property('api.availabilities.profiles'),'/',$id)"></parameter>
+            <parameter name="url" eval="concat(property('api.aggregation_profiles'),'/',$id)"></parameter>
             <parameter name="method">PUT</parameter>
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>
@@ -480,7 +480,7 @@
 
 
         <connector type="HTTPConnector">
-            <parameter name="url" eval="property('api.availabilities.profiles')"></parameter>
+            <parameter name="url" eval="property('api.aggregation_profiles')"></parameter>
             <parameter name="method">POST</parameter>
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>

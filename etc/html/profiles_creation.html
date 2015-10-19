@@ -15,12 +15,9 @@
         <section class="content-header" id="content-header">
             <h1>
                 Profiles
-                <small>Creation page</small>
+                <small>Creation/Update page</small>
             </h1>
-            <ol class="breadcrumb" id="breadcrumb">
-                <li ><a href="#"><i class="fa fa-dashboard"></i> Profile Creation</a></li>
-                <li class="active">Index</li>
-            </ol>
+
         </section>
         <form role="form"  style="margin:50px" method="post" action="/lavoisier/form_profile_results_INTERNAL?accept=html" id="form_profile">
 
@@ -31,33 +28,33 @@
                 </div>
                 <div class="form-group">
                     <label for="profileName">Name of the Profile</label>
-                    <input type="text" tpl:if="/results/@mode='edition'" class="form-control" name="name" id="profileName" placeholder="Profile Name" value="{{/results/profile/@name}}"/>
+                    <input type="text" tpl:if="/results/@mode='edition'" class="form-control" name="name" id="profileName" placeholder="Profile Name" value="{{/results/object/@name}}"/>
                     <input type="text" tpl:else="" class="form-control" name="name" id="profileName" placeholder="Profile Name"/>
                 </div>
                 <div class="form-group">
                     <label for="profileNameSpace">NameSpace of the Profile</label>
-                    <input type="text" tpl:if="/results/@mode='edition'"  class="form-control" name="namespace" id="profileNameSpace" placeholder="Profile Name Space" value="{{/results/profile/@namespace}}"/>
+                    <input type="text" tpl:if="/results/@mode='edition'"  class="form-control" name="namespace" id="profileNameSpace" placeholder="Profile Name Space" value="{{/results/object/@namespace}}"/>
                     <input type="text" tpl:else=""  class="form-control" name="namespace" id="profileNameSpace" placeholder="Profile Name Space"/>
                 </div>
 
-                <div class="form-group">
-                    <label>POEM Profile</label>
+                <!--<div class="form-group">-->
+                    <!--<label>POEM Profile</label>-->
 
-                    <select   class="form-control"  multiple="multiple"  id="listPoem">
+                    <!--<select   class="form-control"  multiple="multiple"  id="listPoem">-->
 
 
-                            <option tpl:foreach="/results/root/Poem" name="{{@profile}}" value="{{@profile}}"
-                                    selected="true" tpl:remove-attribute.selected="not(contains(/results/profile/@poems,@profile))">{{@profile}}</option>
+                            <!--<option tpl:foreach="/results/root/Poem" name="{{@profile}}" value="{{@profile}}"-->
+                                    <!--selected="true" tpl:remove-attribute.selected="not(contains(/results/profile/@poems,@profile))">{{@profile}}</option>-->
 
-                    </select>
+                    <!--</select>-->
 
-                    <div class="form-group hidden" >
-                        <input name="poems"  value="" class="form-control" id="poems" />
-                        <div id="poemList" tpl:foreach="/results/profile/@poems">{{text()}}</div>
-                    </div>
+                    <!--<div class="form-group hidden" >-->
+                        <!--<input name="poems"  value="" class="form-control" id="poems" />-->
+                        <!--<div id="poemList" tpl:foreach="/results/profile/@poems">{{text()}}</div>-->
+                    <!--</div>-->
 
-                </div>
-                
+                <!--</div>-->
+
 
              </div>
                 </div>
@@ -129,14 +126,14 @@
 
                 <div class="box-content">
                     <div  id="listProfile" style="height:400px;overflow:auto">
-                        <input tpl:if="/results/@mode='edition'"  class="hidden" name="profileId" value="{{/results/profile/@id}}"/>
-                        <div tpl:foreach="/results/profile/AND/OR">
+                        <input tpl:if="/results/@mode='edition'"  class="hidden" name="profileId" value="{{/results/object/@uuid}}"/>
+                        <div tpl:foreach="/results/object/groups/item/object">
                         <div  class="col-xs-3 box group" id="group_update{{position()}}" name="group" style="min-height:90px">
                             <button class="btn btn-primary fa fa-times-circle" id="close_group_update{{position()}}" onclick="javascript:closeGroup(this.id)" style="display: block;">
 
                             </button>
                             <ul class="ms-list">
-                                <li tpl:foreach="Group" name="{{@service_flavor}}">{{@service_flavor}}</li>
+                                <li tpl:foreach="services/item/object" name="{{@name}}">{{@name}}</li>
                             </ul>
 
                             <input class="hidden" name="group_update{{position()}}" type="text"
@@ -145,7 +142,7 @@
                             <xsl:template name="concatvalues" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                                 <xsl:attribute name="value">
                                     <xsl:for-each select="Group">
-                                        "<xsl:value-of select="@service_flavor"></xsl:value-of>"
+                                        "<xsl:value-of select="@name"></xsl:value-of>"
                                         <xsl:if test='position()!=last()'>,</xsl:if>
                                     </xsl:for-each>
                                 </xsl:attribute>
