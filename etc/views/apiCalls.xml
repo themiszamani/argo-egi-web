@@ -333,45 +333,6 @@ node16.datagrid.cea.fr/org.nordugrid.ARC-CE-ARIS?exec_time=2015-06-01T00:01:20Z'
 
 
 
-    <!-- *******************************************************************
-****               PROFILES DATA
-****               profile method
-************************************************************************
--->
-
-    <view name="listProfilesRaw">
-        <info>
-            <description>List of Availability Profiles</description>
-            <category>API call</category>
-        </info>
-        <connector type="HTTPConnector">
-
-            <parameter name="url" eval="property('api.availabilities.profiles')"/>
-            <parameter name="certificate" eval="property('certificate.path')"/>
-            <parameter name="passphrase" eval="property('certificate.password')"/>
-            <parameter name="force-redirect">true</parameter>
-            <parameter name="header">
-                <entry key="x-api-key" eval="property('argo.api.key')"></entry>
-                <entry key="Accept">application/xml</entry>
-            </parameter>
-        </connector>
-
-        <cache type="FileCache">
-            <!--<trigger type="ViewCreatedTrigger"/>-->
-            <trigger type="DeltaTimeTrigger">
-                <parameter name="hours">4</parameter>
-            </trigger>
-            <trigger type="ViewNotifiedTrigger"/>
-
-            <trigger type="DependencyRefreshedTrigger">
-                <parameter name="views">
-                    <entry>triggerProfileList</entry>
-                </parameter>
-            </trigger>
-        </cache>
-    </view>
-
-
 
 
 
