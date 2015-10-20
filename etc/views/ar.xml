@@ -208,7 +208,7 @@
             <parameter name="content" eval="view('api.availability.rotating.caches',
             entry('granularity',$granularity)
             | entry('report',$report)
-            | entry('group_type','site')
+            | entry('group_type','sites')
             | entry('start_time',concat($start_date,'T00:00:00Z'))
             | entry('end_time',concat($end_date,'T00:00:00Z'))
             )"/>
