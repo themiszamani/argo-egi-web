@@ -469,9 +469,9 @@
 
         <processors>
             <insert match="/root" nodes="
-            view('api.availability.rotating.caches',entry('group_type','site')|entry('granularity','MONTHLY')|entry('report',$report)|entry('diff','0')|entry('delete',$delete))
-            |view('api.availability.rotating.caches',entry('group_type','site')|entry('granularity','MONTHLY')|entry('report',$report)|entry('diff','1')|entry('delete',$delete))
-            |view('api.availability.rotating.caches',entry('group_type','site')|entry('granularity','MONTHLY')|entry('report',$report)|entry('diff','2')|entry('delete',$delete))">
+            view('api.availability.rotating.caches',entry('group_type','sites')|entry('granularity','MONTHLY')|entry('report',$report)|entry('diff','0')|entry('delete',$delete))
+            |view('api.availability.rotating.caches',entry('group_type','sites')|entry('granularity','MONTHLY')|entry('report',$report)|entry('diff','1')|entry('delete',$delete))
+            |view('api.availability.rotating.caches',entry('group_type','sites')|entry('granularity','MONTHLY')|entry('report',$report)|entry('diff','2')|entry('delete',$delete))">
 
             </insert>
         </processors>
@@ -507,9 +507,9 @@
 
         <processors>
             <insert match="/root" nodes="
-            view('api.availability.rotating.caches',entry('group_type','site')|entry('granularity','MONTHLY')|entry('start_time',$starttime1)|entry('end_time',$endtime1)|entry('report',$report))
-            |view('api.availability.rotating.caches',entry('group_type','site')|entry('granularity','MONTHLY')|entry('start_time',$starttime2)|entry('end_time',$endtime2)|entry('report',$report))
-            |view('api.availability.rotating.caches',entry('group_type','site')|entry('granularity','MONTHLY')|entry('start_time',$starttime3)|entry('end_time',$endtime3)|entry('report',$report))">
+            view('api.availability.rotating.caches',entry('group_type','sites')|entry('granularity','MONTHLY')|entry('start_time',$starttime1)|entry('end_time',$endtime1)|entry('report',$report))
+            |view('api.availability.rotating.caches',entry('group_type','sites')|entry('granularity','MONTHLY')|entry('start_time',$starttime2)|entry('end_time',$endtime2)|entry('report',$report))
+            |view('api.availability.rotating.caches',entry('group_type','sites')|entry('granularity','MONTHLY')|entry('start_time',$starttime3)|entry('end_time',$endtime3)|entry('report',$report))">
 
             </insert>
         </processors>
@@ -532,9 +532,9 @@
 
         <processors>
             <insert match="/root" nodes="
-            view('api.availability.rotating.caches',entry('group_type','site')|entry('granularity','DAILY')|entry('report',$report)|entry('diff','0')|entry('delete',$delete))
-            |view('api.availability.rotating.caches',entry('group_type','site')|entry('granularity','DAILY')|entry('report',$report)|entry('diff','1')|entry('delete',$delete))
-            |view('api.availability.rotating.caches',entry('group_type','site')|entry('granularity','DAILY')|entry('report',$report)|entry('diff','2')|entry('delete',$delete))">
+            view('api.availability.rotating.caches',entry('group_type','sites')|entry('granularity','DAILY')|entry('report',$report)|entry('diff','0')|entry('delete',$delete))
+            |view('api.availability.rotating.caches',entry('group_type','sites')|entry('granularity','DAILY')|entry('report',$report)|entry('diff','1')|entry('delete',$delete))
+            |view('api.availability.rotating.caches',entry('group_type','sites')|entry('granularity','DAILY')|entry('report',$report)|entry('diff','2')|entry('delete',$delete))">
 
             </insert>
         </processors>
