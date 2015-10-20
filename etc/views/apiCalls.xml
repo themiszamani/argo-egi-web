@@ -172,7 +172,7 @@
 
         <connector type="HTTPConnector">
             <parameter name="url" eval="concat(property('api.status.url'),$report,'/',upper-case($group_type),
-            '?start_time=',$start_time,'&amp;end_time=',$end_time)">
+            '/?start_time=',$start_time,'&amp;end_time=',$end_time)">
             </parameter>
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>
@@ -180,6 +180,9 @@
                 <entry key="x-api-key" eval="property('argo.api.key')"></entry>
                 <entry key="Accept">application/xml</entry>
             </parameter>
+            <fallback>
+                <exception type=""/>
+            </fallback>
         </connector>
 
         <processors>
@@ -190,6 +193,9 @@
             </element>
         </processors>
      
+        <cache type="FileCache">
+            <trigger type="ViewCreatedTrigger"></trigger>
+        </cache>
 
     </view>
 
@@ -211,7 +217,7 @@
 
         <argument name="diff">10</argument>
 
-        <argument name="group_type">site</argument>
+        <argument name="group_type">SITES</argument>
         <argument name="report">Critical</argument>
         <argument name="granularity">DAILY</argument>
         <argument name="site">false</argument>
