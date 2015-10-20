@@ -115,7 +115,7 @@
 
         <argument name="diff">10</argument>
 
-        <argument name="group_type">site</argument>
+        <argument name="group_type">sites</argument>
         <argument name="report">Critical</argument>
         <argument name="granularity">DAILY</argument>
         <argument name="start_time">0</argument>
@@ -164,7 +164,7 @@
             <description>Call the Availability Method for sites or ngi - All options </description>
         </info>
 
-        <argument name="group_type"></argument>
+        <argument name="group_type">SITES</argument>
         <argument name="start_time"></argument>
         <argument name="end_time"></argument>
         <argument name="granularity"></argument>
