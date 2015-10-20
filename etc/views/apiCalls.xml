@@ -68,7 +68,7 @@
         <argument name="report">Critical</argument>
 
         <connector type="HTTPConnector">
-            <parameter name="url" eval="concat(property('api.service.availability'),$report,'/SITE/',$site,
+            <parameter name="url" eval="concat(property('api.service.availability'),$report,'/SITES/',$site,
             '/services?granularity=',$granularity,
             '&amp;start_time=',$start_time,'&amp;end_time=',$end_time)">
             </parameter>
