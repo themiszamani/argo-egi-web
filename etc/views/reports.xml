@@ -241,7 +241,7 @@
             <element in="root" out="e:entries">
                 <element-ignore in="root">
                     <element in="group" if="@name=$ngi or $ngi='all'">
-                        <element in="group" if="@type='SITE'" out="Site">
+                        <element in="group" if="@type='SITES'" out="Site">
                             <attribute in="name" out="site"></attribute>
                             <element in="results" out="Availability"></element>
                         </element>
@@ -360,7 +360,7 @@
             <element in="root" out="e:entries">
                 <element-ignore in="root">
                     <element in="group" if="@name=$ngi or $ngi='all'">
-                        <element in="group" if="@type='SITE'" out="Site">
+                        <element in="group" if="@type='SITES'" out="Site">
                             <attribute in="name" out="site"></attribute>
                             <element in="results" out="Availability"></element>
                         </element>
@@ -560,7 +560,7 @@
             <element in="root" out="e:entries">
                 <element-ignore in="root">
                     <element in="group" if="@name=$ngi or $ngi='all'">
-                        <element in="group" if="@type='SITE'" out="Site">
+                        <element in="group" if="@type='SITES'" out="Site">
                             <attribute in="name" out="site"></attribute>
                             <element in="results" out="Availability"></element>
                         </element>
