@@ -41,9 +41,9 @@
 
         <processors>
             <insert match="/root" nodes="
-            view('api.status.rotating.caches',entry('group_type','site')|entry('diff','0')|entry('delete',$delete))
-            |view('api.status.rotating.caches',entry('group_type','site')|entry('diff','1')|entry('delete',$delete))
-            |view('api.status.rotating.caches',entry('group_type','site')|entry('diff','2')|entry('delete',$delete))">
+            view('api.status.rotating.caches',entry('group_type','sites')|entry('diff','0')|entry('delete',$delete))
+            |view('api.status.rotating.caches',entry('group_type','sites')|entry('diff','1')|entry('delete',$delete))
+            |view('api.status.rotating.caches',entry('group_type','sites')|entry('diff','2')|entry('delete',$delete))">
 
             </insert>
         </processors>
@@ -164,7 +164,7 @@
 
 
     <connector type="XMLConnector">
-        <parameter name="content" eval="view('api.status',entry('group_type','site')|entry('site',$site)|entry('start_time',$start_date)|entry('end_time',$end_date)|entry('report',$report))"></parameter>
+        <parameter name="content" eval="view('api.status',entry('group_type','sites')|entry('site',$site)|entry('start_time',$start_date)|entry('end_time',$end_date)|entry('report',$report))"></parameter>
     </connector>
 
         <processors>
@@ -250,7 +250,7 @@
 
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('api.status',entry('group_type','site')|entry('site',$site)|entry('service',$service)|entry('start_time',$start_date)|entry('end_time',$end_date)|entry('report',$report))"></parameter>
+            <parameter name="content" eval="view('api.status',entry('group_type','sites')|entry('site',$site)|entry('service',$service)|entry('start_time',$start_date)|entry('end_time',$end_date)|entry('report',$report))"></parameter>
         </connector>
 
         <processors>
@@ -339,7 +339,7 @@
 
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('api.status',entry('group_type','site')|entry('site',$site)|entry('service',$service)|entry('endpoint',$endpoint)|entry('start_time',$start_date)|entry('end_time',$end_date)|entry('report',$report))"></parameter>
+            <parameter name="content" eval="view('api.status',entry('group_type','sites')|entry('site',$site)|entry('service',$service)|entry('endpoint',$endpoint)|entry('start_time',$start_date)|entry('end_time',$end_date)|entry('report',$report))"></parameter>
         </connector>
 
         <processors>
