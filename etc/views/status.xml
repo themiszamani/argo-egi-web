@@ -59,7 +59,7 @@
 
         <argument name="ngi">all</argument>
         <argument name="site">false</argument>
-        <argument name="report">site</argument>
+        <argument name="report">sites</argument>
 
         <argument name="start" eval="false()"></argument>
         <argument name="end" eval="false()"></argument>
@@ -86,7 +86,6 @@
 
                 <element in="group" if="contains(concat($site,','),@name) or $site='false'">
                     <attribute-create out="group">$SiteList/results/Ngi[SITE/@NAME=current()/../@name]/@key</attribute-create>
-
                 </element>
                 <element-ignore></element-ignore>
             </element>
@@ -239,7 +238,7 @@
 
 
         <argument name="site">false</argument>
-        <argument name="report">site</argument>
+        <argument name="report">sites</argument>
         <argument name="service"></argument>
         <argument name="start" eval="false()"></argument>
         <argument name="end" eval="false()"></argument>
@@ -328,7 +327,7 @@
 
 
         <argument name="site">false</argument>
-        <argument name="report">site</argument>
+        <argument name="report">sites</argument>
         <argument name="service"></argument>
         <argument name="endpoint"></argument>
         <argument name="start" eval="false()"></argument>

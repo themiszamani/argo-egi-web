@@ -180,9 +180,7 @@
                 <entry key="x-api-key" eval="property('argo.api.key')"></entry>
                 <entry key="Accept">application/xml</entry>
             </parameter>
-            <fallback>
-                <exception type=""/>
-            </fallback>
+
         </connector>
 
         <processors>
@@ -190,12 +188,12 @@
                 <attribute-create out="report">$report</attribute-create>
                 <attribute-create out="start_time">$start_time</attribute-create>
                 <attribute-create out="end_time">$end_time</attribute-create>
+                <attribute-create out="url">concat(property('api.status.url'),$report,'/',upper-case($group_type),
+                    '/?start_time=',$start_time,'&amp;end_time=',$end_time)</attribute-create>
             </element>
         </processors>
      
-        <cache type="FileCache">
-            <trigger type="ViewCreatedTrigger"></trigger>
-        </cache>
+
 
     </view>
 
@@ -235,7 +233,7 @@
             |entry('group_type',$group_type)
             |entry('start_time',$starttime)
              |entry('end_time',$endtime)
-             |entry('site',$site))
+             |entry('site',upper-case($site)))
              "/>
             <parameter name="key" eval="concat($report,'-',$group_type,'-',$starttime,'-',$endtime,'-',$site)"/>
             <parameter name="size">100000</parameter>
@@ -318,7 +316,7 @@
 node16.datagrid.cea.fr/org.nordugrid.ARC-CE-ARIS?exec_time=2015-06-01T00:01:20Z'
 -->
         <connector type="HTTPConnector">
-            <parameter name="url" eval="concat(property('api.output.details'),$report,'/',$endpoint,'/',$metric,'?exec_time=',$exec_time)"></parameter>
+            <parameter name="url" eval="concat(property('api.output.details'),'/',$endpoint,'/',$metric,'?exec_time=',$exec_time)"></parameter>
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>
             <parameter name="header">
@@ -414,4 +412,35 @@ node16.datagrid.cea.fr/org.nordugrid.ARC-CE-ARIS?exec_time=2015-06-01T00:01:20Z'
 
     </view>
 
+
+    <view name="reports">
+
+
+        <info>
+            <category>API results</category>
+            <description>Descriptions of reports</description>
+        </info>
+
+        <connector type="HTTPConnector">
+            <parameter name="url" eval="property('api.reports')"></parameter>
+            <parameter name="certificate" eval="property('certificate.path')"/>
+            <parameter name="passphrase" eval="property('certificate.password')"/>
+            <parameter name="force-redirect">true</parameter>
+            <parameter name="header">
+                <entry key="x-api-key" eval="property('argo.api.key')"></entry>
+                <entry key="Accept">application/xml</entry>
+            </parameter>
+        </connector>
+
+
+        <cache type="FileCache">
+            <!--<trigger type="ViewCreatedTrigger"/>-->
+            <trigger type="DeltaTimeTrigger">
+                <parameter name="hours">4</parameter>
+            </trigger>
+            <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="ViewCreatedTrigger"/>
+        </cache>
+
+    </view>
 </config>
