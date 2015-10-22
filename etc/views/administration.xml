@@ -376,7 +376,7 @@
 
             <element in="results">
                 <attribute-create out="mode">'edition'</attribute-create>
-                <element-create>view('aggregation_profiles')/object/data/item/object[@uuid=$profileId]</element-create>
+                <element-create>view('aggregation_profiles')/object/data/item/object[@id=$profileId]</element-create>
             </element>
         </processors>
 

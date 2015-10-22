@@ -126,7 +126,7 @@
 
                 <div class="box-content">
                     <div  id="listProfile" style="height:400px;overflow:auto">
-                        <input tpl:if="/results/@mode='edition'"  class="hidden" name="profileId" value="{{/results/object/@uuid}}"/>
+                        <input tpl:if="/results/@mode='edition'"  class="hidden" name="profileId" value="{{/results/object/@id}}"/>
                         <div tpl:foreach="/results/object/groups/item/object">
                         <div  class="col-xs-3 box group" id="group_update{{position()}}" name="group" style="min-height:90px">
                             <button class="btn btn-primary fa fa-times-circle" id="close_group_update{{position()}}" onclick="javascript:closeGroup(this.id)" style="display: block;">
