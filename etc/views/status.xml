@@ -428,6 +428,7 @@
         <argument name="service"></argument>
         <argument name="start_time"></argument>
         <argument name="end_time"></argument>
+        <argument name="report"></argument>
 
         <connector type="XMLConnector">
             <parameter name="content"
@@ -443,6 +444,7 @@
                     <attribute-create out="service">$service</attribute-create>
                     <attribute-create out="start_time">$start_time</attribute-create>
                     <attribute-create out="end_time">$end_time</attribute-create>
+                    <attribute-create out="report">$report</attribute-create>
                 </element>
             </processors>
 
