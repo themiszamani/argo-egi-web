@@ -1,0 +1,490 @@
+<config xmlns="http://software.in2p3.fr/lavoisier/config.xsd"
+        xmlns:date="http://exslt.org/dates-and-times"
+        xmlns:xi="http://www.w3.org/2001/XInclude"
+        xmlns:str="http://exslt.org/strings"
+        xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
+
+
+
+    <view name="StateColor">
+        <info>
+            <category>Status</category>
+            <description>Status List</description>
+        </info>
+
+        <connector type="XMLConnector">
+            <parameter name="content">
+                <entry key="OK">green</entry>
+                <entry key="WARNING">orange</entry>
+                <entry key="UNKNOWN">lightgrey</entry>
+                <entry key="MISSING">#53424a</entry>
+                <entry key="CRITICAL">red</entry>
+                <entry key="DOWNTIME">grey</entry>
+            </parameter>
+
+        </connector>
+    </view>
+
+
+    <!-- @TODO vérifier avec trigger si c'est utile de regénérer 3 jours -->
+
+    <view name="site_status_reports_cached">
+        <info>
+            <category>Status Report</category>
+            <description>Site Reports - cache Rotated</description>
+        </info>
+        <argument name="delete" eval="false()"></argument>
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="new_element('root')"></parameter>
+        </connector>
+
+        <processors>
+            <insert match="/root" nodes="
+            view('api.status.rotating.caches',entry('group_type','sites')|entry('diff','0')|entry('delete',$delete))
+            |view('api.status.rotating.caches',entry('group_type','sites')|entry('diff','1')|entry('delete',$delete))
+            |view('api.status.rotating.caches',entry('group_type','sites')|entry('diff','2')|entry('delete',$delete))">
+
+            </insert>
+        </processors>
+    </view>
+
+
+    <!-- @TODO Récupérer jour courant -->
+    <view name="status_report-site">
+        <info>
+            <category>Status Report</category>
+            <description>Site Reports - cache Rotated</description>
+        </info>
+
+        <argument name="ngi">all</argument>
+        <argument name="site">false</argument>
+        <argument name="report">sites</argument>
+
+        <argument name="start" eval="false()"></argument>
+        <argument name="end" eval="false()"></argument>
+        <argument name="report">Critical</argument>
+
+        <variable name="start_date" eval="choose($start!='false',concat($start,'T00:00:00Z'),concat(substring(date:add(date:date-time(),'-P3D'), 0,11),'T00:00:00Z'))"></variable>
+        <variable name="end_date" eval="choose($end!='false',concat($end,'T00:00:00Z'),concat(substring(date:date-time(),0,11),'T23:59:59Z'))"></variable>
+
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('api.status.rotating.caches',entry('site',$site)|entry('starttime',$start_date)|entry('endtime',$end_date)|entry('report',$report))"></parameter>
+        </connector>
+
+
+        <processors>
+            <element in="root">
+
+
+
+
+                <set variable="SiteList">view('listSitesbyNgi')</set>
+                <attribute-create out="view">'status_report-sf'</attribute-create>
+                <attribute-create out="ngi" if="$ngi!='all'">$ngi</attribute-create>
+
+                <element in="group" if="contains(concat($site,','),@name) or $site='false'">
+                    <attribute-create out="group">$SiteList/results/Ngi[SITE/@NAME=current()/../@name]/@key</attribute-create>
+                </element>
+                <element-ignore></element-ignore>
+            </element>
+
+            <elements path="root">
+                <element in="group" if="@group=$ngi or $ngi='all'"></element>
+                <element-ignore></element-ignore>
+            </elements>
+
+            <elements path="root">
+                <element-ignore in="group"></element-ignore>
+                <element-create>
+                    sort_by_string(../group,'@name')
+                </element-create>
+            </elements>
+
+            <elements path="root">
+                <element-create-as-parent out="group" attributes="@*" group-by="@name">
+                    <element in="group" ></element>
+                </element-create-as-parent>
+            </elements>
+
+            <elements path="root/group">
+                <element-ignore in="group">
+                    <element></element>
+                </element-ignore>
+            </elements>
+
+            <element in="root">
+                <set variable="StateColor">view('StateColor')</set>
+
+                <element in="group">
+                    <element in="status">
+                        <attribute-create out="color">$StateColor/e:entries/e:entry[@key=current()/../@value]/text()</attribute-create>
+                        <attribute-create out="end_time" if="current()/../following-sibling::status">current()/../following-sibling::status/@timestamp</attribute-create>
+                        <attribute-create out="end_time" if="not(current()/../following-sibling::status)">../ancestor::root/@end_time</attribute-create>
+                    </element>
+                </element>
+
+            </element>
+
+        </processors>
+
+
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/html/status_report.html</parameter>
+
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/html/status_report.html</parameter>
+
+            </renderer>
+        </renderers>
+
+    </view>
+
+    <view name="status_report-sf">
+    <info>
+        <category>Status Report</category>
+        <description>SF reports for a given site</description>
+    </info>
+
+
+    <argument name="site">false</argument>
+    <argument name="report">Critical</argument>
+        <argument name="sf" eval="false()"></argument>
+
+
+        <argument name="start" eval="false()"></argument>
+        <argument name="end" eval="false()"></argument>
+
+        <variable name="start_date" eval="choose($start!='false',concat($start,'T00:00:00Z'),concat(substring(date:add(date:date-time(),'-P3D'), 0,11),'T00:00:00Z'))"></variable>
+        <variable name="end_date" eval="choose($end!='false',concat($end,'T00:00:00Z'),concat(substring(date:date-time(),0,11),'T23:59:59Z'))"></variable>
+
+
+    <connector type="XMLConnector">
+        <parameter name="content" eval="view('api.status',entry('group_type','sites')|entry('site',$site)|entry('start_time',$start_date)|entry('end_time',$end_date)|entry('report',$report))"></parameter>
+    </connector>
+
+        <processors>
+            <element in="root">
+                <set variable="SiteList">view('listSitesbyNgi')</set>
+
+                <attribute-create out="ngi">$SiteList/results/Ngi[SITE/@NAME=$site]/@key</attribute-create>
+                <attribute-create out="view">'status_report-endpoints'</attribute-create>
+                <element-ignore in="group">
+                <element in="group">
+                    <attribute-create out="group">$site</attribute-create>
+                </element>
+                </element-ignore>
+            </element>
+
+
+            <elements path="root">
+                <element-ignore in="group"></element-ignore>
+                <element-create>
+                    sort_by_string(../group,'@name')
+                </element-create>
+            </elements>
+
+            <elements path="root">
+                <element-create-as-parent out="group" attributes="@*" group-by="@name">
+                    <element in="group" ></element>
+                </element-create-as-parent>
+            </elements>
+
+            <elements path="root/group">
+                <element-ignore in="group">
+                    <element></element>
+                </element-ignore>
+            </elements>
+
+            <element in="root">
+                <set variable="StateColor">view('StateColor')</set>
+
+                <element in="group">
+                    <element in="status">
+                        <attribute-create out="color">$StateColor/e:entries/e:entry[@key=current()/../@value]/text()</attribute-create>
+                        <attribute-create out="end_time" if="current()/../following-sibling::status">current()/../following-sibling::status/@timestamp</attribute-create>
+                        <attribute-create out="end_time" if="not(current()/../following-sibling::status)">../ancestor::root/@end_time</attribute-create>
+                    </element>
+                </element>
+
+            </element>
+
+
+        </processors>
+
+
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/html/status_report.html</parameter>
+
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/html/status_report.html</parameter>
+
+            </renderer>
+        </renderers>
+
+
+    </view>
+
+    <view name="status_report-endpoints">
+        <info>
+            <category>Status Report</category>
+            <description>Endpoints reports for a given site and SF</description>
+        </info>
+
+
+        <argument name="site">false</argument>
+        <argument name="report">sites</argument>
+        <argument name="service"></argument>
+        <argument name="start" eval="false()"></argument>
+        <argument name="end" eval="false()"></argument>
+
+        <variable name="start_date" eval="choose($start!='false',concat($start,'T00:00:00Z'),concat(substring(date:add(date:date-time(),'-P3D'), 0,11),'T00:00:00Z'))"></variable>
+        <variable name="end_date" eval="choose($end!='false',concat($end,'T00:00:00Z'),concat(substring(date:date-time(),0,11),'T23:59:59Z'))"></variable>
+
+
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('api.status',entry('group_type','sites')|entry('site',$site)|entry('service',$service)|entry('start_time',$start_date)|entry('end_time',$end_date)|entry('report',$report))"></parameter>
+        </connector>
+
+        <processors>
+            <element in="root">
+                <set variable="SiteList">view('listSitesbyNgi')</set>
+
+                <attribute-create out="ngi">$SiteList/results/Ngi[SITE/@NAME=$site]/@key</attribute-create>
+                <attribute-create out="view">'status_report-metrics'</attribute-create>
+                <element-ignore in="group">
+                    <element-ignore in="group">
+                        <element in="endpoint" out="group">
+                            <attribute-create out="group">$service</attribute-create>
+                            <attribute-create out="site">$site</attribute-create>
+                        </element>
+                    </element-ignore>
+                </element-ignore>
+            </element>
+
+
+            <elements path="root">
+                <element-ignore in="group"></element-ignore>
+                <element-create>
+                    sort_by_string(../group,'@name')
+                </element-create>
+            </elements>
+
+            <elements path="root">
+                <element-create-as-parent out="group" attributes="@*" group-by="@name">
+                    <element in="group" ></element>
+                </element-create-as-parent>
+            </elements>
+
+            <elements path="root/group">
+                <element-ignore in="group">
+                    <element></element>
+                </element-ignore>
+            </elements>
+
+            <element in="root">
+                <set variable="StateColor">view('StateColor')</set>
+
+                <element in="group">
+                    <element in="status">
+                        <attribute-create out="color">$StateColor/e:entries/e:entry[@key=current()/../@value]/text()</attribute-create>
+                        <attribute-create out="end_time" if="current()/../following-sibling::status">current()/../following-sibling::status/@timestamp</attribute-create>
+                        <attribute-create out="end_time" if="not(current()/../following-sibling::status)">../ancestor::root/@end_time</attribute-create>
+                    </element>
+                </element>
+
+            </element>
+
+        </processors>
+
+
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/html/status_report.html</parameter>
+
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/html/status_report.html</parameter>
+
+            </renderer>
+        </renderers>
+
+
+    </view>
+
+
+    <view name="status_report-metrics">
+        <info>
+            <category>Status Report</category>
+            <description>Metrics reports for a given site and SF and endpoint</description>
+        </info>
+
+
+        <argument name="site">false</argument>
+        <argument name="report">sites</argument>
+        <argument name="service"></argument>
+        <argument name="endpoint"></argument>
+        <argument name="start" eval="false()"></argument>
+        <argument name="end" eval="false()"></argument>
+
+        <variable name="start_date" eval="choose($start!='false',concat($start,'T00:00:00Z'),concat(substring(date:add(date:date-time(),'-P3D'), 0,11),'T00:00:00Z'))"></variable>
+        <variable name="end_date" eval="choose($end!='false',concat($end,'T00:00:00Z'),concat(substring(date:date-time(),0,11),'T23:59:59Z'))"></variable>
+
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('api.status',entry('group_type','sites')|entry('site',$site)|entry('service',$service)|entry('endpoint',$endpoint)|entry('start_time',$start_date)|entry('end_time',$end_date)|entry('report',$report))"></parameter>
+        </connector>
+
+        <processors>
+            <element in="root">
+                <set variable="SiteList">view('listSitesbyNgi')</set>
+
+                <attribute-create out="ngi">$SiteList/results/Ngi[SITE/@NAME=$site]/@key</attribute-create>
+                <attribute-create out="view">'metric-output'</attribute-create>
+                <element-ignore in="group">
+                    <element-ignore in="group">
+                        <element-ignore in="endpoint">
+                        <element in="metric" out="group">
+                            <attribute-create out="service">$service</attribute-create>
+                            <attribute-create out="site">$site</attribute-create>
+                            <attribute-create out="endpoint">$endpoint</attribute-create>
+                            <attribute-create out="group">$endpoint</attribute-create>
+                        </element>
+                    </element-ignore>
+                    </element-ignore>
+                </element-ignore>
+            </element>
+
+            <elements path="root">
+                <element-ignore in="group"></element-ignore>
+                <element-create>
+                    sort_by_string(../group,'@name')
+                </element-create>
+            </elements>
+
+            <elements path="root">
+                <element-create-as-parent out="group" attributes="@*" group-by="@name">
+                    <element in="group" ></element>
+                </element-create-as-parent>
+            </elements>
+
+            <elements path="root/group">
+                <element-ignore in="group">
+                    <element></element>
+                </element-ignore>
+            </elements>
+
+            <element in="root">
+                <set variable="StateColor">view('StateColor')</set>
+
+                <element in="group">
+                    <element in="status">
+                        <attribute-create out="color">$StateColor/e:entries/e:entry[@key=current()/../@value]/text()</attribute-create>
+                        <attribute-create out="end_time" if="current()/../following-sibling::status">current()/../following-sibling::status/@timestamp</attribute-create>
+                        <attribute-create out="end_time" if="not(current()/../following-sibling::status)">../ancestor::root/@end_time</attribute-create>
+                        <attribute-create out="exec_time">../@timestamp</attribute-create>
+                    </element>
+                </element>
+
+            </element>
+
+            <elements path="root/group">
+                <element in="status" if="not(preceding-sibling::status)">
+                        <attribute in="timestamp">$start_date</attribute>
+                </element>
+            </elements>
+
+
+        </processors>
+
+
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/html/status_report.html</parameter>
+
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/html/status_report.html</parameter>
+
+            </renderer>
+        </renderers>
+
+
+    </view>
+
+    <view name="metric-output">
+
+
+        <argument name="metric"></argument>
+        <argument name="endpoint"></argument>
+        <argument name="metric"></argument>
+        <argument name="site"></argument>
+        <argument name="service"></argument>
+        <argument name="start_time"></argument>
+        <argument name="end_time"></argument>
+        <argument name="report"></argument>
+
+        <connector type="XMLConnector">
+            <parameter name="content"
+                       eval="view('api.output.details',entry('exec_time',$exec_time)|entry('endpoint',$endpoint)|entry('metric',$metric))">
+            </parameter>
+        </connector>
+
+            <processors>
+                <element in="root">
+                    <set variable="SiteList">view('listSitesbyNgi')</set>
+                    <attribute-create out="ngi">$SiteList/results/Ngi[SITE/@NAME=$site]/@key</attribute-create>
+                    <attribute-create out="site">$site</attribute-create>
+                    <attribute-create out="service">$service</attribute-create>
+                    <attribute-create out="start_time">$start_time</attribute-create>
+                    <attribute-create out="end_time">$end_time</attribute-create>
+                    <attribute-create out="report">$report</attribute-create>
+                </element>
+            </processors>
+
+        <renderers>
+
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/html/output_details.html
+                </parameter>
+
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/html/output_details.html</parameter>
+
+            </renderer>
+        </renderers>
+    </view>
+
+    <view name="status_report-form">
+    <info>
+        <category>Status Report</category>
+        <description>Form for customised report</description>
+    </info>
+
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('listParameters',entry('mode','full'))"></parameter>
+
+        </connector>
+
+
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/html/status_form_reports.html</parameter>
+
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/html/status_form_reports.html</parameter>
+            </renderer>
+        </renderers>
+    </view>
+
+
+</config>

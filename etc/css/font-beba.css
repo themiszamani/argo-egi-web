@@ -1,0 +1,8 @@
+
+@font-face {
+    font-family: "BebasNeuewebfont";
+    src: local("BebasNeuewebfont"), url("../fonts/BebasNeuewebfont.woff") format("woff"), url("../fonts/BebasNeuewebfont.ttf") format("truetype");
+}
+.fontsforweb_fontid_1962 {
+    font-family: "BebasNeuewebfont" !important;
+}

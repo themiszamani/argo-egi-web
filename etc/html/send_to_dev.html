@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:tpl="http://software.in2p3.fr/lavoisier/template.xsd"
+      xmlns:cfg="http://software.in2p3.fr/lavoisier/config.xsd"
+      xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd"
+      tpl:extends="/resource/html/base.html">
+
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title>ERROR #{{/error/@code}}</title>
+
+
+</head>
+<body>
+
+
+<div class="wrapper" id="wrapper">
+    <div class="content-wrapper">
+
+        <div  class="panel panel-info">
+            <div class="panel-heading" tpl:foreach="issue/id">
+                <h1 class="panel-title" style="font-weight: 800;font-variant-caps: all-petite-caps"><span class="glyphicon glyphicon-flash">
+            </span > Bug report # {{text()}}  sent to developers</h1>
+            </div>
+            <div class="panel-body">
+                <table id="dataTable" class="display">
+                    <tr  tpl:foreach="issue/*">
+                        <th>{{name()}}</th>
+                        <td>{{text()}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+
+    </div>
+
+
+</div>
+
+</body>
+
+<script>
+    $(document).ready(function() {
+    $('#dataTable').DataTable({
+        "order": [[1, "asc"]],
+        "paging": false
+    });})
+
+</script>
+
+
+</html>

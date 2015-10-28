@@ -7,7 +7,7 @@ title: Web UI | ARGO
 
 * based on Lavoisier Framework - http://software.in2p3.fr/lavoisier
 * prerequisites : a server certificate and java (version prior to 1.8 or 8 ) 
-* no services running on port 80
+* no services running on port 80 and 443
 
 
 ## Installation 
@@ -26,13 +26,15 @@ title: Web UI | ARGO
 * complete certificate.path and certificate.password
 * specify the cache.baseDirectory property - location of the caches for the data
 * specify the server.baseUrl 
-
-### edit lavoisier-service.properties
-* cd $HOME_LAVOISIER/argo-egi-web-master/etc
-* vi lavoisier-service.properties
 * lavoisier.ssl.trustStore=path_to_your_ca  (/etc/grid-security/certificates)
 * lavoisier.ssl.keyStore= path to the lavoisier certificate
 * lavoisier.ssl.keyStorePassword= password of this certificate
+
+### edit password.properties
+* cd $HOME_LAVOISIER/argo-egi-web-master/etc/security
+* vi password.properties
+* change or add login and passwords (admin and changeit by defaut)
+
 
 ## Examples
 

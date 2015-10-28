@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html  xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" xmlns:tpl="http://software.in2p3.fr/lavoisier/template.xsd" tpl:extends="/lavoisier/_default_?accept=html">
+
+<body>
+<!-- Right side column. Contains the navbar and content of the page -->
+<div id="wrapper">
+
+
+    <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+
+
+
+    <!-- Main content -->
+    <section class="content" id="content">
+
+
+        <section class="content-header" id="content-header">
+            <h1>
+                Availabilities Reliabilities Report
+                <small> Custom Report</small>
+            </h1>
+
+        </section>
+
+
+        <div  class="box box-primary">
+
+            <div class="box-header" tpl:if="count(/e:entries/Entity) &gt; 0">
+                        <h3 class="box-title" >SUMMARY<br/>
+                            <a  title="CSV report" target="_blank"><span style="margin:10px" class="btn btn-primary" onclick="javascript:add_location('accept=csv');">CSV</span> </a>
+                            <a  title="XML report" target="_blank"><span style="margin:10px" class="btn btn-primary" onclick="javascript:add_location('accept=xml')">XML</span></a>
+                            <a  title="Chart report"><span style="margin:10px" class="btn btn-primary" onclick="javascript:add_location('accept=chart')">CHART</span></a>
+
+                            <input type="button" style="margin:10px;display: none" class="btn btn-primary"   id="tableButton" value="TABLE"/>
+                        </h3>
+            </div>
+            <div class="box-body" tpl:else="">
+                <H3>No Data for the selection</H3>
+            </div>
+       </div>
+
+
+
+
+                        <div class="box box-primary" id="table" tpl:foreach="/e:entries/Entity">
+                            <div class="box-header">
+                                <h3 class="box-title">
+                                    <a tpl:if="/e:entries/@view='ngi_ar'" href="/lavoisier/ngi_reports">EGI</a>
+                                    <a tpl:else="" href="/lavoisier/site_reports?ngi={{@NGI}}">{{@NGI}}</a>
+                                    > {{@name}}
+
+                                    <!--<a tpl:if="/e:entries/Entity[@name and @NGI]"  title="detailed report">-->
+                                        <!--<span style="margin:10px" class="btn btn-primary" onclick="change_url('{{/e:entries/@view}}','{{/e:entries/@view_details}}')">DETAILS</span>-->
+                                    <!--</a>-->
+                                    <a tpl:if="/e:entries/Entity[@name and @NGI]" href="{{ancestor::e:entries/@url}}&amp;site={{@name}}" title="detailed report">
+                                        <span style="margin:10px" class="btn btn-primary">DETAILS</span>
+                                    </a>
+                                </h3>
+
+                            </div>
+                            <div class="box-body table-responsive" tpl:if="count(Availability) &gt; 0">
+
+                            <table id="dataTable" class="table table-bordered table-hover table-striped">
+                                <thead>
+                                <tr>
+
+                                    <th>Timestamp</th>
+                                    <th>Availability</th>
+                                    <th>Reliability</th>
+                                    <th tpl:if="/e:entries/Entity/Availability/@unknown">Unknown</th>
+                                    <th tpl:if="/e:entries/Entity/Availability/@downtime">Downtime</th>
+                                </tr>
+                                </thead>
+
+
+                            <tbody>
+                                <tr  tpl:foreach="Availability">
+                                    <td>
+                                        {{@timestamp}}
+                                    </td>
+                                    <td>
+                                        <span class="avCheck label av3" title="{{format-number(@availability,'#.00')}}" >{{format-number(@availability,'#.00')}}</span>
+                                    </td>
+                                    <td>
+                                        <span  style="margin-left:10px"  class="reCheck label re3" title="{{format-number(@reliability,'#.00')}}" >{{format-number(@reliability,'#.00')}}</span>
+                                    </td>
+                                    <td tpl:if="/e:entries/Entity/Availability/@unknown">
+                                        <span  style="margin-left:10px"  class="avUnknown label re3" title="{{format-number(100-@unknown,'#.00')}}" >{{format-number(@unknown,'#.00')}}</span>
+                                    </td>
+                                    <td tpl:if="/e:entries/Entity/Availability/@downtime">
+                                        <span  style="margin-left:10px"  class="avUnknown label re3" title="{{format-number(100-@downtime,'#.00')}}" >{{format-number(@downtime,'#.00')}}</span>
+                                    </td>
+
+                               </tr>
+
+                                </tbody>
+                                <!--<tfoot>-->
+                                    <!--<tr>-->
+                                        <!--<th>Average</th>-->
+                                        <!--<th>{{format-number(sum(Availability/@availability) div count(Availability/@availability),'#.00') }}</th>-->
+                                        <!--<th>{{format-number(sum(Availability/@reliability) div count(Availability/@reliability),'#.00') }}</th>-->
+                                    <!--</tr>-->
+                                <!--</tfoot>-->
+
+                                </table>
+                            </div>
+                            <div class="box-body" tpl:else="">
+                                <H3>No Data for the selection</H3>
+                            </div>
+                 </div>
+
+
+        <div class="box box-primary" id="chart" style="display: none;overflow-y: auto">
+            <div class="box-header">
+                <h3 class="box-title">Availabilities Chart</h3>
+            </div>
+
+            <div class="box-body" id="container1" style="width:900px;min-height: 600px; max-height: 1800px; "/>
+
+
+
+            <div class="box-body" id="container2" style="width:900px;min-height: 600px; max-height: 1800px; "/>
+
+       </div>
+
+
+    </section><!-- /.content -->
+
+</div><!-- /.right-side -->
+
+
+
+    <script type="text/javascript">
+
+
+
+
+        $(function () {
+            $('td').find('span.avCheck.label').each(function () {
+                $(this).addClass(getColorClass($(this).attr('title'),80));
+            });
+
+            $('td').find('span.reCheck.label').each(function () {
+                $(this).addClass(getColorClass($(this).attr('title'),85));
+            });
+
+            $('td').find('span.avUnknown.label').each(function () {
+                $(this).addClass(getColorClass($(this).attr('title'),90));
+            });
+            $('td').find('span.avDowntime.label').each(function () {
+                $(this).addClass(getColorClass($(this).attr('title'),90));
+            });
+
+            // set the first colors
+            $('td').find('span.badge').each(function () {
+                $(this).addClass(getColorClass2($(this).attr('title')));
+            });
+
+
+        });
+
+
+    </script>
+
+
+</div>
+</body>
+</html>

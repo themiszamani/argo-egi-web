@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:tpl="http://software.in2p3.fr/lavoisier/template.xsd"
+      tpl:extends="/resource/html/base.html">
+
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title>Logs</title>
+
+
+</head>
+<body>
+
+
+<div class="wrapper" id="wrapper">
+    <div class="content-wrapper">
+
+
+
+            <table id="dataTableLog" class="dataTable display display-compact">
+                <thead>
+                    <tr>
+                        <th>date</th>
+                        <th>logger</th>
+                        <th>level</th>
+                        <th>message</th>
+                        <th>Exception</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                <tr tpl:foreach="/log/record">
+                    <td>{{date/text()}}</td>
+                    <td>{{logger/text()}}</td>
+                    <td>{{level/text()}}</td>
+                    <td>{{message/text()}}</td>
+                    <td tpl:if="exception/message"><span class="glyphicon glyphicon-forward" data-placement="left" rel="popover" data-content="{{exception/message/text()}}"></span></td>
+                    <td tpl:else=""></td>
+                </tr>
+
+                </tbody>
+
+
+            </table>
+
+
+
+    </div>
+
+
+</div>
+
+
+
+</body>
+<script>
+    <!--
+
+
+
+    $(document).ready(function() {
+
+        $('#dataTableLog').DataTable({});
+
+
+        $('span[rel="popover"]').popover({
+            container: 'body',
+            html: true
+
+        });
+
+    });
+    -->
+</script>
+
+</html>

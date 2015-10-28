@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html  xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd"
+       xmlns:tpl="http://software.in2p3.fr/lavoisier/template.xsd"
+       tpl:extends="/lavoisier/_default_?accept=html">
+
+<body>
+<!-- Right side column. Contains the navbar and content of the page -->
+<div id="wrapper">
+
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+
+
+
+        <!-- Main content -->
+        <section class="content" id="content">
+
+            <ol class="breadcrumb">
+                <li><a href="/lavoisier/status_report-site?start_time={{root/@start_time}}&amp;end_time={{root/@end_time}}&amp;report={{root/@report}}&amp;accept=html">EGI</a></li>
+                <li><a tpl:if="root/@ngi" href="/lavoisier/status_report-site?start_time={{root/@start_time}}&amp;end_time={{root/@end_time}}&amp;report={{root/@report}}&amp;ngi={{root/@ngi}}&amp;accept=html">{{root/@ngi}}</a></li>
+                <li><a href="/lavoisier/status_report-sf?site={{/root/@site}}&amp;start_time={{root/@start_time}}&amp;end_time={{root/@end_time}}&amp;report={{root/@report}}&amp;accept=html">{{/root/@site}}</a></li>
+                <li><a href="/lavoisier/status_report-endpoints?site={{/root/@site}}&amp;service={{/root/@service}}&amp;start_time={{root/@start_time}}&amp;report={{root/@report}}&amp;end_time={{root/@end_time}}&amp;accept=html">{{/root/@service}}</a></li>
+                <li><a href="/lavoisier/status_report-metrics?endpoint={{/root/host/@name}}&amp;site={{/root/@site}}&amp;service={{/root/@service}}&amp;report={{root/@report}}&amp;start_time={{root/@start_time}}&amp;end_time={{root/@end_time}}&amp;accept=html">{{/root/host/@name}}</a></li>
+                <li  class="active">output details</li>
+            </ol>
+
+
+            <div class="row" tpl:if="/root/host/metric/status/message or /root/host/metric/status/summary" style="padding:30px">
+
+
+                    <div tpl:if="/root/host/metric/status/@value='OK'" class="box box-success">
+                        <div class="box-header with-border">
+                            <div class="box-header with-border">
+                                <h4 class="box-title">Hostname : {{/root/host/@name}}<br/>Metric : {{/root/host/metric/@name}}<br/>Timestamp : {{/root/host/metric/status/@timestamp}}<br/>Status : <span class="btn btn-success">{{/root/host/metric/status/@value}}</span></h4>
+                            </div>
+                            <div class="box-body"> <h4>Output</h4>
+                                {{/root/host/metric/status/summary/text()}}<br/>
+                            <span tpl:if="/root/host/metric/status/message/text()"><pre class="output">{{/root/host/metric/status/message/text()}}</pre></span>
+                            </div>
+                        </div>
+                    </div>
+
+                <div tpl:if="/root/host/metric/status/@value='WARNING'" class="box box-warning">
+                    <div class="box-header with-border">
+                        <div class="box-header with-border">
+                            <h4 class="box-title">Hostname : {{/root/host/@name}}<br/>Metric : {{/root/host/metric/@name}}<br/>Timestamp : {{/root/host/metric/status/@timestamp}}<br/>Status : <span class="btn btn-warning"> {{/root/host/metric/status/@value}}</span></h4>
+                        </div>
+                        <div class="box-body"><h4>Output</h4>
+                            {{/root/host/metric/status/summary/text()}}<br/>
+                            <span tpl:if="/root/host/metric/status/message/text()"><pre class="output">{{/root/host/metric/status/message/text()}}</pre></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div tpl:if="/root/host/metric/status/@value='CRITICAL'" class="box box-danger">
+                    <div class="box-header with-border">
+                        <div class="box-header with-border">
+                            <h4 class="box-title">Hostname : {{/root/host/@name}}<br/>Metric : {{/root/host/metric/@name}}<br/>Timestamp : {{/root/host/metric/status/@timestamp}}<br/>Status : <span class="btn btn-danger">{{/root/host/metric/status/@value}}</span></h4>
+                        </div>
+                        <div class="box-body"><h4>Output</h4>
+                            {{/root/host/metric/status/summary/text()}}<br/>
+                            <span tpl:if="/root/host/metric/status/message/text()"><pre class="output">{{/root/host/metric/status/message/text()}}</pre></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div tpl:if="/root/host/metric/status/@value='UNKNOWN' or /root/host/metric/status/@value='MISSING'" class="box box-default">
+                    <div class="box-header with-border">
+                        <div class="box-header with-border">
+                            <h4 class="box-title">Hostname : {{/root/host/@name}}<br/>Metric : {{/root/host/metric/@name}}<br/>Timestamp : {{/root/host/metric/status/@timestamp}}<br/>Status : <span class="btn btn-default">{{/root/host/metric/status/@value}}</span></h4>
+                        </div>
+                        <div class="box-body"><h4>Output</h4>
+                            {{/root/host/metric/status/summary/text()}}<br/>
+                            <span tpl:if="/root/host/metric/status/message/text()"><pre class="output">{{/root/host/metric/status/message/text()}}</pre></span>
+                        </div>
+                    </div>
+                </div>
+        </div>
+
+            <div tpl:else="" class="box box-default">
+                <div class="box-header with-border">
+                    <div class="box-header with-border">
+                        <h4 class="box-title">Hostname : {{/root/host/@name}}<br/>Metric : {{/root/host/metric/@name}}<br/>Timestamp : {{/root/host/metric/status/@timestamp}}<br/>Status : {{/root/host/metric/status/@value}}</h4>
+                    </div>
+                    <div class="box-body">
+                        No output for these parameters
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </section><!-- /.content -->
+
+
+
+    </div><!-- /.right-side -->
+
+<style>
+    .output{
+        white-space:pre-line;
+    }
+</style>
+
+    <script>
+        <!--
+        $(document).ready(function() {
+
+
+            var newText;
+            newText= $(".output").text().replace(/\\n/g,'\r\n');
+
+            $(".output").text(newText,true);
+
+        });
+        -->
+    </script>
+
+</div>
+</body>
+</html>

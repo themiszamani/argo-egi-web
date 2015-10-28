@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html  xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd"
+       xmlns:tpl="http://software.in2p3.fr/lavoisier/template.xsd"
+       tpl:extends="/lavoisier/_default_?accept=html">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>AVAILABILITY / RELIABILITY CHART</title>
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport' />
+
+</head>
+<body>
+<!-- Right side column. Contains the navbar and content of the page -->
+<div id="wrapper">
+    <div class="content-wrapper">
+        <!-- Main content -->
+        <section class="content" id="content">
+
+            <section class="content-header" id="content-header">
+                <h1>
+                    ARGO Reports
+                    <small>Availability / Reliability Chart</small>
+                </h1>
+
+            </section>
+
+
+            <div id="local_groups" tpl:if="/e:entries/@type='availability'">
+                   <span tpl:foreach="/e:entries/e:entry/group"   class="hidden" >
+
+                <div tpl:if="Availability[@timestamp=ancestor::e:entries/@month1]/@color_av">{{@NGI}} : {{@site}},{{ancestor::e:entries/@month1}}_{{@NGI}} : {{@site}}_av,{{ancestor::e:entries/@month1}},{{ancestor::e:entries/@month2}},{{Availability[@timestamp=ancestor::e:entries/@month1]/@color_av}},{{Availability[@timestamp=ancestor::e:entries/@month1]/@availability}}</div>
+                <div tpl:else="">{{@NGI}} : {{@site}},{{ancestor::e:entries/@month1}}_{{@NGI}} : {{@site}}_av,{{ancestor::e:entries/@month1}},{{ancestor::e:entries/@month2}},grey,unknown</div>
+
+
+                <div tpl:if="Availability[@timestamp=ancestor::e:entries/@month2]/@color_av">{{@NGI}} : {{@site}},{{ancestor::e:entries/@month2}}_{{@NGI}} : {{@site}}_av,{{ancestor::e:entries/@month2}},{{ancestor::e:entries/@month3}},{{Availability[@timestamp=ancestor::e:entries/@month2]/@color_av}},{{Availability[@timestamp=ancestor::e:entries/@month2]/@availability}}</div>
+                <div tpl:else="">{{@NGI}} : {{@site}},{{ancestor::e:entries/@month2}}_{{@NGI}} : {{@site}}_av,{{ancestor::e:entries/@month2}},{{ancestor::e:entries/@month3}},grey,unknown</div>
+
+
+                <div tpl:if="Availability[@timestamp=ancestor::e:entries/@month3]/@color_av">{{@NGI}} : {{@site}},{{ancestor::e:entries/@month3}}_{{@NGI}} : {{@site}}_av,{{ancestor::e:entries/@month3}},{{ancestor::e:entries/@month4}},{{Availability[@timestamp=ancestor::e:entries/@month3]/@color_av}},{{Availability[@timestamp=ancestor::e:entries/@month3]/@availability}}</div>
+                <div tpl:else="">{{@NGI}} : {{@site}},{{ancestor::e:entries/@month3}}_{{@NGI}} : {{@site}}_av,{{ancestor::e:entries/@month3}},{{ancestor::e:entries/@month4}},grey,unknown</div>
+
+
+            </span>
+
+            </div>
+
+            <div id="local_groups" tpl:else="">
+                   <span tpl:foreach="/e:entries/e:entry/group"   class="hidden" >
+
+
+                  <div tpl:if="Availability[@timestamp=ancestor::e:entries/@month1]/@color_av">{{@NGI}} : {{@site}},{{ancestor::e:entries/@month1}}_{{@NGI}} : {{@site}}_re,{{ancestor::e:entries/@month1}},{{ancestor::e:entries/@month2}},{{Availability[@timestamp=ancestor::e:entries/@month1]/@color_av}},{{Availability[@timestamp=ancestor::e:entries/@month1]/@reliability}}</div>
+                <div tpl:else="">{{@NGI}} : {{@site}},{{ancestor::e:entries/@month1}}_{{@NGI}} : {{@site}}_re,{{ancestor::e:entries/@month1}},{{ancestor::e:entries/@month2}},grey,unknown</div>
+
+
+                       <div tpl:if="Availability[@timestamp=ancestor::e:entries/@month2]/@color_av">{{@NGI}} : {{@site}},{{ancestor::e:entries/@month2}}_{{@NGI}} : {{@site}}_re,{{ancestor::e:entries/@month2}},{{ancestor::e:entries/@month3}},{{Availability[@timestamp=ancestor::e:entries/@month2]/@color_av}},{{Availability[@timestamp=ancestor::e:entries/@month2]/@reliability}}</div>
+                <div tpl:else="">{{@NGI}} : {{@site}},{{ancestor::e:entries/@month2}}_{{@NGI}} : {{@site}}_re,{{ancestor::e:entries/@month2}},{{ancestor::e:entries/@month3}},grey,unknown</div>
+
+
+                <div tpl:if="Availability[@timestamp=ancestor::e:entries/@month3]/@color_av">{{@NGI}} : {{@site}},{{ancestor::e:entries/@month3}}_{{@NGI}} : {{@site}}_re,{{ancestor::e:entries/@month3}},{{ancestor::e:entries/@month4}},{{Availability[@timestamp=ancestor::e:entries/@month3]/@color_av}},{{Availability[@timestamp=ancestor::e:entries/@month3]/@reliability}}</div>
+                <div tpl:else="">{{@NGI}} : {{@site}},{{ancestor::e:entries/@month3}}_{{@NGI}} : {{@site}}_re,{{ancestor::e:entries/@month3}},{{ancestor::e:entries/@month4}},grey,unknown</div>
+
+            </span>
+
+            </div>
+
+
+
+            <div id="div_timeline" style="height: 800px;margin:20px;width:1000px" ></div>
+
+        </section><!-- /.content -->
+
+        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+        <script src="/resource/js/jsapitimeline.js"></script>
+
+    <script>
+        <!--
+        $(document).ready(function() {
+
+            google.load('visualization', '1', {'packages':['timeline'], 'language': 'en'});
+
+            var newgroup = [];
+            var colorsgroup = [];
+            var links = [];
+
+
+            var local_groups = document.getElementById('local_groups').getElementsByTagName('div');
+            var l=local_groups.length ;
+
+
+            for (j = 0; j < l ; j++) {
+
+                var tempArray = local_groups[j].textContent.split(",");
+                var availability = (Math.round(tempArray.pop()*100))/100;
+                var color = tempArray.pop();
+
+                tempArray[4]= '<div class="panel panel-default">' +
+                                    '<div class="panel-heading">' +
+                                            '<div class="panel-title"><h3>'+ tempArray[0] +
+                            '</h3></div></div>' +
+                        '<div class="panel-body">' +
+                        '<label>Value : &nbsp;</label><span class="label" style="background:'+color+'">' + availability  + '</span><hr/>'+
+                        '<label>Month : &nbsp;</label>' + tempArray[2] + '<hr/>' +
+                        '</div></div>';
+
+
+                tempArray[2] = new Date(tempArray[2].substring(0,4),tempArray[2].substring(5,7),1);
+                tempArray[3] = new Date(tempArray[3].substring(0,4),tempArray[3].substring(5,7),1);
+
+
+                newgroup.push(tempArray);
+                colorsgroup.push(color);
+
+            }
+
+
+            google.setOnLoadCallback(drawChart);
+
+            function drawChart() {
+                var container = document.getElementById('div_timeline');
+                var chart = new google.visualization.Timeline(container);
+
+                google.visualization.events.addListener(chart, 'select', function () {
+                    var selectedItem = chart.getSelection()[0].row;
+
+
+                });
+
+
+
+
+
+                var dataTable = new google.visualization.DataTable();
+                dataTable.addColumn({type: 'string', id: 'Service Flavour'});
+                dataTable.addColumn({type: 'string', id: 'Status'});
+                dataTable.addColumn({type: 'date', id: 'Start'});
+                dataTable.addColumn({type: 'date', id: 'End'});
+                dataTable.addColumn({'type': 'string', 'role': 'tooltip', 'p': {'html': true}});
+
+                dataTable.addRows(newgroup);
+
+                var options = {
+                    title: 'Availability report',
+                    backgroundColor: '#fff',
+                    colors : colorsgroup,
+                    timeline: {
+                        groupByRowLabel: true,
+                        showBarLabels : false
+
+                    }
+
+                };
+
+
+                function myHandler(e){
+                    if(e.row != null){
+                        $(".google-visualization-tooltip").html(dataTable.getValue(e.row,4)).css({width:"auto",height:"auto"});
+                    }
+                }
+
+                google.visualization.events.addListener(chart, 'onmouseover', myHandler);
+
+               chart.draw(dataTable, options);
+            }
+
+
+
+
+
+        })
+
+
+
+
+        -->
+    </script>
+</div>
+    </div>
+</body>
+</html>

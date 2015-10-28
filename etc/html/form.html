@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:tpl="http://software.in2p3.fr/lavoisier/template.xsd"
+      xmlns:cfg="http://software.in2p3.fr/lavoisier/config.xsd"
+      xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd"
+      tpl:extends="/resource/html/base.html">
+
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title>Submit the form</title>
+
+
+</head>
+<body>
+
+
+<div class="wrapper" id="wrapper">
+    <div class="content-wrapper" tpl:foreach="cfg:view">
+
+        <h2>{{@name}}</h2>
+
+        <div tpl:foreach="cfg:info/cfg:description" class="well">{{.}}</div>
+
+        <form id="form" method="get" class="form-horizontal" role="form" target="_blank">
+
+            <div tpl:foreach="cfg:argument" class="form-group">
+                <label for="{{@name}}" class="col-sm-2 control-label">{{@name}}</label>
+
+                <div class="col-sm-10" >
+
+                       <div tpl:if="contains(@pattern,'|') and not(contains(@pattern, '['))">
+                           <select  name="{@name}" class="form-control">
+                               <option tpl:if="not(text()!='')" value="">*** Please select an item ! ***</option>
+                                <span tpl:call-function="OPTIONS" tpl:with-param.pattern="@pattern"  tpl:with-param.default="text()"></span>
+                           </select>
+                       </div>
+
+                        <div tpl:else="">
+                            <input type="text" name="{@name}" placeholder="{text()}" class="col-sm-9"/>
+                        </div>
+
+                </div>
+
+                <div class="hidden">
+                    <xsl:template name="OPTIONS" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+                        <xsl:param name="pattern"/>
+                        <xsl:param name="default"/>
+                        <xsl:choose>
+                            <xsl:when test="contains($pattern, '|')">
+                                <xsl:variable name="current" select="substring-before($pattern, '|')"/>
+                                <option value="{$current}">
+                                    <xsl:if test="$current = $default">
+                                        <xsl:attribute name="selected">selected</xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:value-of select="$current"/>
+                                </option>
+                                <xsl:call-template name="OPTIONS">
+                                    <xsl:with-param name="pattern" select="substring-after($pattern, '|')"/>
+                                    <xsl:with-param name="default" select="$default"/>
+                                </xsl:call-template>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <option value="{$pattern}">
+                                    <xsl:if test="$pattern = $default">
+                                        <xsl:attribute name="selected">selected</xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:value-of select="$pattern"/>
+                                </option>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:template>
+                </div>
+
+            </div>
+
+
+            <div class="well">
+
+                <div tpl:if="count(cfg:authenticators/cfg:authenticator/cfg:value) > 1" class="form-group">
+                    <label for="auth" class="col-sm-2 control-label">Authentication</label>
+
+                    <div class="col-sm-10">
+                        <select name="auth" id="auth" class="form-control">
+                            <option value="default">Default authentication</option>
+                            <option tpl:foreach="cfg:authenticators/cfg:authenticator/cfg:value" value="{{text()}}">
+                                {{text()}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="accept" class="col-sm-2 control-label">Rendering</label>
+
+                    <div class="col-sm-10">
+                        <select name="accept" id="accept" class="form-control">
+
+
+                            <option value="default">Default rendering</option>
+
+                            <option tpl:foreach="cfg:jmx/cfg:domain/cfg:group/cfg:mbean/cfg:attribute[@name='Extensions']/cfg:value[1][text()!='']"
+                                    value="{text()}" >      {{text()}}
+                            </option>
+
+
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">XPath filter</label>
+
+                    <div class="col-sm-10">
+                        <input name="xpath" id="xpath" class="form-control" type="text"
+                               placeholder="Enter XPath to filter output"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Range</label>
+
+                    <div class="col-sm-10">
+                        <div class="input-group">
+                            <span class="input-group-addon">from</span>
+                            <input type="text" name="_window_start_" id="_window_start_"
+                                   placeholder="Enter start of range here..." class="form-control" value="1"/>
+                            <span class="input-group-addon">to</span>
+                            <input type="text" name="_window_end_" id="_window_end_"
+                                   placeholder="Enter end of range here..." class="form-control"/>
+                            <input type="hidden" name="_window_" id="_window_"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group pull-right">
+                <input type="submit" value="Get data" onclick="get()" class="btn btn-lg"/>
+            </div>
+        </form>
+    </div>
+
+    <script language="Javascript" tpl:foreach="cfg:view">
+
+            function get() {
+                if (document.getElementById('xpath').value != '') {
+                    document.getElementById('form').action = '/lavoisier/{{@name}}' + document.getElementById('xpath').value;
+                } else {
+                    document.getElementById('form').action = '/lavoisier/{{@name}}';
+                }
+                if (document.getElementById('auth') &amp;&amp; document.getElementById('auth').value == 'default') {
+                    document.getElementById('auth').disabled = true;
+                }
+                if (document.getElementById('accept').value == 'default') {
+                    document.getElementById('accept').disabled = true;
+                }
+                document.getElementById('_window_start_').disabled = true;
+                document.getElementById('_window_end_').disabled = true;
+                if (document.getElementById('_window_end_').value != '') {
+                    document.getElementById('_window_').value = document.getElementById('_window_start_').value + '-' + document.getElementById('_window_end_').value;
+                } else {
+                    document.getElementById('_window_').disabled = true;
+                }
+                $("#form input[type=text]").each(function () {
+                    if (this.value == '') {
+                        this.disabled = true;
+                    }
+                })
+            }
+
+    </script>
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+

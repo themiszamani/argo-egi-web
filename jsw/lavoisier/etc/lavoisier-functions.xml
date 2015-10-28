@@ -1,8 +1,0 @@
-<functions xmlns="http://software.in2p3.fr/lavoisier/functions.xsd">
-    <function name="apos" eval='concat("&apos;", $string, "&apos;")'>
-        <argument>string</argument>
-    </function>
-    <function name="quot" eval="concat('&quot;', $string, '&quot;')">
-        <argument>string</argument>
-    </function>
-</functions>

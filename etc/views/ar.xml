@@ -1,0 +1,457 @@
+<config xmlns="http://software.in2p3.fr/lavoisier/config.xsd"
+        xmlns:date="http://exslt.org/dates-and-times"
+        xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" >
+
+
+
+
+    <view name="ngi_ar">
+        <info>
+            <category>AR reports</category>
+            <description>NGI Customized Reports</description>
+        </info>
+
+        <argument name="ngi">any</argument>
+        <argument name="granularity"></argument>
+        <argument name="start_date"></argument>
+        <argument name="end_date"></argument>
+
+        <argument name="report">Critical</argument>
+        <argument name="view_details">site_ar</argument>
+        <argument name="cr">0</argument>
+
+        <connector type="XMLConnector">
+
+            <parameter name="content" eval="
+
+            view(choose($cr,'api.availability.call','api.availability.rotating.caches'),
+            entry('granularity',$granularity)
+            | entry('report',$report)
+            | entry('group_type','ngi')
+            | entry('start_time',concat($start_date,'T00:00:00Z'))
+            | entry('end_time',concat($end_date,'T00:00:00Z'))
+            )"/>
+        </connector>
+
+
+        <processors>
+
+
+            <element in="root" out="e:entries">
+                <attribute-create out="start_timestamp">date:seconds($start_date)</attribute-create>
+                <attribute-create out="end_timestamp">date:seconds($end_date)</attribute-create>
+                <attribute-create out="view">ngi_ar</attribute-create>
+                <attribute-create out="view_details">$view_details</attribute-create>
+
+                <element in="group" if="@name=$ngi or $ngi='any'" out="Entity">
+                        <attribute in="name" out="NGI"></attribute>
+                        <element in="results" out="Availability"></element>
+
+                </element>
+                <element-ignore></element-ignore>
+            </element>
+
+
+            <elements path="e:entries/Entity">
+                    <element-ignore in="Availability" if="date:seconds(@timestamp) &lt; ancestor::e:entries/@start_timestamp"></element-ignore>
+                    <element-ignore in="Availability" if="date:seconds(@timestamp) &gt; ancestor::e:entries/@end_timestamp"></element-ignore>
+
+            </elements>
+
+
+
+
+
+        </processors>
+
+        <pre-renderers>
+            <title>'Availabilities Reliabilities Chart'</title>
+            <row foreach="/e:entries/Entity/Availability">
+                <column label="entity">ancestor::Entity/@name</column>
+                <column label="timestamp">@timestamp</column>
+                <column unit="percentage" label="availability">format-number(@availability,'#.00')</column>
+                <column unit="percentage" label="reliability">format-number(@reliability,'#.00')</column>
+            </row>
+        </pre-renderers>
+        <renderers>
+
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/html/ar_custom_reports.html</parameter>
+
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/html/ar_custom_reports.html</parameter>
+
+            </renderer>
+            <renderer type="ChartRenderer">
+                <parameter name="rotation">-45</parameter>
+
+            </renderer>
+        </renderers>
+
+
+    </view>
+
+    <view name="opsmon_ar">
+        <info>
+            <category>AR reports</category>
+            <description>CloudCustomized Reports</description>
+        </info>
+        <argument name="site"></argument>
+        <argument name="ngi">false</argument>
+        <argument name="granularity"></argument>
+        <argument name="start_date"></argument>
+        <argument name="end_date"></argument>
+        <argument name="view_details">services_ar</argument>
+        <argument name="report">OPS-MONITOR-Critical</argument>
+
+
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('site_ar',arguments())"></parameter>
+        </connector>
+
+        <pre-renderers>
+            <title>'Availabilities Reliabilities Chart'</title>
+            <row foreach="/e:entries/Entity/Availability">
+                <column label="entity">ancestor::Entity/@name</column>
+                <column label="timestamp">@timestamp</column>
+                <column unit="percentage" label="availability">format-number(@availability,'#.00')</column>
+                <column unit="percentage" label="reliability">format-number(@reliability,'#.00')</column>
+                <column unit="percentage" label="unknown">format-number(@unknown,'#.00')</column>
+                <column unit="percentage" label="downtime">format-number(@downtime,'#.00')</column>
+            </row>
+        </pre-renderers>
+        <renderers>
+
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/html/ar_custom_reports.html</parameter>
+
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/html/ar_custom_reports.html</parameter>
+
+            </renderer>
+            <renderer type="ChartRenderer">
+                <parameter name="rotation">-45</parameter>
+
+            </renderer>
+        </renderers>
+    </view>
+
+
+
+    <view name="cloud_ar">
+        <info>
+            <category>AR reports</category>
+            <description>CloudCustomized Reports</description>
+        </info>
+        <argument name="site"></argument>
+        <argument name="ngi">false</argument>
+        <argument name="granularity"></argument>
+        <argument name="start_date"></argument>
+        <argument name="end_date"></argument>
+        <argument name="view_details">services_ar</argument>
+        <argument name="poems">ch.cern.sam.CLOUD-MON_CRITICAL</argument>
+        <argument name="report">Cloud</argument>
+
+
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('site_ar',arguments())"></parameter>
+        </connector>
+
+        <pre-renderers>
+            <title>'Availabilities Reliabilities Chart'</title>
+            <row foreach="/e:entries/Entity/Availability">
+                <column label="entity">ancestor::Entity/@name</column>
+                <column label="timestamp">@timestamp</column>
+                <column unit="percentage" label="availability">format-number(@availability,'#.00')</column>
+                <column unit="percentage" label="reliability">format-number(@reliability,'#.00')</column>
+            </row>
+        </pre-renderers>
+        <renderers>
+
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/html/ar_custom_reports.html</parameter>
+
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/html/ar_custom_reports.html</parameter>
+
+            </renderer>
+            <renderer type="ChartRenderer">
+                <parameter name="rotation">-45</parameter>
+
+            </renderer>
+        </renderers>
+    </view>
+
+    <view name="site_ar">
+        <info>
+            <category>AR reports</category>
+            <description>Site Customized Reports</description>
+        </info>
+
+        <argument name="site"></argument>
+        <argument name="ngi">false</argument>
+        <argument name="granularity"></argument>
+        <argument name="start_date"></argument>
+        <argument name="end_date"></argument>
+        <argument name="view_details">services_ar</argument>
+        <argument name="poems">ch.cern.sam.ROC_CRITICAL</argument>
+        <argument name="report">Critical</argument>
+
+
+        <connector type="XMLConnector">
+
+            <parameter name="content" eval="view('api.availability.rotating.caches',
+            entry('granularity',$granularity)
+            | entry('report',$report)
+            | entry('group_type','sites')
+            | entry('start_time',concat($start_date,'T00:00:00Z'))
+            | entry('end_time',concat($end_date,'T00:00:00Z'))
+            )"/>
+        </connector>
+
+        <processors>
+            
+            <element in="root" out="e:entries">
+
+                <attribute-create out="start_timestamp">date:seconds($start_date)</attribute-create>
+                <attribute-create out="end_timestamp">date:seconds($end_date)</attribute-create>
+                <attribute-create out="view">site_ar</attribute-create>
+                <attribute-create out="view_details">$view_details</attribute-create>
+
+                <element in="group" if="@name=$ngi or $ngi='false'">
+                    <element in="group" out="Site" if="contains(concat($site,','),@name) or $ngi!='false'">
+                        <element in="results" out="Availability"></element>
+                    </element>                    
+                </element>    
+                <element-ignore></element-ignore>                
+            </element>
+            
+            <element in="e:entries">
+                <element-ignore in="group">
+                    
+                    <element in="Site" out="Entity">
+                        <attribute-create out="NGI">../ancestor::group/@name</attribute-create>
+                    </element>
+                </element-ignore>
+            </element>
+
+
+            <elements path="e:entries/Entity">
+                <element-ignore in="Availability" if="date:seconds(@timestamp) &lt; ancestor::e:entries/@start_timestamp"></element-ignore>
+                <element-ignore in="Availability" if="date:seconds(@timestamp) &gt; ancestor::e:entries/@end_timestamp"></element-ignore>
+
+            </elements>
+
+
+
+            <element in="e:entries">
+                <attribute-create out="url">concat('/lavoisier/',$view_details,'?report=',$report,
+                    '&amp;end_date=',$end_date,'&amp;start_date=',$start_date,'&amp;granularity=',$granularity)
+                </attribute-create>
+            </element>
+
+
+        </processors>
+
+        <pre-renderers>
+            <title>'Availabilities Reliabilities Chart'</title>
+            <row foreach="/e:entries/Entity/Availability">
+                <column label="entity">ancestor::Entity/@name</column>
+                <column label="timestamp">@timestamp</column>
+                <column unit="percentage" label="availability">format-number(@availability,'#.00')</column>
+                <column unit="percentage" label="reliability">format-number(@reliability,'#.00')</column>
+            </row>
+        </pre-renderers>
+        <renderers>
+
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/html/ar_custom_reports.html</parameter>
+
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/html/ar_custom_reports.html</parameter>
+
+            </renderer>
+            <renderer type="ChartRenderer">
+                <parameter name="rotation">-45</parameter>
+
+            </renderer>
+        </renderers>
+
+
+    </view>
+
+    <view name="services_ar">
+        <info>
+            <category>AR reports</category>
+            <description>Site Customized Reports</description>
+        </info>
+
+
+        <argument name="site"></argument>
+
+        <argument name="granularity"></argument>
+        <argument name="start_date"></argument>
+        <argument name="end_date"></argument>
+        <argument name="poems">ch.cern.sam.ROC_CRITICAL</argument>
+        <argument name="report">report</argument>
+
+
+        <!--<connector type="XMLConnector">-->
+        <!--<parameter name="content" eval="view('services_daily_results')"></parameter>-->
+        <!--</connector>-->
+
+        <connector type="XMLConnector">
+
+            <parameter name="content" eval="view('api.availability.services.call',
+            entry('granularity',$granularity)
+            | entry('report',$report)
+            | entry('group_type','service')
+            | entry('start_time',concat($start_date,'T00:00:00Z'))
+            | entry('end_time',concat($end_date,'T00:00:00Z'))
+            | entry('site',$site)
+            )"/>
+        </connector>
+
+        <processors>
+
+
+            <element in="root" out="e:entries">
+                    <element in="group" out="Site" if="@name=$site">
+                        <attribute in="name" out="site"></attribute>
+                        <element in="group" out="Flavor">
+                            <attribute in="name" out="Flavor"></attribute>
+                            <element in="results" out="Availability"></element>
+                        </element>
+                    </element>
+
+                <element-ignore></element-ignore>
+            </element>
+
+
+
+            <!--<select match="/root/Profile"></select>-->
+            <!--<select  match="/e:entries/Profile/Site[@Site=$site]"></select>-->
+
+
+            <insert match="/e:entries" nodes="new_attribute('start_timestamp',date:seconds($start_date))"></insert>
+            <insert match="/e:entries" nodes="new_attribute('end_timestamp',date:seconds($end_date))"></insert>
+
+            <remove match="/e:entries/Site/Flavor/Availability[date:seconds(@timestamp) &lt; ancestor::e:entries/@start_timestamp ]"></remove>
+            <remove match="/e:entries/Site/Flavor/Availability[date:seconds(@timestamp) &gt; ancestor::e:entries/@end_timestamp ]"></remove>
+            <rename match="/e:entries/Site" name="Entity"></rename>
+            <rename match="/e:entries/Entity/@site" name="name"></rename>
+        </processors>
+
+        <pre-renderers>
+            <title>'Availabilities Reliabilities Chart'</title>
+            <row foreach="/e:entries/Entity/Flavor/Availability">
+                <column label="entity">ancestor::Entity/@name</column>
+                <column label="entity">ancestor::Flavor/@Flavor</column>
+                <column label="timestamp">@timestamp</column>
+                <column unit="percentage" label="availability">format-number(@availability,'#.00')</column>
+                <column unit="percentage" label="reliability">format-number(@reliability,'#.00')</column>
+            </row>
+        </pre-renderers>
+        <renderers>
+
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/html/ar_SF_custom_reports.html</parameter>
+
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/html/ar_SF_custom_reports.html</parameter>
+
+            </renderer>
+            <renderer type="ChartRenderer">
+                <parameter name="rotation">-45</parameter>
+
+            </renderer>
+        </renderers>
+
+
+    </view>
+
+    <view name="customFactors">
+
+
+        <info>
+            <category>AR reports</category>
+            <description>Custom factor display</description>
+        </info>
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('customFactorsRaw')"></parameter>
+        </connector>
+
+        <processors>
+            <insert match="/root/Factor" nodes="new_attribute('ngi',choose(view('goc.siteList')/results/SITE[@NAME=match()/@site]/ROC/text(),view('goc.siteList')/results/SITE[@NAME=match()/@site]/ROC/text(),'NA'))"></insert>
+
+            <select match="/root/Factor">
+                <group by="@ngi"></group>
+            </select>
+
+
+
+            <rename match="/root" name="nodeData"></rename>
+            <!--<insert match="/nodeData" nodes="new_attribute('id','csFactor')"></insert>-->
+            <rename match="/nodeData/e:entry/@key" name="id"></rename>
+            <rename match="/nodeData/e:entry" name="children"></rename>
+            <rename match="/nodeData/children/Factor" name="children"></rename>
+
+
+
+            <rename match="/nodeData//@site" name="id"></rename>
+
+            <insert match="/nodeData/children" nodes="new_attribute('color',choose(view('ngi_reports')/e:entries/e:entry/Ngi[@NGI=match()/@id]/Availability[position()=last()]/@availability,view('ngi_reports')/e:entries/e:entry/Ngi[@NGI=match()/@id]/Availability[position()=last()]/@availability,0))"></insert>
+            <insert match="/nodeData/children/children" nodes="new_attribute('color',choose(view('site_reports')/e:entries/e:entry/Site[@site=match()/@id]/Availability[position()=last()]/@availability,view('site_reports')/e:entries/e:entry/Site[@site=match()/@id]/Availability[position()=last()]/@availability,0))"></insert>
+
+            <replace match="/nodeData//children/@color" nodes="match() div 100 "/>
+
+
+            <insert match="/nodeData/children" nodes="new_element('children',new_attribute('id',match()/@id)|new_attribute('Parent','EGI')|new_attribute('size',0)|new_attribute('color',0))"/>
+            <insert match="/nodeData" nodes="new_element('children',new_attribute('id','EGI')|new_attribute('Parent','null')|new_attribute('size',0)|new_attribute('color',0))"/>
+
+            <remove match="/nodeData/children" depth="1"/>
+            <replace match="/nodeData/children/@ngi" nodes="new_attribute('Parent',match())"></replace>
+
+            <element in="nodeData">
+                <element-ignore in="children" if="@Parent='NA'"></element-ignore>
+                <element in="children"></element>
+            </element>
+
+
+        </processors>
+        <cache type="FileCache">
+            <!--<trigger type="ViewCreatedTrigger"/>-->
+            <trigger type="DeltaTimeTrigger">
+                <parameter name="hours">4</parameter>
+            </trigger>
+            <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="ViewCreatedTrigger"/>
+        </cache>
+
+        <renderers>
+
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/html/factors.html</parameter>
+
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/html/factors.html</parameter>
+
+            </renderer>
+            <renderer type="JSONRenderer">
+                <parameter name="element_as_array">true</parameter>
+            </renderer>
+        </renderers>
+
+    </view>
+
+
+</config>

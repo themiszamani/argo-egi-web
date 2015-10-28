@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:tpl="http://software.in2p3.fr/lavoisier/template.xsd" tpl:extends="/lavoisier/_default_?accept=html">
+
+<body>
+<!-- Right side column. Contains the navbar and content of the page -->
+<div id="wrapper">
+    <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+
+
+    <!-- Main content -->
+    <section class="content" id="content">
+
+        <section class="content-header" id="content-header">
+            <h1>
+                Profiles
+                <small>Management page</small>
+            </h1>
+
+        </section>
+
+
+
+        <div class="col-md-12 box box-primary" tpl:foreach="/object/data/item/object" id="{{@name}}" >
+            <div class="box-header" title="{{@name}}" data-toggle="tooltip" data-original-title="{{@name}}">
+                <h3 class="box-title">{{@name}}</h3>
+
+                <div tpl:if="/object/@admin='true'" class="box-tools pull-right">
+
+
+                    <a  style="margin-left:4px" name="{{@id}}" href="/lavoisier/profileDeletion?profileId={{@id}}" class="btn btn-primary btn-xs" title="remove the profile">
+                        <i class="fa fa-times"> </i>
+                    </a>
+                    <a  style="margin-left:4px" name="edit_{{@id}}" href="/lavoisier/updateProfile?profileId={{@id}}" class="btn btn-primary btn-xs" title="update the profile">
+                        <i class="fa fa-pencil"> </i>
+                    </a>
+                </div>
+                <div tpl:else="" class="box-tools pull-right">
+                    <button title="You are not authorized to edit" style="margin-left:4px" class="btn  btn-xs">
+                        <i class="fa fa-lock"> </i>
+                    </button>
+                </div>
+            </div>
+            <div class="box-content">
+
+                <div class="col-lg-4 col-xs-6"  tpl:foreach ="groups/item/object">
+                    <div class="small-box bg-blue" >
+
+                        <div class="inner">
+
+                            <p  tpl:foreach ="services/item/object" >{{@name}}</p>
+
+                        </div>
+                        <div class="small-box-footer">{{@name}}</div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="box-footer" tpl:if="/object/@admin='true'">
+            <a href="/lavoisier/CreationProfiles"><button class="btn btn-primary" type="submit">Add new profile</button></a>
+        </div>
+
+    </section><!-- /.content -->
+</div><!-- /.right-side -->
+</div>
+</body>
+
+
+</html>
+

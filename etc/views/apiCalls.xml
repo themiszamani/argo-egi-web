@@ -1,0 +1,446 @@
+<config xmlns="http://software.in2p3.fr/lavoisier/config.xsd"
+        xmlns:date="http://exslt.org/dates-and-times"
+        xmlns:xi="http://www.w3.org/2001/XInclude"
+        xmlns:str="http://exslt.org/strings"
+        xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
+
+<!-- *******************************************************************
+****               CALL TO THE API
+****               FOR THE A/R FIGURES
+****  methods :group_availability and service_flavor_availabilities
+************************************************************************
+-->
+
+
+    <view name="api.availability.call">
+        <info>
+            <category>API call</category>
+            <description>Call the Availability Method for sites or ngi - All options </description>
+        </info>
+
+        <argument name="group_type"></argument>
+        <argument name="start_time"></argument>
+        <argument name="end_time"></argument>
+        <argument name="granularity"></argument>
+        <argument name="report">Critical</argument>
+        <connector type="HTTPConnector">
+            <parameter name="url" eval="concat(property('api.group.availability'),$report,'/',upper-case($group_type),
+            '?granularity=',$granularity,
+            '&amp;start_time=',$start_time,'&amp;end_time=',$end_time)">
+            </parameter>
+            <parameter name="certificate" eval="property('certificate.path')"/>
+            <parameter name="passphrase" eval="property('certificate.password')"/>
+            <parameter name="header">
+                <entry key="x-api-key" eval="property('argo.api.key')"></entry>
+                <entry key="Accept">application/xml</entry>
+            </parameter>
+        </connector>
+
+        <processors>
+            <!-- Remove results from an extra day of the next  month , when date is like 2015-02-30 translated into 2015-03-02 -->
+            <elements path="/root/Profile/Site">
+                <element-ignore in="Availability" if="not(contains(@timestamp,substring($start_time,0,8))) and substring($start_time,0,8)=substring($end_time,0,8)"></element-ignore>
+            </elements>
+            <elements path="/root/Profile/Ngi">
+                <element-ignore in="Availability" if="not(contains(@timestamp,substring($start_time,0,8))) and substring($start_time,0,8)=substring($end_time,0,8)"></element-ignore>
+            </elements>
+
+
+            <elements path="/root/root/group">
+                <element-ignore in="results" if="not(contains(@timestamp,substring($start_time,0,8))) and substring($start_time,0,8)=substring($end_time,0,8)"></element-ignore>
+            </elements>
+        </processors>
+
+    </view>
+
+    <view name="api.availability.services.call">
+        <info>
+            <category>API call</category>
+            <description>Call the Availability Method for services - All options </description>
+        </info>
+
+
+        <argument name="start_time"></argument>
+        <argument name="end_time"></argument>
+        <argument name="granularity"></argument>
+        <argument name="report"></argument>
+        <argument name="site"></argument>
+        <argument name="report">Critical</argument>
+
+        <connector type="HTTPConnector">
+            <parameter name="url" eval="concat(property('api.service.availability'),$report,'/SITES/',$site,
+            '/services?granularity=',$granularity,
+            '&amp;start_time=',$start_time,'&amp;end_time=',$end_time)">
+            </parameter>
+            <parameter name="certificate" eval="property('certificate.path')"/>
+            <parameter name="passphrase" eval="property('certificate.password')"/>
+            <parameter name="header">
+                <entry key="x-api-key" eval="property('argo.api.key')"></entry>
+                <entry key="Accept">application/xml</entry>
+            </parameter>
+        </connector>
+
+        <processors>
+            <!-- Remove results from an extra day of the next  month , when date is like 2015-02-30 translated into 2015-03-02 -->
+
+            <elements path="/root/Profile/Site">
+                <element-ignore in="Availability" if="not(contains(@timestamp,substring($start_time,0,8))) and substring($start_time,0,8)=substring($end_time,0,8)"></element-ignore>
+            </elements>
+
+            <elements path="/root/Profile/Ngi">
+                <element-ignore in="Availability" if="not(contains(@timestamp,substring($start_time,0,8))) and substring($start_time,0,8)=substring($end_time,0,8)"></element-ignore>
+            </elements>
+
+            <elements path="/root/root/group">
+                <element-ignore in="results" if="not(contains(@timestamp,substring($start_time,0,8))) and substring($start_time,0,8)=substring($end_time,0,8)"></element-ignore>
+            </elements>
+
+
+        </processors>
+
+    </view>
+
+    <!-- *******************************************************************
+****               ROTATING CACHE TO STORE
+****                THE A/R FIGURES
+************************************************************************
+-->
+
+    <view name="api.availability.rotating.caches">
+
+        <info>
+            <category>API results</category>
+            <description>Sites and NGI AR results in cache</description>
+        </info>
+
+        <argument name="diff">10</argument>
+
+        <argument name="group_type">sites</argument>
+        <argument name="report">Critical</argument>
+        <argument name="granularity">DAILY</argument>
+        <argument name="start_time">0</argument>
+        <argument name="end_time">0</argument>
+        <argument name="site">false</argument>
+        <argument name="delete" eval="false()"></argument>
+
+
+        <argument name="starttime" eval="choose($diff=10,$start_time,concat(substring(date:add(date:date-time(),concat('-P',$diff+1,'M')), 0,8),'-01T00:00:00Z'))"></argument>
+        <argument name="endtime" eval="choose($diff=10,$end_time,concat(substring(date:add(date:date-time(),concat('-P',$diff+1,'M')), 0,8),'-31T23:59:59Z'))"></argument>
+
+
+
+        <connector type="RotatingCacheConnector">
+            <parameter name="content" eval="
+            view(choose($group_type!='service','api.availability.call','api.availability.services.call'),
+            entry('report',$report)
+            |entry('group_type',$group_type)
+            |entry('granularity',$granularity)
+            |entry('start_time',$starttime)
+             |entry('end_time',$endtime)
+             |entry('site',$site)
+             )"/>
+            <parameter name="key" eval="concat($report,'-',$group_type,'-',$granularity,'-',$starttime,'-',$endtime,'-',$site)"/>
+            <parameter name="size">100000</parameter>
+            <parameter name="delete" eval="$delete"></parameter>
+
+            <fallback>
+                <exception type="java.io.IOException"></exception>
+            </fallback>
+        </connector>
+
+
+    </view>
+
+    <!-- *******************************************************************
+****               CALL TO THE API
+****               FOR THE STATUS FIGURES and TIMELINES
+****  methods : status
+************************************************************************
+-->
+
+    <view name="api.status.call">
+        <info>
+            <category>API call</category>
+            <description>Call the Availability Method for sites or ngi - All options </description>
+        </info>
+
+        <argument name="group_type">SITES</argument>
+        <argument name="start_time"></argument>
+        <argument name="end_time"></argument>
+        <argument name="granularity"></argument>
+        <argument name="report">Critical</argument>
+
+        <connector type="HTTPConnector">
+            <parameter name="url" eval="concat(property('api.status.url'),$report,'/',upper-case($group_type),
+            '/?start_time=',$start_time,'&amp;end_time=',$end_time)">
+            </parameter>
+            <parameter name="certificate" eval="property('certificate.path')"/>
+            <parameter name="passphrase" eval="property('certificate.password')"/>
+            <parameter name="header">
+                <entry key="x-api-key" eval="property('argo.api.key')"></entry>
+                <entry key="Accept">application/xml</entry>
+            </parameter>
+
+        </connector>
+
+        <processors>
+            <element in="root">
+                <attribute-create out="report">$report</attribute-create>
+                <attribute-create out="start_time">$start_time</attribute-create>
+                <attribute-create out="end_time">$end_time</attribute-create>
+                <attribute-create out="url">concat(property('api.status.url'),$report,'/',upper-case($group_type),
+                    '/?start_time=',$start_time,'&amp;end_time=',$end_time)</attribute-create>
+            </element>
+        </processors>
+     
+
+
+    </view>
+
+
+
+
+    <!-- *******************************************************************
+****               ROTATING CACHE TO STORE
+****                THE STATUS FIGURES / TIMELINES
+************************************************************************
+-->
+
+    <view name="api.status.rotating.caches">
+
+        <info>
+            <category>API results</category>
+            <description>Sites and NGI AR results in cache</description>
+        </info>
+
+        <argument name="diff">10</argument>
+
+        <argument name="group_type">SITES</argument>
+        <argument name="report">Critical</argument>
+        <argument name="granularity">DAILY</argument>
+        <argument name="site">false</argument>
+        <argument name="delete" eval="false()"></argument>
+
+        <argument name="starttime" eval="concat(substring(date:add(date:date-time(),concat('-P',$diff+1,'D')), 0,11),'T00:00:00Z')"></argument>
+        <argument name="endtime" eval="concat(substring(date:add(date:date-time(),concat('-P',$diff+1,'D')), 0,11),'T23:59:59Z')"></argument>
+
+
+
+        <connector type="RotatingCacheConnector">
+            <parameter name="content" eval="
+            view('api.status.call',
+            entry('report',$report)
+            |entry('group_type',$group_type)
+            |entry('start_time',$starttime)
+             |entry('end_time',$endtime)
+             |entry('site',upper-case($site)))
+             "/>
+            <parameter name="key" eval="concat($report,'-',$group_type,'-',$starttime,'-',$endtime,'-',$site)"/>
+            <parameter name="size">100000</parameter>
+            <parameter name="delete" eval="$delete"></parameter>
+
+            <fallback>
+                <exception type="java.io.IOException"></exception>
+            </fallback>
+        </connector>
+
+
+    </view>
+
+
+    <!-- *******************************************************************
+****               STATUS DATA
+****               status method
+************************************************************************
+-->
+
+
+    <view name="api.status">
+        <info>
+            <category>API call</category>
+            <description>Call the Availability Method for sites or ngi - All options </description>
+        </info>
+
+        <argument name="group_type"></argument>
+        <argument name="start_time"></argument>
+        <argument name="end_time"></argument>
+        <argument name="site"></argument>
+        <argument name="report"></argument>
+        <argument name="report">Critical</argument>
+        <argument name="service">false</argument>
+        <argument name="endpoint">false</argument>
+
+        <connector type="HTTPConnector">
+            <parameter name="url"
+                       eval="choose($service='false',
+                       concat(property('api.status.url'),$report,'/',upper-case($group_type),'/',$site,'/services/','?start_time=',$start_time,'&amp;end_time=',$end_time),
+
+                       choose($endpoint='false',
+                                concat(property('api.status.url'),$report,'/',upper-case($group_type),'/',$site,'/services/',$service,'/endpoints?start_time=',$start_time,'&amp;end_time=',$end_time),
+                                concat(property('api.status.url'),$report,'/',upper-case($group_type),'/',$site,'/services/',$service,'/endpoints/',$endpoint,'/metrics?start_time=',$start_time,'&amp;end_time=',$end_time)
+
+                      ) )">
+            </parameter>
+            <parameter name="certificate" eval="property('certificate.path')"/>
+            <parameter name="passphrase" eval="property('certificate.password')"/>
+            <parameter name="header">
+                <entry key="x-api-key" eval="property('argo.api.key')"></entry>
+                <entry key="Accept">application/xml</entry>
+            </parameter>
+        </connector>
+
+        <processors>
+            <element in="root">
+                <attribute-create out="report">$report</attribute-create>
+                <attribute-create out="start_time">$start_time</attribute-create>
+                <attribute-create out="end_time">$end_time</attribute-create>
+            </element>
+        </processors>
+
+
+    </view>
+
+
+    <view name="api.output.details">
+        <info>
+            <category>API call</category>
+            <description>Call the Availability Method for sites or ngi - All options </description>
+        </info>
+
+        <argument name="exec_time"></argument>
+        <argument name="metric">false</argument>
+        <argument name="endpoint">false</argument>
+        <argument name="report">Critical</argument>
+
+<!-- 'https://arpi.afroditi.hellasgrid.gr:8443/api/v2/metric_result/
+node16.datagrid.cea.fr/org.nordugrid.ARC-CE-ARIS?exec_time=2015-06-01T00:01:20Z'
+-->
+        <connector type="HTTPConnector">
+            <parameter name="url" eval="concat(property('api.output.details'),'/',$endpoint,'/',$metric,'?exec_time=',$exec_time)"></parameter>
+            <parameter name="certificate" eval="property('certificate.path')"/>
+            <parameter name="passphrase" eval="property('certificate.password')"/>
+            <parameter name="header">
+                <entry key="x-api-key" eval="property('argo.api.key')"></entry>
+                <entry key="Accept">application/xml</entry>
+            </parameter>
+        </connector>
+
+
+        <processors>
+            <element in="root">
+                <attribute-create out="url">concat(property('api.output.details'),$endpoint,'/',$metric,'?exec_time=',$exec_time)</attribute-create>
+            </element>
+        </processors>
+
+    </view>
+
+
+
+
+
+
+
+
+    <!-- *******************************************************************
+****               HSPEC  DATA
+****               factors method
+************************************************************************
+-->
+
+    <view name="customFactorsRaw">
+
+
+        <info>
+            <category>API results</category>
+            <description>Custom factor display</description>
+        </info>
+
+        <connector type="HTTPConnector">
+            <parameter name="url" eval="property('api.custom.factors')"></parameter>
+            <parameter name="certificate" eval="property('certificate.path')"/>
+            <parameter name="passphrase" eval="property('certificate.password')"/>
+            <parameter name="force-redirect">true</parameter>
+            <parameter name="header">
+                <entry key="x-api-key" eval="property('argo.api.key')"></entry>
+                <entry key="Accept">application/xml</entry>
+            </parameter>
+        </connector>
+
+        <cache type="FileCache">
+            <!--<trigger type="ViewCreatedTrigger"/>-->
+            <trigger type="DeltaTimeTrigger">
+                <parameter name="hours">4</parameter>
+            </trigger>
+            <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="ViewCreatedTrigger"/>
+        </cache>
+
+    </view>
+
+
+
+
+
+    <view name="aggregation_profiles">
+
+
+        <info>
+            <category>API results</category>
+            <description>Descriptions of reports</description>
+        </info>
+
+        <connector type="HTTPConnector">
+            <parameter name="url" eval="property('api.aggregation_profiles')"></parameter>
+            <parameter name="certificate" eval="property('certificate.path')"/>
+            <parameter name="passphrase" eval="property('certificate.password')"/>
+            <parameter name="force-redirect">true</parameter>
+            <parameter name="header">
+                <entry key="x-api-key" eval="property('argo.api.key')"></entry>
+                <entry key="Accept">application/xml</entry>
+            </parameter>
+        </connector>
+        <serializer type="JSONSerializer"></serializer>
+
+        <cache type="FileCache">
+            <!--<trigger type="ViewCreatedTrigger"/>-->
+            <trigger type="DeltaTimeTrigger">
+                <parameter name="hours">4</parameter>
+            </trigger>
+            <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="ViewCreatedTrigger"/>
+        </cache>
+
+    </view>
+
+
+    <view name="reports">
+
+
+        <info>
+            <category>API results</category>
+            <description>Descriptions of reports</description>
+        </info>
+
+        <connector type="HTTPConnector">
+            <parameter name="url" eval="property('api.reports')"></parameter>
+            <parameter name="certificate" eval="property('certificate.path')"/>
+            <parameter name="passphrase" eval="property('certificate.password')"/>
+            <parameter name="force-redirect">true</parameter>
+            <parameter name="header">
+                <entry key="x-api-key" eval="property('argo.api.key')"></entry>
+                <entry key="Accept">application/xml</entry>
+            </parameter>
+        </connector>
+
+
+        <cache type="FileCache">
+            <!--<trigger type="ViewCreatedTrigger"/>-->
+            <trigger type="DeltaTimeTrigger">
+                <parameter name="hours">4</parameter>
+            </trigger>
+            <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="ViewCreatedTrigger"/>
+        </cache>
+
+    </view>
+</config>

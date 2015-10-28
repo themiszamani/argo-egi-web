@@ -1,0 +1,141 @@
+<config xmlns="http://software.in2p3.fr/lavoisier/config.xsd"
+        xmlns:date="http://exslt.org/dates-and-times"
+        xmlns:xi="http://www.w3.org/2001/XInclude"
+        xmlns:str="http://exslt.org/strings"
+        xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
+
+
+
+    <view name="triggerProfileList">
+        <info>
+            <category>Triggers</category>
+            <description>Trigger the refresh of the profile list</description>
+        </info>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="entry('test','test')">
+            </parameter>
+        </connector>
+
+        <cache type="EmptyCache">
+            <trigger type="ViewAccessedTrigger"></trigger>
+            <trigger type="ViewNotifiedTrigger"></trigger>
+        </cache>
+
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/html/notify.html</parameter>
+
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/html/notify.html</parameter>
+
+            </renderer>
+        </renderers>
+    </view>
+
+    <view name="triggers_ar">
+        <info>
+            <category>Triggers</category>
+            <description>Trigger a refresh of the last 3 months of data per site, ngi</description>
+        </info>
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="new_element('root')"></parameter>
+        </connector>
+
+        <processors>
+
+            <element in="root">
+
+                <set variable="triggerdelete1">view('ngi_reports_cached',entry('delete',true()))/*</set>
+                <set variable="triggerdelete2">view('ngi_reports_daily_cached',entry('delete',true()))/*</set>
+                
+                <set variable="triggerdelete3">view('site_reports_cached',entry('delete',true()))/*</set>
+                <set variable="triggerdelete4">view('site_reports_cached',entry('availability_profile','egi-fedcloud')|entry('delete',true()))/*</set>
+                <set variable="triggerdelete5">view('site_reports_cached',entry('availability_profile','egi-ops-monitor-critical')|entry('delete',true()))/*</set>
+              
+                <set variable="triggerdelete6">view('site_reports_daily_cached',entry('delete',true()))</set>
+                <set variable="triggerdelete7">view('site_reports_daily_cached',entry('availability_profile','egi-fedcloud')|entry('delete',true()))/*</set>
+                <set variable="triggerdelete8">view('site_reports_daily_cached',entry('availability_profile','egi-ops-monitor-critical')|entry('delete',true()))/*</set>
+                <attribute-create out="action1">'deletions done ... '</attribute-create>
+            </element>
+            <element in="root">
+
+                <set variable="triggercreate1">view('ngi_reports_cached')/*</set>
+                <set variable="triggerdelete2">view('ngi_reports_daily_cached')/*</set>
+
+                <set variable="triggerdelete3">view('site_reports_cached')/*</set>
+                <set variable="triggerdelete4">view('site_reports_cached',entry('availability_profile','egi-fedcloud') )/*</set>
+                <set variable="triggerdelete5">view('site_reports_cached',entry('availability_profile','egi-ops-monitor-critical'))/*</set>
+
+                <set variable="triggerdelete6">view('site_reports_daily_cached')/*</set>
+                <set variable="triggerdelete7">view('site_reports_daily_cached',entry('availability_profile','egi-fedcloud'))/*</set>
+                <set variable="triggerdelete8">view('site_reports_daily_cached',entry('availability_profile','egi-ops-monitor-critical'))/*</set>
+                <attribute-create out="action2">'creations done ... '</attribute-create>
+            </element>
+
+        </processors>
+
+        <cache type="EmptyCache">
+            <trigger type="ViewNotifiedTrigger"></trigger>
+            <trigger type="FixedTimeTrigger">
+                <parameter name="hour">7</parameter>
+            </trigger>
+        </cache>
+
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/html/notify.html</parameter>
+
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/html/notify.html</parameter>
+
+            </renderer>
+        </renderers>
+    </view>
+
+    <view name="triggers_status">
+        <info>
+            <category>Triggers</category>
+            <description>Trigger a refresh of the last 3 days of status</description>
+        </info>
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="new_element('root')"></parameter>
+        </connector>
+
+        <processors>
+
+            <element in="root">
+                <set variable="triggerdelete1">view('site_status_reports_cached',entry('delete',true()))/*</set>
+                <attribute-create out="action1">'deletions done ... '</attribute-create>
+            </element>
+            <element in="root">
+                <set variable="triggercreate1">view('site_status_reports_cached')/*</set>
+                <attribute-create out="action2">'creations done ... '</attribute-create>
+            </element>
+
+        </processors>
+
+        <cache type="EmptyCache">
+            <trigger type="ViewNotifiedTrigger"></trigger>
+            <trigger type="DeltaTimeTrigger">
+                <parameter name="minutes">10</parameter>
+            </trigger>
+        </cache>
+
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/html/notify.html</parameter>
+
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/html/notify.html</parameter>
+
+            </renderer>
+        </renderers>
+    </view>
+
+
+</config>

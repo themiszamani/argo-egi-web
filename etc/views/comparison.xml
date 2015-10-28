@@ -1,0 +1,189 @@
+<config xmlns="http://software.in2p3.fr/lavoisier/config.xsd"
+        xmlns:date="http://exslt.org/dates-and-times"
+        xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
+
+    <view name="comparison_main" xmlns:fct="http://software.in2p3.fr/lavoisier/functions.xsd"
+          xmlns:math="http://exslt.org/math">
+
+        <info>
+            <category>Comparison</category>
+            <description>Comparison page with ace</description>
+        </info>
+
+        <connector type="HTTPConnector">
+            <parameter name="url" eval="property('api.monthly.sites.argo')"></parameter>
+        </connector>
+
+        <processors>
+            <element in="root">
+                <set variable="comparison_cern_view">view('comparison_cern_view')</set>
+                <elements path="Profile/Site/Availability">
+                    <attribute-create out="availability_cern">
+                        $comparison_cern_view/root/Profile/Group[@name=current()/../../@site]/Availability[contains(@timestamp,current()/../@timestamp)]/@availability
+                    </attribute-create>
+                    <attribute-create out="reliability_cern">
+                        $comparison_cern_view/root/Profile/Group[@name=current()/../../@site]/Availability[contains(@timestamp,current()/../@timestamp)]/@reliability
+                    </attribute-create>
+                </elements>
+            </element>
+
+            <elements path="/root/Profile/Site/Availability">
+                <attribute in="availability">fct:arround(current())</attribute>
+                <attribute in="availability_cern">fct:arround(current()*100)</attribute>
+                <attribute in="reliability">fct:arround(current())</attribute>
+                <attribute in="reliability_cern">fct:arround(current()*100)</attribute>
+                <attribute-create out="error_av" if="../@availability &gt;= 0  and  ../@availability &gt;= 0">
+                    math:abs(fct:arround(../@availability - ../@availability_cern*100))
+                </attribute-create>
+                <attribute-create out="error_av" if="../@availability &lt; 0  or  ../@availability &lt; 0">N.A
+                </attribute-create>
+
+            </elements>
+        </processors>
+
+        <cache type="FileCache">
+
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="views">
+                    <entry>comparison_cern_view</entry>
+                </parameter>
+            </trigger>
+
+        </cache>
+
+        <pre-renderers>
+            <row foreach="/root/Profile/Site/Availability">
+                <column label="site">ancestor::Site/@site</column>
+                <column label="ngi">ancestor::Site/@NGI</column>
+                <column label="month">@timestamp</column>
+                <column label="av_argo">@availability</column>
+                <column label="av_cern">@availability_cern</column>
+                <column label="av_diff">@error_av</column>
+            </row>
+
+        </pre-renderers>
+
+
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/html/comparison.html</parameter>
+
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/html/comparison.html</parameter>
+
+            </renderer>
+        </renderers>
+
+
+    </view>
+
+    <view name="comparison_cern_view">
+
+        <info>
+            <category>Comparison</category>
+            <description>Old results</description>
+        </info>
+
+        <connector type="HTTPConnector">
+            <parameter name="url" eval="property('api.monthly.sites.cern')"></parameter>
+        </connector>
+
+        <cache type="FileCache">
+
+            <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="ViewCreatedTrigger"/>
+
+
+        </cache>
+
+
+    </view>
+
+    <view name="comparison_main_cloud" xmlns:fct="http://software.in2p3.fr/lavoisier/functions.xsd"
+          xmlns:math="http://exslt.org/math">
+
+        <info>
+            <category>Comparison</category>
+            <description>Comparison page with ace</description>
+        </info>
+
+        <connector type="HTTPConnector">
+            <parameter name="url" eval="property('api.monthly.sites.argo.cloud')"></parameter>
+        </connector>
+
+        <processors>
+            <element in="root">
+                <set variable="comparison_cern_view_cloud">view('comparison_cern_view_cloud')</set>
+                <elements path="Profile/Site/Availability">
+                    <attribute-create out="availability_cern">
+                        $comparison_cern_view_cloud/root/Profile/Group[@name=current()/../../@site]/Availability[contains(@timestamp,current()/../@timestamp)]/@availability
+                    </attribute-create>
+                    <attribute-create out="reliability_cern">
+                        $comparison_cern_view_cloud/root/Profile/Group[@name=current()/../../@site]/Availability[contains(@timestamp,current()/../@timestamp)]/@reliability
+                    </attribute-create>
+                </elements>
+            </element>
+
+            <elements path="/root/Profile/Site/Availability">
+                <attribute in="availability">fct:arround(current())</attribute>
+                <attribute in="availability_cern">fct:arround(current()*100)</attribute>
+                <attribute in="reliability">fct:arround(current())</attribute>
+                <attribute in="reliability_cern">fct:arround(current()*100)</attribute>
+                <attribute-create out="error_av" if="../@availability &gt;= 0  and  ../@availability &gt;= 0">
+                    math:abs(fct:arround(../@availability - ../@availability_cern*100))
+                </attribute-create>
+                <attribute-create out="error_av" if="../@availability &lt; 0  or  ../@availability &lt; 0">N.A
+                </attribute-create>
+
+            </elements>
+        </processors>
+
+        <cache type="FileCache">
+
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="views">
+                    <entry>comparison_cern_view</entry>
+                </parameter>
+            </trigger>
+
+        </cache>
+
+
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/html/comparison.html</parameter>
+
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/html/comparison.html</parameter>
+
+            </renderer>
+        </renderers>
+
+
+    </view>
+
+    <view name="comparison_cern_view_cloud">
+
+        <info>
+            <category>Comparison</category>
+            <description>Old results</description>
+        </info>
+
+        <connector type="HTTPConnector">
+            <parameter name="url" eval="property('api.monthly.sites.cern.cloud')"></parameter>
+        </connector>
+
+        <cache type="FileCache">
+
+            <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="ViewCreatedTrigger"/>
+
+
+        </cache>
+
+
+    </view>
+
+</config>
