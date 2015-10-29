@@ -10,6 +10,32 @@ title: Web UI | ARGO
 * no services running on port 80 and 443
 
 
+# prerequisites (example CENTOS installation on okenaos VM)
+
+* yum install java-1.7.0-openjdk.x86_64
+* yum install wget
+* yum install unzip 
+
+# Open ports
+* firewall-cmd --zone=public --add-port=80/tcp --permanent
+* firewall-cmd --zone=public --add-port=43/tcp --permanent
+* firewall-cmd --reload
+
+
+
+# Installation of CAs
+
+Add the following repo-file to the /etc/yum.repos.d/ directory:  
+    
+[EGI-trustanchors]
+name=EGI-trustanchors
+baseurl=http://repository.egi.eu/sw/production/cas/1/current/
+gpgkey=http://repository.egi.eu/sw/production/cas/1/GPG-KEY-EUGridPMA-RPM-3
+gpgcheck=1
+enabled=1
+
+* yum install ca-policy-egi-core
+
 ## Installation 
 ### the $HOME_LAVOISIER is the directory where do you install the service
 * cd $HOME_LAVOISIER
