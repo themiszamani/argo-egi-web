@@ -12,6 +12,7 @@
         <category>AR reports</category>
         <description>NGI League Reports - cache Rotated</description>
     </info>
+        <argument name="report">Critical</argument>
         <argument name="delete" eval="false()"></argument>
 
     <connector type="XMLConnector">
@@ -19,12 +20,14 @@
     </connector>
 
         <processors>
-            <insert match="/root" nodes="
-            view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','MONTHLY')|entry('diff','0')|entry('delete',$delete))
-            |view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','MONTHLY')|entry('diff','1')|entry('delete',$delete))
-            |view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','MONTHLY')|entry('diff','2')|entry('delete',$delete))">
 
-            </insert>
+
+          <element in="root">
+                <element-create>view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','MONTHLY')|entry('diff','0')|entry('delete',$delete)|entry('report',$report))</element-create>
+                <element-create>view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','MONTHLY')|entry('diff','1')|entry('delete',$delete)|entry('report',$report))</element-create>
+                <element-create>view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','MONTHLY')|entry('diff','2')|entry('delete',$delete)|entry('report',$report))</element-create>
+            </element>
+
         </processors>
 
     </view>
@@ -35,21 +38,30 @@
             <description>NGI League Reports - cache Rotated</description>
         </info>
         <argument name="delete" eval="false()"></argument>
+        <argument name="report">Critical</argument>
 
         <connector type="XMLConnector">
             <parameter name="content" eval="new_element('root')"></parameter>
         </connector>
 
         <processors>
-            <insert match="/root" nodes="
-            view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','DAILY')|entry('diff','0')|entry('delete',$delete))
-            |view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','DAILY')|entry('diff','1')|entry('delete',$delete))
-            |view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','DAILY')|entry('diff','2')|entry('delete',$delete))">
 
-            </insert>
+
+
+            <element>
+                <element-create>view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','DAILY')|entry('diff','0')|entry('delete',$delete)|entry('report',$report))</element-create>
+                <element-create>view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','DAILY')|entry('diff','1')|entry('delete',$delete)|entry('report',$report))</element-create>
+                <element-create>view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','DAILY')|entry('diff','2')|entry('delete',$delete)|entry('report',$report))</element-create>
+            </element>
+
+
+
+
         </processors>
 
     </view>
+
+
 
 
 
@@ -73,25 +85,27 @@
         <argument name="starttime3" eval="concat(substring(date:add($start_date1,'-P2M'), 0,8),'-01T00:00:00Z')"></argument>
         <argument name="endtime3" eval="concat(substring(date:add($start_date1,'-P2M'), 0,8),'-31T23:59:59Z')"></argument>
 
+        <argument name="report">Critical</argument>
 
         <connector type="XMLConnector">
             <parameter name="content" eval="new_element('root')"></parameter>
         </connector>
 
         <processors>
-            <insert match="/root" nodes="
-            view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','MONTHLY')|entry('start_time',$starttime1)|entry('end_time',$endtime1))
-            |view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','MONTHLY')|entry('start_time',$starttime2)|entry('end_time',$endtime2))
-            |view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','MONTHLY')|entry('start_time',$starttime3)|entry('end_time',$endtime3))">
 
-            </insert>
+
+            <element>
+                <element-create >view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','MONTHLY')|entry('start_time',$starttime1)|entry('end_time',$endtime1)|entry('report',$report))</element-create>
+                <element-create >view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','MONTHLY')|entry('start_time',$starttime1)|entry('end_time',$endtime2)|entry('report',$report))</element-create>
+                <element-create >view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','MONTHLY')|entry('start_time',$starttime2)|entry('end_time',$endtime3)|entry('report',$report))</element-create>
+            </element>
+
         </processors>
 
 
     </view>
 
-
-    <view name="ngi_reports">
+    <view name="ngi_fedcloudcritical_reports">
         <info>
             <category>AR reports</category>
             <description>NGI League Reports</description>
@@ -99,7 +113,131 @@
         <argument name="month" eval="0"></argument>
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="choose($month=0,view('ngi_reports_cached'),view('ngi_reports_date',entry('month',$month)))"></parameter>
+            <parameter name="content" eval="choose($month=0,view('ngi_reports_cached',entry('report','Critical-Fedcloud')),view('ngi_reports_date',entry('month',$month)|entry('report','Critical-Fedcloud')))"></parameter>
+        </connector>
+
+        <processors>
+
+
+            <element in="root" out="e:entries">
+                <element-ignore in="root">
+                    <element in="group" if="@type='NGI'" out="Ngi">
+                        <attribute in="name" out="NGI"></attribute>
+                        <element in="results" out="Availability"></element>
+                    </element>
+
+                    <element-ignore></element-ignore>
+                </element-ignore>
+            </element>
+
+
+            <!--<select match="/root/root/Profile"></select>-->
+
+            <select match="/e:entries/Ngi[*]">
+                <group by="@NGI" sort="text"></group>
+            </select>
+
+
+            <insert-parent match="/e:entries/e:entry/Ngi" name="Ngi"></insert-parent>
+
+            <merge match="/e:entries/e:entry/Ngi"></merge>
+            <remove match="/e:entries/e:entry/Ngi/Ngi" depth="1"></remove>
+
+
+
+
+            <processor match="/e:entries" type="InsertProcessor" disabled="$month!=0">
+                <parameter name="nodes" eval="new_attribute('month4',substring(date:add(date:date-time(),'-P1D'),  0,8))|new_attribute('month3',substring(date:add(date:date-time(),'-P1M'),  0,8))|new_attribute('month2',substring(date:add(date:date-time(),'-P2M'),  0,8))|new_attribute('month1',substring(date:add(date:date-time(),'-P3M'),  0,8))"/>
+            </processor>
+
+            <processor match="/e:entries" type="InsertProcessor" disabled="$month=0">
+                <parameter name="nodes" eval="new_attribute('month3',$month)|new_attribute('month4',substring(date:add(concat($month,'-01T00:00:00'),'P1M'),  0,8))|new_attribute('month2',substring(date:add(concat($month,'-01T00:00:00'),'-P1M'),  0,8))|new_attribute('month1',substring(date:add(concat($month,'-01T00:00:00'),'-P2M'),  0,8))"/>
+            </processor>
+
+
+
+            <insert match="/e:entries"  nodes="new_attribute('description','NGI Fedcloud Critical Report')"></insert>
+            <insert match="/e:entries" nodes="new_attribute('details','site_reports')"></insert>
+            <insert match="/e:entries"  nodes="new_attribute('view','ngi_reports')"></insert>
+            <insert match="/e:entries"  nodes="new_attribute('related_view','ngi_ar')"></insert>
+            <insert match="/e:entries"  nodes="new_attribute('ngi','all')"></insert>
+            <insert match="/e:entries"  nodes="new_attribute('report','Critical-Fedcloud')"></insert>
+
+
+
+            <element in="e:entries" if="@ngi='all'">
+                <set variable="last">0</set>
+                <element in="e:entry" future="true">
+                    <set variable="last">.</set>
+                </element>
+                <element-create as="last-child">entries($last)</element-create>
+            </element>
+
+            <element in="e:entries" if="@ngi='all'">
+                <element-ignore in="e:entries">
+                    <element in="e:entry">
+                        <attribute in="key">'EGI'</attribute>
+                        <element in="Ngi">
+                            <attribute in="NGI">'EGI'</attribute>
+                            <element in="Availability">
+                                <attribute in="availability">(sum(/e:entries/e:entry/Ngi[@NGI!='EGI']/Availability[@timestamp=current()/../@timestamp]/@availability)) div count(/e:entries/e:entry/Ngi[@NGI!='EGI']/Availability[@timestamp=current()/../@timestamp]/@availability) </attribute>
+                                <attribute in="reliability">(sum(/e:entries/e:entry/Ngi[@NGI!='EGI']/Availability[@timestamp=current()/../@timestamp]/@reliability)) div count(/e:entries/e:entry/Ngi[@NGI!='EGI']/Availability[@timestamp=current()/../@timestamp]/@reliability) </attribute>
+                            </element>
+                        </element>
+                    </element>
+
+                </element-ignore>
+
+            </element>
+
+        </processors>
+
+        <pre-renderers>
+            <title>/e:entries/@description</title>
+            <field label="month1">/e:entries/@month1</field>
+            <field label="month2">/e:entries/@month2</field>
+            <field label="month3">/e:entries/@month3</field>
+
+            <row foreach="/e:entries/e:entry/Ngi/Availability[@timestamp=/e:entries/@month1 or @timestamp=/e:entries/@month2 or @timestamp=/e:entries/@month3]">
+                <column label="Ngi">ancestor::Ngi/@NGI</column>
+                <column label="Timestamp">@timestamp</column>
+                <column label="Availability" unit="percentage">@availability</column>
+                <column label="Reliability" unit="percentage">@reliability</column>
+            </row>
+        </pre-renderers>
+        <renderers>
+
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/html/ar_reports.html</parameter>
+
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/html/ar_reports.html</parameter>
+
+            </renderer>
+            <renderer type="ChartRenderer">
+
+                <parameter name="axis">inverted</parameter>
+                <!--optional: The width of the chart (Integer)-->
+                <parameter name="width">1200</parameter>
+
+
+                <!--optional: The height of the chart (Integer)-->
+                <parameter name="height">2000</parameter>
+            </renderer>
+        </renderers>
+    </view>
+
+    <view name="ngi_reports">
+        <info>
+            <category>AR reports</category>
+            <description>NGI League Reports</description>
+        </info>
+        <argument name="month" eval="0"></argument>
+        <argument name="report">Critical</argument>
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="choose($month=0,view('ngi_reports_cached',entry('report',$report)),view('ngi_reports_date',entry('month',$month)|entry('report',$report)))"></parameter>
         </connector>
 
         <processors>
@@ -147,7 +285,7 @@
             <insert match="/e:entries"  nodes="new_attribute('view','ngi_reports')"></insert>
             <insert match="/e:entries"  nodes="new_attribute('related_view','ngi_ar')"></insert>
             <insert match="/e:entries"  nodes="new_attribute('ngi','all')"></insert>
-            <insert match="/e:entries"  nodes="new_attribute('report','Critical')"></insert>
+            <insert match="/e:entries"  nodes="new_attribute('report',$report)"></insert>
 
 
 
@@ -549,9 +687,10 @@
 
         <argument name="month" eval="0"></argument>
         <argument name="ngi">all</argument>
+        <argument name="report">Critical</argument>
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="choose($month=0,view('site_reports_cached'),view('site_reports_date',entry('month',$month)))"></parameter>
+            <parameter name="content" eval="choose($month=0,view('site_reports_cached',entry('report',$report)),view('site_reports_date',entry('month',$month)|entry('report',$report)))"></parameter>
         </connector>
 
         <processors>
@@ -618,7 +757,7 @@
             <insert match="/e:entries"  nodes="new_attribute('view','site_reports')"></insert>
             <insert match="/e:entries"  nodes="new_attribute('ngi',$ngi)"></insert>
             <insert match="/e:entries"  nodes="new_attribute('related_view','site_ar')"></insert>
-            <insert match="/e:entries"  nodes="new_attribute('report','Critical')"></insert>
+            <insert match="/e:entries"  nodes="new_attribute('report',$report)"></insert>
         </processors>
 
         <pre-renderers>
@@ -690,6 +829,7 @@
         <argument name="ngi">all</argument>
         <argument name="type">availability</argument>
         <argument name="chart">false</argument>
+        <argument name="report">Critical</argument>
         <connector type="XMLConnector">
             <parameter name="content" eval="view($view,arguments())"></parameter>
 

@@ -34,6 +34,7 @@
             <description>Site Reports - cache Rotated</description>
         </info>
         <argument name="delete" eval="false()"></argument>
+        <argument name="report">Critical</argument>
 
         <connector type="XMLConnector">
             <parameter name="content" eval="new_element('root')"></parameter>
@@ -41,9 +42,9 @@
 
         <processors>
             <insert match="/root" nodes="
-            view('api.status.rotating.caches',entry('group_type','sites')|entry('diff','0')|entry('delete',$delete))
-            |view('api.status.rotating.caches',entry('group_type','sites')|entry('diff','1')|entry('delete',$delete))
-            |view('api.status.rotating.caches',entry('group_type','sites')|entry('diff','2')|entry('delete',$delete))">
+            view('api.status.rotating.caches',entry('group_type','sites')|entry('diff','0')|entry('report',$report)|entry('delete',$delete))
+            |view('api.status.rotating.caches',entry('group_type','sites')|entry('diff','1')|entry('report',$report)|entry('delete',$delete))
+            |view('api.status.rotating.caches',entry('group_type','sites')|entry('diff','2')|entry('report',$report)|entry('delete',$delete))">
 
             </insert>
         </processors>
@@ -114,6 +115,11 @@
                 </element-ignore>
             </elements>
 
+            <elements path="root/group">
+                <element-ignore in="status"></element-ignore>
+                <element-create>sort_by_string(../status,'@timestamp')</element-create>
+            </elements>
+
             <element in="root">
                 <set variable="StateColor">view('StateColor')</set>
 
@@ -126,6 +132,14 @@
                 </element>
 
             </element>
+
+            <elements path="root/group">
+                <element-ignore in="status" if="preceding-sibling::status and date:seconds(@timestamp) &lt; date:seconds($start_date)"></element-ignore>
+                <element in="status" if="not(preceding-sibling::status)" >
+                    <attribute in="timestamp">$start_date</attribute>
+                </element>
+            </elements>
+
 
         </processors>
 
@@ -197,6 +211,11 @@
                 </element-ignore>
             </elements>
 
+            <elements path="root/group">
+                <element-ignore in="status"></element-ignore>
+                <element-create>sort_by_string(../status,'@timestamp')</element-create>
+            </elements>
+
             <element in="root">
                 <set variable="StateColor">view('StateColor')</set>
 
@@ -209,6 +228,14 @@
                 </element>
 
             </element>
+
+            <elements path="root/group">
+                <element-ignore in="status" if="preceding-sibling::status and date:seconds(@timestamp) &lt; date:seconds($start_date)"></element-ignore>
+                <element in="status" if="not(preceding-sibling::status)" >
+                    <attribute in="timestamp">$start_date</attribute>
+                </element>
+            </elements>
+
 
 
         </processors>
@@ -302,6 +329,13 @@
                 </element>
 
             </element>
+
+            <elements path="root/group">
+                <element-ignore in="status" if="preceding-sibling::status and date:seconds(@timestamp) &lt; date:seconds($start_date)"></element-ignore>
+                <element in="status" if="not(preceding-sibling::status)" >
+                    <attribute in="timestamp">$start_date</attribute>
+                </element>
+            </elements>
 
         </processors>
 

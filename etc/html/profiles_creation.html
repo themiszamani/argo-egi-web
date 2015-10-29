@@ -10,7 +10,7 @@
 
 
     <!-- Main content -->
-    <section class="content" id="content" tpl:if="/results/@admin='true'">
+    <section class="content" id="content" tpl:if="/object/@admin='true'">
 
         <section class="content-header" id="content-header">
             <h1>
@@ -19,7 +19,45 @@
             </h1>
 
         </section>
-        <form role="form"  style="margin:50px" method="post" action="/lavoisier/form_profile_results_INTERNAL?accept=html" id="form_profile">
+
+        <form style="margin:50px 50px 0 50px"  role="formstep1" tyle="margin:50px" method="post"  id="form_profile_1st" >
+
+            <div class="row">
+                <div class="col-xs-8 box box-primary">
+                    <div class="box-header">
+                        <div class="form-group">
+                            <label>1st Step : Defined your Metrics Profile</label>
+
+                            <select class="form-control" id="listProfiles" tpl:if="/object/@metricsProfileId=0">
+                                <option tpl:foreach="/object/data/object" name="{{name/text()}}" value="{{id/text()}}">
+                                    {{name/text()}}
+                                </option>
+                            </select>
+                            <select class="form-control" id="listProfiles" tpl:else="/object/@mode='edition'" disabled="true">
+                                <option tpl:foreach="/object/object/metric_profile/object"
+                                        name="{{@name}}" value="{{@id}}">{{@name}}
+                                </option>
+                            </select>
+                            <select class="form-control" id="listProfiles" tpl:else="" disabled="true">
+                                <option tpl:foreach="/object/data/object[id/text()=current()/object/@metricsProfileId]"
+                                        name="{{name/text()}}" value="{{id/text()}}">{{name/text()}}
+                                </option>
+                            </select>
+
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <input tpl:if="/object/@metricsProfileId=0" id="buttonSubmit1step" style="margin:5px"
+                               class="btn btn-primary " value="validate"/>
+
+                    </div>
+
+                </div>
+            </div>
+        </form>
+
+        <form role="form" tpl:if="/object/@metricsProfileId!=0 or /object/@mode='edition' " style="margin:50px 50px 0 50px" method="post" action="/lavoisier/form_profile_results_INTERNAL?accept=html" id="form_profile" >
 
             <div class="row">
             <div class="col-xs-8 box box-primary">
@@ -28,35 +66,28 @@
                 </div>
                 <div class="form-group">
                     <label for="profileName">Name of the Profile</label>
-                    <input type="text" tpl:if="/results/@mode='edition'" class="form-control" name="name" id="profileName" placeholder="Profile Name" value="{{/results/object/@name}}"/>
+                    <input type="text" tpl:if="/object/@mode='edition'" class="form-control" name="name" id="profileName" placeholder="Profile Name" value="{{/object/data/object/name/text()}}"/>
                     <input type="text" tpl:else="" class="form-control" name="name" id="profileName" placeholder="Profile Name"/>
                 </div>
                 <div class="form-group">
                     <label for="profileNameSpace">NameSpace of the Profile</label>
-                    <input type="text" tpl:if="/results/@mode='edition'"  class="form-control" name="namespace" id="profileNameSpace" placeholder="Profile Name Space" value="{{/results/object/@namespace}}"/>
+                    <input type="text" tpl:if="/object/@mode='edition'"  class="form-control" name="namespace" id="profileNameSpace" placeholder="Profile Name Space" value="{{/object/object/@namespace}}"/>
                     <input type="text" tpl:else=""  class="form-control" name="namespace" id="profileNameSpace" placeholder="Profile Name Space"/>
                 </div>
 
-                <!--<div class="form-group">-->
-                    <!--<label>POEM Profile</label>-->
-
-                    <!--<select   class="form-control"  multiple="multiple"  id="listPoem">-->
 
 
-                            <!--<option tpl:foreach="/results/root/Poem" name="{{@profile}}" value="{{@profile}}"-->
-                                    <!--selected="true" tpl:remove-attribute.selected="not(contains(/results/profile/@poems,@profile))">{{@profile}}</option>-->
-
-                    <!--</select>-->
-
-                    <!--<div class="form-group hidden" >-->
-                        <!--<input name="poems"  value="" class="form-control" id="poems" />-->
-                        <!--<div id="poemList" tpl:foreach="/results/profile/@poems">{{text()}}</div>-->
-                    <!--</div>-->
-
-                <!--</div>-->
+                
+                
+                <input class="hidden" name="MetricsProfileName" id="MetricsProfileName"  tpl:if="/object/@mode='edition'" value="{{/object/object/metric_profile/object/@name}}"/>
+                <input class="hidden" name="MetricsProfileName" id="MetricsProfileName"  tpl:else="" value="{{/object/data/object[id/text()=current()/object/@metricsProfileId]/name/text()}}"/>
 
 
-             </div>
+                <input class="hidden" name="MetricsProfileId" id="MetricsProfileId"  tpl:if="/object/@mode='edition'" value="{{/object/object/metric_profile/object/@id}}"/>
+                <input class="hidden" name="MetricsProfileId" id="MetricsProfileId"  tpl:else="" value="{{/object/data/object[id/text()=current()/object/@metricsProfileId]/id/text()}}"/>
+
+
+            </div>
                 </div>
 
     <div class="row">
@@ -74,9 +105,13 @@
 
                         <div class="form-group" id="services">
 
-                                    <select  multiple="multiple"  id="listServices">
-                                        <option tpl:foreach="/results/SERVICE_TYPE/SERVICE_TYPE_NAME" name="{{text()}}" value="{{text()}}">{{text()}}</option>
+                                    <select  multiple="multiple"  id="listServices" tpl:if="/object/@mode='edition'">
+                                        <option tpl:foreach="/object/data/object[name/text()=/object/object/metric_profile/object/@name]/services/object/service" name="{{text()}}" value="{{text()}}">{{text()}}</option>
                                     </select>
+
+                            <select  multiple="multiple"  id="listServices" tpl:else="">
+                                <option tpl:foreach="/object/data/object[id/text()=current()/object/@metricsProfileId]/services/object/service" name="{{text()}}" value="{{text()}}">{{text()}}</option>
+                            </select>
 
                             <div id="add_list"  class="btn btn-primary pull-right">
                                 <i style="margin:5px" class="fa fa-plus-circle"> </i> ADD
@@ -94,7 +129,7 @@
 
         <div class="row">
 
-        <div class="box box-primary"  tpl:if="/results/@mode!='edition'"  id="div_add_list" style="display:none">
+        <div class="box box-primary"  tpl:if="/object/@mode!='edition'"  id="div_add_list" style="display:none">
 
             <div class="box-header">
                 <h3 class="box-title">Profile</h3>
@@ -126,8 +161,10 @@
 
                 <div class="box-content">
                     <div  id="listProfile" style="height:400px;overflow:auto">
-                        <input tpl:if="/results/@mode='edition'"  class="hidden" name="profileId" value="{{/results/object/@id}}"/>
-                        <div tpl:foreach="/results/object/groups/item/object">
+                        <input tpl:if="/object/@mode='edition'"  class="hidden" name="profileId" value="{{/object/object/@id}}"/>
+
+                        <div tpl:foreach="/object/object/groups/item/object">
+
                         <div  class="col-xs-3 box group" id="group_update{{position()}}" name="group" style="min-height:90px">
                             <button class="btn btn-primary fa fa-times-circle" id="close_group_update{{position()}}" onclick="javascript:closeGroup(this.id)" style="display: block;">
 
@@ -136,21 +173,20 @@
                                 <li tpl:foreach="services/item/object" name="{{@name}}">{{@name}}</li>
                             </ul>
 
-                            <input class="hidden" name="group_update{{position()}}" type="text"
-                                tpl:call-function="concatvalues"/>
+                            <input class="hidden" name="group_{{@name}}" type="text"
+                                tpl:call-function="concatvalues" tpl:with-param.position="position()"/>
 
                             <xsl:template name="concatvalues" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+                                <xsl:param name="position"></xsl:param>
                                 <xsl:attribute name="value">
-                                    <xsl:for-each select="Group">
-                                        "<xsl:value-of select="@name"></xsl:value-of>"
-                                        <xsl:if test='position()!=last()'>,</xsl:if>
-                                    </xsl:for-each>
+                                    <xsl:for-each select="/object/object/groups/item[position()=$position]/object/services/item/object"><xsl:value-of select="@name"></xsl:value-of><xsl:if test='position()!=last()'>,</xsl:if></xsl:for-each>
                                 </xsl:attribute>
                                 </xsl:template>
 
                         </div>
                             <div class="col-xs-1" id="separator_group1"><code>AND</code></div>
                         </div>
+
 
                     </div>
                 </div>
@@ -182,11 +218,12 @@
     <section     tpl:else="" class="content" id="content">
         <div  class="box box-danger col-md-12">
             <div clas="box-header">
-                <h4 class="box-title" tpl:foreach="/root">You haven't been recognized as administrator of the service .You are not authorized to ask this page.<br/>
+                <h4 class="box-title" tpl:foreach="/object">You haven't been recognized as administrator of the service .You are not authorized to ask this page.<br/>
                 You need to ask the administrator role for the DN : {{@user}} </h4>
             </div>
         </div>
     </section>
+
 </div><!-- /.right-side -->
 </div>
 </body>
@@ -203,7 +240,7 @@
 
 
 
-<script type="text/javascript" >
+<script type="text/javascript" id="localjs">
 
     var grp_cpt=0;
 
@@ -220,27 +257,12 @@
 
     $( document ).ready(function(){
 
-        var poemList = new Array( $("#poemList").val());
-        console.log(poemList);
-
-
-        $('#listPoem').multiSelect(  );
+     
 
 
 
 
-
-
-        $('#listServices').change(function(){
-
-            if( ($('.ms-selection > .ms-list > li:visible').length) )
-                $("#div_add_list").css("display","block");
-        });
-
-        $('#listServices').multiSelect({
-
-                }
-        );
+        $('#listServices').multiSelect();
 
 
 
@@ -274,7 +296,7 @@
 
 
             $("#" + newId +"> .ms-list  > li:visible > span").each(function( index ) {
-                textIn =  '"' + $(this).text() + '"' + ',' +  textIn ;
+                textIn =     $(this).text()  + ',' +  textIn ;
 
             });
 
@@ -298,23 +320,14 @@
 
         $("#buttonSubmit").click(function(){
 
-
-            var poems="";
-
-            $("#ms-listPoem> .ms-selection > .ms-list >.ms-selected >span").each(function( index ) {
-                poems=poems +  '"' + $( this ).text() + '"' + ',' ;
-            });
-
-            poems=poems.substring(0,poems.length - 1);
-
-            poems="[" + poems +"]" ;
-            $("#poems").val(poems);
-
            $("#form_profile").submit();
 
         });
 
-
+        $("#buttonSubmit1step").click(function() {
+            var link ='/lavoisier/CreationProfiles?metricsProfileId='   +  $("#listProfiles").val();
+            window.location= link;
+        });
 
 
 

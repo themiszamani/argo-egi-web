@@ -10,7 +10,7 @@ title: Web UI | ARGO
 * no services running on port 80 and 443
 
 
-# prerequisites (example CENTOS installation on okenaos VM)
+# prerequisites (CENTOS installation)
 
 * yum install java-1.7.0-openjdk.x86_64
 * yum install wget

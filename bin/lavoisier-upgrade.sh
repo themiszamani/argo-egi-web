@@ -84,6 +84,11 @@ cd $NEW_DIR
     echo "###"
     unzip -q *.zip
     if [ $? -ne 0 ]; then echo "Failed to unzip new version"; exit 1; fi
+
+    echo "###"
+    echo "### Updating lavoisier-wrapper.conf..."
+    echo "###"
+    $BASEDIR/bin/lavoisier-post-install.sh
 cd -
 
 cd $NEW_DIR/*/etc/
