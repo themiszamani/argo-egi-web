@@ -152,14 +152,12 @@
 
     <argument name="site">false</argument>
     <argument name="report">Critical</argument>
-        <argument name="sf" eval="false()"></argument>
+        <argument name="sf">_SF_</argument>
+        <argument name="start">_START_</argument>
+        <argument name="end">_END_</argument>
 
-
-        <argument name="start" eval="false()"></argument>
-        <argument name="end" eval="false()"></argument>
-
-        <variable name="start_date" eval="choose($start!='false',concat($start,'T00:00:00Z'),concat(substring(date:add(date:date-time(),'-P3D'), 0,11),'T00:00:00Z'))"></variable>
-        <variable name="end_date" eval="choose($end!='false',concat($end,'T00:00:00Z'),concat(substring(date:date-time(),0,11),'T23:59:59Z'))"></variable>
+        <argument name="start_date" eval="choose($start!='_START_',concat($start,'T00:00:00Z'),concat(substring(date:add(date:date-time(),'-P3D'), 0,11),'T00:00:00Z'))"></argument>
+        <argument name="end_date" eval="choose($end!='_END_',concat($end,'T00:00:00Z'),concat(substring(date:date-time(),0,11),'T23:59:59Z'))"></argument>
 
 
     <connector type="XMLConnector">
@@ -240,12 +238,11 @@
         <argument name="site">false</argument>
         <argument name="report">sites</argument>
         <argument name="service"></argument>
-        <argument name="start" eval="false()"></argument>
-        <argument name="end" eval="false()"></argument>
+        <argument name="start">_START_</argument>
+        <argument name="end">_END_</argument>
 
-        <variable name="start_date" eval="choose($start!='false',concat($start,'T00:00:00Z'),concat(substring(date:add(date:date-time(),'-P3D'), 0,11),'T00:00:00Z'))"></variable>
-        <variable name="end_date" eval="choose($end!='false',concat($end,'T00:00:00Z'),concat(substring(date:date-time(),0,11),'T23:59:59Z'))"></variable>
-
+        <argument name="start_date" eval="choose($start!='_START_',concat($start,'T00:00:00Z'),concat(substring(date:add(date:date-time(),'-P3D'), 0,11),'T00:00:00Z'))"></argument>
+        <argument name="end_date" eval="choose($end!='_END_',concat($end,'T00:00:00Z'),concat(substring(date:date-time(),0,11),'T23:59:59Z'))"></argument>
 
 
         <connector type="XMLConnector">
@@ -330,11 +327,12 @@
         <argument name="report">sites</argument>
         <argument name="service"></argument>
         <argument name="endpoint"></argument>
-        <argument name="start" eval="false()"></argument>
-        <argument name="end" eval="false()"></argument>
+        <argument name="sf">_SF_</argument>
+        <argument name="start">_START_</argument>
+        <argument name="end">_END_</argument>
 
-        <variable name="start_date" eval="choose($start!='false',concat($start,'T00:00:00Z'),concat(substring(date:add(date:date-time(),'-P3D'), 0,11),'T00:00:00Z'))"></variable>
-        <variable name="end_date" eval="choose($end!='false',concat($end,'T00:00:00Z'),concat(substring(date:date-time(),0,11),'T23:59:59Z'))"></variable>
+        <argument name="start_date" eval="choose($start!='_START_',concat($start,'T00:00:00Z'),concat(substring(date:add(date:date-time(),'-P3D'), 0,11),'T00:00:00Z'))"></argument>
+        <argument name="end_date" eval="choose($end!='_END_',concat($end,'T00:00:00Z'),concat(substring(date:date-time(),0,11),'T23:59:59Z'))"></argument>
 
 
         <connector type="XMLConnector">
