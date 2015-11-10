@@ -285,6 +285,11 @@
                 </element-ignore>
             </elements>
 
+            <elements path="root/group">
+                <element-ignore in="status"></element-ignore>
+                <element-create>sort_by_string(../status,'@timestamp')</element-create>
+            </elements>
+
             <element in="root">
                 <set variable="StateColor">view('StateColor')</set>
 
@@ -376,6 +381,11 @@
                 <element-ignore in="group">
                     <element></element>
                 </element-ignore>
+            </elements>
+
+            <elements path="root/group">
+                <element-ignore in="status"></element-ignore>
+                <element-create>sort_by_string(../status,'@timestamp')</element-create>
             </elements>
 
             <element in="root">
