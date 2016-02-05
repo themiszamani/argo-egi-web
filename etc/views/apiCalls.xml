@@ -273,7 +273,7 @@
         <connector type="HTTPConnector">
             <parameter name="url"
                        eval="choose($service='false',
-                       concat(property('api.status.url'),$report,'/',upper-case($group_type),'/',$site,'/services/','?start_time=',$start_time,'&amp;end_time=',$end_time),
+                       concat(property('api.status.url'),$report,'/',upper-case($group_type),'/',$site,'/services','?start_time=',$start_time,'&amp;end_time=',$end_time),
 
                        choose($endpoint='false',
                                 concat(property('api.status.url'),$report,'/',upper-case($group_type),'/',$site,'/services/',$service,'/endpoints?start_time=',$start_time,'&amp;end_time=',$end_time),
