@@ -172,7 +172,7 @@
 
         <connector type="HTTPConnector">
             <parameter name="url" eval="concat(property('api.status.url'),$report,'/',upper-case($group_type),
-            '/?start_time=',$start_time,'&amp;end_time=',$end_time)">
+            '?start_time=',$start_time,'&amp;end_time=',$end_time)">
             </parameter>
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>
