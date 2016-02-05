@@ -189,7 +189,7 @@
                 <attribute-create out="start_time">$start_time</attribute-create>
                 <attribute-create out="end_time">$end_time</attribute-create>
                 <attribute-create out="url">concat(property('api.status.url'),$report,'/',upper-case($group_type),
-                    '/?start_time=',$start_time,'&amp;end_time=',$end_time)</attribute-create>
+                    '?start_time=',$start_time,'&amp;end_time=',$end_time)</attribute-create>
             </element>
         </processors>
      
