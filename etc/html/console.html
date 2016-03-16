@@ -67,147 +67,124 @@
             <h3>Statuses of the views</h3>
 
             <div id="categoriesDiv" class="row">
-
-        <span tpl:foreach="/views/categories/category[text()!='Hidden' and text()!='Monitoring' and text()!='Environment' and text()!='Configuration']">
-            <button class="buttonFilter btn btn-default" style="font-size: smaller;margin:7px" value="{{text()}}">
-                {{text()}}
-            </button>
-
-        </span>
-                <button class="buttonFilter btn btn-primary" style="font-size: smaller;margin:7px" value="">Reset</button>
-
+            <span tpl:foreach="/views/categories/category[text()!='Hidden' and text()!='Monitoring' and text()!='Environment' and text()!='Configuration']">
+                <button class="buttonFilter btn btn-default" style="font-size: smaller;margin:7px" value="{{text()}}">
+                    {{text()}}
+                </button>
+            </span>
+                <button class="buttonFilter btn btn-primary" style="font-size: smaller;margin:7px" value="">Clear filter</button>
+                <button type="button" class="pull-right btn btn-primary" data-toggle="modal" data-target="#myHelp">
+                    <div class="glyphicon glyphicon-question-sign"></div>
+                </button>
                 <br/>
             </div>
+
+
+            <div class="modal fade" id="myHelp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+                            <h3 class="modal-title" id="myModalLabel">Colors Code</h3>
+                        </div>
+                        <div class="modal-body">
+
+
+                            <div class='callout callout-success'>OK</div>
+                            <div class='callout callout-danger'>Failure</div>
+                            <div class='callout callout-unknown'>Not built</div>
+                            <div class='callout callout-info'>Under construction</div>
+                            <div>The date is representing the date of the last successful built</div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
             <div id="dataTableDiv">
-
-
                 <div class="row">
+                    <btn class="btn btn-primary" id="notifyMultiple" style="display:none;padding:15px">NOTIFY</btn>
 
-                    <btn class="btn btn-primary" id="notifyMultiple" style="display:none">NOTIFY</btn>
-
-                    <table id="dataTableJs" class="display display-compact col-md-10">
+                    <table id="dataTableJs" class="display display-compact" style="padding:20px;margin:40px">
                         <thead>
                         <tr tpl:foreach="/views/mbean[position()=1]">
-                            <th>Notify</th>
+                            <th>Notify / Debug / Form / View</th>
                             <th class="sorting">Category</th>
                             <th class="sorting">View</th>
                             <th class="sorting">arguments</th>
-                            <th class="sorting">Status</th>
-
-
-                            <th tpl:foreach="attribute[@name!='LastException' and @name!='LastStackTrace' ]">{{@name}}</th>
-                            <th></th>
-
+                            <th class="sorting">Status - Last success
+                            </th>
                         </tr>
                         </thead>
 
                         <tbody>
-                        <tr tpl:foreach="/views/mbean[Info/cfg:category/text()!='Hidden' and Info/cfg:category/text()!='Monitoring' and Info/cfg:category/text()!='Environment' and Info/cfg:category/text()!='Configuration']">
-                            <td><input type="checkbox" tpl:if="@notifiable=1" value="{{@name}}" class="checkBoxes"/></td>
-                            <td>{{Info/cfg:category/text()}}</td>
+                        <tr tpl:foreach="/views/mbean[@category='No Category---' or (Info/cfg:category/text()!='Hidden' and Info/cfg:category/text()!='Monitoring' and Info/cfg:category/text()!='Environment' and Info/cfg:category/text()!='Configuration')]">
                             <td>
-                    <span title="{{@name}}" data-content="{{Info/cfg:description/text()}}" rel="popover"
-                          aria-hidden="true" data-container="content-wrapper"> {{@name}}</span>
-                        <span class="pull-right">
+                                <input type="checkbox" tpl:if="@notifiable=1" value="{{@name}}" class="checkBoxes" />
+                                <input type="checkbox" tpl:else="" value="{{@name}}" class="checkBoxes" disabled="true"/>
+                            <span style="padding: 10px">
+                                <a href="/lavoisier/debug/{{@name}}"><span title="Debug of the view"    class="glyphicon glyphicon-wrench">  </span></a>
+                            </span>
+                            <span style="padding: 10px">
+                                <a  href="/lavoisier/form/{{@name}}"><span title="View Form"   class="glyphicon glyphicon-edit"> </span></a>
+                            </span>
+                            <span>
+                                <a tpl:if="arguments/cfg:argument[not(text()) or text()=''][not(@eval)]" ></a>
+                                <a tpl:else=""  href="/lavoisier/{{@name}}" >  <span title="Access view"   class="glyphicon glyphicon-eye-open"> </span></a>
+                            </span>
+                            </td>
+                            <td tpl:if="Info/cfg:category/text()">{{Info/cfg:category/text()}}</td>
+                            <td tpl:else="">No Category</td>
 
-
-                        <span style="padding: 5px">
-                            <a tpl:if="arguments/cfg:argument" href="/lavoisier/form/{{@name}}"><span title="View Form"
-                                                                                                      class="glyphicon glyphicon-edit"> </span></a>
-                            <a tpl:else="" href="/lavoisier/{{@name}}"><span title="View Form"
-                                                                             class="glyphicon glyphicon-eye-open"> </span></a>
-                        </span>
-                        </span>
+                            <td>
+                                <span title="{{@name}}" data-content="{{Info/cfg:description/text()}}" rel="popover" aria-hidden="true" data-container="content-wrapper"> {{@name}}</span>
                             </td>
 
-                            <td>
-                    <span tpl:foreach="arguments/cfg:argument">
-                        {{@name}} <br/>
-                    </span>
-
+                            <td tpl:if="arguments/cfg:argument/text() or arguments/cfg:argument/@eval">
+                                <em><span tpl:foreach="arguments/cfg:argument" data-content="{{text()}}{{@eval}}" rel="tooltip" aria-hidden="true" data-container="content-wrapper" >{{@name}} <br/></span></em>
+                            </td>
+                            <td tpl:else="">
+                                <span tpl:foreach="arguments/cfg:argument">{{@name}} <br/></span>
                             </td>
 
                             <td class="callout callout-{{@statusclass}}">
-
-                        <span tpl:if="attribute[@name='LastException']/@strln &gt; 30" style="color:black ">
-                            <span title="{{@name}}" data-container="content-wrapper" data-content="{{attribute[@name='LastException']/value/text()}}"
-                                  rel="popover">
-                            <a href="/lavoisier/status/jmx/domain/group/mbean[@name='{{@name}}']">{{@status}}</a>
+                                <a href="/lavoisier/status/jmx/domain/group/mbean[@name='{{@name}}']">{{attribute[@name='LastBuildDate']/value/text()}}</a>
+                            <span tpl:if="attribute[@name='LastException']/@strln &gt; 30" style="color:black ">
+                                <span title="{{@name}}" data-container="content-wrapper" rel="popover"
+                                      data-content="{{concat(attribute[@name='LastBuildDate']/value/text(),' -------------------',attribute[@name='LastException']/value/text())}}">
+                                </span>
+                                <span title="{{@name}}" data-content="{{attribute[@name='LastStackTrace']/value/text()}}" data-placement="left"
+                                      rel="popover"  class="pull-right glyphicon glyphicon-search"/>
                             </span>
-                            <span title="{{@name}}" data-container="content-wrapper" data-content="{{attribute[@name='LastStackTrace']/value/text()}}"
-                                  rel="popover" class="pull-right glyphicon glyphicon-search"/>
-                        </span>
-
-                        <span tpl:else="">
-                             <a href="/lavoisier/status/jmx/domain/group/mbean[@name='{{@name}}']">{{@status}}</a>
-                        </span>
-
-
                             </td>
-
-
-                            <td tpl:foreach="attribute[@name!='LastException' and @name!='LastStackTrace' ]">
-                                <div tpl:if="@strln!=0">
-                                    <span tpl:if="@strln &lt; 30">{{value/text()}}</span>
-                        <span tpl:else="" data-container="content-wrapper" title="{{@name}}" data-content="{{value/text()}}" rel="popover"
-                              class="glyphicon glyphicon-search" aria-hidden="true"/>
-                                </div>
-                            </td>
-
-
-                            <td>
-                                <div class="dropdown">
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu_{{@name}}"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                        More
-                                        <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu_{{@name}}">
-                                        <li><a href="/lavoisier/debug/{{@name}}"><span title="Debug of the view"
-                                                                                       class="glyphicon glyphicon-cog">  debug </span></a>
-                                        </li>
-                                        <li><a href="/lavoisier/configuration/cfg:config/cfg:view[@name='{{@name}}']"><span
-                                                title="Configuration of the view"
-                                                class="glyphicon glyphicon-wrench"> config </span></a>
-                                        </li>
-
-
-                                    </ul>
-                                </div>
-                            </td>
-
 
                         </tr>
                         </tbody>
-
-
                     </table>
                 </div>
 
             </div>
 
-
-
-
-
-        </section><!-- /.content -->
+            </section>
     </div>
 
+
 </div>
+
 </body>
-
-
-
-
-<script>
+<script id="viewslocalscript">
     <!--
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('#dataTableJs').DataTable({
             "order": [[1, "asc"]],
             "paging": false
         });
-
 
         $('span[rel="popover"]').popover({
             container: 'body',
@@ -215,10 +192,11 @@
 
         });
 
+        $('span[rel="popover"]').css("max-width", "500px");
+
         $(".buttonFilter").click(function () {
             $('#dataTableJs').dataTable().fnFilter($(this).val());
         });
-
 
         $("#notifyMultiple").click(function () {
             var url;
@@ -228,12 +206,9 @@
                     window.open(url, 'Notify the view', 'menubar=no, scrollbars=no, top=100, left=100, width=300, height=200');
                 }
             });
-
         });
 
-
         $(".checkBoxes").change(function () {
-
             var cpt = 0;
             $(".checkBoxes").each(function (index) {
                 if (this.checked)
@@ -245,21 +220,12 @@
                 $("#notifyMultiple").hide();
         });
 
-
         $("#views").addClass('active');
-
         $("#sidebar").load("/lavoisier/sidebar?accept=html");
     });
 
     -->
 </script>
-
-<style>
-    .popover{
-        max-width: 100%; /* Max Width of the popover (depending on the container!) */
-    }
-</style>
-
 
 
 </html>

@@ -3,9 +3,10 @@
     <categories bg="bg-aqua" icon="fa fa-dashboard" title="Status" >
 
 
-        <category link="/lavoisier/status_report-site?accept=html" icon="fa fa-home"> Site Status Report</category>
-        <category link="/lavoisier/status_report-site?report=Cloud&amp;accept=html" icon="fa fa-cloud"> Cloud Status Report</category>
-        <category link="/lavoisier/status_report-site?report=OPS-MONITOR-Critical&amp;accept=html" icon="fa fa-star"> Opsmon Status Report</category>
+        <category link="/lavoisier/status_report-site?accept=html" icon="fa fa-home"> Site Status</category>
+        <category link="/lavoisier/status_report-site?report=Cloud&amp;accept=html" icon="fa fa-cloud"> Cloud Status</category>
+        <category link="/lavoisier/status_report-site?report=Critical-Fedcloud&amp;accept=html" icon="fa fa-cloud-upload"> Cloud Critical Status</category>
+        <category link="/lavoisier/status_report-site?report=OPS-MONITOR-Critical&amp;accept=html" icon="fa fa-star"> Opsmon Status</category>
         <category link="/lavoisier/status_report-form?accept=html" icon="fa fa-list"> Customized Report</category>
 
 
@@ -15,6 +16,7 @@
         <category link="/lavoisier/ngi_reports?accept=html" icon="fa fa-globe"> NGI Report</category>
         <category link="/lavoisier/site_reports?accept=html" icon="fa fa-home"> Site Report</category>
         <category link="/lavoisier/cloud_reports?accept=html" icon="fa fa-cloud"> Cloud Report</category>
+        <category link="/lavoisier/ngi_fedcloudcritical_reports?accept=html" icon="fa fa-cloud-upload"> CloudCritical Report</category>
         <category link="/lavoisier/opsmon_reports?accept=html" icon="fa fa-star"> OpsMon Report</category>
         <category link="/lavoisier/report_form?accept=html" icon="fa fa-list"> Customized Report</category>
         <category link="/lavoisier/customFactors?accept=html" icon="fa fa-th">Availability Treemap</category>
@@ -24,7 +26,7 @@
         <category link="/lavoisier/listProfiles" icon="fa fa-group"> Profile Management</category>
         <category link="/lavoisier/recomputation" icon="fa fa-mail-forward">Recomputation request</category>
         <category link="/lavoisier/administratorsList" icon="fa fa-list"> Admin List</category>
-        <category link="/lavoisier/listViews?accept=html" icon="fa fa-lock">Admin Interface</category>
+        <category link="/lavoisier/views?accept=html" icon="fa fa-lock">Admin Interface</category>
 
     </categories>
    <categories bg="bg-light-blue" icon="fa fa-comments" title="About ARGO">

@@ -2,335 +2,342 @@
 <html xmlns:tpl="http://software.in2p3.fr/lavoisier/template.xsd"
       xmlns:cfg="http://software.in2p3.fr/lavoisier/config.xsd"
       xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd"
-        tpl:extends="/resource/html/base.html">
-<head lang="en">
-    <meta http-equiv="refresh" content="8"/>
-</head>
+      tpl:extends="/resource/html/default.html">
+
+
 <body>
 
 <div class="wrapper" id="wrapper">
 
+    <div class="content-wrapper">
+
+        <section class="content" id="content">
+
+            <section class="content-header" id="content-header">
+                <h1 tpl:if="e:entries/mbean[@name!='status']">
+                    Views Status
+                    <small>List the views by status</small>
+                </h1>
+
+            </section>
+        </section>
+
+        <table   tpl:if="e:entries/mbean[@name!='status']" class="display display-compact dataTableStyle2 " style="padding:20px;margin:40px">
+            <thead>
+            <tr>
+                <th>Actions</th>
+                <th >View</th>
+                <th >Status</th>
+                <th>Last build date</th>
+                <th>Last Build Duration (s)</th>
+                <th>Last Build Size (Ko)</th>
+                <th>On going build (Ko)</th>
+                <th>On going build (%)</th>
+                <th>Reads / Writes</th>
+            </tr>
+            </thead>
 
 
-<div class="content-wrapper">
-    <h2 tpl:if="e:entries/mbean[@name!='status']">Views Status</h2>
-    <table   tpl:if="e:entries/mbean[@name!='status']"  class="display display-compact dataTableStyle2 ">
-        <thead>
-        <tr>
-            <th >View</th>
-            <th >Status</th>
-            <th>Last build date</th>
-            <th>Last Build Duration (s)</th>
-            <th>Last Build Size (Ko)</th>
-            <th>On going build (Ko)</th>
-            <th>On going build (%)</th>
-            <th>Reads / Writes</th>
-        </tr>
-        </thead>
+            <tbody>
+            <tr tpl:foreach="e:entries/mbean[@name!='status']">
+                <td>
+                    <span  tpl:if="@notifiable=1" value="{{@name}}" class="checkBoxes" />
+                    <input type="checkbox" tpl:else="" value="{{@name}}" class="checkBoxes" disabled="true"/>
+                <span style="padding: 10px">
+                    <a href="/lavoisier/debug/{{@name}}"><span title="Debug of the view"    class="glyphicon glyphicon-cog">  </span></a>
+                </span>
+                <span style="padding: 10px">
+                    <a  href="/lavoisier/form/{{@name}}"><span title="View Form"   class="glyphicon glyphicon-edit"> </span></a>
+                </span>
+                </td>
+                <td>{{@name}}</td>
+                <td  class="col-md-1 callout callout-{{@statusclass}}">{{@status}}</td>
 
+                <td   tpl:if="attribute[@name='LastBuildDate']!='null'">
+                    {{attribute[@name='LastBuildDate']/value/text()}}
+                </td>
+                <td  tpl:else=""></td>
 
-        <tbody>
-        <tr tpl:foreach="e:entries/mbean[@name!='status']">
-             <td>{{@name}}</td>
-            <td  class="col-md-1 callout callout-{{@statusclass}}">{{@status}}</td>
+                <td  tpl:if="attribute[@name='LastBuildTime']!='null'">
+                    {{round(attribute[@name='LastBuildTime']/value/text() div 1000)}}
+                </td>
+                <td  tpl:else=""></td>
 
-            <td   tpl:if="attribute[@name='LastBuildDate']!='null'">
-                {{attribute[@name='LastBuildDate']/value/text()}}
-            </td>
-            <td  tpl:else=""></td>
+                <td  tpl:if="attribute[@name='LastBytesSize']!='null'">
+                    {{round(attribute[@name='LastBytesSize']/value/text() div 1024)}}
+                </td>
+                <td  tpl:else=""></td>
 
-            <td  tpl:if="attribute[@name='LastBuildTime']!='null'">
-                {{round(attribute[@name='LastBuildTime']/value/text() div 1000)}}
-            </td>
-            <td  tpl:else=""></td>
+                <td  tpl:if="attribute[@name='CurrentBytesSize']!='null'">
+                    {{round(attribute[@name='CurrentBytesSize']/value/text() * 1000 div 1024) div 1000}}
+                </td>
+                <td tpl:else=""></td>
 
-            <td  tpl:if="attribute[@name='LastBytesSize']!='null'">
-                {{round(attribute[@name='LastBytesSize']/value/text() div 1024)}}
-            </td>
-            <td  tpl:else=""></td>
+                <td tpl:if="attribute[@name='CurrentBytesSize']/value/text()!='null' and attribute[@name='LastBytesSize']/value/text()!='null'">
 
-            <td  tpl:if="attribute[@name='CurrentBytesSize']!='null'">
-                {{round(attribute[@name='CurrentBytesSize']/value/text() * 1000 div 1024) div 1000}}
-            </td>
-            <td tpl:else=""></td>
+                    <div class="progress-group">
+                        <span class="progress-text"></span>
+                        <span class="progress-number"></span>
+                        <div class="progress sm" tpl:variable.percentage="round(attribute[@name='CurrentBytesSize']/value/text() div attribute[@name='LastBytesSize']/value/text() *100)">
+                            <div class="progress-bar progress-bar-aqua" style="width: {{$percentage}}%"></div>
+                        </div>
 
-            <td tpl:if="attribute[@name='CurrentBytesSize']/value/text()!='null' and attribute[@name='LastBytesSize']/value/text()!='null'">
+                    </div>
+                    <div>
+                        {{attribute[@name='CurrentBuildStartDate']/value/text()}}
+                    </div>
+                </td>
+                <td   tpl:else=""></td>
 
-                <div class="progress-group">
-                    <span class="progress-text"></span>
-                    <span class="progress-number"></span>
-                            <div class="progress sm" tpl:variable.percentage="round(attribute[@name='CurrentBytesSize']/value/text() div attribute[@name='LastBytesSize']/value/text() *100)">
-                                <div class="progress-bar progress-bar-aqua" style="width: {{$percentage}}%"></div>
-                            </div>
+                <td   tpl:if="attribute[@name='NbReads']/value/text()">
+                    {{attribute[@name='NbReads']/value/text()}}
+                </td>
+                <td   tpl:else=""></td>
 
-                </div>
-                <div>
-                    {{attribute[@name='CurrentBuildStartDate']/value/text()}}
-                </div>
-            </td>
-            <td   tpl:else="">
-
-
-            </td>
-
-            <td   tpl:if="attribute[@name='NbReads']/value/text()">
-                {{attribute[@name='NbReads']/value/text()}}
-            </td>
-            <td   tpl:else=""></td>
-
-        </tr>
-        </tbody>
+            </tr>
+            </tbody>
         </table>
 
 
         <table tpl:foreach="e:entries/mbean/attribute[@name='LastStackTrace']/value/text()" class="display display-compact dataTableStyle2 ">
-          <tbody>
+            <tbody>
             <tr>
                 <td>
-                <form action="/lavoisier/send_to_dev" method="POST">
+                    <form action="/lavoisier/send_to_dev" method="POST">
 
-                    <div class="row pull-left">
-                    <input type="submit" value="Send to developers" class="btn btn-warning"/>
-                    <input name="stacktrace" type="hidden" value="{{.}}"/>
-                    </div>
+                        <div class="row pull-left">
+                            <input type="submit" value="Send to developers" class="btn btn-warning"/>
+                            <input name="stacktrace" type="hidden" value="{{.}}"/>
+                        </div>
 
-                    <div class="row">
-                        <textarea name="description" rows="5" style="width:95%">Describe the context of the problem here...</textarea>
-                    </div>
-                    <div class="row">
-                        <textarea  rows="6" style="width:95%" disabled='true'>{{.}}</textarea>
-                    </div>
-                </form>
+                        <div class="row">
+                            <textarea name="description" rows="5" style="width:95%">Describe the context of the problem here...</textarea>
+                        </div>
+                        <div class="row">
+                            <textarea  rows="6" style="width:95%" disabled='true'>{{.}}</textarea>
+                        </div>
+                    </form>
                 </td>
             </tr>
             </tbody>
         </table>
 
-    <h2 tpl:if="/jmx/domain/group/mbean[@name!='status'][@status='failure']">Non ok Views</h2>
-    <table   tpl:if="/jmx/domain/group/mbean[@name!='status'][@status='failure']" class="display display-compact  dataTableStyle">
+        <h2 tpl:if="/jmx/domain/group/mbean[@name!='status'][@status='failure']">Non ok Views</h2>
+        <table id="dataTableDiv" tpl:if="/jmx/domain/group/mbean[@name!='status'][@status='failure']" class="display display-compact  dataTableStyle">
 
-        <thead>
-        <tr>
-            <th>View</th>
-            <th>Status</th>
-            <th>Last build date</th>
-            <th>Last Build Duration (s)</th>
-            <th>Last Build Size (Ko)</th>
-            <th>Reads / Writes</th>
-            <th></th>
-            <th></th>
-        </tr>
-        </thead>
-
-
-    <tbody>
-
-    <tr tpl:foreach="/jmx/domain/group/mbean[@name!='status'][@status='failure']">
-
-        <td>{{@name}}</td>
-        <td class="callout callout-{{@statusclass}}">{{@status}}</td>
+            <thead>
+            <tr>
+                <th>View</th>
+                <th>Status</th>
+                <th>Last build date</th>
+                <th>Last Build Duration (s)</th>
+                <th>Last Build Size (Ko)</th>
+                <th>Reads / Writes</th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
 
 
+            <tbody>
 
+            <tr tpl:foreach="/jmx/domain/group/mbean[@name!='status'][@status='failure']">
 
-        <td tpl:else=""></td>
-
-        <td  tpl:if="attribute[@name='LastBuildDate']!='null'">
-            {{attribute[@name='LastBuildDate']/value/text()}}
-        </td>
-        <td  tpl:else=""></td>
-
-
-        <td  tpl:if="attribute[@name='LastBuildTime']!='null'">
-            {{round(attribute[@name='LastBuildTime']/value/text() div 1000)}}
-        </td>
-        <td  tpl:else=""></td>
-
-
-        <td  tpl:if="attribute[@name='LastBytesSize']!='null'">
-            {{round(attribute[@name='LastBytesSize']/value/text() div 1024)}}
-        </td>
-        <td tpl:else=""></td>
-
-        <td  tpl:if="attribute[@name='NbReads']/value/text()">
-            {{attribute[@name='NbReads']/value/text()}}
-        </td>
-        <td  tpl:else="">0</td>
-
-        <td><span  title="{{@name}}"   data-placement="left"  data-content="{{attribute[@name='LastStackTrace']/value/text()}}"
+                <td>{{@name}}</td>
+                <td class="callout callout-{{@statusclass}}">{{@status}}
+            <span  title="{{@name}}"   data-content="{{attribute[@name='LastStackTrace']/value/text()}}"
                    rel="popover" class="pull-right glyphicon glyphicon-forward"/>
-        </td>
-        <td></td>
+                </td>
 
-    </tr>
-    </tbody>
-
-    </table>
-
-    <h2 tpl:if="/jmx/domain/group/mbean[@name!='status'][@status='under construction']">Under building Views</h2>
-    <table   tpl:if="/jmx/domain/group/mbean[@name!='status'][@status='under construction']" class="display display-compact  dataTableStyle">
-        <thead>
-        <tr>
-        <th>View</th>
-            <th>Status</th>
-            <th>Last build date</th>
-            <th>Last Build Duration (s)</th>
-            <th>Last Build Size (Ko)</th>
-            <th>On going build (Ko)</th>
-            <th>On going build (%)</th>
-            <th>Reads / Writes</th>
-        </tr>
-        </thead>
-            
+                <td  tpl:if="attribute[@name='LastBuildDate']!='null'">
+                    {{attribute[@name='LastBuildDate']/value/text()}}
+                </td>
+                <td  tpl:else=""></td>
 
 
-        <tbody>
-        <tr tpl:foreach="/jmx/domain/group/mbean[@name!='status'][@status='under construction']">
-            <td>{{@name}}</td>
-            <td  class="callout callout-{{@statusclass}}">{{@status}}</td>
+                <td  tpl:if="attribute[@name='LastBuildTime']!='null'">
+                    {{round(attribute[@name='LastBuildTime']/value/text() div 1000)}}
+                </td>
+                <td  tpl:else=""></td>
 
-            <td  tpl:if="attribute[@name='LastBuildDate']!='null'">
-                {{attribute[@name='LastBuildDate']/value/text()}}
-            </td>
-            <td  tpl:else=""></td>
 
-            <td   tpl:if="attribute[@name='LastBuildTime']!='null'">
-                {{round(attribute[@name='LastBuildTime']/value/text() div 1000)}}
-            </td>
-            <td   tpl:else=""></td>
+                <td  tpl:if="attribute[@name='LastBytesSize']!='null'">
+                    {{round(attribute[@name='LastBytesSize']/value/text() div 1024)}}
+                </td>
+                <td tpl:else=""></td>
 
-            <td   tpl:if="attribute[@name='LastBytesSize']!='null'">
-                {{round(attribute[@name='LastBytesSize']/value/text() div 1024)}}
-            </td>
-            <td   tpl:else=""></td>
 
-            <td   tpl:if="attribute[@name='CurrentBytesSize']!='null'">
-                {{round(attribute[@name='CurrentBytesSize']/value/text() * 1000 div 1024) div 1000}}
-            </td>
-            <td   tpl:else=""></td>
+                <td  tpl:if="attribute[@name='NbReads']/value/text()">
+                    {{attribute[@name='NbReads']/value/text()}}
+                </td>
+                <td  tpl:else="">0</td>
 
-            <td   tpl:if="attribute[@name='CurrentBytesSize']/value/text()!='null' and attribute[@name='LastBytesSize']/value/text()!='null'">
 
-                <div class="progress-group">
-                    <span class="progress-text"></span>
-                    <span class="progress-number"></span>
-                    <div class="progress sm" tpl:variable.percentage="round(attribute[@name='CurrentBytesSize']/value/text() div attribute[@name='LastBytesSize']/value/text() *100)">
-                        <div class="progress-bar progress-bar-aqua" style="width: {{$percentage}}%"></div>
+                <td></td>
+                <td></td>
+
+            </tr>
+            </tbody>
+
+        </table>
+
+        <h2 tpl:if="/jmx/domain/group/mbean[@name!='status'][@status='under construction']">Under building Views</h2>
+        <table   tpl:if="/jmx/domain/group/mbean[@name!='status'][@status='under construction']" class="display display-compact  dataTableStyle">
+            <thead>
+            <tr>
+                <th>View</th>
+                <th>Status</th>
+                <th>Last build date</th>
+                <th>Last Build Duration (s)</th>
+                <th>Last Build Size (Ko)</th>
+                <th>On going build (Ko)</th>
+                <th>On going build (%)</th>
+                <th>Reads / Writes</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr tpl:foreach="/jmx/domain/group/mbean[@name!='status'][@status='under construction']">
+                <td>{{@name}}</td>
+                <td  class="callout callout-{{@statusclass}}">{{@status}}</td>
+
+                <td  tpl:if="attribute[@name='LastBuildDate']!='null'">
+                    {{attribute[@name='LastBuildDate']/value/text()}}
+                </td>
+                <td  tpl:else=""></td>
+
+                <td   tpl:if="attribute[@name='LastBuildTime']!='null'">
+                    {{round(attribute[@name='LastBuildTime']/value/text() div 1000)}}
+                </td>
+                <td   tpl:else=""></td>
+
+                <td   tpl:if="attribute[@name='LastBytesSize']!='null'">
+                    {{round(attribute[@name='LastBytesSize']/value/text() div 1024)}}
+                </td>
+                <td   tpl:else=""></td>
+
+                <td   tpl:if="attribute[@name='CurrentBytesSize']!='null'">
+                    {{round(attribute[@name='CurrentBytesSize']/value/text() * 1000 div 1024) div 1000}}
+                </td>
+                <td   tpl:else=""></td>
+
+                <td   tpl:if="attribute[@name='CurrentBytesSize']/value/text()!='null' and attribute[@name='LastBytesSize']/value/text()!='null'">
+
+                    <div class="progress-group">
+                        <span class="progress-text"></span>
+                        <span class="progress-number"></span>
+                        <div class="progress sm" tpl:variable.percentage="round(attribute[@name='CurrentBytesSize']/value/text() div attribute[@name='LastBytesSize']/value/text() *100)">
+                            <div class="progress-bar progress-bar-aqua" style="width: {{$percentage}}%"></div>
+                        </div>
+
                     </div>
-
-                </div>
-                <div>
-                    {{attribute[@name='CurrentBuildStartDate']/value/text()}}
-                </div>
-            </td>
-            <td   tpl:else="">
+                    <div>
+                        {{attribute[@name='CurrentBuildStartDate']/value/text()}}
+                    </div>
+                </td>
+                <td   tpl:else="">
 
 
-            </td>
+                </td>
 
-            <td   tpl:if="attribute[@name='NbReads']/value/text()">
-                {{attribute[@name='NbReads']/value/text()}}
-            </td>
-            <td   tpl:else=""></td>
+                <td   tpl:if="attribute[@name='NbReads']/value/text()">
+                    {{attribute[@name='NbReads']/value/text()}}
+                </td>
+                <td   tpl:else=""></td>
 
-        </tr>
-        </tbody>
-        
-    </table>
+            </tr>
+            </tbody>
 
-    <h2 tpl:if="/jmx/domain/group/mbean[@name!='status'][@status='ok']">Ok Views</h2>
-    <table   tpl:if="/jmx/domain/group/mbean[@name!='status'][@status='ok']" class="display display-compact  dataTableStyle">
-        <thead>
-        <tr>
-            <th>View</th>
-            <th>Status</th>
-            <th>Last build date</th>
-            <th>Last Build Duration (s)</th>
-            <th>Last Build Size (Ko)</th>          
-            <th>Reads / Writes</th>
-            <th></th>
-        </tr>
-        </thead>
+        </table>
 
+        <h2 tpl:if="/jmx/domain/group/mbean[@name!='status'][@status='ok']">Ok Views</h2>
+        <table   tpl:if="/jmx/domain/group/mbean[@name!='status'][@status='ok']" class="display display-compact  dataTableStyle">
+            <thead>
+            <tr>
+                <th>View</th>
+                <th>Status</th>
+                <th>Last build date</th>
+                <th>Last Build Duration (s)</th>
+                <th>Last Build Size (Ko)</th>
+                <th>Reads / Writes</th>
+                <th></th>
+            </tr>
+            </thead>
 
-        <tbody>
+            <tbody>
 
-        <tr tpl:foreach="/jmx/domain/group/mbean[@name!='status'][@status='ok']">
-            <td   >{{@name}}</td>
-            <td class="callout callout-{{@statusclass}}">{{@status}}</td>
+            <tr tpl:foreach="/jmx/domain/group/mbean[@name!='status'][@status='ok']">
+                <td   >{{@name}}</td>
+                <td class="callout callout-{{@statusclass}}">{{@status}}</td>
 
-            <td   tpl:if="attribute[@name='LastBuildDate']!='null'">
-                {{attribute[@name='LastBuildDate']/value/text()}}
-            </td>
-            <td   tpl:else=""></td>
+                <td   tpl:if="attribute[@name='LastBuildDate']!='null'">
+                    {{attribute[@name='LastBuildDate']/value/text()}}
+                </td>
+                <td   tpl:else=""></td>
 
-            <td   tpl:if="attribute[@name='LastBuildTime']!='null'">
-                {{round(attribute[@name='LastBuildTime']/value/text() div 1000)}}
-            </td>
-            <td   tpl:else=""></td>
+                <td   tpl:if="attribute[@name='LastBuildTime']!='null'">
+                    {{round(attribute[@name='LastBuildTime']/value/text() div 1000)}}
+                </td>
+                <td   tpl:else=""></td>
 
-            <td   tpl:if="attribute[@name='LastBytesSize']!='null'">
-                {{round(attribute[@name='LastBytesSize']/value/text() div 1024)}}
-            </td>
-            <td   tpl:else=""></td>
-
+                <td   tpl:if="attribute[@name='LastBytesSize']!='null'">
+                    {{round(attribute[@name='LastBytesSize']/value/text() div 1024)}}
+                </td>
+                <td   tpl:else=""></td>
 
 
-            <td   tpl:if="attribute[@name='NbReads']/value/text()">
-                {{attribute[@name='NbReads']/value/text()}}
-            </td>
-            <td   tpl:else=""></td>
-            <td></td>
+                <td   tpl:if="attribute[@name='NbReads']/value/text()">
+                    {{attribute[@name='NbReads']/value/text()}}
+                </td>
+                <td   tpl:else=""></td>
+                <td></td>
 
-        </tr>
-        </tbody>
-    </table>
+            </tr>
+            </tbody>
+        </table>
 
 
-    <h2 tpl:if="/jmx/domain/group/mbean[@name!='status'][@status='not built']">Not built Views</h2>
-    <table   tpl:if="/jmx/domain/group/mbean[@name!='status'][@status='not built']" class="display display-compact  dataTableStyle">
-        <thead>
-        <tr>
-            <th>View</th>
-            <th>Status</th>
-            <th>Reads / Writes</th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-        </tr>
-        </thead>
+        <h2 tpl:if="/jmx/domain/group/mbean[@name!='status'][@status='not built']">Not built Views</h2>
+        <table   tpl:if="/jmx/domain/group/mbean[@name!='status'][@status='not built']" class="display display-compact  dataTableStyle">
+            <thead>
+            <tr>
+                <th>View</th>
+                <th>Status</th>
+                <th>Reads / Writes</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
 
 
 
-        <tbody>
+            <tbody>
 
-        <tr tpl:foreach="/jmx/domain/group/mbean[@name!='status'][@status='not built']">
-            <td   >{{@name}}</td>
-            <td  class="col-md-1 callout callout-{{@statusclass}}">{{@status}}</td>
-            <td   tpl:if="attribute[@name='NbReads']/value/text()">
-                {{attribute[@name='NbReads']/value/text()}}
-            </td>
-            <td   tpl:else=""></td>
+            <tr tpl:foreach="/jmx/domain/group/mbean[@name!='status'][@status='not built']">
+                <td   >{{@name}}</td>
+                <td  class="col-md-1 callout callout-{{@statusclass}}">{{@status}}</td>
+                <td   tpl:if="attribute[@name='NbReads']/value/text()">
+                    {{attribute[@name='NbReads']/value/text()}}
+                </td>
+                <td   tpl:else=""></td>
 
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        </tbody>
-    </table>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            </tbody>
+        </table>
 
 
-</div>
     </div>
+</div>
 
-
-</body>
-
-<script>
+<script type="text/javascript" id="statuslocalscripts">
     <!--
     $(document).ready(function() {
 
@@ -356,10 +363,11 @@
             container: 'body',
             html: true
 
-        });
+        }    );
     });
 
     -->
 </script>
 
+</body>
 </html>

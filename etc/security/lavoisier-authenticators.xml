@@ -1,0 +1,26 @@
+<config xmlns="http://software.in2p3.fr/lavoisier/config.xsd" version="14">
+
+
+    <authenticators name="AuthenticatedUsers">
+        <authenticator type="X509Authenticator" authorized="true()"/>
+    </authenticators>
+
+    <authenticators name="admin">
+        <authenticator type="X509Authenticator" authorized="true()"/>
+    </authenticators>
+    <authenticators name="console">
+        <authenticator type="X509Authenticator" authorized="true()"/>
+    </authenticators>
+
+    <!--<authenticators name="console">-->
+        <!--<authenticator type="HTTPBasicAuthenticator">-->
+            <!--<parameter name="passwords" eval="view_path('properties', '/security/passwords.properties')"/>-->
+        <!--</authenticator>-->
+        <!--<authenticator type="IPAddressAuthenticator">-->
+            <!--<parameter name="addresses">-->
+                <!--<entry>127.0.0.1</entry>-->
+                <!--<entry>0:0:0:0:0:0:0:1</entry>-->
+            <!--</parameter>-->
+        <!--</authenticator>-->
+    <!--</authenticators>-->
+</config>

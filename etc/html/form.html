@@ -16,11 +16,24 @@
 <div class="wrapper" id="wrapper">
     <div class="content-wrapper" tpl:foreach="cfg:view">
 
-        <h2>{{@name}}</h2>
 
-        <div tpl:foreach="cfg:info/cfg:description" class="well">{{.}}</div>
+        <section class="content" id="content">
 
-        <form id="form" method="get" class="form-horizontal" role="form" target="_blank">
+            <section class="content-header" id="content-header">
+                <h1>
+                    {{@name}}
+                    <small>Form page</small>
+                </h1>
+
+            </section>
+
+
+        </section><!-- /.content -->
+
+
+        <div tpl:foreach="cfg:info/cfg:description" class="well" style="margin:40px">{{.}}</div>
+
+        <form id="form" method="get" class="form-horizontal" style="margin:40px" role="form" target="_blank">
 
             <div tpl:foreach="cfg:argument" class="form-group">
                 <label for="{{@name}}" class="col-sm-2 control-label">{{@name}}</label>

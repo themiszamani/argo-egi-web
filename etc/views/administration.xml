@@ -5,10 +5,7 @@
         xmlns:str="http://exslt.org/strings"
         xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
 
-    <authenticators name="AuthenticatedUsers">
-        <!--<authenticator type="X509Authenticator"  authorized="view('administratorsList')/admins/admin/DN[text()=user()]"/>-->
-        <authenticator type="X509Authenticator" authorized="true()"/>
-    </authenticators>
+
 
 
     <view name="listParameters">
@@ -311,6 +308,8 @@
         </processors>
 
 
+
+
         <renderers>
 
             <renderer type="DefaultRenderer">
@@ -330,17 +329,18 @@
             <category>ADMIN</category>
         </info>
 
+        <argument name="metricsProfileId">0</argument>
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('goc.ServiceFlavours')"></parameter>
+            <parameter name="content" eval="view('metricsProfile')"></parameter>
         </connector>
 
         <processors>
-            <insert match="/results"
+            <insert match="/object"
                     nodes="new_attribute('admin',boolean(view('administratorsList')/admins/admin/CertDN[text()=user()]))
-                     |new_attribute('user',user())">
+                     |new_attribute('user',user()) | new_attribute('metricsProfileId',$metricsProfileId)">
             </insert>
             <!--<element in="results">-->
-            <!--<element-create>view('poems')</element-create>-->
+            <!--<element-create>view('metricsProfile')</element-create>-->
             <!--</element>-->
         </processors>
 
@@ -365,16 +365,17 @@
 
         <argument name="profileId"></argument>
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('goc.ServiceFlavours')"></parameter>
+            <parameter name="content" eval="view('metricsProfile')"></parameter>
         </connector>
 
+
         <processors>
-            <insert match="/results"
+            <insert match="/object"
                     nodes="new_attribute('admin',boolean(view('administratorsList')/admins/admin/CertDN[text()=user()]))
                      |new_attribute('user',user())">
             </insert>
 
-            <element in="results">
+            <element in="object">
                 <attribute-create out="mode">'edition'</attribute-create>
                 <element-create>view('aggregation_profiles')/object/data/item/object[@id=$profileId]</element-create>
             </element>
@@ -410,10 +411,11 @@
 
             <parameter name="header">
                 <entry key="x-api-key" eval="property('argo.api.key')"></entry>
-                <entry key="Accept">application/xml</entry>
+                <entry key="Accept">application/json</entry>
             </parameter>
         </connector>
 
+        <serializer type="JSONStreamSerializer"></serializer>
 
         <processors>
             <element>
@@ -451,7 +453,7 @@
                 <entry key="Content-Type">application/json</entry>
             </parameter>
         </connector>
-
+        <serializer type="JSONStreamSerializer"></serializer>
         <processors>
             <element>
                 <element-create>view('triggerProfileList')/null</element-create>
@@ -491,7 +493,7 @@
                 <entry key="Content-Type">application/json</entry>
             </parameter>
         </connector>
-
+        <serializer type="JSONStreamSerializer"></serializer>
         <processors>
             <element>
                 <element-create>view('triggerProfileList')/null</element-create>
@@ -511,5 +513,20 @@
 
     </view>
 
+    <view name="testJson">
+        <connector type="FileConnector">
+            <parameter name="path">test.json</parameter>
+        </connector>
+
+        <serializer type="JSONStreamSerializer"></serializer>
+    </view>
+
+    <view name="testJson2">
+        <connector type="FileConnector">
+            <parameter name="path">test2.json</parameter>
+        </connector>
+
+        <serializer type="JSONStreamSerializer"></serializer>
+    </view>
 
 </config>

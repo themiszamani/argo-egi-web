@@ -3,807 +3,938 @@
       xmlns:cfg="http://software.in2p3.fr/lavoisier/config.xsd"
       xmlns:plan="http://software.in2p3.fr/lavoisier/plan.xsd"
       xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-      tpl:extends="/resource/html/base.html">
-    <head lang="en">
-
-        <title tpl:text="/cfg:view/@name | /cfg:view-template/@name">MyView</title>
-    </head>
-    <body>
-
-    <div class="wrapper" id="wrapper">
-
-
-
-        <div tpl:foreach="/cfg:view | /cfg:view-template" id="content" class="content-wrapper">
-            <h2 id="title" tpl:if="false()"/><!-- this removes the default title -->
-            <h1 id="title2" class="panel panel-title page-header" style="margin-bottom: 30px;"
-                tpl:text="/cfg:view/@name | /cfg:view-template/@name">MyView</h1>
-
-            <ul class="breadcrumb">
-                <li><a href="#details">View details</a></li>
-                <li><a href="#authenticators">Authenticators</a></li>
-                <li><a href="#connection">Connection</a> </li>
-                <li><a href="#processing">Processing</a></li>
-                <li><a href="#cache">Cache</a></li>
-                <li><a href="#rendering">Rendering</a> </li>
-                <li class="pull-right no-breadcrumb"><a class="btn btn-default btn-xs"
-                        href="/lavoisier/debug_advanced/{{/cfg:*/@name}}">
-                    <i class="fa fa-search-plus"></i> Advanced mode</a>
-                </li>
-            </ul>
-
-            <a name="details" class="anchor"></a>
-            <h3 class="page-header">VIEW DETAILS</h3>
-
-            <!-- View arguments -->
-            <div tpl:if="cfg:argument" class="panel panel-default plugin-table" style="padding:5px;">
-                <table class="table dataTable"  style="margin-bottom:0px;">
-                    <thead>
-                    <tr>
-                        <i class="fa fa-hand-o-right"></i> <i>Please, fill the Arguments</i>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr tpl:foreach="cfg:argument">
-                        <th width="120" class="red" tpl:text="@name">MyArgument</th>
-                        <td>
-                            <select tpl:if="contains(@pattern,'|') and not(contains(@pattern, '['))"
-                                    tpl:data-argument="@name" data-argument="MyArgument"
-                                    tpl:name="@name" name="MyArgument" style="width:100%" class="valueField">
-                                <option tpl:if="not(text()!='')" value="">*** Please select an item ! ***</option>
-                                <option tpl:foreach-token="@pattern" tpl:with-delimiter="|"
-                                        tpl:remove-attribute.selected="not(text()=$token)" selected="selected"
-                                        tpl:value="$token" value="MyOption"
-                                        tpl:text="$token">MyOption</option>
-                            </select>
-                            <input tpl:else="" type="text" style="width:100%" class="valueField"
-                                   tpl:data-argument="@name" data-argument="MyArgument"
-                                   tpl:name="@name" name="MyArgument"
-                                   tpl:value="text()" value="MyValue"/>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- View details -->
-            <div class="plugin-table">
-                <table  class="table dataTable  table-striped table-hover table-bordered table-condensed">
-                    <thead>
-                    <tr>
-                        <th colspan="2">
-                            <i>Miscellaneous</i>
-                            <div class="btn-group btn-group-sm pull-right">
-                                <div class="btn-group btn-group-sm">
-                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-down"></i></button>
-                                    <ul class="dropdown-menu pull-right">
-                                        <li><a href="/lavoisier/configuration/cfg:config/cfg:view[@name='{{/cfg:*/@name}}']" target="_blank">
-                                            <i class="fa fa-code"></i> Configuration</a>
-                                        </li>
-                                        <li><a href="http://software.in2p3.fr/lavoisier/view.html" target="_blank">
-                                            <i class="fa fa-info-circle"></i> Documentation</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr tpl:if="cfg:variable">
-                        <th>Variables</th>
-                        <td>
-                            <table class="valuesTable display ">
-                                <tr tpl:foreach="cfg:variable">
-                                    <td width="50">{{@name}}</td>
-                                    <td>
-                                        <div tpl:if="@eval" class="valueField" data-language="xquery">{{@eval}}</div>
-                                        <div tpl:else="" class="valueField">{{text()}}</div>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                    <tr tpl:if="cfg:namespace">
-                        <th>Namespaces</th>
-                        <td>
-                            <table class="valuesTable">
-                                <tr tpl:foreach="cfg:namespace">
-                                    <td width="50">{{@prefix}}</td>
-                                    <td>
-                                        <div class="valueField">{{@uri}}</div>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                    <tr tpl:if="self::cfg:view-template/cfg:parameter">
-                        <th>Parameters</th>
-                        <td>
-                            <table class="valuesTable">
-                                <tr tpl:foreach="cfg:parameter">
-                                    <td width="50">{{@name}}</td>
-                                    <td>
-                                        <div tpl:if="@eval" class="valueField" data-language="xquery">{{@eval}}</div>
-                                        <div tpl:else="" class="valueField">{{text()}}</div>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                    <tr tpl:foreach="descendant::cfg:fallback">
-                        <th>Fallback</th>
-                        <td>
-                            <table class="valuesTable">
-                                <tr tpl:if="@eval">
-                                    <td width="50">XML</td>
-                                    <td>
-                                        <div class="valueField" data-language="xquery">{{@eval}}</div>
-                                    </td>
-                                </tr>
-                                <tr tpl:foreach="cfg:exception">
-                                    <td width="50">{{@type}}</td>
-                                    <td>
-                                        <div class="valueField" data-language="xquery">{{@predicate-on-message}}</div>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                    <tr tpl:foreach="cfg:info">
-                        <th>Info</th>
-                        <td>
-                            <table class="valuesTable">
-                                <tr tpl:foreach="descendant::*[text()] | descendant::*/@*">
-                                    <td width="50">{{local-name()}}</td>
-                                    <td>
-                                        <div class="valueField">{{.}}</div>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                    <tr tpl:if="@timeout">
-                        <th>Timeout</th>
-                        <td>
-                            <div class="valueField" data-language="xquery">{{@timeout}}</div>
-                        </td>
-                    </tr>
-                    <tr style="visibility: hidden"><td width="120"/><td/></tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <a name="authenticators" class="anchor"></a>
-            <h3 class="page-header">AUTHENTICATORS</h3>
-
-            <!-- Authenticators -->
-            <div tpl:foreach="cfg:authenticators/cfg:authenticator" class="plugin">
-                <div class="plugin-table">
-                    <table class="table dataTable  table-striped table-hover table-bordered table-condensed">
-                        <thead>
-                        <tr>
-                            <th colspan="2">
-                                <i class="fa fa-cog color-authenticator"></i>
-                                <span tpl:foreach-token="@type" tpl:with-delimiter="." tpl:remove-tag="not($last)"
-                                      tpl:text="substring-after(concat('true',$token), $last)">MyAuthenticator</span>
-                                <div class="btn-group btn-group-sm pull-right">
-                                    <div class="btn-group btn-group-sm">
-                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-down"></i></button>
-                                        <ul class="dropdown-menu pull-right">
-                                            <li><a href="/lavoisier/configuration/cfg:config/cfg:authenticators[@name='{{/cfg:*/@authenticators}}']" target="_blank">
-                                                <i class="fa fa-code"></i> Configuration</a>
-                                            </li>
-                                            <li><a href="http://software.in2p3.fr/lavoisier/adaptors.xml#authenticator" target="_blank">
-                                                <i class="fa fa-info-circle"></i> Documentation</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr tpl:if="@authorized" class="warning">
-                            <th>authorized</th>
-                            <td>
-                                <div class="valueField" data-language="xquery">{{@authorized}}</div>
-                            </td>
-                        </tr>
-                        <tr tpl:duplicate="parameter" tpl:foreach="cfg:parameter"></tr>
-                        <tr style="visibility: hidden"><th width="120"/><td/></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <h3 class="page-header">PLUGINS CHAIN</h3>
-            <a name="connection" class="anchor"></a>
-
-            <!-- Connector, Serializer, Validator -->
-            <div tpl:foreach="cfg:connector|cfg:serializer|cfg:validator" class="plugin">
-                <a tpl:id="count(preceding-sibling::cfg:*[self::cfg:connector|self::cfg:serializer])+1"
-                   id="1" class="anchor"></a>
-                <div class="plugin-table">
-                    <table class="table dataTable  table-striped table-hover table-bordered table-condensed">
-                        <thead id="header">
-                        <tr>
-                            <th colspan="4">
-                                <i tpl:class="concat('fa fa-cog color-',local-name())" class="fa fa-cog color-connector"></i>
-                                <span tpl:foreach-token="@type" tpl:with-delimiter="." tpl:remove-tag="not($last)"
-                                      tpl:text="substring-after(concat('true',$token), $last)">MyAdaptor</span>
-                                <div tpl:if="not(self::cfg:trigger)" class="btn-group btn-group-sm pull-right">
-                                    <span class="btn"><i class="fa fa-selected"></i></span>
-                                    <div class="btn-group btn-group-sm">
-                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-sort-asc"></i></button>
-                                        <ul class="dropdown-menu pull-right" role="menu"
-                                            tpl:variable.nbsteps="count(
-                                                (parent::cfg:processors/preceding-sibling::cfg:* | preceding-sibling::cfg:* | self::cfg:*)
-                                                [self::cfg:connector|self::cfg:serializer|self::cfg:validator|self::cfg:processor|self::cfg:element]
-                                            )">
-                                            <li tpl:if="not(self::cfg:cache)">
-                                                <a data-url="/lavoisier/{{/cfg:view/@name}}?accept=hxml&amp;nbsteps={{$nbsteps}}&amp;_skeleton_"
-                                                   href="#" class="btn-output anchor"><i class="fa fa-sitemap"></i> Skeleton</a>
-                                            </li>
-                                            <li tpl:if="not(self::cfg:cache)">
-                                                <a data-url="/lavoisier/{{/cfg:view/@name}}?accept=hxml&amp;nbsteps={{$nbsteps}}&amp;_extract_"
-                                                   href="#" class="btn-output anchor"><i class="fa fa-eye-slash"></i> Output extract</a>
-                                            </li>
-                                            <li tpl:if="not(self::cfg:cache)">
-                                                <a data-url="/lavoisier/{{/cfg:view/@name}}?accept=hxml&amp;nbsteps={{$nbsteps}}"
-                                                   href="#" class="btn-output anchor"><i class="fa fa-eye"></i> Full output</a>
-                                            </li>
-                                            <li tpl:if="not(self::cfg:cache)">
-                                                <a href="/lavoisier/breakpoint/*/*?view={{/cfg:view/@name}}"
-                                                   target="_blank"><i class="fa fa-bug"></i> Debug</a>
-                                            </li>
-                                            <li tpl:if="not(self::cfg:cache)"
-                                                class="divider"></li>
-                                            <li>
-                                                <a href="/lavoisier/configuration/cfg:config/cfg:view[@name='{{/cfg:view/@name}}']/cfg:*[starts-with(local-name(),'{{local-name()}}')]"
-                                                   target="_blank"><i class="fa fa-code"></i> Configuration</a>
-                                            </li>
-                                            <li>
-                                                <a tpl:foreach-token="@type" tpl:with-delimiter="." tpl:remove-tag="not($last)"
-                                                   href="http://software.in2p3.fr/lavoisier/adaptors.xml#{{$token}}"
-                                                   target="_blank"><span tpl:if="$last"><i class="fa fa-info-circle"></i> Documentation</span></a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr tpl:foreach="cfg:parameter" id="parameter">
-                            <th tpl:text="@name">MyParameter</th>
-                            <td>
-                                <table tpl:if="cfg:entry"
-                                       class="table dataTable  table-striped table-hover table-bordered table-condensed"
-                                       style="margin-bottom: 0px !important;">
-                                    <tr tpl:foreach="cfg:entry">
-                                        <th tpl:if="@key" width="100" tpl:text="@key">MyEntry</th>
-                                        <td>
-                                            <div tpl:if="@eval" class="valueField" data-language="xquery">{{@eval}}</div>
-                                            <div tpl:else="" class="valueField">{{text()}}</div>
-                                        </td>
-                                    </tr>
-                                </table>
-                                <div tpl:if="@eval" class="valueField" data-language="xquery">{{@eval}}</div>
-                                <div tpl:else="@name='nodes'" class="valueField" data-language="xquery">{{text()}}</div>
-                                <div tpl:else="" class="valueField">
-                                    <a tpl:remove-tag="not(@name='template' and ancestor::cfg:renderer)"
-                                       href="/resource/{{text()}}" target="_blank">{{text()}}</a>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr id="output" class="block-preview">
-                            <td colspan="4">
-                                <div class="div-preview">
-                                    <pre class="pre-preview wrap"></pre>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr style="visibility: hidden"><th width="120"/><td/></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <a name="processing" class="anchor"></a>
-
-            <!-- Processor -->
-            <div tpl:foreach="cfg:processors/cfg:processor" class="plugin">
-                <a tpl:id="count(preceding-sibling::cfg:* | parent::cfg:*/preceding-sibling::cfg:*[self::cfg:connector|self::cfg:serializer|self::cfg:validator])+1"
-                   id="2" class="anchor"></a>
-                <div class="plugin-table">
-                    <table class="table dataTable  table-striped table-hover table-bordered table-condensed">
-                        <thead tpl:duplicate="header"></thead>
-                        <tbody>
-                        <tr class="warning">
-                            <th>match</th>
-                            <td xmlns:x="http://software.in2p3.fr/lavoisier/config.xsd">
-                                <div tpl:if="x:XPath" class="valueField" data-language="xml" tpl:xml="x:XPath">&lt;XML/&gt;</div>
-                                <div tpl:else="@match" class="valueField" data-language="xquery">{{@match}}</div>
-                            </td>
-                        </tr>
-                        <tr tpl:if="cfg:variable" class="warning">
-                            <th>variables</th>
-                            <td>
-                                <table class="valuesTable">
-                                    <tr tpl:foreach="cfg:variable">
-                                        <td width="50">{{@name}}</td>
-                                        <td>
-                                            <div tpl:if="@eval" class="valueField" data-language="xquery">{{@eval}}</div>
-                                            <div tpl:else="" class="valueField">{{text()}}</div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr tpl:duplicate="parameter" tpl:foreach="cfg:parameter"></tr>
-                        <tr tpl:duplicate="output" class="block-preview"></tr>
-                        <tr style="visibility: hidden"><th width="120"/><td/></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div tpl:foreach="cfg:processors/cfg:element | cfg:processors/cfg:elements" class="plugin">
-                <a tpl:id="count(preceding-sibling::cfg:* | parent::cfg:*/preceding-sibling::cfg:*[self::cfg:connector|self::cfg:serializer|self::cfg:validator])+1"
-                   id="3" class="anchor"></a>
-                <div class="plugin-table">
-                    <table class="table dataTable  table-bordered table-condensed templateTable">
-                        <thead tpl:duplicate="header"/>
-                        <tbody>
-                            <tr>
-                                <th>INPUT</th>
-                                <th>AXIS</th>
-                                <th>OUTPUT</th>
-                                <th>CONDITION</th>
-                            </tr>
-                            <tr tpl:call-function="TEMPLATE" tpl:remove-tag="true()"/>
-                            <tr tpl:duplicate="output" class="block-preview"></tr>
-                            <tr style="visibility: hidden"><th width="120"/><td/></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div tpl:foreach="cfg:processors/plan:e" class="plugin">
-                <a tpl:id="count(preceding-sibling::cfg:* | parent::cfg:*/preceding-sibling::cfg:*[self::cfg:connector|self::cfg:serializer|self::cfg:validator])+1"
-                   id="3bis" class="anchor"></a>
-                <div class="plugin-table">
-                    <table class="table dataTable  table-striped table-hover table-bordered table-condensed">
-                        <thead tpl:duplicate="header"/>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <div class="valueField" data-language="xml" tpl:xml=".">&lt;XML/&gt;</div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- post-processors -->
-            <div tpl:if="@post-processors" class="plugin">
-                <div class="plugin-table">
-                    <table class="table dataTable  table-striped table-bordered table-hover table-condensed">
-                        <thead>
-                        <tr>
-                            <th colspan="2">
-                                <i class="fa fa-cog color-processor"></i>Post-Processors : {{@post-processors}}
-                                <div class="pull-right">
-                                    <a href="/lavoisier/configuration/cfg:config/cfg:processors[@name='{{@post-processors}}']"
-                                       target="_blank" class="btn btn-default btn-sm"><i class="fa fa-code"></i>
-                                    </a>
-                                </div>
-                            </th>
-                        </tr>
-                        </thead>
-                    </table>
-                </div>
-            </div>
-
-            <a name="cache" class="anchor"></a>
-
-            <!-- Cache -->
-            <div tpl:foreach="cfg:cache" class="plugin">
-                <a tpl:id="count(preceding-sibling::cfg:processors/* | preceding-sibling::cfg:*[self::cfg:connector|self::cfg:serializer|self::cfg:validator])+1"
-                   id="4" class="anchor"></a>
-                <div class="plugin-table">
-                    <table class="table dataTable  table-striped table-hover table-bordered table-condensed">
-                        <thead tpl:duplicate="header"></thead>
-                        <tbody>
-                        <tr tpl:duplicate="parameter" tpl:foreach="cfg:parameter"></tr>
-                        <tr tpl:if="cfg:trigger">
-                            <th>Triggers</th>
-                            <td>
-                                <table tpl:foreach="cfg:trigger"
-                                       class="table dataTable  table-striped table-hover table-bordered table-condensed">
-                                    <thead tpl:duplicate="header"></thead>
-                                    <tbody>
-                                    <tr tpl:duplicate="parameter" tpl:foreach="cfg:parameter"></tr>
-                                    <tr style="visibility: hidden"><th width="120"/><td/></tr>
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr tpl:duplicate="output" class="block-preview"></tr>
-                        <tr style="visibility: hidden"><th width="120"/><td/></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <a name="rendering" class="anchor"></a>
-
-            <!-- pre-renderer  -->
-            <div tpl:foreach="cfg:pre-renderers" class="plugin">
-                <div class="plugin-table">
-                    <table class="table dataTable  table-striped table-hover table-bordered table-condensed">
-                        <thead>
-                        <tr>
-                            <th colspan="2">
-                                <i class="fa fa-cog color-renderer"></i>Pre-renderers
-                                <div class="pull-right">
-                                    <a href="/lavoisier/configuration/cfg:config/cfg:view[@name='{{/cfg:view/@name}}']/cfg:pre-renderers"
-                                       target="_blank" class="btn btn-default btn-sm"><i class="fa fa-code"></i>
-                                    </a>
-                                </div>
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr tpl:if="cfg:namespace">
-                            <th>Namespaces</th>
-                            <td>
-                                <table class="valuesTable">
-                                    <tr tpl:foreach="cfg:namespace">
-                                        <td width="50">{{@prefix}}</td>
-                                        <td>
-                                            <div class="valueField">{{@uri}}</div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr tpl:foreach="cfg:title">
-                            <th>Title</th>
-                            <td>
-                                <div class="valueField" data-language="xquery">{{text()}}</div>
-                            </td>
-                        </tr>
-                        <tr tpl:if="cfg:field">
-                            <th>Fields</th>
-                            <td>
-                                <table class="valuesTable">
-                                    <tr tpl:foreach="cfg:field">
-                                        <td width="50">{{@label}}</td>
-                                        <td>
-                                            <div class="valueField" data-language="xquery">{{text()}}</div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr tpl:foreach="cfg:row">
-                            <th>Rows</th>
-                            <td>
-                                <div class="valueField" data-language="xquery">{{@foreach}}</div>
-                            </td>
-                        </tr>
-                        <tr tpl:foreach="cfg:row">
-                            <th>Columns</th>
-                            <td>
-                                <table class="valuesTable">
-                                    <tr tpl:foreach="cfg:column">
-                                        <td width="50">{{@label}}</td>
-                                        <td>
-                                            <div class="valueField" data-language="xquery">{{text()}}</div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr style="visibility: hidden"><th width="120"/><td/></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Renderer  -->
-            <div class="plugin">
-                <div class="plugin-table" style="margin-bottom: 0px !important;">
-                    <table class="table dataTable  table-striped table-bordered table-hover table-condensed" style="margin-bottom: 0px;">
-                        <thead>
-                        <tr>
-                            <th>
-                                <i class="fa fa-cog color-renderer"></i>Renderers
-                                <div class="btn-group btn-group-sm pull-right">
-                                    <div class="btn-group btn-group-sm">
-                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-down"></i></button>
-                                        <ul class="dropdown-menu pull-right">
-                                            <li><a href="/lavoisier/configuration/cfg:config/cfg:view[@name='{{/cfg:*/@name}}']/cfg:renderers" target="_blank">
-                                                <i class="fa fa-code"></i> Configuration</a>
-                                            </li>
-                                            <li><a href="http://software.in2p3.fr/lavoisier/adaptors.xml#renderer" target="_blank">
-                                                <i class="fa fa-info-circle"></i> Documentation</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="btn-group btn-group-sm pull-right">
-                                    <span class="btn">
-                                        <a data-url="/lavoisier/{{/cfg:*/@name}}" href="#" target="_blank" id="render">
-                                        <i class="fa fa-eye fa-selected" style="color: #000000"></i></a>
-                                    </span>
-                                </div>
-                                <div class="btn-group btn-group-sm pull-right" style="margin-right: 10px;">
-                                    <select id="selectRenderer" class="btn btn-default btn-sm" style="text-align: left;"
-                                            tpl:variable.selected="cfg:info/cfg:accept/text()">
-                                        <option value="">Default rendering</option>
-                                        <option tpl:foreach="cfg:jmx/cfg:domain/cfg:group/cfg:mbean/cfg:attribute[@name='Extensions']/cfg:value[1][text()!='']"
-                                                tpl:value="text()" value="MyRenderer"
-                                                tpl:remove-attribute.selected="not(text() = $selected)" selected="selected"
-                                                tpl:text="concat(text(), substring-after('true *',boolean(/cfg:view/cfg:renderers/cfg:renderer[@type=current()/ancestor::mbean/@name])))">MyRenderer</option>
-                                    </select>
-                                </div>
-                            </th>
-                        </tr>
-                        </thead>
-                    </table>
-                </div>
-            </div>
-            <div class="plugin">
-                <div class="plugin-table">
-                    <table tpl:foreach="cfg:renderers/cfg:renderer"
-                           tpl:id="/cfg:*/cfg:jmx/cfg:domain/cfg:group/cfg:mbean[contains(current()/@type,@name)]/cfg:attribute[@name='Extensions']/cfg:value/text()"
-                           id="MyRenderer" class="table dataTable  table-striped table-hover table-bordered table-condensed renderer" style="margin-top:0px;">
-                        <tbody>
-                        <tr tpl:duplicate="parameter" tpl:foreach="cfg:parameter"></tr>
-                        <tr style="visibility: hidden"><th width="120"/><td/></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div style="visibility: hidden">
-            <xsl:template name="TEMPLATE">
-                <xsl:apply-templates select="." mode="TEMPLATE"/>
-            </xsl:template>
-
-            <xsl:template match="cfg:set" priority="3" mode="TEMPLATE">
-                <xsl:param name="indent"/>
-                <tr>
-                    <td colspan="4" style="background:#fff">
-                        <pre><xsl:value-of select="$indent"/>
-                            <b><xsl:value-of select="@variable"/></b> = "<xsl:value-of select="text()"/>"</pre>
-                    </td>
-                </tr>
-            </xsl:template>
-
-            <xsl:template match="*[*]" mode="TEMPLATE">
-                <xsl:param name="indent"/>
-                <tr class="wrap">
-                    <!-- INPUT -->
-                    <td>
-                        <pre><xsl:value-of select="$indent"/>
-                            <xsl:apply-templates mode="INPUT" select=".">
-                                <xsl:with-param name="tag">start</xsl:with-param>
-                            </xsl:apply-templates>
-                        </pre>
-                    </td>
-                    <!-- AXIS -->
-                    <td class="axis">
-                        <xsl:apply-templates mode="AXIS" select="."/>
-                    </td>
-                    <!-- OUPUT -->
-                    <td>
-                        <pre><xsl:value-of select="$indent"/>
-                            <xsl:apply-templates mode="OUTPUT" select=".">
-                                <xsl:with-param name="tag">start</xsl:with-param>
-                            </xsl:apply-templates>
-                        </pre>
-                    </td>
-                    <!-- CONDITION -->
-                    <td class="condition">
-                        <xsl:for-each select="@if">
-                            <xsl:value-of select="."/>
-                        </xsl:for-each>
-                    </td>
-                </tr>
-                <xsl:apply-templates select="*" mode="TEMPLATE">
-                    <xsl:with-param name="indent" select="concat($indent,'    ')"/>
-                </xsl:apply-templates>
-                <tr class="wrap">
-                    <!-- INPUT -->
-                    <td>
-                        <pre><xsl:value-of select="$indent"/>
-                            <xsl:apply-templates mode="INPUT" select=".">
-                                <xsl:with-param name="tag">end</xsl:with-param>
-                            </xsl:apply-templates>
-                        </pre>
-                    </td>
-                    <!-- AXIS -->
-                    <td class="axis">
-                        <xsl:apply-templates mode="AXIS" select="."/>
-                    </td>
-                    <!-- OUPUT -->
-                    <td>
-                        <pre><xsl:value-of select="$indent"/>
-                            <xsl:apply-templates mode="OUTPUT" select=".">
-                                <xsl:with-param name="tag">end</xsl:with-param>
-                            </xsl:apply-templates>
-                        </pre>
-                    </td>
-                    <!-- CONDITION -->
-                    <td class="condition"></td>
-                </tr>
-            </xsl:template>
-
-            <xsl:template match="*[not(*)]" mode="TEMPLATE">
-                <xsl:param name="indent"/>
-                <tr class="wrap">
-                    <!-- INPUT -->
-                    <td>
-                        <pre><xsl:value-of select="$indent"/><xsl:apply-templates mode="INPUT" select="."/></pre>
-                    </td>
-                    <!-- AXIS -->
-                    <td class="axis">
-                        <xsl:apply-templates mode="AXIS" select="."/>
-                    </td>
-                    <!-- OUPUT -->
-                    <td>
-                        <pre><xsl:value-of select="$indent"/><xsl:apply-templates mode="OUTPUT" select="."/></pre>
-                    </td>
-                    <!-- CONDITION -->
-                    <td class="condition">
-                        <xsl:for-each select="@if">
-                            <xsl:value-of select="."/>
-                        </xsl:for-each>
-                    </td>
-                </tr>
-            </xsl:template>
-
-            <xsl:template mode="AXIS" match="cfg:element-recursive">
-                <i class="glyphicon glyphicon-repeat" title="APPLY parent rules recursively"></i>
-            </xsl:template>
-            <xsl:template mode="AXIS" match="cfg:element[@empty='true']">
-                <i class="glyphicon glyphicon-chevron-down" title="MOVE children as following siblings"></i>
-            </xsl:template>
-            <xsl:template mode="AXIS" match="*[contains(local-name(),'ignore')]">
-                <i id="tooltip" class="glyphicon glyphicon-remove" style="color: #FF0000" title="IGNORE"></i>
-            </xsl:template>
-            <xsl:template mode="AXIS" match="cfg:attribute-create">
-                <b class="glyphicon" title="CREATE attribute">@</b>
-            </xsl:template>
-            <xsl:template mode="AXIS" match="cfg:text-create">
-                <b class="glyphicon" title="CREATE text">text()</b>
-            </xsl:template>
-            <xsl:template mode="AXIS" match="cfg:comment-create">
-                <b class="glyphicon" title="CREATE comment">comment()</b>
-            </xsl:template>
-            <xsl:template mode="AXIS" match="cfg:element-create-as-parent">
-                <i class="glyphicon glyphicon-arrow-left" title="CREATE parent element"></i>
-            </xsl:template>
-            <xsl:template mode="AXIS" match="cfg:element-create[@as='last-child' or not(@as)]">
-                <i class="glyphicon glyphicon-arrow-right" title="CREATE last child element(s)"></i>
-            </xsl:template>
-            <xsl:template mode="AXIS" match="cfg:element-create[@as='preceding-sibling']">
-                <i class="glyphicon glyphicon-arrow-up" title="CREATE preceding sibling element(s)"></i>
-            </xsl:template>
-            <xsl:template mode="AXIS" match="cfg:element-create[@as='following-sibling']">
-                <i class="glyphicon glyphicon-arrow-down" title="CREATE following sibling element(s)"></i>
-            </xsl:template>
-            <xsl:template mode="AXIS" match="cfg:element-create[@as='first-child']">
-                <i class="glyphicon glyphicon-share-alt" title="CREATE first child element(s)"></i>
-            </xsl:template>
-            <xsl:template mode="AXIS" match="*"/>
-
-            <xsl:template mode="INPUT" match="cfg:elements | cfg:elements-ignore" priority="3">
-                <xsl:param name="tag"/>
-                <xsl:text>&lt;</xsl:text>
-                <xsl:if test="$tag='end'">/</xsl:if>
-                <xsl:value-of select="translate(@path,'/',' ')"/>
-                <xsl:if test="not($tag)">/</xsl:if>
-                <xsl:text>&gt;</xsl:text>
-            </xsl:template>
-            <xsl:template mode="INPUT" match="*[contains(local-name(),'-create')]" priority="3"/>
-            <xsl:template mode="INPUT" match="*[starts-with(local-name(),'attribute')]">
-                <xsl:text>@</xsl:text>
-                <xsl:apply-templates mode="INPUT_TAG" select="."/>
-            </xsl:template>
-            <xsl:template mode="INPUT" match="*[starts-with(local-name(),'element')]">
-                <xsl:param name="tag"/>
-                <xsl:text>&lt;</xsl:text>
-                <xsl:if test="$tag='end'">/</xsl:if>
-                <xsl:apply-templates mode="INPUT_TAG" select="."/>
-                <xsl:if test="not($tag)">/</xsl:if>
-                <xsl:text>&gt;</xsl:text>
-            </xsl:template>
-            <xsl:template mode="INPUT" match="*[starts-with(local-name(),'text')]">text()</xsl:template>
-            <xsl:template mode="INPUT" match="*[starts-with(local-name(),'comment')]">comment()</xsl:template>
-            <xsl:template mode="INPUT_TAG" match="*">
-                <xsl:choose>
-                    <xsl:when test="@in"><xsl:value-of select="@in"/></xsl:when>
-                    <xsl:otherwise>*</xsl:otherwise>
-                </xsl:choose>
-            </xsl:template>
-
-            <xsl:template mode="OUTPUT" match="cfg:element-recursive" priority="4">
-                <b>x <xsl:value-of select="@count"/></b>
-            </xsl:template>
-            <xsl:template mode="OUTPUT" match="cfg:element[@empty='true']" priority="4"/>
-            <xsl:template mode="OUTPUT" match="cfg:elements" priority="3">
-                <xsl:param name="tag"/>
-                <xsl:apply-templates select="." mode="INPUT">
-                    <xsl:with-param name="tag" select="$tag"/>
-                </xsl:apply-templates>
-            </xsl:template>
-            <xsl:template mode="OUTPUT" match="*[contains(local-name(),'-ignore')]" priority="3"/>
-            <xsl:template mode="OUTPUT" match="*[starts-with(local-name(),'attribute')]">
-                <b>
-                    <xsl:text>@</xsl:text>
-                    <xsl:apply-templates mode="OUTPUT_TAG" select="."/>
-                </b>
-                <xsl:text> = "</xsl:text>
-                <xsl:value-of select="text()"/>
-                <xsl:text>"</xsl:text>
-            </xsl:template>
-            <xsl:template mode="OUTPUT" match="cfg:element-create" priority="3">
-                <b>&lt; </b>
-                <xsl:value-of select="text()"/>
-                <b> &gt;</b>
-            </xsl:template>
-            <xsl:template mode="OUTPUT" match="*[starts-with(local-name(),'element')]">
-                <xsl:param name="tag"/>
-                <xsl:text>&lt;</xsl:text>
-                <xsl:if test="$tag='end'">/</xsl:if>
-                <xsl:apply-templates mode="OUTPUT_TAG" select="."/>
-                <xsl:if test="not($tag='end')">
-                    <xsl:for-each select="@attributes | @first-child-attributes">
-                        <xsl:text> </xsl:text><xsl:value-of select="local-name()"/>="<xsl:value-of select="."/>"<xsl:text/>
-                    </xsl:for-each>
-                </xsl:if>
-                <xsl:if test="not($tag)">/</xsl:if>
-                <xsl:text>&gt;</xsl:text>
-            </xsl:template>
-            <xsl:template mode="OUTPUT" match="*[starts-with(local-name(),'text')]">
-                <xsl:value-of select="text()"/>
-            </xsl:template>
-            <xsl:template mode="OUTPUT" match="*[starts-with(local-name(),'comment')]">
-                <xsl:text>&lt;!-- </xsl:text>
-                <xsl:value-of select="text()"/>
-                <xsl:text> --&gt;</xsl:text>
-            </xsl:template>
-            <xsl:template mode="OUTPUT_TAG" match="*">
-                <xsl:choose>
-                    <xsl:when test="@out"><xsl:value-of select="@out"/></xsl:when>
-                    <xsl:when test="@in"><xsl:value-of select="@in"/></xsl:when>
-                    <xsl:otherwise>*</xsl:otherwise>
-                </xsl:choose>
-            </xsl:template>
-        </div>
-
-    </div>
-    </body>
-
-<script>
-
-    <!--
-    $(document).ready(function() {
-        $(".dataTable").dataTable();
-    });
-            -->
-
-</script>
+      tpl:extends="/lavoisier/base?accept=html">
+<head>
+    <META http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
 
     <script src="http://cdn.jsdelivr.net/ace/1.1.3/min/ace.js" language="JavaScript"></script>
     <script src="http://software.in2p3.fr/lavoisier/lavoisier-debug.js" language="JavaScript"
             tpl:src="'/resource/js/lavoisier-debug.js'"></script>
-    <link href="/resource/css/debug.css" rel="stylesheet" type="text/css"/>
+    <style>
 
+
+
+        caption {
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .highlight {
+            background-color: #F7F7F9;
+            border: 1px solid #E1E1E8;
+            border-radius: 4px;
+            margin-bottom: 14px;
+            padding: 9px 14px;
+        }
+
+        .h4 {
+            margin-bottom:0px !important;
+        }
+
+        .ace_editor {
+            border: 1px solid #BBBBBB;
+            padding: 0 !important;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace !important;
+            font-size: 13px !important;
+        }
+
+        table {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 13px !important;
+        }
+
+        .table > thead > tr > th {
+            vertical-align: middle !important;
+        }
+
+        .plugin-title {
+            padding:6px;
+        }
+
+        .plugin-table {
+            margin-bottom:35px !important;
+            margin-left:20px;
+        }
+
+        .color-view         {color: #FFCC66; /* jaune */}
+        .color-connector    {color: #6cbddf; /* bleu */}
+        .color-serializer   {color: #66c89d; /* vert */}
+        .color-validator    {color: #e5a4f5; /* violet */}
+        .color-processor    {color: grey; /* gris */}
+        .color-cache        {color: #fbbf58; /* orange */}
+        .color-trigger      {color: #fbbf58; /* orange */}
+        .color-renderer     {color: grey; /* a definir */}
+        .color-prerenderer  {color: grey; /* a definir */}
+
+        i.fa:before {
+            margin-right: 4px;
+        }
+
+        li.no-breadcrumb:before {
+            content: "" !important;
+        }
+
+        pre.wrap {
+            white-space: pre-wrap;       /* css-3 */
+            white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+            white-space: -pre-wrap;      /* Opera 4-6 */
+            white-space: -o-pre-wrap;    /* Opera 7 */
+            word-wrap: break-word;       /* Internet Explorer 5.5+ */
+        }
+        td.wrap {
+            min-width: 200px;
+        }
+
+        .pre-preview {
+            margin:0px !important;
+            padding:0px !important;
+            border:none !important;
+            background-color: #ffffff !important;
+        }
+
+        .div-preview {
+            width: 100%;
+            overflow-y: scroll;
+            border: 1px dotted #BBBBBB;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            padding: 5px;
+            background-color: #ffffff !important;
+        }
+
+        .valueField {
+            padding:5px;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            border: 1px solid #BBBBBB;
+            background-color: #FFFFFF;
+        }
+
+        table.valuesTable {
+            border: 0;
+            width:100%;
+        }
+        table.valuesTable td {
+            padding: 5px !important;
+        }
+
+        table.templateTable td {
+            background:#eee;
+            border-left: 1px solid black !important;
+            border-right:1px solid black !important;
+        }
+        table.templateTable td.axis {
+            width: 15px;
+            text-align:center;
+        }
+        table.templateTable td.condition {
+            width: 20%;
+            background:none;
+        }
+        pre {
+            border:none;
+            background-color:transparent;
+            margin:0;
+            padding:0;
+        }
+        tr.wrap td * {
+            white-space: pre-wrap;       /* CSS 3 */
+            white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+            white-space: -pre-wrap;      /* Opera 4-6 */
+            white-space: -o-pre-wrap;    /* Opera 7 */
+            word-wrap: break-word;       /* Internet Explorer 5.5+ */
+        }
+    </style>
+    <title tpl:text="/cfg:view/@name | /cfg:view-template/@name">MyView</title>
+</head>
+<body>
+
+<div class="wrapper" id="wrapper">
+<div class="content-wrapper">
+
+    <section tpl:foreach="/cfg:view | /cfg:view-template" class="content" id="content" >
+
+        <section class="content-header" id="content-header">
+
+        <h1 style="margin-bottom: 10px;"
+            tpl:text="/cfg:view/@name | /cfg:view-template/@name">
+            <small> Debug the view</small></h1>
+    </section>
+
+    <ul class="breadcrumb">
+        <li><a href="#details">View details</a></li>
+        <li><a href="#authenticators">Authenticators</a></li>
+        <li><a href="#connection">Connection</a> </li>
+        <li><a href="#processing">Processing</a></li>
+        <li><a href="#cache">Cache</a></li>
+        <li><a href="#rendering">Rendering</a> </li>
+        <li class="pull-right no-breadcrumb"><a class="btn btn-default btn-xs"
+                                                href="/lavoisier/debug_advanced/{{/cfg:*/@name}}">
+            <i class="fa fa-search-plus"></i> Advanced mode</a>
+        </li>
+    </ul>
+
+    <a name="details" class="anchor"></a>
+    <h3 class="page-header">VIEW DETAILS</h3>
+
+    <!-- View arguments -->
+    <div tpl:if="cfg:argument" class="well plugin-table" style="padding:5px;">
+        <table class="table" style="margin-bottom:0px;">
+            <thead>
+            <tr>
+                <i class="fa fa-hand-o-right"></i> <i>Please, fill the Arguments</i>
+            </tr>
+            </thead>
+            <tbody>
+            <tr tpl:foreach="cfg:argument">
+                <th width="120" class="red" tpl:text="@name">MyArgument</th>
+                <td>
+                    <select tpl:if="contains(@pattern,'|') and not(contains(@pattern, '['))"
+                            tpl:data-argument="@name" data-argument="MyArgument"
+                            tpl:name="@name" name="MyArgument" style="width:100%" class="valueField">
+                        <option tpl:if="not(text()!='')" value="">*** Please select an item ! ***</option>
+                        <option tpl:foreach-token="@pattern" tpl:with-delimiter="|"
+                                tpl:remove-attribute.selected="not(text()=$token)" selected="selected"
+                                tpl:value="$token" value="MyOption"
+                                tpl:text="$token">MyOption</option>
+                    </select>
+                    <input tpl:else="" type="text" style="width:100%" class="valueField"
+                           tpl:data-argument="@name" data-argument="MyArgument"
+                           tpl:name="@name" name="MyArgument"
+                           tpl:value="text()" value="MyValue"/>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- View details -->
+    <div class="plugin-table">
+        <table class="table table-striped table-hover table-bordered table-condensed">
+            <thead>
+            <tr>
+                <th colspan="2">
+                    <i>Miscellaneous</i>
+                    <div class="btn-group btn-group-sm pull-right">
+                        <div class="btn-group btn-group-sm">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-down"></i></button>
+                            <ul class="dropdown-menu pull-right">
+                                <li><a href="/lavoisier/configuration/cfg:config/cfg:view[@name='{{/cfg:*/@name}}']" target="_blank">
+                                    <i class="fa fa-code"></i> Configuration</a>
+                                </li>
+                                <li><a href="http://software.in2p3.fr/lavoisier/view.html" target="_blank">
+                                    <i class="fa fa-info-circle"></i> Documentation</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr tpl:if="cfg:variable">
+                <th>Variables</th>
+                <td>
+                    <table class="valuesTable">
+                        <tr tpl:foreach="cfg:variable">
+                            <td width="50">{{@name}}</td>
+                            <td>
+                                <div tpl:if="@eval" class="valueField" data-language="xquery">{{@eval}}</div>
+                                <div tpl:else="" class="valueField">{{text()}}</div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr tpl:if="cfg:namespace">
+                <th>Namespaces</th>
+                <td>
+                    <table class="valuesTable">
+                        <tr tpl:foreach="cfg:namespace">
+                            <td width="50">{{@prefix}}</td>
+                            <td>
+                                <div class="valueField">{{@uri}}</div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr tpl:if="self::cfg:view-template/cfg:parameter">
+                <th>Parameters</th>
+                <td>
+                    <table class="valuesTable">
+                        <tr tpl:foreach="cfg:parameter">
+                            <td width="50">{{@name}}</td>
+                            <td>
+                                <div tpl:if="@eval" class="valueField" data-language="xquery">{{@eval}}</div>
+                                <div tpl:else="" class="valueField">{{text()}}</div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr tpl:foreach="descendant::cfg:fallback">
+                <th>Fallback</th>
+                <td>
+                    <table class="valuesTable">
+                        <tr tpl:if="@eval">
+                            <td width="50">XML</td>
+                            <td>
+                                <div class="valueField" data-language="xquery">{{@eval}}</div>
+                            </td>
+                        </tr>
+                        <tr tpl:foreach="cfg:exception">
+                            <td width="50">{{@type}}</td>
+                            <td>
+                                <div class="valueField" data-language="xquery">{{@predicate-on-message}}</div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr tpl:foreach="cfg:info">
+                <th>Info</th>
+                <td>
+                    <table class="valuesTable">
+                        <tr tpl:foreach="descendant::*[text()] | descendant::*/@*">
+                            <td width="50">{{local-name()}}</td>
+                            <td>
+                                <div class="valueField">{{.}}</div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr tpl:if="@timeout">
+                <th>Timeout</th>
+                <td>
+                    <div class="valueField" data-language="xquery">{{@timeout}}</div>
+                </td>
+            </tr>
+            <tr style="visibility: hidden"><td width="120"/><td/></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <a name="authenticators" class="anchor"></a>
+    <h3 class="page-header">AUTHENTICATORS</h3>
+
+    <!-- Authenticators -->
+    <div tpl:foreach="cfg:authenticators/cfg:authenticator" class="plugin">
+        <div class="plugin-table">
+            <table class="table table-striped table-hover table-bordered table-condensed">
+                <thead>
+                <tr>
+                    <th colspan="2">
+                        <i class="fa fa-cog color-authenticator"></i>
+                                <span tpl:foreach-token="@type" tpl:with-delimiter="." tpl:remove-tag="not($last)"
+                                      tpl:text="substring-after(concat('true',$token), $last)">MyAuthenticator</span>
+                        <div class="btn-group btn-group-sm pull-right">
+                            <div class="btn-group btn-group-sm">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-down"></i></button>
+                                <ul class="dropdown-menu pull-right">
+                                    <li><a href="/lavoisier/configuration/cfg:config/cfg:authenticators[@name='{{/cfg:*/@authenticators}}']" target="_blank">
+                                        <i class="fa fa-code"></i> Configuration</a>
+                                    </li>
+                                    <li><a href="http://software.in2p3.fr/lavoisier/adaptors.xml#authenticator" target="_blank">
+                                        <i class="fa fa-info-circle"></i> Documentation</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr tpl:if="@authorized" class="warning">
+                    <th>authorized</th>
+                    <td>
+                        <div class="valueField" data-language="xquery">{{@authorized}}</div>
+                    </td>
+                </tr>
+                <tr tpl:duplicate="parameter" tpl:foreach="cfg:parameter"></tr>
+                <tr style="visibility: hidden"><th width="120"/><td/></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <h3 class="page-header">PLUGINS CHAIN</h3>
+    <a name="connection" class="anchor"></a>
+
+    <!-- Connector, Serializer, Validator -->
+    <div tpl:foreach="cfg:connector|cfg:serializer|cfg:validator" class="plugin">
+        <a tpl:id="count(preceding-sibling::cfg:*[self::cfg:connector|self::cfg:serializer])+1"
+           id="1" class="anchor"></a>
+        <div class="plugin-table">
+            <table class="table table-striped table-hover table-bordered table-condensed">
+                <thead id="header">
+                <tr>
+                    <th colspan="4">
+                        <i tpl:class="concat('fa fa-cog color-',local-name())" class="fa fa-cog color-connector"></i>
+                                <span tpl:foreach-token="@type" tpl:with-delimiter="." tpl:remove-tag="not($last)"
+                                      tpl:text="substring-after(concat('true',$token), $last)">MyAdaptor</span>
+                        <div tpl:if="not(self::cfg:trigger)" class="btn-group btn-group-sm pull-right">
+                            <span class="btn"><i class="fa fa-selected"></i></span>
+                            <div class="btn-group btn-group-sm">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-sort-asc"></i></button>
+                                <ul class="dropdown-menu pull-right" role="menu"
+                                    tpl:variable.nbsteps="count(
+                                                (parent::cfg:processors/preceding-sibling::cfg:* | preceding-sibling::cfg:* | self::cfg:*)
+                                                [self::cfg:connector|self::cfg:serializer|self::cfg:validator|self::cfg:processor|
+                                                 self::cfg:element|self::cfg:elements|self::cfg:element-ignore]
+                                            )">
+                                    <li tpl:if="not(self::cfg:cache)">
+                                        <a data-url="/lavoisier/{{/cfg:view/@name}}?accept=hxml&amp;nbsteps={{$nbsteps}}&amp;_skeleton_"
+                                           href="#" class="btn-output anchor"><i class="fa fa-sitemap"></i> Skeleton</a>
+                                    </li>
+                                    <li tpl:if="not(self::cfg:cache)">
+                                        <a data-url="/lavoisier/{{/cfg:view/@name}}?accept=hxml&amp;nbsteps={{$nbsteps}}&amp;_extract_"
+                                           href="#" class="btn-output anchor"><i class="fa fa-eye-slash"></i> Output extract</a>
+                                    </li>
+                                    <li tpl:if="not(self::cfg:cache)">
+                                        <a data-url="/lavoisier/{{/cfg:view/@name}}?accept=hxml&amp;nbsteps={{$nbsteps}}"
+                                           href="#" class="btn-output anchor"><i class="fa fa-eye"></i> Full output</a>
+                                    </li>
+                                    <li tpl:if="not(self::cfg:cache)">
+                                        <a href="/lavoisier/breakpoint/*/*?view={{/cfg:view/@name}}"
+                                           target="_blank"><i class="fa fa-bug"></i> Debug</a>
+                                    </li>
+                                    <li tpl:if="not(self::cfg:cache)"
+                                        class="divider"></li>
+                                    <li>
+                                        <a href="/lavoisier/configuration/cfg:config/cfg:view[@name='{{/cfg:view/@name}}']/cfg:*[starts-with(local-name(),'{{local-name()}}')]"
+                                           target="_blank"><i class="fa fa-code"></i> Configuration</a>
+                                    </li>
+                                    <li>
+                                        <a tpl:foreach-token="@type" tpl:with-delimiter="." tpl:remove-tag="not($last)"
+                                           href="http://software.in2p3.fr/lavoisier/adaptors.xml#{{$token}}"
+                                           target="_blank"><span tpl:if="$last"><i class="fa fa-info-circle"></i> Documentation</span></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr tpl:foreach="cfg:parameter" id="parameter">
+                    <th tpl:text="@name">MyParameter</th>
+                    <td>
+                        <table tpl:if="cfg:entry"
+                               class="table table-striped table-hover table-bordered table-condensed"
+                               style="margin-bottom: 0px !important;">
+                            <tr tpl:foreach="cfg:entry">
+                                <th tpl:if="@key" width="100" tpl:text="@key">MyEntry</th>
+                                <td>
+                                    <div tpl:if="@eval" class="valueField" data-language="xquery">{{@eval}}</div>
+                                    <div tpl:else="" class="valueField">{{text()}}</div>
+                                </td>
+                            </tr>
+                        </table>
+                        <div tpl:if="@eval" class="valueField" data-language="xquery">{{@eval}}</div>
+                        <div tpl:else="@name='nodes'" class="valueField" data-language="xquery">{{text()}}</div>
+                        <div tpl:else="" class="valueField">
+                            <a tpl:remove-tag="not(@name='template' and ancestor::cfg:renderer)"
+                               href="/resource/{{text()}}" target="_blank">{{text()}}</a>
+                        </div>
+                    </td>
+                </tr>
+                <tr id="output" class="block-preview">
+                    <td colspan="4">
+                        <div class="div-preview">
+                            <pre class="pre-preview wrap"></pre>
+                        </div>
+                    </td>
+                </tr>
+                <tr style="visibility: hidden"><th width="120"/><td/></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <a name="processing" class="anchor"></a>
+
+    <!-- Processor -->
+    <div tpl:foreach="cfg:processors/cfg:processor" class="plugin">
+        <a tpl:id="count(preceding-sibling::cfg:* | parent::cfg:*/preceding-sibling::cfg:*[self::cfg:connector|self::cfg:serializer|self::cfg:validator])+1"
+           id="2" class="anchor"></a>
+        <div class="plugin-table">
+            <table class="table table-striped table-hover table-bordered table-condensed">
+                <thead tpl:duplicate="header"></thead>
+                <tbody>
+                <tr class="warning">
+                    <th>match</th>
+                    <td xmlns:x="http://software.in2p3.fr/lavoisier/config.xsd">
+                        <div tpl:if="x:XPath" class="valueField" data-language="xml" tpl:xml="x:XPath">&lt;XML/&gt;</div>
+                        <div tpl:else="@match" class="valueField" data-language="xquery">{{@match}}</div>
+                    </td>
+                </tr>
+                <tr tpl:if="cfg:variable" class="warning">
+                    <th>variables</th>
+                    <td>
+                        <table class="valuesTable">
+                            <tr tpl:foreach="cfg:variable">
+                                <td width="50">{{@name}}</td>
+                                <td>
+                                    <div tpl:if="@eval" class="valueField" data-language="xquery">{{@eval}}</div>
+                                    <div tpl:else="" class="valueField">{{text()}}</div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr tpl:duplicate="parameter" tpl:foreach="cfg:parameter"></tr>
+                <tr tpl:duplicate="output" class="block-preview"></tr>
+                <tr style="visibility: hidden"><th width="120"/><td/></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div tpl:foreach="cfg:processors/cfg:element | cfg:processors/cfg:elements" class="plugin">
+        <a tpl:id="count(preceding-sibling::cfg:* | parent::cfg:*/preceding-sibling::cfg:*[self::cfg:connector|self::cfg:serializer|self::cfg:validator])+1"
+           id="3" class="anchor"></a>
+        <div class="plugin-table">
+            <table class="table table-bordered table-condensed templateTable">
+                <thead tpl:duplicate="header"/>
+                <tbody>
+                <tr>
+                    <th>INPUT</th>
+                    <th>AXIS</th>
+                    <th>OUTPUT</th>
+                    <th>CONDITION</th>
+                </tr>
+                <tr tpl:call-function="TEMPLATE" tpl:remove-tag="true()"/>
+                <tr tpl:duplicate="output" class="block-preview"></tr>
+                <tr style="visibility: hidden"><th width="120"/><td/></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div tpl:foreach="cfg:processors/plan:e" class="plugin">
+        <a tpl:id="count(preceding-sibling::cfg:* | parent::cfg:*/preceding-sibling::cfg:*[self::cfg:connector|self::cfg:serializer|self::cfg:validator])+1"
+           id="3bis" class="anchor"></a>
+        <div class="plugin-table">
+            <table class="table table-striped table-hover table-bordered table-condensed">
+                <thead tpl:duplicate="header"/>
+                <tbody>
+                <tr>
+                    <td>
+                        <div class="valueField" data-language="xml" tpl:xml=".">&lt;XML/&gt;</div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- post-processors -->
+    <div tpl:if="@post-processors" class="plugin">
+        <div class="plugin-table">
+            <table class="table table-striped table-bordered table-hover table-condensed">
+                <thead>
+                <tr>
+                    <th colspan="2">
+                        <i class="fa fa-cog color-processor"></i>Post-Processors : {{@post-processors}}
+                        <div class="pull-right">
+                            <a href="/lavoisier/configuration/cfg:config/cfg:processors[@name='{{@post-processors}}']"
+                               target="_blank" class="btn btn-default btn-sm"><i class="fa fa-code"></i>
+                            </a>
+                        </div>
+                    </th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+    <a name="cache" class="anchor"></a>
+
+    <!-- Cache -->
+    <div tpl:foreach="cfg:cache" class="plugin">
+        <a tpl:id="count(preceding-sibling::cfg:processors/* | preceding-sibling::cfg:*[self::cfg:connector|self::cfg:serializer|self::cfg:validator])+1"
+           id="4" class="anchor"></a>
+        <div class="plugin-table">
+            <table class="table table-striped table-hover table-bordered table-condensed">
+                <thead tpl:duplicate="header"></thead>
+                <tbody>
+                <tr tpl:duplicate="parameter" tpl:foreach="cfg:parameter"></tr>
+                <tr tpl:if="cfg:trigger">
+                    <th>Triggers</th>
+                    <td>
+                        <table tpl:foreach="cfg:trigger"
+                               class="table table-striped table-hover table-bordered table-condensed">
+                            <thead tpl:duplicate="header"></thead>
+                            <tbody>
+                            <tr tpl:duplicate="parameter" tpl:foreach="cfg:parameter"></tr>
+                            <tr style="visibility: hidden"><th width="120"/><td/></tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr tpl:duplicate="output" class="block-preview"></tr>
+                <tr style="visibility: hidden"><th width="120"/><td/></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <a name="rendering" class="anchor"></a>
+
+    <!-- pre-renderer  -->
+    <div tpl:foreach="cfg:pre-renderers" class="plugin">
+        <div class="plugin-table">
+            <table class="table table-striped table-hover table-bordered table-condensed">
+                <thead>
+                <tr>
+                    <th colspan="2">
+                        <i class="fa fa-cog color-renderer"></i>Pre-renderers
+                        <div class="pull-right">
+                            <a href="/lavoisier/configuration/cfg:config/cfg:view[@name='{{/cfg:view/@name}}']/cfg:pre-renderers"
+                               target="_blank" class="btn btn-default btn-sm"><i class="fa fa-code"></i>
+                            </a>
+                        </div>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr tpl:if="cfg:namespace">
+                    <th>Namespaces</th>
+                    <td>
+                        <table class="valuesTable">
+                            <tr tpl:foreach="cfg:namespace">
+                                <td width="50">{{@prefix}}</td>
+                                <td>
+                                    <div class="valueField">{{@uri}}</div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr tpl:foreach="cfg:title">
+                    <th>Title</th>
+                    <td>
+                        <div class="valueField" data-language="xquery">{{text()}}</div>
+                    </td>
+                </tr>
+                <tr tpl:if="cfg:field">
+                    <th>Fields</th>
+                    <td>
+                        <table class="valuesTable">
+                            <tr tpl:foreach="cfg:field">
+                                <td width="50">{{@label}}</td>
+                                <td>
+                                    <div class="valueField" data-language="xquery">{{text()}}</div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr tpl:foreach="cfg:row">
+                    <th>Rows</th>
+                    <td>
+                        <div class="valueField" data-language="xquery">{{@foreach}}</div>
+                    </td>
+                </tr>
+                <tr tpl:foreach="cfg:row">
+                    <th>Columns</th>
+                    <td>
+                        <table class="valuesTable">
+                            <tr tpl:foreach="cfg:column">
+                                <td width="50">{{@label}}</td>
+                                <td>
+                                    <div class="valueField" data-language="xquery">{{text()}}</div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr style="visibility: hidden"><th width="120"/><td/></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Renderer  -->
+    <div class="plugin">
+        <div class="plugin-table" style="margin-bottom: 0px !important;">
+            <table class="table table-striped table-bordered table-hover table-condensed" style="margin-bottom: 0px;">
+                <thead>
+                <tr>
+                    <th>
+                        <i class="fa fa-cog color-renderer"></i>Renderers
+                        <div class="btn-group btn-group-sm pull-right">
+                            <div class="btn-group btn-group-sm">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-down"></i></button>
+                                <ul class="dropdown-menu pull-right">
+                                    <li><a href="/lavoisier/configuration/cfg:config/cfg:view[@name='{{/cfg:*/@name}}']/cfg:renderers" target="_blank">
+                                        <i class="fa fa-code"></i> Configuration</a>
+                                    </li>
+                                    <li><a href="http://software.in2p3.fr/lavoisier/adaptors.xml#renderer" target="_blank">
+                                        <i class="fa fa-info-circle"></i> Documentation</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="btn-group btn-group-sm pull-right">
+                                    <span class="btn">
+                                        <a data-url="/lavoisier/{{/cfg:*/@name}}" href="#" target="_blank" id="render">
+                                            <i class="fa fa-eye fa-selected" style="color: #000000"></i></a>
+                                    </span>
+                        </div>
+                        <div class="btn-group btn-group-sm pull-right" style="margin-right: 10px;">
+                            <select id="selectRenderer" class="btn btn-default btn-sm" style="text-align: left;"
+                                    tpl:variable.selected="cfg:info/cfg:accept/text()">
+                                <option value="">Default rendering</option>
+                                <option tpl:foreach="cfg:jmx/cfg:domain/cfg:group/cfg:mbean/cfg:attribute[@name='Extensions']/cfg:value[1][text()!='']"
+                                        tpl:value="text()" value="MyRenderer"
+                                        tpl:remove-attribute.selected="not(text() = $selected)" selected="selected"
+                                        tpl:text="concat(text(), substring-after('true *',boolean(/cfg:view/cfg:renderers/cfg:renderer[@type=current()/ancestor::mbean/@name])))">MyRenderer</option>
+                            </select>
+                        </div>
+                    </th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <div class="plugin">
+        <div class="plugin-table">
+            <table tpl:foreach="cfg:renderers/cfg:renderer"
+                   tpl:id="/cfg:*/cfg:jmx/cfg:domain/cfg:group/cfg:mbean[contains(current()/@type,@name)]/cfg:attribute[@name='Extensions']/cfg:value/text()"
+                   id="MyRenderer" class="table table-striped table-hover table-bordered table-condensed renderer" style="margin-top:0px;">
+                <tbody>
+                <tr tpl:duplicate="parameter" tpl:foreach="cfg:parameter"></tr>
+                <tr style="visibility: hidden"><th width="120"/><td/></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+</div>
+
+</div>
+<div style="visibility: hidden">
+    <xsl:template name="TEMPLATE">
+        <xsl:apply-templates select="." mode="TEMPLATE"/>
+    </xsl:template>
+
+    <xsl:template match="cfg:set" priority="3" mode="TEMPLATE">
+        <xsl:param name="indent"/>
+        <tr>
+            <td colspan="4" style="background:#fff">
+                        <pre><xsl:value-of select="$indent"/>
+                            <b><xsl:value-of select="@variable"/></b> = "<xsl:value-of select="text()"/>"</pre>
+            </td>
+        </tr>
+    </xsl:template>
+
+    <xsl:template match="*[*]" mode="TEMPLATE">
+        <xsl:param name="indent"/>
+        <tr class="wrap">
+            <!-- INPUT -->
+            <td>
+                        <pre><xsl:value-of select="$indent"/>
+                            <xsl:apply-templates mode="INPUT" select=".">
+                                <xsl:with-param name="tag">start</xsl:with-param>
+                            </xsl:apply-templates>
+                        </pre>
+            </td>
+            <!-- AXIS -->
+            <td class="axis">
+                <xsl:apply-templates mode="AXIS" select="."/>
+            </td>
+            <!-- OUPUT -->
+            <td>
+                        <pre><xsl:value-of select="$indent"/>
+                            <xsl:apply-templates mode="OUTPUT" select=".">
+                                <xsl:with-param name="tag">start</xsl:with-param>
+                            </xsl:apply-templates>
+                        </pre>
+            </td>
+            <!-- CONDITION -->
+            <td class="condition">
+                <xsl:for-each select="@if">
+                    <xsl:value-of select="."/>
+                </xsl:for-each>
+            </td>
+        </tr>
+        <xsl:apply-templates select="*" mode="TEMPLATE">
+            <xsl:with-param name="indent" select="concat($indent,'    ')"/>
+        </xsl:apply-templates>
+        <tr class="wrap">
+            <!-- INPUT -->
+            <td>
+                        <pre><xsl:value-of select="$indent"/>
+                            <xsl:apply-templates mode="INPUT" select=".">
+                                <xsl:with-param name="tag">end</xsl:with-param>
+                            </xsl:apply-templates>
+                        </pre>
+            </td>
+            <!-- AXIS -->
+            <td class="axis">
+                <xsl:apply-templates mode="AXIS" select="."/>
+            </td>
+            <!-- OUPUT -->
+            <td>
+                        <pre><xsl:value-of select="$indent"/>
+                            <xsl:apply-templates mode="OUTPUT" select=".">
+                                <xsl:with-param name="tag">end</xsl:with-param>
+                            </xsl:apply-templates>
+                        </pre>
+            </td>
+            <!-- CONDITION -->
+            <td class="condition"></td>
+        </tr>
+    </xsl:template>
+
+    <xsl:template match="*[not(*)]" mode="TEMPLATE">
+        <xsl:param name="indent"/>
+        <tr class="wrap">
+            <!-- INPUT -->
+            <td>
+                <pre><xsl:value-of select="$indent"/><xsl:apply-templates mode="INPUT" select="."/></pre>
+            </td>
+            <!-- AXIS -->
+            <td class="axis">
+                <xsl:apply-templates mode="AXIS" select="."/>
+            </td>
+            <!-- OUPUT -->
+            <td>
+                <pre><xsl:value-of select="$indent"/><xsl:apply-templates mode="OUTPUT" select="."/></pre>
+            </td>
+            <!-- CONDITION -->
+            <td class="condition">
+                <xsl:for-each select="@if">
+                    <xsl:value-of select="."/>
+                </xsl:for-each>
+            </td>
+        </tr>
+    </xsl:template>
+
+    <xsl:template mode="AXIS" match="cfg:element-recursive">
+        <i class="glyphicon glyphicon-repeat" title="APPLY parent rules recursively"></i>
+    </xsl:template>
+    <xsl:template mode="AXIS" match="cfg:element[@empty='true']">
+        <i class="glyphicon glyphicon-chevron-down" title="MOVE children as following siblings"></i>
+    </xsl:template>
+    <xsl:template mode="AXIS" match="*[contains(local-name(),'ignore')]">
+        <i id="tooltip" class="glyphicon glyphicon-remove" style="color: #FF0000" title="IGNORE"></i>
+    </xsl:template>
+    <xsl:template mode="AXIS" match="cfg:attribute-create">
+        <b class="glyphicon" title="CREATE attribute">@</b>
+    </xsl:template>
+    <xsl:template mode="AXIS" match="cfg:text-create">
+        <b class="glyphicon" title="CREATE text">text()</b>
+    </xsl:template>
+    <xsl:template mode="AXIS" match="cfg:comment-create">
+        <b class="glyphicon" title="CREATE comment">comment()</b>
+    </xsl:template>
+    <xsl:template mode="AXIS" match="cfg:element-create-as-parent">
+        <i class="glyphicon glyphicon-arrow-left" title="CREATE parent element"></i>
+    </xsl:template>
+    <xsl:template mode="AXIS" match="cfg:element-create[@as='last-child' or not(@as)]">
+        <i class="glyphicon glyphicon-arrow-right" title="CREATE last child element(s)"></i>
+    </xsl:template>
+    <xsl:template mode="AXIS" match="cfg:element-create[@as='preceding-sibling']">
+        <i class="glyphicon glyphicon-arrow-up" title="CREATE preceding sibling element(s)"></i>
+    </xsl:template>
+    <xsl:template mode="AXIS" match="cfg:element-create[@as='following-sibling']">
+        <i class="glyphicon glyphicon-arrow-down" title="CREATE following sibling element(s)"></i>
+    </xsl:template>
+    <xsl:template mode="AXIS" match="cfg:element-create[@as='first-child']">
+        <i class="glyphicon glyphicon-share-alt" title="CREATE first child element(s)"></i>
+    </xsl:template>
+    <xsl:template mode="AXIS" match="*"/>
+
+    <xsl:template mode="INPUT" match="cfg:elements | cfg:elements-ignore" priority="3">
+        <xsl:param name="tag"/>
+        <xsl:text>&lt;</xsl:text>
+        <xsl:if test="$tag='end'">/</xsl:if>
+        <xsl:value-of select="translate(@path,'/',' ')"/>
+        <xsl:if test="not($tag)">/</xsl:if>
+        <xsl:text>&gt;</xsl:text>
+    </xsl:template>
+    <xsl:template mode="INPUT" match="*[contains(local-name(),'-create')]" priority="3"/>
+    <xsl:template mode="INPUT" match="*[starts-with(local-name(),'attribute')]">
+        <xsl:text>@</xsl:text>
+        <xsl:apply-templates mode="INPUT_TAG" select="."/>
+    </xsl:template>
+    <xsl:template mode="INPUT" match="*[starts-with(local-name(),'element')]">
+        <xsl:param name="tag"/>
+        <xsl:text>&lt;</xsl:text>
+        <xsl:if test="$tag='end'">/</xsl:if>
+        <xsl:apply-templates mode="INPUT_TAG" select="."/>
+        <xsl:if test="not($tag)">/</xsl:if>
+        <xsl:text>&gt;</xsl:text>
+    </xsl:template>
+    <xsl:template mode="INPUT" match="*[starts-with(local-name(),'text')]">text()</xsl:template>
+    <xsl:template mode="INPUT" match="*[starts-with(local-name(),'comment')]">comment()</xsl:template>
+    <xsl:template mode="INPUT_TAG" match="*">
+        <xsl:choose>
+            <xsl:when test="@in"><xsl:value-of select="@in"/></xsl:when>
+            <xsl:otherwise>*</xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
+    <xsl:template mode="OUTPUT" match="cfg:element-recursive" priority="4">
+        <b>x <xsl:value-of select="@count"/></b>
+    </xsl:template>
+    <xsl:template mode="OUTPUT" match="cfg:element[@empty='true']" priority="4"/>
+    <xsl:template mode="OUTPUT" match="cfg:elements" priority="3">
+        <xsl:param name="tag"/>
+        <xsl:apply-templates select="." mode="INPUT">
+            <xsl:with-param name="tag" select="$tag"/>
+        </xsl:apply-templates>
+    </xsl:template>
+    <xsl:template mode="OUTPUT" match="*[contains(local-name(),'-ignore')]" priority="3"/>
+    <xsl:template mode="OUTPUT" match="*[starts-with(local-name(),'attribute')]">
+        <b>
+            <xsl:text>@</xsl:text>
+            <xsl:apply-templates mode="OUTPUT_TAG" select="."/>
+        </b>
+        <xsl:text> = "</xsl:text>
+        <xsl:value-of select="text()"/>
+        <xsl:text>"</xsl:text>
+    </xsl:template>
+    <xsl:template mode="OUTPUT" match="cfg:element-create" priority="3">
+        <b>&lt; </b>
+        <xsl:value-of select="text()"/>
+        <b> &gt;</b>
+    </xsl:template>
+    <xsl:template mode="OUTPUT" match="*[starts-with(local-name(),'element')]">
+        <xsl:param name="tag"/>
+        <xsl:text>&lt;</xsl:text>
+        <xsl:if test="$tag='end'">/</xsl:if>
+        <xsl:apply-templates mode="OUTPUT_TAG" select="."/>
+        <xsl:if test="not($tag='end')">
+            <xsl:for-each select="@attributes | @first-child-attributes">
+                <xsl:text> </xsl:text><xsl:value-of select="local-name()"/>="<xsl:value-of select="."/>"<xsl:text/>
+            </xsl:for-each>
+        </xsl:if>
+        <xsl:if test="not($tag)">/</xsl:if>
+        <xsl:text>&gt;</xsl:text>
+    </xsl:template>
+    <xsl:template mode="OUTPUT" match="*[starts-with(local-name(),'text')]">
+        <xsl:value-of select="text()"/>
+    </xsl:template>
+    <xsl:template mode="OUTPUT" match="*[starts-with(local-name(),'comment')]">
+        <xsl:text>&lt;!-- </xsl:text>
+        <xsl:value-of select="text()"/>
+        <xsl:text> --&gt;</xsl:text>
+    </xsl:template>
+    <xsl:template mode="OUTPUT_TAG" match="*">
+        <xsl:choose>
+            <xsl:when test="@out"><xsl:value-of select="@out"/></xsl:when>
+            <xsl:when test="@in"><xsl:value-of select="@in"/></xsl:when>
+            <xsl:otherwise>*</xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+</div>
+</body>
 </html>

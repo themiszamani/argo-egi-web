@@ -21,31 +21,81 @@
 
             </section>
 
-            <div class="alert alert-info">
-                Please check the content<br/>
-                Then validate .
-            </div>
-            <br/><br/>
 
 
 
 
-
-            <table class="table table-bordered table-condensed table-striped ">
-                <tr tpl:foreach="e:entries/e:entry">
-                    <th>{{@key}}</th>
-                    <td>{{text()}}</td>
+            <table class="display display-compact dataTableStyle2" style="margin:80px;">
+               <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Value</th>
                 </tr>
+                </thead>
+                <tbody>
+
+                <tr tpl:foreach="e:entries/e:entry[@key='name']">
+                    <td>Aggregation Profile Name</td>
+                    <td><input class="col-md-5" id="name" value="{{text()}}"/></td>
+                </tr>
+                <tr tpl:foreach="e:entries/e:entry[@key='namespace']">
+                    <td>Aggregation Profile NameSpace</td>
+                    <td><input class="col-md-5" id="namespace" value="{{text()}}"/></td>
+                </tr>
+
+                <tr tpl:foreach="e:entries/e:entry[@key='MetricsProfileName']">
+                    <td>MetricsProfileName</td>
+                    <td><input class="col-md-5" id="MetricsProfileName" value="{{text()}}"/></td>
+                </tr>
+                <tr tpl:foreach="e:entries/e:entry[@key='MetricsProfileId']">
+                    <td>MetricsProfileId</td>
+                    <td><input class="col-md-5" id="MetricsProfileId" value="{{text()}}"/></td>
+                </tr>
+
+                <tr>
+                    <td>Endpoint Group</td>
+                    <td>
+                        <select id="endpoint_group">
+                            <option value="sites" selected="true">SITES</option>
+                            <option value="servicegroups">SERVICE GROUPS</option>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Metrics Operation</td>
+                    <td>
+                        <select id="metric_operation">
+                            <option value="AND" selected="true">AND</option>
+                            <option value="OR">OR</option>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+
+                    <td>Profile Operation</td>
+                    <td>
+                        <select id="profile_operation">
+                            <option value="AND" selected="true">AND</option>
+                            <option value="OR">OR</option>
+                        </select>
+                    </td>
+                </tr>
+                </tbody>
+
+                <tfoot>
+                <tr tpl:foreach="e:entries/e:entry[contains(@key,'group')]" class="groups">
+                    <td><input  class="col-md-5"  value="{{@key}}"/></td>
+                    <td><textarea  rows="4" cols="50" >{{text()}}</textarea></td>
+                </tr>
+                </tfoot>
+
+
+
 
             </table>
 
-
-
-
-            <div tpl:foreach="e:entries/e:entry[not(starts-with(@key,'group')) and not(starts-with(@key,'poem')) and not(starts-with(@key,'profile'))]" class="hidden" name="data" id="{{@key}}">{{text()}}</div>
-            <div tpl:foreach="e:entries/e:entry[starts-with(@key,'group')]" class="hidden"   name="dataGroup" id="{{@key}}">{{substring(text(),1,string-length(text())-1)}}</div>
-
-            <div tpl:foreach="e:entries/e:entry[starts-with(@key,'poem')]" class="hidden"   name="dataGroupPoem" id="{{@key}}">{{text()}}</div>
 
 
             <form id="jsonform" class="form" tpl:if="e:entries/e:entry[@key='profileId']" action="/lavoisier/profileUpdate?id={{/e:entries/e:entry[@key='profileId']/text()}}" method="post">
@@ -56,7 +106,21 @@
                 <input class="hidden" id="json" name="json"/>
             </form>
 
-            <input type="submit" class="btn btn-primary" value="Create the profile" id="creationButton"/>
+
+
+
+
+            <span class="alert alert-success" style="margin:100px;">
+                Please check/correct the values registered and change the name of the groups .
+                The validation will trigger directly the API.
+            </span>
+
+
+
+            <input type="submit" class="btn btn-primary" value="Validate" id="creationButton"/>
+
+            <!--<textarea  id="jsonvalue"  cols="50" rows="20" style="margin:60px"></textarea>-->
+
         </section><!-- /.content -->
 
     </div><!-- /.right-side -->
@@ -67,46 +131,71 @@
 </body>
 
 
-
 <script type="text/javascript" >
 
-
+<!--
 
     $( document ).ready(function(){
 
-        var jsondata='{';
+        $(".dataTableStyle2").dataTable({
+            paging: false,
+            filter: false
+        });
+
+        $("#jsonvalue").hide();
+
 
         $("#creationButton").click(function(){
 
+            var tabGroups=[];
 
 
-            $('div[name="data"]').each(function( index ) {
-               jsondata=jsondata  + '"' + $(this).attr('id') + '"' + ':'  + '"' + $(this).text()  +  '" ,';
+            $('tr[class="groups"]').each(function( index ) {
+                var myGroupOutput=new Object();
+                myGroupOutput.name=$('td input',this).val();
+
+                myGroupOutput.operation='OR';
+
+                var services=$('td textarea',this).val();
+
+                var tabServices=services.split(",");
+                var tabServicesGroup=[];
+
+
+
+                for (var i= 0; i < tabServices.length-1 ;i++)
+                {
+                    tabServicesGroup.push({name:tabServices[i],operation:'OR'});
+
+                }
+                myGroupOutput.services=tabServicesGroup;
+                tabGroups.push(myGroupOutput);
+
 
             });
 
-            $('div[name="dataGroupPoem"]').each(function( index ) {
-                jsondata=jsondata  +  '"poems" :'+  $(this).text() ;
-
-            });
 
 
-            jsondata=jsondata + ',"' +  "groups" + '"' +  ": [";
+            var myJsonOutput = new Object();
+            myJsonOutput.name = $("#name").val();
+            myJsonOutput.namespace = $("#namespace").val();
+            myJsonOutput.endpoint_group =$("#endpoint_group option:selected").text();
+            myJsonOutput.metric_operation = $("#metric_operation option:selected").text();
+            myJsonOutput.profile_operation = $("#profile_operation option:selected").text();
+            myJsonOutput.metric_profile={id:$("#MetricsProfileId").val()};
 
-            $('div[name="dataGroup"]').each(function( index ) {
-                jsondata=jsondata  + '[' +  $(this).text() +   '],';
+            myJsonOutput.groups=tabGroups;
 
-            });
-
-            jsondata=jsondata.substring(0,jsondata.length - 1);
-            jsondata=jsondata + "]}";
+            var jsondata = JSON.stringify(myJsonOutput);
 
 
+            $("#jsonvalue").show();
+            $("#jsonvalue").empty();
+            $("#jsonvalue").text(jsondata);
 
             $("#json").val(jsondata);
 
-
-            $("#jsonform").submit();
+           $("#jsonform").submit();
 
         });
 
@@ -115,6 +204,7 @@
 
 
     });
+    -->
 </script>
 
 </html>

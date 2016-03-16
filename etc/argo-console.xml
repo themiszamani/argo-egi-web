@@ -1,27 +1,7 @@
 <config xmlns="http://software.in2p3.fr/lavoisier/config.xsd" xmlns:xi="http://www.w3.org/2001/XInclude" version="14" xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
     <xi:include href="argo-commons.xml" xpointer="element(/1/*)"/>
+    <xi:include href="security/lavoisier-authenticators.xml" xpointer="element(/1/*)"/>
 
-    <authenticators name="admin">
-        <authenticator type="IPAddressAuthenticator">
-            <parameter name="addresses">
-                <entry>127.0.0.1</entry>
-                <entry>0:0:0:0:0:0:0:1</entry>
-            </parameter>
-        </authenticator>
-    </authenticators>
-
-
-    <authenticators name="console">
-        <authenticator type="HTTPBasicAuthenticator">
-            <parameter name="passwords" eval="view_path('properties', '/security/passwords.properties')"/>
-        </authenticator>
-        <authenticator type="IPAddressAuthenticator">
-            <parameter name="addresses">
-                <entry>127.0.0.1</entry>
-                <entry>0:0:0:0:0:0:0:1</entry>
-            </parameter>
-        </authenticator>
-    </authenticators>
 
     <view>
         <info>
@@ -200,7 +180,7 @@
         <info>
             <category>Hidden</category>
         </info>
-        <argument name="view"/>
+        <argument name="view" path-format="value"/>
         <connector type="MemoryCacheConnector">
             <parameter name="key">!effective_configuration!</parameter>
         </connector>
@@ -214,7 +194,7 @@
         </processors>
         <renderers>
             <renderer type="HTMLRenderer">
-                <parameter name="template">xsl/form.xsl</parameter>
+                <parameter name="template">/html/form.html</parameter>
             </renderer>
         </renderers>
     </view>
@@ -559,38 +539,48 @@
             </row>
         </pre-renderers>
     </view>
-    <view name="status" authenticators="console">
+    <view name="status" >
         <info>
             <category>Monitoring</category>
             <description>Statuses of the data views</description>
         </info>
+        <argument name="notifiable">0</argument>
         <connector type="JMXConnector">
             <parameter name="domain">fr.in2p3.lavoisier.engine.jmx</parameter>
             <parameter name="type">status</parameter>
         </connector>
         <processors>
             <processor type="EncodeProcessor" match="/jmx/domain/group/mbean/attribute/value/text()"/>
-
-
             <elements path="jmx/domain/group/mbean">
                 <attribute-create out="status">3</attribute-create>
             </elements>
-
             <elements path="jmx/domain/group/mbean">
-
+                <attribute-create out="notifiable">$notifiable</attribute-create>
                 <attribute in="status" if="../attribute[@name='LastException']/value/text()!='null' and ../attribute[@name='LastErrorDate']/value/text()!='null'">1</attribute>
                 <attribute in="status" if="../attribute[@name='CurrentBuildStartDate']/value/text()!='null'">2</attribute>
                 <attribute in="status" if="../attribute[@name='LastBuildDate']/value/text()='null'">4</attribute>
             </elements>
             <elements path="jmx/domain/group">
-                <element-ignore in="mbean"></element-ignore>
+                <element-ignore in="mbean"/>
                 <element-create>sort_by_string(../mbean,'@status')</element-create>
             </elements>
+            <elements path="jmx/domain/group/mbean">
+                <attribute in="status" if=".='1'">'failure'</attribute>
+                <attribute-create out="statusclass" if="../@status='1'">'danger'</attribute-create>
 
+                <attribute in="status" if=".='2'">'under construction'</attribute>
+                <attribute-create out="statusclass" if="../@status='2'">'info'</attribute-create>
+
+                <attribute in="status" if=".='3'">'ok'</attribute>
+                <attribute-create out="statusclass" if="../@status='3'">'success'</attribute-create>
+
+                <attribute in="status" if=".='4'">'not built'</attribute>
+                <attribute-create out="statusclass" if="../@status='4'">'unknown'</attribute-create>
+            </elements>
         </processors>
         <renderers>
             <renderer type="HTMLRenderer">
-                <parameter name="template">xsl/status.xsl</parameter>
+                <parameter name="template">/html/console-status.html</parameter>
             </renderer>
         </renderers>
     </view>

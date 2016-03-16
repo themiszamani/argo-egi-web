@@ -49,14 +49,21 @@
 
                 <set variable="triggerdelete1">view('ngi_reports_cached',entry('delete',true()))/*</set>
                 <set variable="triggerdelete2">view('ngi_reports_daily_cached',entry('delete',true()))/*</set>
+
+                <set variable="triggerdelete3">view('ngi_reports_cached',entry('delete',true())|entry('report','Critical-Fedcloud'))/*</set>
+                <set variable="triggerdelete4">view('ngi_reports_daily_cached',entry('delete',true())|entry('report','Critical-Fedcloud'))/*</set>
                 
-                <set variable="triggerdelete3">view('site_reports_cached',entry('delete',true()))/*</set>
-                <set variable="triggerdelete4">view('site_reports_cached',entry('availability_profile','egi-fedcloud')|entry('delete',true()))/*</set>
-                <set variable="triggerdelete5">view('site_reports_cached',entry('availability_profile','egi-ops-monitor-critical')|entry('delete',true()))/*</set>
-              
-                <set variable="triggerdelete6">view('site_reports_daily_cached',entry('delete',true()))</set>
-                <set variable="triggerdelete7">view('site_reports_daily_cached',entry('availability_profile','egi-fedcloud')|entry('delete',true()))/*</set>
-                <set variable="triggerdelete8">view('site_reports_daily_cached',entry('availability_profile','egi-ops-monitor-critical')|entry('delete',true()))/*</set>
+                <set variable="triggerdelete5">view('site_reports_cached',entry('delete',true()))/*</set>
+                <set variable="triggerdelete6">view('site_reports_cached',entry('report','Cloud')|entry('delete',true()))/*</set>
+                <set variable="triggerdelete7">view('site_reports_cached',entry('report','OPS-MONITOR-Critical')|entry('delete',true()))/*</set>
+                <set variable="triggerdelete8">view('site_reports_cached',entry('report','Critical-Fedcloud')|entry('delete',true()))/*</set>
+
+                <set variable="triggerdelete9">view('site_reports_daily_cached',entry('delete',true()))</set>
+                <set variable="triggerdelete10">view('site_reports_daily_cached',entry('report','Cloud')|entry('delete',true()))/*</set>
+                <set variable="triggerdelete11">view('site_reports_daily_cached',entry('report','OPS-MONITOR-Critical')|entry('delete',true()))/*</set>
+                <set variable="triggerdelete12">view('site_reports_daily_cached',entry('report','Critical-Fedcloud')|entry('delete',true()))/*</set>
+
+
                 <attribute-create out="action1">'deletions done ... '</attribute-create>
             </element>
             <element in="root">
@@ -64,13 +71,18 @@
                 <set variable="triggercreate1">view('ngi_reports_cached')/*</set>
                 <set variable="triggerdelete2">view('ngi_reports_daily_cached')/*</set>
 
-                <set variable="triggerdelete3">view('site_reports_cached')/*</set>
-                <set variable="triggerdelete4">view('site_reports_cached',entry('availability_profile','egi-fedcloud') )/*</set>
-                <set variable="triggerdelete5">view('site_reports_cached',entry('availability_profile','egi-ops-monitor-critical'))/*</set>
+                <set variable="triggercreate3">view('ngi_reports_cached',entry('report','Critical-Fedcloud'))/*</set>
+                <set variable="triggercreate4">view('ngi_reports_daily_cached',entry('report','Critical-Fedcloud'))/*</set>
 
-                <set variable="triggerdelete6">view('site_reports_daily_cached')/*</set>
-                <set variable="triggerdelete7">view('site_reports_daily_cached',entry('availability_profile','egi-fedcloud'))/*</set>
-                <set variable="triggerdelete8">view('site_reports_daily_cached',entry('availability_profile','egi-ops-monitor-critical'))/*</set>
+                <set variable="triggercreate5">view('site_reports_cached')/*</set>
+                <set variable="triggercreate6">view('site_reports_cached',entry('report','Cloud'))/*</set>
+                <set variable="triggercreate7">view('site_reports_cached',entry('report','OPS-MONITOR-Critical'))/*</set>
+                <set variable="triggercreate8">view('site_reports_cached',entry('report','Critical-Fedcloud'))/*</set>
+
+                <set variable="triggercreate9">view('site_reports_daily_cached')</set>
+                <set variable="triggercreate10">view('site_reports_daily_cached',entry('report','Cloud'))/*</set>
+                <set variable="triggercreate11">view('site_reports_daily_cached',entry('report','OPS-MONITOR-Critical'))/*</set>
+                <set variable="triggercreate12">view('site_reports_daily_cached',entry('report','Critical-Fedcloud'))/*</set>
                 <attribute-create out="action2">'creations done ... '</attribute-create>
             </element>
 
@@ -109,10 +121,12 @@
 
             <element in="root">
                 <set variable="triggerdelete1">view('site_status_reports_cached',entry('delete',true()))/*</set>
+                <set variable="triggerdelete2">view('site_status_reports_cached',entry('report','Critical-Fedcloud')|entry('delete',true()))/*</set>
                 <attribute-create out="action1">'deletions done ... '</attribute-create>
             </element>
             <element in="root">
                 <set variable="triggercreate1">view('site_status_reports_cached')/*</set>
+                <set variable="triggercreate2">view('site_status_reports_cached',entry('report','Critical-Fedcloud'))/*</set>
                 <attribute-create out="action2">'creations done ... '</attribute-create>
             </element>
 

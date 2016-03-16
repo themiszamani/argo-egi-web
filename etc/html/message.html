@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd"
+      xmlns:tpl="http://software.in2p3.fr/lavoisier/template.xsd"
+      tpl:extends="/lavoisier/_default_?accept=html">
+<meta charset="UTF-8" />
+<title>ARGO AR REPORTS</title>
+<meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport' />
+
+<body>
+<!-- Right side column. Contains the navbar and content of the page -->
+<div id="wrapper">
+
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+
+
+
+        <!-- Main content -->
+        <section class="content" id="content">
+
+            <section class="content-header" id="content-header">
+                <h1>
+                    API Result
+
+                </h1>
+
+            </section>
+
+            <div class="box box-primary">
+
+                <div class="box-header">
+                    <h3 class="box-title">Request submitted</h3>
+                </div>
+
+                <div class="box-body">
+
+
+
+
+
+
+                    <table class="table table-bordered table-condensed table-striped col-md-3">
+
+                        <tr tpl:foreach="/object/status">
+                            <th>Code</th>
+                            <td>{{code/text()}} - {{message/text()}}</td>
+                        </tr>
+                        <tr tpl:foreach="/object/status">
+                            <td colspan="2">{{details/text()}}</td>
+                        </tr>
+                        <tr tpl:foreach="/object/errors">
+                            <td colspan="2">{{object/details/text()}}</td>
+                        </tr>
+                    </table>
+
+                </div>
+
+
+
+            </div>
+
+        </section>
+
+        <!-- /.content -->
+    </div>
+
+</div>
+</body>
+</html>
