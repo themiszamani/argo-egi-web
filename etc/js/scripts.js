@@ -129,8 +129,8 @@ $(".dataTableStyle2").dataTable({
             classname="label-danger";
 
 
-        if (percent == '-1')
-            classname ="label-inverse";
+        if (percent < 0)
+            classname ="label-info";
 
 
 
