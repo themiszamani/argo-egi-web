@@ -96,8 +96,8 @@
 
             <element>
                 <element-create >view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','MONTHLY')|entry('start_time',$starttime1)|entry('end_time',$endtime1)|entry('report',$report))</element-create>
-                <element-create >view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','MONTHLY')|entry('start_time',$starttime1)|entry('end_time',$endtime2)|entry('report',$report))</element-create>
-                <element-create >view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','MONTHLY')|entry('start_time',$starttime2)|entry('end_time',$endtime3)|entry('report',$report))</element-create>
+                <element-create >view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','MONTHLY')|entry('start_time',$starttime2)|entry('end_time',$endtime2)|entry('report',$report))</element-create>
+                <element-create >view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','MONTHLY')|entry('start_time',$starttime3)|entry('end_time',$endtime3)|entry('report',$report))</element-create>
             </element>
 
         </processors>
