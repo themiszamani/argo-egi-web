@@ -2,9 +2,9 @@
 <html xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd"
       xmlns:tpl="http://software.in2p3.fr/lavoisier/template.xsd"
       tpl:extends="/lavoisier/_default_?accept=html">
-<meta charset="UTF-8" />
+<meta charset="UTF-8"/>
 <title>ARGO AR REPORTS</title>
-<meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport' />
+<meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'/>
 
 <body>
 <!-- Right side column. Contains the navbar and content of the page -->
@@ -14,25 +14,24 @@
         <!-- Content Header (Page header) -->
 
 
-
         <!-- Main content -->
         <section class="content" id="content">
 
             <section class="content-header" id="content-header">
-            <h1>
-                Recomputation
-                <small>Management page</small>
-            </h1>
+                <h1>
+                    Recomputation
+                    <small>Management page</small>
+                </h1>
 
             </section>
 
-        <div class="box box-primary">
+            <div class="box box-primary">
 
-            <div class="box-header">
-                <h3 class="box-title">Recomputation Form Submitted</h3>
-            </div>
+                <div class="box-header">
+                    <h3 class="box-title">Recomputation Form Submitted</h3>
+                </div>
 
-            <div class="box-body">
+                <div class="box-body">
 
                 <span tpl:if="not(/entries/@mode)">
                      Your request has been successfully submitted (details below).
@@ -44,30 +43,44 @@
                 </span>
 
 
+                    <h3 tpl:foreach="/entries/entries">Request #{{entry[@key='recompId']/text()}} </h3>
 
-                <h3 tpl:foreach="/entries/entries">Request  #{{entry[@key='recompId']/text()}} </h3>
+                    <table tpl:if="/entries/@admin='true'" class="table table-bordered table-condensed table-striped ">
+                        <form name="ultimateForm" action="/lavoisier/form_recomputation_results_c?accept=xml"     method="post">
 
-                <table class="table table-bordered table-condensed table-striped ">
+                            <tr tpl:foreach="/entries/entries/entry">
+                                <th>{{@key}}</th>
+                                <td><input class="col-md-8" name="{{@key}}" value="{{text()}}"/></td>
+                            </tr>
+                            <tr>
+                                <th><input class="btn btn-primary" type="submit" value="submit"/></th>
+                                <td></td>
+                            </tr>
 
-                    <tr tpl:foreach="entries/entries/entry">
-                        <th>{{@key}}</th>
-                        <td>{{text()}}</td>
-                    </tr>
-                    <tr tpl:foreach="entries/entries/e:entry">
-                        <th>{{@key}}</th>
-                        <td>{{text()}}</td>
-                    </tr>
-                </table>
+                        </form>
+
+
+                    </table>
+
+                    <table tpl:else="" class="table table-bordered table-condensed table-striped ">
+
+                        <tr tpl:foreach="/entries/entries/entry">
+                            <th>{{@key}}</th>
+                            <td>{{text()}}</td>
+                        </tr>
+
+                    </table>
+
+                </div>
+
+                <div class="box-footer" tpl:if="/entries/@mode">
+                    <input tpl:if="entries/@admin='true'" type="button" class="btn btn-primary" value="Trigger API"/>
+                    <input type="button" tpl:else="" class="btn btn-primary" value="Trigger API" disabled="true"
+                           title="You are not authorized to perform this action"/>
+                </div>
+
 
             </div>
-
-                        <div class="box-footer" tpl:if="/entries/@mode">
-                          <input tpl:if="entries/@admin='true'" type="button" class="btn btn-primary" value="Trigger API"/>
-                            <input type="button" tpl:else="" class="btn btn-primary" value="Trigger API" disabled="true" title="You are not authorized to perform this action"/>
-                    </div>
-
-
-        </div>
 
         </section>
 

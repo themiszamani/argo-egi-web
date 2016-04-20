@@ -146,25 +146,34 @@
 
 
 
-    <view name="recomputationInfo" authenticators="AuthenticatedUsers">
+
+    <view name="form_recomputation_results" authenticators="AuthenticatedUsers">
         <info>
-            <category>Recomputation</category>
-            <description>Check a given recomputation</description>
+            <category>Hidden</category>
         </info>
 
+        <argument name="recompId"></argument>
+        <argument name="key">0</argument>
+        <argument name="mode">RW</argument>
+        <argument name="admin">_admin_</argument>
 
-        <argument name="recompId">0</argument>
-        <connector type="FileConnector">
-            <parameter name="path" eval="concat(property('cache.baseDirectory'),'form_recomputation_results/',$recompId)"></parameter>
+
+        <connector type="RotatingCacheConnector">
+            <!--<parameter name="content" eval="choose($update='update',post(),view_post('form_recomputation_results_INTERNAL',choose(post(false()),post(false()),entries())))"/>-->
+            <parameter name="content" eval="view_post('form_recomputation_results_INTERNAL',choose(post(false()),post(false()),entries()))"/>
+            <parameter name="key" eval="arguments()[@key='recompId']"/>
+            <parameter name="size">100</parameter>
+            <parameter name="mode" eval="$mode"></parameter>
         </connector>
 
         <processors>
             <element in="entries">
-                <attribute-create out="mode">history</attribute-create>
                 <attribute-create out="user">user()</attribute-create>
-                <attribute-create out="admin">boolean(view('administratorsList')/admins/admin/CertDN[text()=user()])</attribute-create>
+                <attribute-create out="admin">choose($admin!='_admin_',false(),boolean(view('administratorsList')/admins/admin/CertDN[text()=user()]))</attribute-create>
+
             </element>
         </processors>
+
         <renderers>
             <renderer type="DefaultRenderer">
                 <parameter name="template">/html/recomp_res.html</parameter>
@@ -176,30 +185,29 @@
 
     </view>
 
-    <view name="form_recomputation_results">
+    <view name="form_recomputation_results_c" authenticators="AuthenticatedUsers">
         <info>
             <category>Hidden</category>
         </info>
 
-        <argument name="recompId">0</argument>
-        <argument name="key">0</argument>
 
 
-        <connector type="RotatingCacheConnector">
-            <parameter name="content" eval="view_post('form_recomputation_results_INTERNAL',choose(post(false()),post(false()),entries()))"/>
-            <parameter name="key" eval="$recompId"/>
-            <parameter name="size">100</parameter>
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="new_element('root')"></parameter>
+
         </connector>
 
+        <processors>
+            <element in="root">
+                <attribute-create out="user">user()</attribute-create>
+                <attribute-create out="admin">boolean(view('administratorsList')/admins/admin/CertDN[text()=user()])</attribute-create>
+            </element>
 
-        <renderers>
-            <renderer type="DefaultRenderer">
-                <parameter name="template">/html/recomp_res.html</parameter>
-            </renderer>
-            <renderer type="HTMLRenderer">
-                <parameter name="template">/html/recomp_res.html</parameter>
-            </renderer>
-        </renderers>
+            <element in="root">
+                <element-create>view('form_recomputation_results',post()|entry('mode','W'))</element-create>
+            </element>
+        </processors>
 
 
     </view>
@@ -236,7 +244,7 @@
             <element in="e:entries">
                 <element in="e:entries">
                     <element-create>entry('RequestDate',substring-after(substring-before(../../e:entry/text(),'&lt;/entry'),'key="Request date"&gt;'))</element-create>
-                    <element-create>entry('status',substring-before(substring-after(../../e:entry/text(),'key="status"&gt;'),'&lt;/entry'))</element-create>
+                    <element-create>entry('status',choose(substring-before(substring-after(../../e:entry/text(),'key="status"&gt;'),'&lt;/entry'),substring-before(substring-after(../../e:entry/text(),'key="status"&gt;'),'&lt;/entry'),'Submission request failed'))</element-create>
 
                 </element>
             </element>
@@ -260,6 +268,33 @@
 
         </processors>
 
+
+    </view>
+
+    <view name="RecomputationList" authenticators="AuthenticatedUsers">
+        <info>
+            <category>ADMIN</category>
+            <description>List of recomputation</description>
+        </info>
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('form_recomputation_results')"></parameter>
+        </connector>
+
+        <processors>
+            <element in="properties">
+                <attribute-create out="user">user()</attribute-create>
+                <attribute-create out="admin">boolean(view('administratorsList')/admins/admin/CertDN[text()=user()])</attribute-create>
+            </element>
+        </processors>
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/html/recomputationList.html</parameter>
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/html/recomputationList.html</parameter>
+            </renderer>
+        </renderers>
 
     </view>
 

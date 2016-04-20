@@ -38,8 +38,10 @@
 
 
             <element in="root" out="e:entries">
-                <attribute-create out="start_timestamp">date:seconds($start_date)</attribute-create>
-                <attribute-create out="end_timestamp">date:seconds($end_date)</attribute-create>
+
+                <attribute-create out="start_date">$start_date</attribute-create>
+                <attribute-create out="end_date">$end_date</attribute-create>
+
                 <attribute-create out="view">ngi_ar</attribute-create>
                 <attribute-create out="view_details">$view_details</attribute-create>
 
@@ -220,6 +222,10 @@
 
                 <attribute-create out="start_timestamp">date:seconds($start_date)</attribute-create>
                 <attribute-create out="end_timestamp">date:seconds($end_date)</attribute-create>
+
+                <attribute-create out="start_date">$start_date</attribute-create>
+                <attribute-create out="end_date">$end_date</attribute-create>
+
                 <attribute-create out="view">site_ar</attribute-create>
                 <attribute-create out="view_details">$view_details</attribute-create>
 
@@ -252,6 +258,9 @@
             <element in="e:entries">
                 <attribute-create out="url">concat('/lavoisier/',$view_details,'?report=',$report,
                     '&amp;end_date=',$end_date,'&amp;start_date=',$start_date,'&amp;granularity=',$granularity)
+                </attribute-create>
+                <attribute-create out="status_url">concat('/lavoisier/status_report-site','?report=',$report,
+                    '&amp;end=',$end_date,'&amp;start=',$start_date,'&amp;accept=html')
                 </attribute-create>
             </element>
 
