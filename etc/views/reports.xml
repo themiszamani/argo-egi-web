@@ -13,7 +13,7 @@
         <description>NGI League Reports - cache Rotated</description>
     </info>
         <argument name="report">Critical</argument>
-        <argument name="delete" eval="false()"></argument>
+        <argument name="mode">RW</argument>
 
     <connector type="XMLConnector">
         <parameter name="content" eval="new_element('root')"></parameter>
@@ -23,9 +23,9 @@
 
 
           <element in="root">
-                <element-create>view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','MONTHLY')|entry('diff','0')|entry('delete',$delete)|entry('report',$report))</element-create>
-                <element-create>view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','MONTHLY')|entry('diff','1')|entry('delete',$delete)|entry('report',$report))</element-create>
-                <element-create>view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','MONTHLY')|entry('diff','2')|entry('delete',$delete)|entry('report',$report))</element-create>
+                <element-create>view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','MONTHLY')|entry('diff','0')|entry('mode',$mode)|entry('report',$report))</element-create>
+                <element-create>view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','MONTHLY')|entry('diff','1')|entry('mode',$mode)|entry('report',$report))</element-create>
+                <element-create>view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','MONTHLY')|entry('diff','2')|entry('mode',$mode)|entry('report',$report))</element-create>
             </element>
 
         </processors>
@@ -37,7 +37,7 @@
             <category>AR reports</category>
             <description>NGI League Reports - cache Rotated</description>
         </info>
-        <argument name="delete" eval="false()"></argument>
+        <argument name="mode">RW</argument>
         <argument name="report">Critical</argument>
 
         <connector type="XMLConnector">
@@ -49,9 +49,9 @@
 
 
             <element>
-                <element-create>view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','DAILY')|entry('diff','0')|entry('delete',$delete)|entry('report',$report))</element-create>
-                <element-create>view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','DAILY')|entry('diff','1')|entry('delete',$delete)|entry('report',$report))</element-create>
-                <element-create>view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','DAILY')|entry('diff','2')|entry('delete',$delete)|entry('report',$report))</element-create>
+                <element-create>view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','DAILY')|entry('diff','0')|entry('mode',$mode)|entry('report',$report))</element-create>
+                <element-create>view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','DAILY')|entry('diff','1')|entry('mode',$mode)|entry('report',$report))</element-create>
+                <element-create>view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','DAILY')|entry('diff','2')|entry('mode',$mode)|entry('report',$report))</element-create>
             </element>
 
 
@@ -96,8 +96,8 @@
 
             <element>
                 <element-create >view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','MONTHLY')|entry('start_time',$starttime1)|entry('end_time',$endtime1)|entry('report',$report))</element-create>
-                <element-create >view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','MONTHLY')|entry('start_time',$starttime1)|entry('end_time',$endtime2)|entry('report',$report))</element-create>
-                <element-create >view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','MONTHLY')|entry('start_time',$starttime2)|entry('end_time',$endtime3)|entry('report',$report))</element-create>
+                <element-create >view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','MONTHLY')|entry('start_time',$starttime2)|entry('end_time',$endtime2)|entry('report',$report))</element-create>
+                <element-create >view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','MONTHLY')|entry('start_time',$starttime3)|entry('end_time',$endtime3)|entry('report',$report))</element-create>
             </element>
 
         </processors>
@@ -271,7 +271,7 @@
 
           
             <processor match="/e:entries" type="InsertProcessor" disabled="$month!=0">
-                <parameter name="nodes" eval="new_attribute('month4',substring(date:add(date:date-time(),'-P1D'),  0,8))|new_attribute('month3',substring(date:add(date:date-time(),'-P1M'),  0,8))|new_attribute('month2',substring(date:add(date:date-time(),'-P2M'),  0,8))|new_attribute('month1',substring(date:add(date:date-time(),'-P3M'),  0,8))"/>
+                <parameter name="nodes" eval="new_attribute('month4',substring(date:add(date:date-time(),'-PT1H'),  0,8))|new_attribute('month3',substring(date:add(date:date-time(),'-P1M'),  0,8))|new_attribute('month2',substring(date:add(date:date-time(),'-P2M'),  0,8))|new_attribute('month1',substring(date:add(date:date-time(),'-P3M'),  0,8))"/>
             </processor>
 
             <processor match="/e:entries" type="InsertProcessor" disabled="$month=0">
@@ -422,7 +422,7 @@
 
 
             <processor match="/e:entries" type="InsertProcessor" disabled="$month!=0">
-                <parameter name="nodes" eval="new_attribute('month4',substring(date:add(date:date-time(),'-P1D'),  0,8))|new_attribute('month3',substring(date:add(date:date-time(),'-P1M'),  0,8))|new_attribute('month2',substring(date:add(date:date-time(),'-P2M'),  0,8))|new_attribute('month1',substring(date:add(date:date-time(),'-P3M'),  0,8))"/>
+                <parameter name="nodes" eval="new_attribute('month4',substring(date:add(date:date-time(),'-PT1H'),  0,8))|new_attribute('month3',substring(date:add(date:date-time(),'-P1M'),  0,8))|new_attribute('month2',substring(date:add(date:date-time(),'-P2M'),  0,8))|new_attribute('month1',substring(date:add(date:date-time(),'-P3M'),  0,8))"/>
             </processor>
 
             <processor match="/e:entries" type="InsertProcessor" disabled="$month=0">
@@ -545,7 +545,7 @@
 
 
             <processor match="/e:entries" type="InsertProcessor" disabled="$month!=0">
-                <parameter name="nodes" eval="new_attribute('month4',substring(date:add(date:date-time(),'-P1D'),  0,8))|new_attribute('month3',substring(date:add(date:date-time(),'-P1M'),  0,8))|new_attribute('month2',substring(date:add(date:date-time(),'-P2M'),  0,8))|new_attribute('month1',substring(date:add(date:date-time(),'-P3M'),  0,8))"/>
+                <parameter name="nodes" eval="new_attribute('month4',substring(date:add(date:date-time(),'-PT1H'),  0,8))|new_attribute('month3',substring(date:add(date:date-time(),'-P1M'),  0,8))|new_attribute('month2',substring(date:add(date:date-time(),'-P2M'),  0,8))|new_attribute('month1',substring(date:add(date:date-time(),'-P3M'),  0,8))"/>
             </processor>
 
             <processor match="/e:entries" type="InsertProcessor" disabled="$month=0">
@@ -599,7 +599,7 @@
             <description>NGI League Reports - cache Rotated</description>
         </info>
         <argument name="report">Critical</argument>
-        <argument name="delete" eval="false()"></argument>
+        <argument name="mode">RW</argument>
 
         <connector type="XMLConnector">
             <parameter name="content" eval="new_element('root')"></parameter>
@@ -607,9 +607,9 @@
 
         <processors>
             <insert match="/root" nodes="
-            view('api.availability.rotating.caches',entry('group_type','sites')|entry('granularity','MONTHLY')|entry('report',$report)|entry('diff','0')|entry('delete',$delete))
-            |view('api.availability.rotating.caches',entry('group_type','sites')|entry('granularity','MONTHLY')|entry('report',$report)|entry('diff','1')|entry('delete',$delete))
-            |view('api.availability.rotating.caches',entry('group_type','sites')|entry('granularity','MONTHLY')|entry('report',$report)|entry('diff','2')|entry('delete',$delete))">
+            view('api.availability.rotating.caches',entry('group_type','sites')|entry('granularity','MONTHLY')|entry('report',$report)|entry('diff','0')|entry('mode',$mode))
+            |view('api.availability.rotating.caches',entry('group_type','sites')|entry('granularity','MONTHLY')|entry('report',$report)|entry('diff','1')|entry('mode',$mode))
+            |view('api.availability.rotating.caches',entry('group_type','sites')|entry('granularity','MONTHLY')|entry('report',$report)|entry('diff','2')|entry('mode',$mode))">
 
             </insert>
         </processors>
@@ -662,7 +662,7 @@
             <description>NGI League Reports - cache Rotated</description>
         </info>
         <argument name="report">Critical</argument>
-        <argument name="delete" eval="false()"></argument>
+        <argument name="mode">RW</argument>
 
         <connector type="XMLConnector">
             <parameter name="content" eval="new_element('root')"></parameter>
@@ -670,9 +670,9 @@
 
         <processors>
             <insert match="/root" nodes="
-            view('api.availability.rotating.caches',entry('group_type','sites')|entry('granularity','DAILY')|entry('report',$report)|entry('diff','0')|entry('delete',$delete))
-            |view('api.availability.rotating.caches',entry('group_type','sites')|entry('granularity','DAILY')|entry('report',$report)|entry('diff','1')|entry('delete',$delete))
-            |view('api.availability.rotating.caches',entry('group_type','sites')|entry('granularity','DAILY')|entry('report',$report)|entry('diff','2')|entry('delete',$delete))">
+            view('api.availability.rotating.caches',entry('group_type','sites')|entry('granularity','DAILY')|entry('report',$report)|entry('diff','0')|entry('mode',$mode))
+            |view('api.availability.rotating.caches',entry('group_type','sites')|entry('granularity','DAILY')|entry('report',$report)|entry('diff','1')|entry('mode',$mode))
+            |view('api.availability.rotating.caches',entry('group_type','sites')|entry('granularity','DAILY')|entry('report',$report)|entry('diff','2')|entry('mode',$mode))">
 
             </insert>
         </processors>
@@ -746,7 +746,7 @@
 
 
             <processor match="/e:entries" type="InsertProcessor" disabled="$month!=0">
-                <parameter name="nodes" eval="new_attribute('month4',substring(date:add(date:date-time(),'-P1D'),  0,8))|new_attribute('month3',substring(date:add(date:date-time(),'-P1M'),  0,8))|new_attribute('month2',substring(date:add(date:date-time(),'-P2M'),  0,8))|new_attribute('month1',substring(date:add(date:date-time(),'-P3M'),  0,8))"/>
+                <parameter name="nodes" eval="new_attribute('month4',substring(date:add(date:date-time(),'-PT1H'),  0,8))|new_attribute('month3',substring(date:add(date:date-time(),'-P1M'),  0,8))|new_attribute('month2',substring(date:add(date:date-time(),'-P2M'),  0,8))|new_attribute('month1',substring(date:add(date:date-time(),'-P3M'),  0,8))"/>
             </processor>
 
             <processor match="/e:entries" type="InsertProcessor" disabled="$month=0">

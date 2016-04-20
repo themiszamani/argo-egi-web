@@ -34,6 +34,10 @@
                 <entry key="x-api-key" eval="property('argo.api.key')"></entry>
                 <entry key="Accept">application/xml</entry>
             </parameter>
+            <fallback eval="new_element('root')">
+                <exception type="java.io.IOException"></exception>
+
+            </fallback>
         </connector>
 
         <processors>
@@ -78,6 +82,9 @@
                 <entry key="x-api-key" eval="property('argo.api.key')"></entry>
                 <entry key="Accept">application/xml</entry>
             </parameter>
+            <fallback eval="new_element('root')">
+                <exception type="java.io.IOException"></exception>
+            </fallback>
         </connector>
 
         <processors>
@@ -121,7 +128,7 @@
         <argument name="start_time">0</argument>
         <argument name="end_time">0</argument>
         <argument name="site">false</argument>
-        <argument name="delete" eval="false()"></argument>
+        <argument name="mode">RW</argument>
 
 
         <argument name="starttime" eval="choose($diff=10,$start_time,concat(substring(date:add(date:date-time(),concat('-P',$diff+1,'M')), 0,8),'-01T00:00:00Z'))"></argument>
@@ -141,10 +148,11 @@
              )"/>
             <parameter name="key" eval="concat($report,'-',$group_type,'-',$granularity,'-',$starttime,'-',$endtime,'-',$site)"/>
             <parameter name="size">100000</parameter>
-            <parameter name="delete" eval="$delete"></parameter>
+            <parameter name="mode" eval="$mode"></parameter>
 
-            <fallback>
+            <fallback eval="new_element('root')">
                 <exception type="java.io.IOException"></exception>
+
             </fallback>
         </connector>
 
@@ -180,6 +188,17 @@
                 <entry key="x-api-key" eval="property('argo.api.key')"></entry>
                 <entry key="Accept">application/xml</entry>
             </parameter>
+            <!-- optional: timeout (in seconds) for connecting (Integer) -->
+            <parameter name="connect-timeout">600</parameter>
+
+
+            <!-- optional: timeout (in seconds) for reading (Integer) -->
+            <parameter name="read-timeout">600</parameter>
+
+            <fallback eval="new_element('root')">
+                <exception type="java.io.IOException"></exception>
+
+            </fallback>
 
         </connector>
 
@@ -219,7 +238,7 @@
         <argument name="report">Critical</argument>
         <argument name="granularity">DAILY</argument>
         <argument name="site">false</argument>
-        <argument name="delete" eval="false()"></argument>
+        <argument name="mode">RW</argument>
 
         <argument name="starttime" eval="concat(substring(date:add(date:date-time(),concat('-P',$diff+1,'D')), 0,11),'T00:00:00Z')"></argument>
         <argument name="endtime" eval="concat(substring(date:add(date:date-time(),concat('-P',$diff+1,'D')), 0,11),'T23:59:59Z')"></argument>
@@ -237,7 +256,7 @@
              "/>
             <parameter name="key" eval="concat($report,'-',$group_type,'-',$starttime,'-',$endtime,'-',$site)"/>
             <parameter name="size">100000</parameter>
-            <parameter name="delete" eval="$delete"></parameter>
+            <parameter name="mode" eval="$mode"></parameter>
 
             <fallback>
                 <exception type="java.io.IOException"></exception>
@@ -287,6 +306,12 @@
                 <entry key="x-api-key" eval="property('argo.api.key')"></entry>
                 <entry key="Accept">application/xml</entry>
             </parameter>
+            <parameter name="connect-timeout">600</parameter>
+            <parameter name="read-timeout">600</parameter>
+            <fallback eval="new_element('root')">
+                <exception type="java.io.IOException"></exception>
+
+            </fallback>
         </connector>
 
         <processors>
@@ -333,6 +358,10 @@ node16.datagrid.cea.fr/org.nordugrid.ARC-CE-ARIS?exec_time=2015-06-01T00:01:20Z'
                 <entry key="x-api-key" eval="property('argo.api.key')"></entry>
                 <entry key="Accept">application/xml</entry>
             </parameter>
+            <fallback eval="new_element('root')">
+                <exception type="java.io.IOException"></exception>
+
+            </fallback>
         </connector>
 
 
