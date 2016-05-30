@@ -26,6 +26,11 @@
         <trigger type="ViewNotifiedTrigger"/>
         <trigger type="ViewCreatedTrigger"/>
     </cache>
+    <renderers>
+        <renderer type="DefaultRenderer">
+            <parameter name="contentType">text/xml</parameter>
+        </renderer>
+    </renderers>
 
 </view>
 
@@ -54,7 +59,73 @@
 
 </view>
 
-<view xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" name="listSitesbyNgi">
+    <view xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" name="listSiteElixir">
+        <info>
+            <description>GOC DB : List of Sites with Elixir Tag</description>
+            <category>GOC DB</category>
+        </info>
+
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('goc.siteList')/results/SITE[SCOPES/SCOPE/text()='elixir']/@NAME"/>
+        </connector>
+
+        <cache type="FileCache">
+            <!--<trigger type="ViewCreatedTrigger"/>-->
+            <trigger type="DeltaTimeTrigger">
+                <parameter name="hours">2</parameter>
+            </trigger>
+            <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="ViewCreatedTrigger"/>
+        </cache>
+
+
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="contentType">text/xml</parameter>
+            </renderer>
+        </renderers>
+    </view>
+
+    <view xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" name="listSiteScopes">
+        <info>
+            <description>GOC DB : List of Sites Scope</description>
+            <category>GOC DB</category>
+        </info>
+
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('goc.siteList')/results/SITE/SCOPES/SCOPE/text()"/>
+        </connector>
+
+        <processors>
+            <element in="e:entries">
+                <element-ignore in="e:entry"></element-ignore>
+                <element-create>
+                    uniq(../e:entry,'text()')
+                </element-create>
+            </element>
+        </processors>
+
+        <cache type="FileCache">
+            <!--<trigger type="ViewCreatedTrigger"/>-->
+            <trigger type="DeltaTimeTrigger">
+                <parameter name="hours">2</parameter>
+            </trigger>
+            <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="ViewCreatedTrigger"/>
+        </cache>
+
+
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="contentType">text/xml</parameter>
+            </renderer>
+        </renderers>
+    </view>
+
+
+    <view xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" name="listSitesbyNgi">
 <info>
     <description>GOC DB : List of Sites per Ngi</description>
     <category>GOC DB</category>

@@ -19,8 +19,13 @@
         <category link="/lavoisier/ngi_fedcloudcritical_reports?accept=html" icon="fa fa-cloud-upload"> CloudCritical Report</category>
         <category link="/lavoisier/opsmon_reports?accept=html" icon="fa fa-star"> OpsMon Report</category>
         <category link="/lavoisier/report_form?accept=html" icon="fa fa-list"> Customized Report</category>
+        <category link="/lavoisier/elixir_report?accept=html" icon="fa fa-globe"> Elixir Report</category>
         <category link="/lavoisier/customFactors?accept=html" icon="fa fa-th">Availability Treemap</category>
     </categories>
+
+
+
+
 
     <categories bg="bg-purple" icon="fa fa-cog" title="Administration">
         <category link="/lavoisier/listProfiles" icon="fa fa-group"> Profile Management</category>

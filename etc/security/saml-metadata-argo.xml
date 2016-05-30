@@ -1,0 +1,33 @@
+<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+                     entityID="https://argo.egi.eu/lavoisier/sam-ml-metadata">
+    <md:SPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:1.1:protocol urn:oasis:names:tc:SAML:2.0:protocol">
+        <md:KeyDescriptor use="signing">
+            <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+                <ds:X509Data>
+                    <ds:X509Certificate>MIIE6zCCA9OgAwIBAgIBMzANBgkqhkiG9w0BAQsFADBKMRMwEQYKCZImiZPyLGQBGRYDT1JHMRgwFgYKCZImiZPyLGQBGRYIU0VFLUdSSUQxGTAXBgNVBAMTEFNFRS1HUklEIENBIDIwMTMwHhcNMTUwNjExMDkzODMwWhcNMTYwNjEwMDkzODMwWjBtMRIwEAYKCZImiZPyLGQBGRYCRVUxEzARBgoJkiaJk/IsZAEZFgNFR0kxCzAJBgNVBAYTAk5MMQ4wDAYDVQQKDAVIb3N0czEPMA0GA1UECgwGRUdJLmV1MRQwEgYDVQQDDAthcmdvLmVnaS5ldTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALrkrVfrz/ivuXp7+9xtkpx1pSaX0UsgF3wxG3O/+uag3nJ2ZeDKrle2229up704092WoN1KJyZAk+vhpdjWTW2TE3sSFMLNFeaOk42W44cOxkGscLplw53e8lt6LhH2LePYVZ2CwzZz6iNmuhxIiZKi5cb03mGxxCL1/r2iiRq6F+HQRGRNzJIphEzlwWzhlkdvgDJ+AWup3M7WXcmi/+x7cIvWvkopaya0ipPn4+7EmLTG0qw4T5a2mTumwP6iR3ktZlEJKOdhWEOgEzd2M4tUNuKc61iQmgSwZXlXCEDVvBb5g+AUcZvVIzK5fNy43cltn1lp/CYv3LYnCM+dWCcCAwEAAaOCAbcwggGzMAwGA1UdEwEB/wQCMAAwDgYDVR0PAQH/BAQDAgSwMB0GA1UdJQQWMBQGCCsGAQUFBwMBBggrBgEFBQcDAjAdBgNVHQ4EFgQUOmHKU5JjS/QdIqyJ8rLkew/1VDwwcgYDVR0jBGswaYAUtNuATG66Y6Ncft+ScPaYLRoccIChTqRMMEoxEzARBgoJkiaJk/IsZAEZFgNPUkcxGDAWBgoJkiaJk/IsZAEZFghTRUUtR1JJRDEZMBcGA1UEAxMQU0VFLUdSSUQgQ0EgMjAxM4IBADAtBgNVHREEJjAkggthcmdvLmVnaS5ldYIVd2ViLWVnaS5hcmdvLmdybmV0LmdyMEQGA1UdHwQ9MDswOaA3oDWGM2h0dHA6Ly9jcmwuaGVsbGFzZ3JpZC5nci9zZWVncmlkLWNhLTIwMTMvY3JsLXYyLnBlbTBsBgNVHSAEZTBjMGEGDSsGAQQBgYEDFAIBAgQwUDBOBggrBgEFBQcCARZCaHR0cDovL3NlZS1ncmlkLWNhLmhlbGxhc2dyaWQuZ3IvYXNzZXRzL1NFRS1HUklELUNBLUNQLUNQUy0yLjQucGRmMA0GCSqGSIb3DQEBCwUAA4IBAQDVTwK+lf+w8rnGLNUXlSNhx7R3jMb9fdVBXLkbECSYGLonTrHp3dzXL9mdU0Rg8T0wEYg/Ykewd3C6kzLVPI/yFmd2HR9z+exL+P017ocWaRJbjxZXuSZEt+9yD546avL8zHfFtJRQGkpcR4c/GLryatstws30wr1i8JPPZ/n8EEHIlu6Lh2ebapHYZYcaRjTe8fUtlYvBDItrzs5YIuepDj+j4CqHlperA/ZsU+CSdN2z2cQ41ZP0rZIDd1sDzwKcqumKk7zSa3VQ4ePrSZwfJyGcNTj57hiGPATGAMYJ1jDnEfYjriZRqYQSvsxVMxF4IKSY89AzCQJpdqvpNPla</ds:X509Certificate>
+                </ds:X509Data>
+            </ds:KeyInfo>
+        </md:KeyDescriptor>
+        <md:KeyDescriptor use="encryption">
+            <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+                <ds:X509Data>
+                    <ds:X509Certificate>MIIE6zCCA9OgAwIBAgIBMzANBgkqhkiG9w0BAQsFADBKMRMwEQYKCZImiZPyLGQBGRYDT1JHMRgwFgYKCZImiZPyLGQBGRYIU0VFLUdSSUQxGTAXBgNVBAMTEFNFRS1HUklEIENBIDIwMTMwHhcNMTUwNjExMDkzODMwWhcNMTYwNjEwMDkzODMwWjBtMRIwEAYKCZImiZPyLGQBGRYCRVUxEzARBgoJkiaJk/IsZAEZFgNFR0kxCzAJBgNVBAYTAk5MMQ4wDAYDVQQKDAVIb3N0czEPMA0GA1UECgwGRUdJLmV1MRQwEgYDVQQDDAthcmdvLmVnaS5ldTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALrkrVfrz/ivuXp7+9xtkpx1pSaX0UsgF3wxG3O/+uag3nJ2ZeDKrle2229up704092WoN1KJyZAk+vhpdjWTW2TE3sSFMLNFeaOk42W44cOxkGscLplw53e8lt6LhH2LePYVZ2CwzZz6iNmuhxIiZKi5cb03mGxxCL1/r2iiRq6F+HQRGRNzJIphEzlwWzhlkdvgDJ+AWup3M7WXcmi/+x7cIvWvkopaya0ipPn4+7EmLTG0qw4T5a2mTumwP6iR3ktZlEJKOdhWEOgEzd2M4tUNuKc61iQmgSwZXlXCEDVvBb5g+AUcZvVIzK5fNy43cltn1lp/CYv3LYnCM+dWCcCAwEAAaOCAbcwggGzMAwGA1UdEwEB/wQCMAAwDgYDVR0PAQH/BAQDAgSwMB0GA1UdJQQWMBQGCCsGAQUFBwMBBggrBgEFBQcDAjAdBgNVHQ4EFgQUOmHKU5JjS/QdIqyJ8rLkew/1VDwwcgYDVR0jBGswaYAUtNuATG66Y6Ncft+ScPaYLRoccIChTqRMMEoxEzARBgoJkiaJk/IsZAEZFgNPUkcxGDAWBgoJkiaJk/IsZAEZFghTRUUtR1JJRDEZMBcGA1UEAxMQU0VFLUdSSUQgQ0EgMjAxM4IBADAtBgNVHREEJjAkggthcmdvLmVnaS5ldYIVd2ViLWVnaS5hcmdvLmdybmV0LmdyMEQGA1UdHwQ9MDswOaA3oDWGM2h0dHA6Ly9jcmwuaGVsbGFzZ3JpZC5nci9zZWVncmlkLWNhLTIwMTMvY3JsLXYyLnBlbTBsBgNVHSAEZTBjMGEGDSsGAQQBgYEDFAIBAgQwUDBOBggrBgEFBQcCARZCaHR0cDovL3NlZS1ncmlkLWNhLmhlbGxhc2dyaWQuZ3IvYXNzZXRzL1NFRS1HUklELUNBLUNQLUNQUy0yLjQucGRmMA0GCSqGSIb3DQEBCwUAA4IBAQDVTwK+lf+w8rnGLNUXlSNhx7R3jMb9fdVBXLkbECSYGLonTrHp3dzXL9mdU0Rg8T0wEYg/Ykewd3C6kzLVPI/yFmd2HR9z+exL+P017ocWaRJbjxZXuSZEt+9yD546avL8zHfFtJRQGkpcR4c/GLryatstws30wr1i8JPPZ/n8EEHIlu6Lh2ebapHYZYcaRjTe8fUtlYvBDItrzs5YIuepDj+j4CqHlperA/ZsU+CSdN2z2cQ41ZP0rZIDd1sDzwKcqumKk7zSa3VQ4ePrSZwfJyGcNTj57hiGPATGAMYJ1jDnEfYjriZRqYQSvsxVMxF4IKSY89AzCQJpdqvpNPla</ds:X509Certificate>
+                </ds:X509Data>
+            </ds:KeyInfo>
+        </md:KeyDescriptor>
+        <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
+                                Location="https://aai.egi.eu/proxy/saml2/idp/SingleLogoutService.php"/>
+        <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
+                                Location="https://aai.egi.eu/proxy/saml2/idp/SSOService.php"/>
+            <md:ServiceName xml:lang="en">ARGO</md:ServiceName>
+            <md:RequestedAttribute Name="urn:oid:2.5.4.49" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" isRequired="true"/>
+            <md:RequestedAttribute Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.13" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" />
+            <md:RequestedAttribute Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.11" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" />
+        </md:AttributeConsumingService>
+    </md:SPSSODescriptor>
+    <md:ContactPerson contactType="technical">
+        <md:GivenName>Cyril</md:GivenName>
+        <md:SurName>Lorphelin</md:SurName>
+        <md:EmailAddress>cic-information@cc.in2p3.fr</md:EmailAddress>
+    </md:ContactPerson>
+</md:EntityDescriptor>

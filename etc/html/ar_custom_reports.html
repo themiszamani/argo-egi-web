@@ -91,10 +91,10 @@
                                         <span  style="margin-left:10px"  class="reCheck label re3" title="{{format-number(@reliability,'#.00')}}" >{{format-number(@reliability,'#.00')}}</span>
                                     </td>
                                     <td tpl:if="/e:entries/Entity/Availability/@unknown">
-                                        <span  style="margin-left:10px"  class="avUnknown label re3" title="{{format-number(100-@unknown,'#.00')}}" >{{format-number(@unknown,'#.00')}}</span>
+                                        <span  style="margin-left:10px"  class="avUnknown label re3" title="{{format-number(100-100*@unknown,'#.00')}}" >{{format-number(100*@unknown,'#.00')}}</span>
                                     </td>
                                     <td tpl:if="/e:entries/Entity/Availability/@downtime">
-                                        <span  style="margin-left:10px"  class="avUnknown label re3" title="{{format-number(100-@downtime,'#.00')}}" >{{format-number(@downtime,'#.00')}}</span>
+                                        <span  style="margin-left:10px"  class="avUnknown label re3" title="{{format-number(100-100*@downtime,'#.00')}}" >{{format-number(100*@downtime,'#.00')}}</span>
                                     </td>
 
                                </tr>

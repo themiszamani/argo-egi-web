@@ -35,16 +35,17 @@
                     <tr>
                         <th tpl:if="/properties/@admin='true'">Modify the recomputation</th>
                         <th tpl:else="">Details</th>
-                        <th>Requestor</th><th>Registration Date</th><th>Status</th>
+                        <th>Requestor</th><th>Registration Date</th><th>Status</th><th>Status</th>
                     </tr>
                    </thead>
                    <tbody>
 
                         <tr tpl:foreach="/properties/entry/entries/entries[entry[@key='recompId']/text()!='0']">
-                            <td><a href="/lavoisier/form_recomputation_results?recompId={{entry[@key='recompId']/text()}}" title="Link to the details">{{entry[@key='recompId']/text()}}</a></td>
+                            <td><a href="/lavoisier/form_recomputation_results?recompId={{entry[@key='recompId']/text()}}&amp;accept=html" title="Link to the details">{{entry[@key='recompId']/text()}}</a></td>
                             <td>{{entry[@key='requestor']/text()}}</td>
                             <td>{{entry[@key='RequestDate']/text()}}</td>
                             <td>{{entry[@key='status']/text()}}</td>
+                            <td>{{entry[@key='status2']/text()}}</td>
                         </tr>
                    </tbody>
                </table>
