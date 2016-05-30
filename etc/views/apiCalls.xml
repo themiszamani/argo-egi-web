@@ -34,9 +34,8 @@
                 <entry key="x-api-key" eval="property('argo.api.key')"></entry>
                 <entry key="Accept">application/xml</entry>
             </parameter>
-            <fallback eval="new_element('root')">
+            <fallback eval="new_element('root',new_attribute('key', concat(property('api.group.availability'),$report,'/',upper-case($group_type),'?granularity=',$granularity,'&amp;start_time=',$start_time,'&amp;end_time=',$end_time)))">
                 <exception type="java.io.IOException"></exception>
-
             </fallback>
         </connector>
 
@@ -53,6 +52,10 @@
             <elements path="/root/root/group">
                 <element-ignore in="results" if="not(contains(@timestamp,substring($start_time,0,8))) and substring($start_time,0,8)=substring($end_time,0,8)"></element-ignore>
             </elements>
+
+            <element in="root">
+                <attribute-create out="uris">concat(property('api.group.availability'),$report,'/',upper-case($group_type),'?granularity=',$granularity,'&amp;start_time=',$start_time,'&amp;end_time=',$end_time)</attribute-create>
+            </element>
         </processors>
 
     </view>
@@ -175,6 +178,7 @@
         <argument name="group_type">SITES</argument>
         <argument name="start_time"></argument>
         <argument name="end_time"></argument>
+        <argument name="granularity"></argument>
         <argument name="report">Critical</argument>
 
         <connector type="HTTPConnector">
@@ -187,13 +191,6 @@
                 <entry key="x-api-key" eval="property('argo.api.key')"></entry>
                 <entry key="Accept">application/xml</entry>
             </parameter>
-            <!-- optional: timeout (in seconds) for connecting (Integer) -->
-            <parameter name="connect-timeout">600</parameter>
-
-
-            <!-- optional: timeout (in seconds) for reading (Integer) -->
-            <parameter name="read-timeout">600</parameter>
-
             <fallback eval="new_element('root')">
                 <exception type="java.io.IOException"></exception>
 
@@ -210,11 +207,10 @@
                     '?start_time=',$start_time,'&amp;end_time=',$end_time)</attribute-create>
             </element>
         </processors>
-     
+
 
 
     </view>
-
 
 
 
