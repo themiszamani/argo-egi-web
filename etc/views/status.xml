@@ -60,7 +60,7 @@
 
         <argument name="ngi">all</argument>
         <argument name="site">false</argument>
-        <argument name="report">sites</argument>
+
 
         <argument name="start" eval="false()"></argument>
         <argument name="end" eval="false()"></argument>
@@ -77,9 +77,6 @@
 
         <processors>
             <element in="root">
-
-
-
 
                 <set variable="SiteList">view('listSitesbyNgi')</set>
                 <attribute-create out="view">'status_report-sf'</attribute-create>

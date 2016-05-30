@@ -448,8 +448,8 @@
                 <column label="Timestamp">@timestamp</column>
                 <column label="Availability" unit="percentage">@availability</column>
                 <column label="Reliability" unit="percentage">@reliability</column>
-                <column label="Unknown" unit="percentage">@unknown</column>
-                <column label="Downtime" unit="percentage">@downtime</column>
+                <column label="Unknown" unit="percentage">@unknown </column>
+                <column label="Downtime" unit="percentage">@downtime </column>
             </row>
         </pre-renderers>
 
@@ -571,8 +571,8 @@
                 <column label="Timestamp">@timestamp</column>
                 <column label="Availability" unit="percentage">@availability</column>
                 <column label="Reliability" unit="percentage">@reliability</column>
-                <column label="Unknown" unit="percentage">@unknown</column>
-                <column label="Downtime" unit="percentage">@downtime</column>
+                <column label="Unknown" unit="percentage">@unknown </column>
+                <column label="Downtime" unit="percentage">@downtime </column>
             </row>
         </pre-renderers>
 
@@ -688,6 +688,7 @@
         <argument name="month" eval="0"></argument>
         <argument name="ngi">all</argument>
         <argument name="report">Critical</argument>
+        <argument name="tag">_tag_</argument>
 
         <connector type="XMLConnector">
             <parameter name="content" eval="choose($month=0,view('site_reports_cached',entry('report',$report)),view('site_reports_date',entry('month',$month)|entry('report',$report)))"></parameter>
@@ -772,8 +773,8 @@
                 <column label="Timestamp">@timestamp</column>
                 <column label="Availability" unit="percentage">@availability</column>
                 <column label="Reliability" unit="percentage">@reliability</column>
-                <column label="Unknown" unit="percentage">@unknown</column>
-                <column label="Downtime" unit="percentage">@downtime</column>
+                <column label="Unknown" unit="percentage">@unknown </column>
+                <column label="Downtime" unit="percentage">@downtime </column>
             </row>
         </pre-renderers>
 
@@ -792,6 +793,194 @@
         </renderers>
 
     </view>
+
+    <view name="elixir_report">
+        <info>
+            <category>AR reports</category>
+            <description>Site League Reports</description>
+        </info>
+
+        <argument name="listElixirSites" eval="string(concat(view('listSiteElixir')/e:entries/e:entry/text(),','))"></argument>
+        <argument name="month" eval="0"></argument>
+        <argument name="ngi">all</argument>
+        <argument name="site">false</argument>
+
+        <argument name="report">Critical-Fedcloud</argument>
+
+        <argument name="start" eval="false()"></argument>
+        <argument name="end" eval="false()"></argument>
+
+
+        <variable name="start_date" eval="choose($start!='false',concat($start,'T00:00:00Z'),concat(substring(date:add(date:date-time(),'-P3D'), 0,11),'T00:00:00Z'))"></variable>
+        <variable name="end_date" eval="choose($end!='false',concat($end,'T00:00:00Z'),concat(substring(date:date-time(),0,11),'T23:59:59Z'))"></variable>
+
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="choose($month=0,view('site_reports_cached',entry('report',$report)),view('site_reports_date',entry('month',$month)|entry('report',$report)))"></parameter>
+        </connector>
+
+        <processors>
+
+
+            <element in="root" out="e:entries">
+                <element-ignore in="root">
+                    <element in="group" if="contains($listElixirSites,group/@name)">
+                        <element in="group"  if="contains($listElixirSites,@name)" out="Site">
+                            <attribute in="name" out="site"></attribute>
+                            <element in="results" out="Availability"></element>
+                        </element>
+                        <element-ignore></element-ignore>
+                    </element>
+                    <element-ignore></element-ignore>
+                </element-ignore>
+            </element>
+
+
+            <element in="e:entries">
+                <element-ignore in="group">
+                    <element in="Site">
+                        <attribute-create out="NGI">'ELIXIR'</attribute-create>
+                    </element>
+                    <element></element>
+                </element-ignore>
+            </element>
+
+
+
+
+            <select match="/e:entries/Site[*]">
+                <group by="@site" sort="text"></group>
+            </select>
+
+            <insert-parent match="/e:entries/e:entry/Site" name="Site"></insert-parent>
+
+            <merge match="/e:entries/e:entry/Site"></merge>
+            <remove match="/e:entries/e:entry/Site/Site" depth="1"></remove>
+            <remove match="/e:entries/e:entry" depth="1"/>
+            <select match="/e:entries/Site[*]">
+                <group by="@NGI" sort="text"></group>
+            </select>
+
+
+
+
+            <processor match="/e:entries" type="InsertProcessor" disabled="$month!=0">
+                <parameter name="nodes" eval="new_attribute('month4',substring(date:add(date:date-time(),'-PT1H'),  0,8))|new_attribute('month3',substring(date:add(date:date-time(),'-P1M'),  0,8))|new_attribute('month2',substring(date:add(date:date-time(),'-P2M'),  0,8))|new_attribute('month1',substring(date:add(date:date-time(),'-P3M'),  0,8))"/>
+            </processor>
+
+            <processor match="/e:entries" type="InsertProcessor" disabled="$month=0">
+                <parameter name="nodes" eval="new_attribute('month3',$month)|new_attribute('month4',substring(date:add(concat($month,'-01T00:00:00'),'P1M'),  0,8))|new_attribute('month2',substring(date:add(concat($month,'-01T00:00:00'),'-P1M'),  0,8))|new_attribute('month1',substring(date:add(concat($month,'-01T00:00:00'),'-P2M'),  0,8))"/>
+            </processor>
+
+            <insert match="/e:entries"  nodes="new_attribute('description','Elixir Report')"></insert>
+            <insert match="/e:entries"  nodes="new_attribute('view','site_reports')"></insert>
+            <insert match="/e:entries"  nodes="new_attribute('ngi',$ngi)"></insert>
+            <insert match="/e:entries"  nodes="new_attribute('related_view','site_ar')"></insert>
+            <insert match="/e:entries"  nodes="new_attribute('report',$report)"></insert>
+
+
+            <element in="e:entries">
+                <element-create>view('api.status.rotating.caches',entry('site',$site)|entry('starttime',$start_date)|entry('endtime',$end_date)|entry('report',$report))</element-create>
+            </element>
+
+            <element in="e:entries">
+                <element in="root" out="status">
+
+
+                    <attribute-create out="view">'status_report-sf'</attribute-create>
+                    <attribute-create out="ngi">'ELIXIR'</attribute-create>
+
+                    <element in="group" if="contains($listElixirSites,@name)">
+                        <attribute-create out="group">'ELIXIR'</attribute-create>
+                    </element>
+                    <element-ignore></element-ignore>
+
+
+                </element>
+            </element>
+
+            <elements path="e:entries/status">
+                <element-ignore in="group"></element-ignore>
+                <element-create>
+                    sort_by_string(../group,'@name')
+                </element-create>
+            </elements>
+
+            <elements path="e:entries/status">
+                <element-create-as-parent out="group" attributes="@*" group-by="@name">
+                    <element in="group" ></element>
+                </element-create-as-parent>
+            </elements>
+
+            <elements path="e:entries/status/group">
+                <element-ignore in="group">
+                    <element></element>
+                </element-ignore>
+            </elements>
+
+            <elements path="e:entries/status">
+                <element-ignore in="status"></element-ignore>
+                <element-create>sort_by_string(../status,'@timestamp')</element-create>
+            </elements>
+
+            <element in="e:entries">
+                <element in="status">
+                    <set variable="StateColor">view('StateColor')</set>
+
+                    <element in="group">
+                        <element in="status">
+                            <attribute-create out="color">$StateColor/e:entries/e:entry[@key=current()/../@value]/text()</attribute-create>
+                            <attribute-create out="end_time" if="current()/../following-sibling::status">current()/../following-sibling::status/@timestamp</attribute-create>
+                            <attribute-create out="end_time" if="not(current()/../following-sibling::status)">../ancestor::status/@end_time</attribute-create>
+                        </element>
+                    </element>
+
+                </element>
+            </element>
+
+
+            <elements path="e:entries/status/group">
+                <element-ignore in="status" if="preceding-sibling::status and date:seconds(@timestamp) &lt; date:seconds($start_date)"></element-ignore>
+                <element in="status" if="not(preceding-sibling::status)" >
+                    <attribute in="timestamp">$start_date</attribute>
+                </element>
+            </elements>
+
+        </processors>
+
+        <pre-renderers>
+            <title>/e:entries/@description</title>
+            <field label="month1">/e:entries/@month1</field>
+            <field label="month2">/e:entries/@month2</field>
+            <field label="month3">/e:entries/@month3</field>
+
+            <row foreach="/e:entries/e:entry/Site/Availability[@timestamp=/e:entries/@month1 or @timestamp=/e:entries/@month2 or @timestamp=/e:entries/@month3]">
+                <column label="Site">ancestor::Site/@site</column>
+                <column label="Ngi">ancestor::Site/@NGI</column>
+                <column label="Timestamp">@timestamp</column>
+                <column label="Availability" unit="percentage">@availability</column>
+                <column label="Reliability" unit="percentage">@reliability</column>
+                <column label="Unknown" unit="percentage">@unknown </column>
+                <column label="Downtime" unit="percentage">@downtime </column>
+            </row>
+        </pre-renderers>
+
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/html/elixir_reports.html</parameter>
+
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/html/elixir_reports.html</parameter>
+
+            </renderer>
+            <renderer type="ChartRenderer">
+                <parameter name="rotation">-45</parameter>
+            </renderer>
+        </renderers>
+
+    </view>
+
 
     <view name="report_form">
         <info>

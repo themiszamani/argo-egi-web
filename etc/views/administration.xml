@@ -6,6 +6,11 @@
         xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
 
 
+<view name="saml-metadata">
+    <connector type="FileConnector">
+        <parameter name="path" >security/saml-metadata-argo.xml</parameter>
+    </connector>
+</view>
 
 
     <view name="listParameters">
@@ -103,7 +108,7 @@
 
     </view>
 
-    <view name="post_profile">
+    <view name="post_profile" authenticators="AuthenticatedUsers">
 
 
         <info>
@@ -244,9 +249,9 @@
             <element in="e:entries">
                 <element in="e:entries">
                     <element-create>entry('RequestDate',substring-after(substring-before(../../e:entry/text(),'&lt;/entry'),'key="Request date"&gt;'))</element-create>
-                    <element-create>entry('status',choose(substring-before(substring-after(../../e:entry/text(),'key="status"&gt;'),'&lt;/entry'),substring-before(substring-after(../../e:entry/text(),'key="status"&gt;'),'&lt;/entry'),'Submission request failed'))</element-create>
-
-                </element>
+                    <element-create>entry('status',
+                        substring-before(substring-after(../../e:entry/text(),'key="status"&gt;'),'&lt;/entry'))</element-create>
+                                </element>
             </element>
 
             <element in="e:entries" out="entries">
@@ -298,7 +303,7 @@
 
     </view>
 
-    <view name="form_profile_results_INTERNAL" xmlns:str="http://exslt.org/strings"
+    <view name="form_profile_results_INTERNAL" xmlns:str="http://exslt.org/strings" authenticators="AuthenticatedUsers"
           xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
         <info>
             <category>ADMIN</category>

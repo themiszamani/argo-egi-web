@@ -25,7 +25,7 @@
         <argument name="report">Critical</argument>
         <connector type="HTTPConnector">
             <parameter name="url" eval="concat(property('api.group.availability'),$report,'/',upper-case($group_type),
-            '?granularity=',$granularity,
+            '?granularity=',lower-case($granularity),
             '&amp;start_time=',$start_time,'&amp;end_time=',$end_time)">
             </parameter>
             <parameter name="certificate" eval="property('certificate.path')"/>
@@ -73,7 +73,7 @@
 
         <connector type="HTTPConnector">
             <parameter name="url" eval="concat(property('api.service.availability'),$report,'/SITES/',$site,
-            '/services?granularity=',$granularity,
+            '/services?granularity=',lower-case($granularity),
             '&amp;start_time=',$start_time,'&amp;end_time=',$end_time)">
             </parameter>
             <parameter name="certificate" eval="property('certificate.path')"/>
@@ -175,7 +175,6 @@
         <argument name="group_type">SITES</argument>
         <argument name="start_time"></argument>
         <argument name="end_time"></argument>
-        <argument name="granularity"></argument>
         <argument name="report">Critical</argument>
 
         <connector type="HTTPConnector">
@@ -236,7 +235,6 @@
 
         <argument name="group_type">SITES</argument>
         <argument name="report">Critical</argument>
-        <argument name="granularity">DAILY</argument>
         <argument name="site">false</argument>
         <argument name="mode">RW</argument>
 

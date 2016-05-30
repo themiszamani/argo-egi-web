@@ -23,4 +23,11 @@
             <!--</parameter>-->
         <!--</authenticator>-->
     <!--</authenticators>-->
+
+    <authenticators name="AAI">
+        <authenticator type="SAML2Authenticator" authorized="true()">
+            <parameter name="server">https://aai.egi.eu/proxy/saml2/idp/metadata.php</parameter>
+        </authenticator>
+    </authenticators>
+
 </config>
