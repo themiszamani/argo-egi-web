@@ -325,6 +325,7 @@
                     </element>
                 </element>
 
+
             </element>
 
             <elements path="root/group">
@@ -332,6 +333,11 @@
                 <element in="status" if="not(preceding-sibling::status)" >
                     <attribute in="timestamp">$start_date</attribute>
                 </element>
+            </elements>
+
+            <elements path="root/group">
+                <element-ignore in="status" if="preceding-sibling::status/@timestamp=current()/@timestamp"></element-ignore>
+                <element-ignore in="status" if="@timestamp=@end_time"></element-ignore>
             </elements>
 
         </processors>
