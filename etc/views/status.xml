@@ -33,7 +33,7 @@
             <category>Status Report</category>
             <description>Site Reports - cache Rotated</description>
         </info>
-        <argument name="delete" eval="false()"></argument>
+        <argument name="mode">RW</argument>
         <argument name="report">Critical</argument>
 
         <connector type="XMLConnector">
@@ -42,9 +42,9 @@
 
         <processors>
             <insert match="/root" nodes="
-            view('api.status.rotating.caches',entry('group_type','sites')|entry('diff','0')|entry('report',$report)|entry('delete',$delete))
-            |view('api.status.rotating.caches',entry('group_type','sites')|entry('diff','1')|entry('report',$report)|entry('delete',$delete))
-            |view('api.status.rotating.caches',entry('group_type','sites')|entry('diff','2')|entry('report',$report)|entry('delete',$delete))">
+            view('api.status.rotating.caches',entry('group_type','sites')|entry('diff','0')|entry('report',$report)|entry('mode',$mode))
+            |view('api.status.rotating.caches',entry('group_type','sites')|entry('diff','1')|entry('report',$report)|entry('mode',$mode))
+            |view('api.status.rotating.caches',entry('group_type','sites')|entry('diff','2')|entry('report',$report)|entry('mode',$mode))">
 
             </insert>
         </processors>
@@ -60,7 +60,7 @@
 
         <argument name="ngi">all</argument>
         <argument name="site">false</argument>
-        <argument name="report">sites</argument>
+
 
         <argument name="start" eval="false()"></argument>
         <argument name="end" eval="false()"></argument>
@@ -77,9 +77,6 @@
 
         <processors>
             <element in="root">
-
-
-
 
                 <set variable="SiteList">view('listSitesbyNgi')</set>
                 <attribute-create out="view">'status_report-sf'</attribute-create>
@@ -369,6 +366,7 @@
         <argument name="sf">_SF_</argument>
         <argument name="start">_START_</argument>
         <argument name="end">_END_</argument>
+        <argument name="overview">mod</argument>
 
         <argument name="start_date" eval="choose($start!='_START_',concat($start,'T00:00:00Z'),concat(substring(date:add(date:date-time(),'-P3D'), 0,11),'T00:00:00Z'))"></argument>
         <argument name="end_date" eval="choose($end!='_END_',concat($end,'T00:00:00Z'),concat(substring(date:date-time(),0,11),'T23:59:59Z'))"></argument>
@@ -384,6 +382,7 @@
 
                 <attribute-create out="ngi">$SiteList/results/Ngi[SITE/@NAME=$site]/@key</attribute-create>
                 <attribute-create out="view">'metric-output'</attribute-create>
+
                 <element-ignore in="group">
                     <element-ignore in="group">
                         <element-ignore in="endpoint">
@@ -406,6 +405,7 @@
             </elements>
 
             <elements path="root">
+                <attribute-create out="overview">$overview</attribute-create>
                 <element-create-as-parent out="group" attributes="@*" group-by="@name">
                     <element in="group" ></element>
                 </element-create-as-parent>
@@ -421,6 +421,31 @@
                 <element-ignore in="status"></element-ignore>
                 <element-create>sort_by_string(../status,'@timestamp')</element-create>
             </elements>
+
+
+
+
+
+
+            <element in="root" if="$overview='mod'">
+
+                <set variable="previous">null()</set>
+                <set variable="position">0</set>
+                <set variable="modulo">floor(count(group/status) div 200)</set>
+                <attribute in="overview">'mod'</attribute>
+
+                <element in="group">
+                    <element in="status" if="$previous/@value!=@value or ($position mod $modulo = 0)">
+                        <set variable="previous">.</set>
+                        <set variable="position">$position+1</set>
+                    </element>
+
+                    <element-ignore>
+                        <set variable="position">$position+1</set>
+                    </element-ignore>
+                </element>
+            </element>
+
 
             <element in="root">
                 <set variable="StateColor">view('StateColor')</set>
@@ -441,6 +466,8 @@
                         <attribute in="timestamp">$start_date</attribute>
                 </element>
             </elements>
+
+
 
 
         </processors>

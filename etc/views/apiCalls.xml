@@ -25,7 +25,7 @@
         <argument name="report">Critical</argument>
         <connector type="HTTPConnector">
             <parameter name="url" eval="concat(property('api.group.availability'),$report,'/',upper-case($group_type),
-            '?granularity=',$granularity,
+            '?granularity=',lower-case($granularity),
             '&amp;start_time=',$start_time,'&amp;end_time=',$end_time)">
             </parameter>
             <parameter name="certificate" eval="property('certificate.path')"/>
@@ -34,6 +34,9 @@
                 <entry key="x-api-key" eval="property('argo.api.key')"></entry>
                 <entry key="Accept">application/xml</entry>
             </parameter>
+            <fallback eval="new_element('root',new_attribute('key', concat(property('api.group.availability'),$report,'/',upper-case($group_type),'?granularity=',$granularity,'&amp;start_time=',$start_time,'&amp;end_time=',$end_time)))">
+                <exception type="java.io.IOException"></exception>
+            </fallback>
         </connector>
 
         <processors>
@@ -49,6 +52,10 @@
             <elements path="/root/root/group">
                 <element-ignore in="results" if="not(contains(@timestamp,substring($start_time,0,8))) and substring($start_time,0,8)=substring($end_time,0,8)"></element-ignore>
             </elements>
+
+            <element in="root">
+                <attribute-create out="uris">concat(property('api.group.availability'),$report,'/',upper-case($group_type),'?granularity=',$granularity,'&amp;start_time=',$start_time,'&amp;end_time=',$end_time)</attribute-create>
+            </element>
         </processors>
 
     </view>
@@ -69,7 +76,7 @@
 
         <connector type="HTTPConnector">
             <parameter name="url" eval="concat(property('api.service.availability'),$report,'/SITES/',$site,
-            '/services?granularity=',$granularity,
+            '/services?granularity=',lower-case($granularity),
             '&amp;start_time=',$start_time,'&amp;end_time=',$end_time)">
             </parameter>
             <parameter name="certificate" eval="property('certificate.path')"/>
@@ -78,6 +85,9 @@
                 <entry key="x-api-key" eval="property('argo.api.key')"></entry>
                 <entry key="Accept">application/xml</entry>
             </parameter>
+            <fallback eval="new_element('root')">
+                <exception type="java.io.IOException"></exception>
+            </fallback>
         </connector>
 
         <processors>
@@ -121,7 +131,7 @@
         <argument name="start_time">0</argument>
         <argument name="end_time">0</argument>
         <argument name="site">false</argument>
-        <argument name="delete" eval="false()"></argument>
+        <argument name="mode">RW</argument>
 
 
         <argument name="starttime" eval="choose($diff=10,$start_time,concat(substring(date:add(date:date-time(),concat('-P',$diff+1,'M')), 0,8),'-01T00:00:00Z'))"></argument>
@@ -141,10 +151,11 @@
              )"/>
             <parameter name="key" eval="concat($report,'-',$group_type,'-',$granularity,'-',$starttime,'-',$endtime,'-',$site)"/>
             <parameter name="size">100000</parameter>
-            <parameter name="delete" eval="$delete"></parameter>
+            <parameter name="mode" eval="$mode"></parameter>
 
-            <fallback>
+            <fallback eval="new_element('root')">
                 <exception type="java.io.IOException"></exception>
+
             </fallback>
         </connector>
 
@@ -180,6 +191,10 @@
                 <entry key="x-api-key" eval="property('argo.api.key')"></entry>
                 <entry key="Accept">application/xml</entry>
             </parameter>
+            <fallback eval="new_element('root')">
+                <exception type="java.io.IOException"></exception>
+
+            </fallback>
 
         </connector>
 
@@ -192,11 +207,10 @@
                     '?start_time=',$start_time,'&amp;end_time=',$end_time)</attribute-create>
             </element>
         </processors>
-     
+
 
 
     </view>
-
 
 
 
@@ -217,9 +231,8 @@
 
         <argument name="group_type">SITES</argument>
         <argument name="report">Critical</argument>
-        <argument name="granularity">DAILY</argument>
         <argument name="site">false</argument>
-        <argument name="delete" eval="false()"></argument>
+        <argument name="mode">RW</argument>
 
         <argument name="starttime" eval="concat(substring(date:add(date:date-time(),concat('-P',$diff+1,'D')), 0,11),'T00:00:00Z')"></argument>
         <argument name="endtime" eval="concat(substring(date:add(date:date-time(),concat('-P',$diff+1,'D')), 0,11),'T23:59:59Z')"></argument>
@@ -237,7 +250,7 @@
              "/>
             <parameter name="key" eval="concat($report,'-',$group_type,'-',$starttime,'-',$endtime,'-',$site)"/>
             <parameter name="size">100000</parameter>
-            <parameter name="delete" eval="$delete"></parameter>
+            <parameter name="mode" eval="$mode"></parameter>
 
             <fallback>
                 <exception type="java.io.IOException"></exception>
@@ -287,6 +300,12 @@
                 <entry key="x-api-key" eval="property('argo.api.key')"></entry>
                 <entry key="Accept">application/xml</entry>
             </parameter>
+            <parameter name="connect-timeout">600</parameter>
+            <parameter name="read-timeout">600</parameter>
+            <fallback eval="new_element('root')">
+                <exception type="java.io.IOException"></exception>
+
+            </fallback>
         </connector>
 
         <processors>
@@ -333,6 +352,10 @@ node16.datagrid.cea.fr/org.nordugrid.ARC-CE-ARIS?exec_time=2015-06-01T00:01:20Z'
                 <entry key="x-api-key" eval="property('argo.api.key')"></entry>
                 <entry key="Accept">application/xml</entry>
             </parameter>
+            <fallback eval="new_element('root')">
+                <exception type="java.io.IOException"></exception>
+
+            </fallback>
         </connector>
 
 

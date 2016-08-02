@@ -85,12 +85,24 @@
                 <li><a href="/lavoisier/status_report-sf?site={{/root/group/@site}}&amp;start_date={{root/@start_time}}&amp;end_date={{root/@end_time}}&amp;report={{root/@report}}&amp;accept=html">{{/root/group/@site}}</a></li>
                 <li  class="active">{{/root/group/@group}}</li>
                 </ol>
-                <div style="display: none"  tpl:foreach="/root/group/status" >/lavoisier/{{ancestor::root/@view}}?site={{ancestor::group/@site}}&amp;service={{ancestor::group/@group}}&amp;endpoint={{ancestor::group/@name}}&amp;start_date={{ancestor::root/@start_time}}&amp;end_date={{ancestor::root/@end_time}}&amp;report={{ancestor::root/@report}}&amp;accept=html</div>
+                <div style="display: none"  tpl:foreach="/root/group/status" >/lavoisier/{{ancestor::root/@view}}?site={{ancestor::group/@site}}&amp;service={{ancestor::group/@group}}&amp;endpoint={{ancestor::group/@name}}&amp;start_date={{ancestor::root/@start_time}}&amp;end_date={{ancestor::root/@end_time}}&amp;report={{ancestor::root/@report}}&amp;overview=mod&amp;accept=html</div>
             </div>
 
 
+            <div  id="local_links"  tpl:if="/root/@view='metric-output' and /root/@overview='mod'">
 
-            <div  id="local_links"  tpl:if="/root/@view='metric-output'">
+                <ol class="breadcrumb">
+                    <li><a href="/lavoisier/status_report-site?start_date={{root/@start_time}}&amp;end_date={{root/@end_time}}&amp;report={{root/@report}}&amp;accept=html">EGI</a></li>
+                    <li><a tpl:if="root/@ngi" href="/lavoisier/status_report-site?start_date={{root/@start_time}}&amp;end_date={{root/@end_time}}&amp;ngi={{root/@ngi}}&amp;report={{root/@report}}&amp;accept=html">{{root/@ngi}}</a></li>
+                    <li><a href="/lavoisier/status_report-sf?site={{/root/group/@site}}&amp;start_date={{root/@start_time}}&amp;end_date={{root/@end_time}}&amp;report={{root/@report}}&amp;accept=html">{{/root/group/@site}}</a></li>
+                    <li><a href="/lavoisier/status_report-endpoints?site={{/root/group/@site}}&amp;service={{/root/group/@service}}&amp;start_date={{root/@start_time}}&amp;report={{root/@report}}&amp;end_date={{root/@end_time}}&amp;accept=html">{{/root/group/@service}}</a></li>
+                    <li  class="active">{{/root/group/@endpoint}}</li>
+                </ol>
+                <div style="display: none"  tpl:foreach="/root/group/status" >/lavoisier/status_report-metrics?site={{ancestor::group/@site}}&amp;service={{ancestor::group/@service}}&amp;endpoint={{ancestor::group/@group}}&amp;start_date={{@timestamp}}&amp;end_date={{@end_time}}&amp;report={{ancestor::root/@report}}&amp;overview=details&amp;accept=html</div>            </div>
+
+
+
+            <div  id="local_links"  tpl:if="/root/@view='metric-output' and /root/@overview!='mod'">
 
                 <ol class="breadcrumb">
                     <li><a href="/lavoisier/status_report-site?start_date={{root/@start_time}}&amp;end_date={{root/@end_time}}&amp;report={{root/@report}}&amp;accept=html">EGI</a></li>
@@ -198,13 +210,16 @@
                 '<label>Start Time : &nbsp;</label>' + tempArray[2] + '<hr/>' +
                 '<label>End Time : &nbsp;</label>' + tempArray[3] + '</div><div class="panel-footer"><em>Click on the bar to access the next granularity level</em></div></div>';
 
-                tempArray[2] = new Date(tempArray[2]);
-                tempArray[3] = new Date(tempArray[3]);
 
 
-                newgroup.push(tempArray);
-                colorsgroup.push(color);
+                tempArray[2] = new Date(tempArray[2].substr(0,19));
+                tempArray[3] = new Date(tempArray[3].substr(0,19));
 
+
+                if (tempArray[2] < tempArray[3]) {
+                    newgroup.push(tempArray);
+                    colorsgroup.push(color);
+                }
             }
 
 

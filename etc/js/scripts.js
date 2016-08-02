@@ -118,7 +118,7 @@ $(".dataTableStyle2").dataTable({
      */
     var getColorClass = function(percent,treshold1,treshold2){
 
-        var classname="";
+        var classname="label-info";
 
 
 

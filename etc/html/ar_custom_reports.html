@@ -18,7 +18,6 @@
         <section class="content-header" id="content-header">
             <h1>
                 Availabilities Reliabilities Report
-                <small> Custom Report</small>
             </h1>
 
         </section>
@@ -56,7 +55,13 @@
                                     <a tpl:if="/e:entries/Entity[@name and @NGI]" href="{{ancestor::e:entries/@url}}&amp;site={{@name}}" title="detailed report">
                                         <span style="margin:10px" class="btn btn-primary">DETAILS</span>
                                     </a>
+
+                                    <a tpl:if="/e:entries/Entity[@name and @NGI]" href="{{ancestor::e:entries/@status_url}}&amp;site={{@name}}" title="Status report">
+                                        <span style="margin:10px" class="btn btn-primary">STATUS</span>
+                                    </a>
+
                                 </h3>
+
 
                             </div>
                             <div class="box-body table-responsive" tpl:if="count(Availability) &gt; 0">
@@ -86,10 +91,10 @@
                                         <span  style="margin-left:10px"  class="reCheck label re3" title="{{format-number(@reliability,'#.00')}}" >{{format-number(@reliability,'#.00')}}</span>
                                     </td>
                                     <td tpl:if="/e:entries/Entity/Availability/@unknown">
-                                        <span  style="margin-left:10px"  class="avUnknown label re3" title="{{format-number(100-@unknown,'#.00')}}" >{{format-number(@unknown,'#.00')}}</span>
+                                        <span  style="margin-left:10px"  class="avUnknown label re3" title="{{format-number(100-100*@unknown,'#.00')}}" >{{format-number(100*@unknown,'#.00')}}</span>
                                     </td>
                                     <td tpl:if="/e:entries/Entity/Availability/@downtime">
-                                        <span  style="margin-left:10px"  class="avUnknown label re3" title="{{format-number(100-@downtime,'#.00')}}" >{{format-number(@downtime,'#.00')}}</span>
+                                        <span  style="margin-left:10px"  class="avUnknown label re3" title="{{format-number(100-100*@downtime,'#.00')}}" >{{format-number(100*@downtime,'#.00')}}</span>
                                     </td>
 
                                </tr>
@@ -146,7 +151,7 @@
             });
 
             $('td').find('span.avUnknown.label').each(function () {
-                $(this).addClass(getColorClass($(this).attr('title'),90));
+                $(this).addClass(getColorClass($(this).attr('title'),80));
             });
             $('td').find('span.avDowntime.label').each(function () {
                 $(this).addClass(getColorClass($(this).attr('title'),90));
