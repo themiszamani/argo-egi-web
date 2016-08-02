@@ -129,7 +129,7 @@ $(".dataTableStyle2").dataTable({
             classname="label-danger";
 
 
-        if (percent <0 )
+        if (percent < 0)
             classname ="label-info";
 
 

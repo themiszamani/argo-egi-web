@@ -314,14 +314,14 @@
                                   title="{{format-number(Availability[@timestamp=ancestor::e:entries/@month1]/@reliability,'#.00')}}">{{format-number(Availability[@timestamp=ancestor::e:entries/@month1]/@reliability,'#.00')}}</span>
                         </a>
                         <span  class="pull-right" style="font-size: small;" >
-                            <span  tpl:if="Availability[@timestamp=ancestor::e:entries/@month1]/@downtime&gt;10" class="minilabel label label-warning" title="Downtime : {{format-number(Availability[@timestamp=ancestor::e:entries/@month1]/@downtime*100,'#.00')}} % ">
+                            <span  tpl:if="Availability[@timestamp=ancestor::e:entries/@month1]/@downtime&gt;0.1" class="minilabel label label-warning" title="Downtime : {{format-number(Availability[@timestamp=ancestor::e:entries/@month1]/@downtime*100,'#.00')}} % ">
                                 {{format-number(Availability[@timestamp=ancestor::e:entries/@month1]/@downtime*100,'#.00')}}
                             </span>
                               <span  tpl:else="" class="minilabel label label-success" title="Downtime : {{format-number(Availability[@timestamp=ancestor::e:entries/@month1]/@downtime*100,'#.00')}} % ">
                                 {{format-number(Availability[@timestamp=ancestor::e:entries/@month1]/@downtime*100,'#.00')}}
                             </span>
                            <br/>
-                             <span  tpl:if="Availability[@timestamp=ancestor::e:entries/@month1]/@unknown&gt;10" class="minilabel label label-warning" title="unknown : {{format-number(Availability[@timestamp=ancestor::e:entries/@month1]/@unknown*100,'#.00')}} % ">
+                             <span  tpl:if="Availability[@timestamp=ancestor::e:entries/@month1]/@unknown&gt;0.1" class="minilabel label label-warning" title="unknown : {{format-number(Availability[@timestamp=ancestor::e:entries/@month1]/@unknown*100,'#.00')}} % ">
                                 {{format-number(Availability[@timestamp=ancestor::e:entries/@month1]/@unknown*100,'#.00')}}
                             </span>
                               <span  tpl:else="" class="minilabel label label-success" title="unknown : {{format-number(Availability[@timestamp=ancestor::e:entries/@month1]/@unknown*100,'#.00')}} % ">
@@ -345,14 +345,14 @@
                         </a>
 
                          <span  class="pull-right" style="font-size: small;" >
-                            <span  tpl:if="Availability[@timestamp=ancestor::e:entries/@month2]/@downtime&gt;10" class="minilabel label label-warning" title="Downtime : {{format-number(Availability[@timestamp=ancestor::e:entries/@month2]/@downtime,'#.00')}} % ">
+                            <span  tpl:if="Availability[@timestamp=ancestor::e:entries/@month2]/@downtime&gt;0.1" class="minilabel label label-warning" title="Downtime : {{format-number(Availability[@timestamp=ancestor::e:entries/@month2]/@downtime*100,'#.00')}} % ">
                                 {{format-number(Availability[@timestamp=ancestor::e:entries/@month2]/@downtime*100,'#.00')}}
                             </span>
                               <span  tpl:else="" class="minilabel label label-success" title="Downtime : {{format-number(Availability[@timestamp=ancestor::e:entries/@month2]/@downtime*100,'#.00')}} % ">
                                 {{format-number(Availability[@timestamp=ancestor::e:entries/@month2]/@downtime*100,'#.00')}}
                             </span>
                            <br/>
-                             <span  tpl:if="Availability[@timestamp=ancestor::e:entries/@month2]/@unknown&gt;10" class="minilabel label label-warning" title="unknown : {{format-number(Availability[@timestamp=ancestor::e:entries/@month2]/@unknown*100,'#.00')}} % ">
+                             <span  tpl:if="Availability[@timestamp=ancestor::e:entries/@month2]/@unknown&gt;0.1" class="minilabel label label-warning" title="unknown : {{format-number(Availability[@timestamp=ancestor::e:entries/@month2]/@unknown*100,'#.00')}} % ">
                                 {{format-number(Availability[@timestamp=ancestor::e:entries/@month2]/@unknown*100,'#.00')}}
                             </span>
                               <span  tpl:else="" class="minilabel label label-success" title="unknown : {{format-number(Availability[@timestamp=ancestor::e:entries/@month2]/@unknown*100,'#.00')}} % ">
@@ -374,14 +374,14 @@
                                   title="{{format-number(Availability[@timestamp=ancestor::e:entries/@month3]/@reliability,'#.00')}}">{{format-number(Availability[@timestamp=ancestor::e:entries/@month3]/@reliability,'#.00')}}</span>
                         </a>
                             <span  class="pull-right" style="font-size: small;" >
-                            <span  tpl:if="Availability[@timestamp=ancestor::e:entries/@month3]/@downtime*100&gt;20" class="minilabel label label-warning" title="Downtime : {{format-number(Availability[@timestamp=ancestor::e:entries/@month3]/@downtime*100,'#.00')}} % ">
+                            <span  tpl:if="Availability[@timestamp=ancestor::e:entries/@month3]/@downtime&gt;0.1" class="minilabel label label-warning" title="Downtime : {{format-number(Availability[@timestamp=ancestor::e:entries/@month3]/@downtime*100,'#.00')}} % ">
                                 {{format-number(Availability[@timestamp=ancestor::e:entries/@month3]/@downtime*100,'#.00')}}
                             </span>
                               <span  tpl:else="" class="minilabel label label-success" title="Downtime : {{format-number(Availability[@timestamp=ancestor::e:entries/@month3]/@downtime*100,'#.00')}} % ">
                                 {{format-number(Availability[@timestamp=ancestor::e:entries/@month3]/@downtime*100,'#.00')}}
                             </span>
                            <br/>
-                             <span  tpl:if="Availability[@timestamp=ancestor::e:entries/@month3]/@unknown*100&gt;20" class="minilabel label label-warning" title="unknown : {{format-number(Availability[@timestamp=ancestor::e:entries/@month3]/@unknown*100,'#.00')}} % ">
+                             <span  tpl:if="Availability[@timestamp=ancestor::e:entries/@month3]/@unknown&gt;0.1" class="minilabel label label-warning" title="unknown : {{format-number(Availability[@timestamp=ancestor::e:entries/@month3]/@unknown*100,'#.00')}} % ">
                                 {{format-number(Availability[@timestamp=ancestor::e:entries/@month3]/@unknown*100,'#.00')}}
                             </span>
                               <span  tpl:else="" class="minilabel label label-success" title="unknown : {{format-number(Availability[@timestamp=ancestor::e:entries/@month3]/@unknown*100,'#.00')}} % ">
