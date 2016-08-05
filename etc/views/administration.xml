@@ -7,9 +7,19 @@
 
 
 <view name="saml-metadata">
+    <info>
+        <description>SAML metadata</description>
+        <category>ADMIN</category>
+    </info>
     <connector type="FileConnector">
         <parameter name="path" >security/saml-metadata-argo.xml</parameter>
     </connector>
+
+    <renderers>
+        <renderer type="DefaultRenderer">
+            <parameter name="contentType">text/xml</parameter>
+        </renderer>
+    </renderers>
 </view>
 
 

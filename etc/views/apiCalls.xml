@@ -134,8 +134,8 @@
         <argument name="mode">RW</argument>
 
 
-        <argument name="starttime" eval="choose($diff=10,$start_time,concat(substring(date:add(date:date-time(),concat('-P',$diff+1,'M')), 0,8),'-01T00:00:00Z'))"></argument>
-        <argument name="endtime" eval="choose($diff=10,$end_time,concat(substring(date:add(date:date-time(),concat('-P',$diff+1,'M')), 0,8),'-31T23:59:59Z'))"></argument>
+        <argument name="starttime" eval="choose($diff=10,$start_time,concat(substring(date:add(date:date-time(),concat('-P',$diff,'M')), 0,8),'-01T00:00:00Z'))"></argument>
+        <argument name="endtime" eval="choose($diff=10,$end_time,concat(substring(date:add(date:date-time(),concat('-P',$diff,'M')), 0,8),'-31T23:59:59Z'))"></argument>
 
 
 
@@ -160,7 +160,50 @@
         </connector>
 
 
+
+
     </view>
+
+
+    <view name="api.availability.file.cache">
+
+        <info>
+            <category>API results</category>
+            <description>Sites and NGI AR results in cache</description>
+        </info>
+
+        <argument name="diff">10</argument>
+
+        <argument name="group_type">sites</argument>
+        <argument name="report">Critical</argument>
+        <argument name="granularity">DAILY</argument>
+        <argument name="site">false</argument>
+        <argument name="mode">RW</argument>
+
+
+        <argument name="start_time"></argument>
+        <argument name="end_time"></argument>
+
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('api.availability.call',  entry('report',$report)
+            |entry('group_type',$group_type)
+            |entry('granularity',$granularity)
+            |entry('start_time',$start_time)
+            |entry('end_time',$end_time)
+            |entry('site',$site))">
+            </parameter>
+            <fallback eval="new_element('root')">
+                <exception type="java.io.IOException"></exception>
+            </fallback>
+        </connector>
+
+
+
+
+
+    </view>
+
 
     <!-- *******************************************************************
 ****               CALL TO THE API
