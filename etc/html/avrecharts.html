@@ -78,6 +78,8 @@
 
             google.load('visualization', '1', {'packages':['timeline'], 'language': 'en'});
 
+
+
             var newgroup = [];
             var colorsgroup = [];
             var links = [];
@@ -103,8 +105,11 @@
                         '</div></div>';
 
 
-                tempArray[2] = new Date(tempArray[2].substring(0,4),tempArray[2].substring(5,7),1);
-                tempArray[3] = new Date(tempArray[3].substring(0,4),tempArray[3].substring(5,7),1);
+                tempArray[2] = new Date(tempArray[2].substring(0,4),tempArray[2].substring(5,7)-1,1);
+                if (tempArray[3].substring(8,10))
+                tempArray[3] = new Date(tempArray[3].substring(0,4),tempArray[3].substring(5,7)-1,tempArray[3].substring(8,10));
+                else
+                    tempArray[3] = new Date(tempArray[3].substring(0,4),tempArray[3].substring(5,7)-1,1);
 
 
                 newgroup.push(tempArray);
@@ -146,6 +151,9 @@
                         groupByRowLabel: true,
                         showBarLabels : false
 
+                    },
+                    hAxis: {
+                        format: 'MMM yyyy'
                     }
 
                 };
