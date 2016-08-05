@@ -83,7 +83,7 @@
                 <attribute-create out="ngi" if="$ngi!='all'">$ngi</attribute-create>
 
                 <element in="group" if="contains(concat($site,','),@name) or $site='false'">
-                    <attribute-create out="group">$SiteList/results/Ngi[SITE/@NAME=current()/../@name]/@key</attribute-create>
+                    <attribute-create out="group">choose($SiteList/results/Ngi[SITE/@NAME=current()/../@name]/@key,$SiteList/results/Ngi[SITE/@NAME=current()/../@name]/@key,'UNCERTIFIED')</attribute-create>
                 </element>
                 <element-ignore></element-ignore>
             </element>

@@ -3,6 +3,4 @@
   <component name="ProjectResources">
     <resource url="http://software.in2p3.fr/lavoisier/config.xsd" location="/" />
   </component>
-  <component name="ProjectRootManager" version="2" />
 </project>
-
