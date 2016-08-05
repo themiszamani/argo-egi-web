@@ -10,20 +10,7 @@
 <!-- Right side column. Contains the navbar and content of the page -->
 <div id="wrapper">
 
-    <aside class="main-sidebar sidebar-offcanvas" >
 
-        <section class="sidebar">
-
-            <ul class="sidebar-menu">
-                <li class="hidden" style="display: block;height:100px;"><a href="#"><span> </span></a></li>
-                <li class="hidden"><a href="#"><span> </span></a></li>
-                <li class="hidden"><a href="#"><span> </span></a></li>
-                <li  tpl:foreach="e:entries/e:entry" style="font-size: lighter;background-color: #C7d2e1">
-                    <a  href="/lavoisier/site_reports?ngi={{@key}}&amp;report={{/e:entries/@report}}">  <span >-- {{@key}} --</span> </a>
-                </li>
-            </ul>
-        </section>
-    </aside>
 
 <div class="content-wrapper">
 <!-- Content Header (Page header) -->
@@ -105,16 +92,7 @@
 
         <div class="box-body table-responsive">
 
-                <a href="/lavoisier/render_chart_n?view={{/e:entries/@view}}&amp;report={{/e:entries/@report}}&amp;type=availability&amp;ngi={{@key}}&amp;accept=html"
-                   title="Chart">
-                    <span style="margin:15px" class="btn btn-primary"><i
-                            class="fa fa-bar-chart-o"> </i> AVAILABILITY</span>
-                </a>
-                <a href="/lavoisier/render_chart_n?view={{/e:entries/@view}}&amp;report={{/e:entries/@report}}&amp;type=reliability&amp;ngi={{@key}}&amp;accept=html"
-                   title="Chart">
-                    <span style="margin:15px" class="btn btn-primary"><i
-                            class="fa fa-bar-chart-o"> </i>  RELIABILITY</span>
-                </a>
+
 
             <a href="?accept=csv" target="_blank" title="CSV report"><span style="margin:10px;" class="btn btn-primary">CSV</span> </a>
             <a href="?accept=xml" target="_blank" title="XML report"><span style="margin:10px" class="btn btn-primary">XML</span></a>
@@ -203,7 +181,7 @@
                     </td>
 
                     <td tpl:if="Availability[@timestamp=ancestor::e:entries/@month3]">
-                        <a href="/lavoisier/{{/e:entries/@related_view}}?granularity=DAILY&amp;report={{/e:entries/@report}}&amp;start_date={{/e:entries/@month3}}-01&amp;end_date={{/e:entries/@month4}}-01&amp;site={{@site}}">
+                        <a href="/lavoisier/{{/e:entries/@related_view}}?granularity=DAILY&amp;report={{/e:entries/@report}}&amp;start_date={{/e:entries/@month3}}-01&amp;end_date={{/e:entries/@month4}}&amp;site={{@site}}">
                             <span class="avCheck label"
                                   title="{{format-number(Availability[@timestamp=ancestor::e:entries/@month3]/@availability,'#.00')}}">{{format-number(Availability[@timestamp=ancestor::e:entries/@month3]/@availability,'#.00')}}</span>
                             <span class="reCheck label" style="margin-left:10px"
@@ -397,6 +375,9 @@
                         groupByRowLabel: true,
                         showBarLabels : false
 
+                    },
+                    hAxis: {
+                        format: 'dd.MM HH:MM'
                     }
 
                 };
