@@ -221,8 +221,8 @@
                         <element in="Ngi">
                             <attribute in="NGI">'EGI'</attribute>
                             <element in="Availability">
-                                <attribute in="availability">(sum(/e:entries/e:entry/Ngi[@NGI!='EGI']/Availability[@timestamp=current()/../@timestamp]/@availability)) div count(/e:entries/e:entry/Ngi[@NGI!='EGI']/Availability[@timestamp=current()/../@timestamp]/@availability) </attribute>
-                                <attribute in="reliability">(sum(/e:entries/e:entry/Ngi[@NGI!='EGI']/Availability[@timestamp=current()/../@timestamp]/@reliability)) div count(/e:entries/e:entry/Ngi[@NGI!='EGI']/Availability[@timestamp=current()/../@timestamp]/@reliability) </attribute>
+                                <attribute in="availability">(sum(/e:entries/e:entry/Ngi[@NGI!='EGI']/Availability[@availability&gt;=0][@timestamp=current()/../@timestamp]/@availability)) div count(/e:entries/e:entry/Ngi[@NGI!='EGI']/Availability[@availability&gt;=0][@timestamp=current()/../@timestamp]/@availability) </attribute>
+                                <attribute in="reliability">(sum(/e:entries/e:entry/Ngi[@NGI!='EGI']/Availability[@reliaibility&gt;=0][@timestamp=current()/../@timestamp]/@reliability)) div count(/e:entries/e:entry/Ngi[@NGI!='EGI']/Availability[@reliaibility&gt;=0][@timestamp=current()/../@timestamp]/@reliability) </attribute>
                             </element>
                         </element>
                     </element>
