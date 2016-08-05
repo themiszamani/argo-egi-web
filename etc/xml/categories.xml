@@ -16,7 +16,6 @@
         <category link="/lavoisier/ngi_reports?accept=html" icon="fa fa-globe"> NGI Report</category>
         <category link="/lavoisier/site_reports?accept=html" icon="fa fa-home"> Site Report</category>
         <category link="/lavoisier/cloud_reports?accept=html" icon="fa fa-cloud"> Cloud Report</category>
-        <category link="/lavoisier/ngi_fedcloudcritical_reports?accept=html" icon="fa fa-cloud-upload"> CloudCritical Report</category>
         <category link="/lavoisier/opsmon_reports?accept=html" icon="fa fa-star"> OpsMon Report</category>
         <category link="/lavoisier/report_form?accept=html" icon="fa fa-list"> Customized Report</category>
         <category link="/lavoisier/elixir_report?accept=html" icon="fa fa-globe"> Elixir Report</category>
