@@ -187,7 +187,7 @@
                     </td>
 
                     <td tpl:if="Availability[@timestamp=ancestor::e:entries/@month3]">
-                        <a href="/lavoisier/{{/e:entries/@related_view}}?granularity=DAILY&amp;report={{/e:entries/@report}}&amp;start_date={{/e:entries/@month3}}-01&amp;end_date={{/e:entries/@month4}}&amp;ngi={{@NGI}}">
+                        <a href="/lavoisier/{{/e:entries/@related_view}}?granularity=DAILY&amp;report={{/e:entries/@report}}&amp;start_date={{/e:entries/@month3}}-01&amp;end_date={{choose(string-length(/e:entries/@month4)&gt;8,/e:entries/@month4,concat(/e:entries/@month4),'-01')}}&amp;ngi={{@NGI}}">
                             <span class="avCheck label"
                                   title="{{format-number(Availability[@timestamp=ancestor::e:entries/@month3]/@availability,'#.00')}}">{{format-number(Availability[@timestamp=ancestor::e:entries/@month3]/@availability,'#.00')}}</span>
                             <span style="margin-left:10px" class="reCheck label"
@@ -367,7 +367,7 @@
                     </td>
 
                     <td tpl:if="Availability[@timestamp=ancestor::e:entries/@month3]">
-                        <a href="/lavoisier/{{/e:entries/@related_view}}?granularity=DAILY&amp;report={{/e:entries/@report}}&amp;start_date={{/e:entries/@month3}}-01&amp;end_date={{/e:entries/@month4}}&amp;site={{@site}}">
+                        <a href="/lavoisier/{{/e:entries/@related_view}}?granularity=DAILY&amp;report={{/e:entries/@report}}&amp;start_date={{/e:entries/@month3}}-01&amp;end_date={{choose(string-length(/e:entries/@month4)&gt;8,/e:entries/@month4,concat(/e:entries/@month4),'-01')}}&amp;site={{@site}}">
                             <span class="avCheck label"
                                   title="{{format-number(Availability[@timestamp=ancestor::e:entries/@month3]/@availability,'#.00')}}">{{format-number(Availability[@timestamp=ancestor::e:entries/@month3]/@availability,'#.00')}}</span>
                             <span class="reCheck label" style="margin-left:10px"
