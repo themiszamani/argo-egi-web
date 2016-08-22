@@ -194,17 +194,16 @@
             <category>AR reports</category>
             <description>Site Customized Reports</description>
         </info>
-
         <argument name="site"></argument>
         <argument name="ngi">false</argument>
         <argument name="granularity"></argument>
-        <argument name="start_date"></argument>
-        <argument name="end_date"></argument>
+        <argument name="start_date">_DATE_</argument>
+        <argument name="end_date">_DATE_</argument>
         <argument name="view_details">services_ar</argument>
         <argument name="poems">ch.cern.sam.ROC_CRITICAL</argument>
         <argument name="report">Critical</argument>
-        <variable name="start_time" eval="choose($start_date,concat($start_date,'T00:00:00Z'),concat(substring(date:add(date:date-time(),'-P30D'), 0,11),'T00:00:00Z'))"></variable>
-        <variable name="end_time" eval="choose($end_date,concat($end_date,'T00:00:00Z'),concat(substring(date:add(date:date-time(),'-P1D'), 0,11),'T00:00:00Z'))"></variable>
+        <variable name="start_time" eval="choose($start_date!='_DATE_',concat($start_date,'T00:00:00Z'),concat(substring(date:add(date:date-time(),'-P30D'), 0,11),'T00:00:00Z'))"></variable>
+        <variable name="end_time" eval="choose($end_date!='_DATE_',concat($end_date,'T00:00:00Z'),concat(substring(date:add(date:date-time(),'-P1D'), 0,11),'T00:00:00Z'))"></variable>
 
 
         <connector type="XMLConnector">
@@ -222,11 +221,11 @@
             
             <element in="root" out="e:entries">
 
-                <attribute-create out="start_timestamp">date:seconds($start_date)</attribute-create>
-                <attribute-create out="end_timestamp">date:seconds($end_date)</attribute-create>
+                <attribute-create out="start_timestamp">date:seconds($start_time)</attribute-create>
+                <attribute-create out="end_timestamp">date:seconds($end_time)</attribute-create>
 
-                <attribute-create out="start_date">$start_date</attribute-create>
-                <attribute-create out="end_date">$end_date</attribute-create>
+                <attribute-create out="start_date">$start_time</attribute-create>
+                <attribute-create out="end_date">$end_time</attribute-create>
 
                 <attribute-create out="view">site_ar</attribute-create>
                 <attribute-create out="view_details">$view_details</attribute-create>
