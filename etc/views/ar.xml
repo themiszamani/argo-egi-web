@@ -197,8 +197,8 @@
         <argument name="site"></argument>
         <argument name="ngi">false</argument>
         <argument name="granularity"></argument>
-        <argument name="start_date">'_DATE_'</argument>
-        <argument name="end_date">'_DATE_'</argument>
+        <argument name="start_date">_DATE_</argument>
+        <argument name="end_date">_DATE_</argument>
         <argument name="view_details">services_ar</argument>
         <argument name="poems">ch.cern.sam.ROC_CRITICAL</argument>
         <argument name="report">Critical</argument>
@@ -221,11 +221,11 @@
             
             <element in="root" out="e:entries">
 
-                <attribute-create out="start_timestamp">date:seconds($start_date)</attribute-create>
-                <attribute-create out="end_timestamp">date:seconds($end_date)</attribute-create>
+                <attribute-create out="start_timestamp">date:seconds($start_time)</attribute-create>
+                <attribute-create out="end_timestamp">date:seconds($end_time)</attribute-create>
 
-                <attribute-create out="start_date">$start_date</attribute-create>
-                <attribute-create out="end_date">$end_date</attribute-create>
+                <attribute-create out="start_date">$start_time</attribute-create>
+                <attribute-create out="end_date">$end_time</attribute-create>
 
                 <attribute-create out="view">site_ar</attribute-create>
                 <attribute-create out="view_details">$view_details</attribute-create>
