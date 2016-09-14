@@ -95,7 +95,7 @@
             <a href="?accept=csv&amp;month={{/e:entries/@month3}}" target="_blank" title="CSV report"><span style="margin:10px;" class="btn btn-primary">CSV</span> </a>
             <a href="?accept=xml&amp;month={{/e:entries/@month3}}" target="_blank" title="XML report"><span style="margin:10px" class="btn btn-primary">XML</span></a>
             <a tpl:if="/e:entries/@view!='site_reports'"
-               href="/lavoisier/render_chart_n?view={{/e:entries/@view}}&amp;report={{/e:entries/@report}}&amp;type=availability&amp;ngi=all&amp;accept=html"
+               href="/lavoisier/render_chart_n?view={{/e:entries/@view}}&amp;report={{/e:entries/@report}}&amp;type=availability&amp;ngi=all&amp;accept=html&amp;month={{/e:entries/@month3}}"
                title="Chart">
                 <span style="margin:15px" class="btn btn-primary"><i class="fa fa-bar-chart-o"> </i>  AVAILABILITY </span>
             </a>
