@@ -176,7 +176,7 @@
 
 
 
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="/resource/js/jsapitimeline.js"></script>
 
     <script>
@@ -185,7 +185,7 @@
 
 
         $(document).ready(function() {
-            google.load('visualization', '1', {'packages':['timeline'], 'language': 'en'});
+            google.charts.load('current', {packages: ['timeline'] , 'language':'en'});
 
             var newgroup = [];
             var colorsgroup = [];
