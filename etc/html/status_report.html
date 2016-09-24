@@ -63,7 +63,7 @@
                     <li><a href="/lavoisier/status_report-site?start_date={{root/@start_time}}&amp;end_date={{root/@end_time}}&amp;report={{root/@report}}&amp;accept=html">EGI</a></li>
                     <li class="active"><a tpl:if="root/@ngi!='all'" href="/lavoisier/status_report-site?start_date={{root/@start_time}}&amp;end_date={{root/@end_time}}&amp;report={{root/@report}}&amp;ngi={{root/@ngi}}&amp;report={{ancestor::root/@report}}&amp;accept=html">{{root/@ngi}}</a></li>
                 </ol>
-                <div style="display: none" tpl:foreach="/root/group/status" >/lavoisier/{{ancestor::root/@view}}?site={{ancestor::group/@name}}&amp;start_date={{ancestor::root/@start_time}}&amp;end_date={{ancestor::root/@end_time}}&amp;report={{ancestor::root/@report}}&amp;accept=html</div>
+                <div style="display: none" tpl:foreach="/root/group/status">/lavoisier/{{ancestor::root/@view}}?site={{ancestor::group/@name}}&amp;start_date={{ancestor::root/@start_time}}&amp;end_date={{ancestor::root/@end_time}}&amp;report={{ancestor::root/@report}}&amp;accept=html</div>
             </div>
 
             <div  id="local_links" tpl:if="/root/@view='status_report-endpoints'"  >
@@ -176,7 +176,7 @@
 
 
 
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="/resource/js/jsapitimeline.js"></script>
 
     <script>
@@ -185,15 +185,16 @@
 
 
         $(document).ready(function() {
-            google.load('visualization', '1', {'packages':['timeline'], 'language': 'en'});
+            google.charts.load('current', {packages: ['timeline'] , 'language':'en'});
 
             var newgroup = [];
             var colorsgroup = [];
             var links = [];
-
+            var excludedIndexes =[];
 
             var local_groups = document.getElementById('local_groups').getElementsByTagName('div');
             var local_links = document.getElementById('local_links').getElementsByTagName('div');
+
 
 
             for (j = 0; j < local_groups.length; j++) {
@@ -220,10 +221,15 @@
                     newgroup.push(tempArray);
                     colorsgroup.push(color);
                 }
+                else
+                {
+                    excludedIndexes.push(j);
+                }
             }
 
 
             for (m = 0; m < local_links.length; m++) {
+                if (excludedIndexes.indexOf(m) == -1)
                 links.push(local_links[m].textContent);
             }
 

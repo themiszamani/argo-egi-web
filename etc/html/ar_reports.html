@@ -92,16 +92,16 @@
 
     <div class="box-header">
         <h3 class="box-title">{{/e:entries/@description}} - Report Type : {{/e:entries/@report}} <br/>
-            <a href="?accept=csv" target="_blank" title="CSV report"><span style="margin:10px;" class="btn btn-primary">CSV</span> </a>
-            <a href="?accept=xml" target="_blank" title="XML report"><span style="margin:10px" class="btn btn-primary">XML</span></a>
+            <a href="?accept=csv&amp;month={{/e:entries/@month3}}" target="_blank" title="CSV report"><span style="margin:10px;" class="btn btn-primary">CSV</span> </a>
+            <a href="?accept=xml&amp;month={{/e:entries/@month3}}" target="_blank" title="XML report"><span style="margin:10px" class="btn btn-primary">XML</span></a>
             <a tpl:if="/e:entries/@view!='site_reports'"
-               href="/lavoisier/render_chart_n?view={{/e:entries/@view}}&amp;report={{/e:entries/@report}}&amp;type=availability&amp;ngi=all&amp;accept=html"
+               href="/lavoisier/render_chart_n?view={{/e:entries/@view}}&amp;report={{/e:entries/@report}}&amp;type=availability&amp;ngi=all&amp;accept=html&amp;month={{/e:entries/@month3}}"
                title="Chart">
                 <span style="margin:15px" class="btn btn-primary"><i class="fa fa-bar-chart-o"> </i>  AVAILABILITY </span>
             </a>
 
             <a tpl:if="/e:entries/@view!='site_reports'"
-               href="/lavoisier/render_chart_n?view={{/e:entries/@view}}&amp;report={{/e:entries/@report}}&amp;type=reliability&amp;ngi=all&amp;accept=html"
+               href="/lavoisier/render_chart_n?view={{/e:entries/@view}}&amp;report={{/e:entries/@report}}&amp;type=reliability&amp;ngi=all&amp;accept=html&amp;month={{/e:entries/@month3}}"
                title="Chart">
                 <span style="margin:15px" class="btn btn-primary"><i class="fa fa-bar-chart-o"> </i> RELIABILITY </span>
             </a>
@@ -187,12 +187,21 @@
                     </td>
 
                     <td tpl:if="Availability[@timestamp=ancestor::e:entries/@month3]">
-                        <a href="/lavoisier/{{/e:entries/@related_view}}?granularity=DAILY&amp;report={{/e:entries/@report}}&amp;start_date={{/e:entries/@month3}}-01&amp;end_date={{/e:entries/@month4}}&amp;ngi={{@NGI}}">
+                        <a tpl:if="string-length(/e:entries/@month4)&gt;8" href="/lavoisier/{{/e:entries/@related_view}}?granularity=DAILY&amp;report={{/e:entries/@report}}&amp;start_date={{/e:entries/@month3}}-01&amp;end_date={{/e:entries/@month4}}&amp;ngi={{@NGI}}">
                             <span class="avCheck label"
                                   title="{{format-number(Availability[@timestamp=ancestor::e:entries/@month3]/@availability,'#.00')}}">{{format-number(Availability[@timestamp=ancestor::e:entries/@month3]/@availability,'#.00')}}</span>
                             <span style="margin-left:10px" class="reCheck label"
                                   title="{{format-number(Availability[@timestamp=ancestor::e:entries/@month3]/@reliability,'#.00')}}">{{format-number(Availability[@timestamp=ancestor::e:entries/@month3]/@reliability,'#.00')}}</span>
                         </a>
+
+                        <a tpl:else="" href="/lavoisier/{{/e:entries/@related_view}}?granularity=DAILY&amp;report={{/e:entries/@report}}&amp;start_date={{/e:entries/@month3}}-01&amp;end_date={{concat(/e:entries/@month4,'-01')}}&amp;ngi={{@NGI}}">
+                            <span class="avCheck label"
+                                  title="{{format-number(Availability[@timestamp=ancestor::e:entries/@month3]/@availability,'#.00')}}">{{format-number(Availability[@timestamp=ancestor::e:entries/@month3]/@availability,'#.00')}}</span>
+                            <span style="margin-left:10px" class="reCheck label"
+                                  title="{{format-number(Availability[@timestamp=ancestor::e:entries/@month3]/@reliability,'#.00')}}">{{format-number(Availability[@timestamp=ancestor::e:entries/@month3]/@reliability,'#.00')}}</span>
+                        </a>
+
+
                     </td>
                     <td tpl:else="">
                         <span class="avCheck label label-default">N.A</span>
@@ -272,12 +281,12 @@
         </div>
         <div class="box-body table-responsive">
 
-                <a href="/lavoisier/render_chart_n?view={{/e:entries/@view}}&amp;report={{/e:entries/@report}}&amp;type=availability&amp;ngi={{@key}}&amp;accept=html"
+                <a href="/lavoisier/render_chart_n?view={{/e:entries/@view}}&amp;report={{/e:entries/@report}}&amp;type=availability&amp;ngi={{@key}}&amp;month={{/e:entries/@month3}}&amp;accept=html"
                    title="Chart">
                     <span style="margin:15px" class="btn btn-primary"><i
                             class="fa fa-bar-chart-o"> </i> AVAILABILITY</span>
                 </a>
-                <a href="/lavoisier/render_chart_n?view={{/e:entries/@view}}&amp;report={{/e:entries/@report}}&amp;type=reliability&amp;ngi={{@key}}&amp;accept=html"
+                <a href="/lavoisier/render_chart_n?view={{/e:entries/@view}}&amp;report={{/e:entries/@report}}&amp;type=reliability&amp;ngi={{@key}}&amp;month={{/e:entries/@month3}}&amp;accept=html"
                    title="Chart">
                     <span style="margin:15px" class="btn btn-primary"><i
                             class="fa fa-bar-chart-o"> </i>  RELIABILITY</span>
@@ -367,7 +376,14 @@
                     </td>
 
                     <td tpl:if="Availability[@timestamp=ancestor::e:entries/@month3]">
-                        <a href="/lavoisier/{{/e:entries/@related_view}}?granularity=DAILY&amp;report={{/e:entries/@report}}&amp;start_date={{/e:entries/@month3}}-01&amp;end_date={{/e:entries/@month4}}&amp;site={{@site}}">
+                        <a tpl:if="string-length(/e:entries/@month4)&gt;8" href="/lavoisier/{{/e:entries/@related_view}}?granularity=DAILY&amp;report={{/e:entries/@report}}&amp;start_date={{/e:entries/@month3}}-01&amp;end_date={{/e:entries/@month4}}&amp;site={{@site}}">
+                            <span class="avCheck label"
+                                  title="{{format-number(Availability[@timestamp=ancestor::e:entries/@month3]/@availability,'#.00')}}">{{format-number(Availability[@timestamp=ancestor::e:entries/@month3]/@availability,'#.00')}}</span>
+                            <span class="reCheck label" style="margin-left:10px"
+                                  title="{{format-number(Availability[@timestamp=ancestor::e:entries/@month3]/@reliability,'#.00')}}">{{format-number(Availability[@timestamp=ancestor::e:entries/@month3]/@reliability,'#.00')}}</span>
+                        </a>
+
+                        <a tpl:else="" href="/lavoisier/{{/e:entries/@related_view}}?granularity=DAILY&amp;report={{/e:entries/@report}}&amp;start_date={{/e:entries/@month3}}-01&amp;end_date={{concat(/e:entries/@month4,'-01')}}&amp;site={{@site}}">
                             <span class="avCheck label"
                                   title="{{format-number(Availability[@timestamp=ancestor::e:entries/@month3]/@availability,'#.00')}}">{{format-number(Availability[@timestamp=ancestor::e:entries/@month3]/@availability,'#.00')}}</span>
                             <span class="reCheck label" style="margin-left:10px"
