@@ -2,10 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0611ee5a-e0c6-45ef-8f46-94c59425f4b2" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/copyright/profiles_settings.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/etc/views/status.xml" afterPath="$PROJECT_DIR$/etc/views/status.xml" />
     </list>
     <ignored path="argo-ui.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -50,8 +49,13 @@
       <file leaf-file-name="status.xml" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/etc/views/status.xml">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="350">
               <caret line="85" column="187" selection-start-line="85" selection-start-column="187" selection-end-line="85" selection-end-column="187" />
+=======
+            <state relative-caret-position="365">
+              <caret line="92" column="49" selection-start-line="92" selection-start-column="49" selection-end-line="92" selection-end-column="49" />
+>>>>>>> upstream/devel
               <folding />
             </state>
           </provider>
@@ -65,7 +69,10 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
+<<<<<<< HEAD
         <option value="$PROJECT_DIR$/etc/argo-config.properties" />
+=======
+>>>>>>> upstream/devel
         <option value="$PROJECT_DIR$/etc/views/status.xml" />
       </list>
     </option>
@@ -242,7 +249,11 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
+<<<<<<< HEAD
     <option name="totallyTimeSpent" value="2888000" />
+=======
+    <option name="totallyTimeSpent" value="296000" />
+>>>>>>> upstream/devel
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="24" width="1855" height="1176" extended-state="6" />
@@ -280,11 +291,14 @@
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
+<<<<<<< HEAD
   <component name="VcsManagerConfiguration">
     <MESSAGE value="change api reference" />
     <MESSAGE value="change the month4" />
     <option name="LAST_COMMIT_MESSAGE" value="change the month4" />
   </component>
+=======
+>>>>>>> upstream/devel
   <component name="XDebuggerManager">
     <breakpoint-manager />
     <watches-manager />
@@ -316,8 +330,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/etc/views/status.xml">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="350">
           <caret line="85" column="187" selection-start-line="85" selection-start-column="187" selection-end-line="85" selection-end-column="187" />
+=======
+        <state relative-caret-position="365">
+          <caret line="92" column="49" selection-start-line="92" selection-start-column="49" selection-end-line="92" selection-end-column="49" />
+>>>>>>> upstream/devel
           <folding />
         </state>
       </provider>
