@@ -116,7 +116,7 @@
         <argument name="report">Critical</argument>
 
 
-        <variable name="start_date" eval="concat(str:replace(substring(date:add(date:date-time(),concat('-P',$lastdays,'D')), 0,20),' ','T'),'Z')"></variable>
+        <variable name="start_date" eval="concat(str:replace(substring(date:add(date:date-time('yyyy-MM-dd HH:mm:ss z'),concat('-P',$lastdays,'D')), 0,20),' ','T'),'Z')"></variable>
         <variable name="end_date" eval="concat(str:replace(substring(date:date-time(), 0,20),' ','T'),'Z')"></variable>
 
 
