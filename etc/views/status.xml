@@ -103,8 +103,18 @@
 
 
 
+    <view name="testDateTime" xmlns:lav="http://software.in2p3.fr/lavoisier/functions.xsd">
+        <connector type="StringConnector" xmlns:date="http://exslt.org/dates-and-times">
+            <parameter name="content" eval="concat('DateTime: ',lav:DateTimeUtc(), '  - TimeZone : ',property('user.timezone'))"/>
+        </connector>
+        <serializer type="EncapsulateSerializer"/>
+    </view>
+
+
+
+
     <!-- @TODO Récupérer jour courant -->
-    <view name="status_site">
+    <view name="status_site" xmlns:java="http://software.in2p3.fr/lavoisier/java">
         <info>
             <category>Status Report</category>
             <description>Site Reports - cache Rotated</description>
@@ -115,7 +125,7 @@
         <argument name="lastdays">3</argument>
         <argument name="report">Critical</argument>
 
-
+        <variable name='setutc' eval="java:java.util.TimeZone.setDefault(java:java.util.TimeZone.getTimeZone('UTC'))"></variable>
         <variable name="start_date" eval="concat(str:replace(substring(date:add(date:date-time(),concat('-P',$lastdays,'D')), 0,20),' ','T'),'Z')"></variable>
         <variable name="end_date" eval="concat(str:replace(substring(date:date-time(), 0,20),' ','T'),'Z')"></variable>
 
@@ -148,6 +158,9 @@
 
         <variable name="nbdays">3,10,30</variable>
 
+        <variable name="dateTime" eval="date:date-time()"></variable>
+
+
         <variable name="start_date" eval="concat(str:replace(substring(date:add(date:date-time(),concat('-P',$lastdays,'D')), 0,20),' ','T'),'Z')"/>
         <variable name="end_date" eval="concat(str:replace(substring(date:date-time(), 0,20),' ','T'),'Z')"/>
 
@@ -170,7 +183,7 @@
                 <attribute-create out="view">'status_report-sf'</attribute-create>
                 <attribute-create out="ngi" if="$ngi!='all'">$ngi</attribute-create>
                 <attribute-create out="lastdays">$lastdays</attribute-create>
-
+                <attribute-create out="dateTime">$dateTime</attribute-create>
                 <element in="group" if="contains(concat($site,','),@name) or $site='false'">
                     <attribute-create out="group">choose($SiteList/results/Ngi[SITE/@NAME=current()/../@name]/@key!='',$SiteList/results/Ngi[SITE/@NAME=current()/../@name]/@key,'UNCERTIFIED')</attribute-create>
                 </element>
