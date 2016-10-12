@@ -321,7 +321,6 @@
         <argument name="start_time"></argument>
         <argument name="end_time"></argument>
         <argument name="site"></argument>
-        <argument name="report"></argument>
         <argument name="report">Critical</argument>
         <argument name="service">false</argument>
         <argument name="endpoint">false</argument>

@@ -51,8 +51,64 @@
     </view>
 
 
+
+
+    <view name="status_site_3">
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('status_site',entry('lastdays','3'))"></parameter>
+        </connector>
+
+        <cache type="FileCache">
+            <!--<trigger type="ViewCreatedTrigger"/>-->
+            <trigger type="DeltaTimeTrigger">
+                <parameter name="minutes">14</parameter>
+            </trigger>
+            <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="ViewCreatedTrigger"/>
+
+        </cache>
+    </view>
+
+    <view name="status_site_10">
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('status_site',entry('lastdays','10'))"></parameter>
+        </connector>
+
+        <cache type="FileCache">
+            <!--<trigger type="ViewCreatedTrigger"/>-->
+            <trigger type="DeltaTimeTrigger">
+                <parameter name="minutes">26</parameter>
+            </trigger>
+            <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="ViewCreatedTrigger"/>
+
+        </cache>
+    </view>
+
+    <view name="status_site_30">
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('status_site',entry('lastdays','30'))"></parameter>
+        </connector>
+
+        <cache type="FileCache">
+            <!--<trigger type="ViewCreatedTrigger"/>-->
+            <trigger type="DeltaTimeTrigger">
+                <parameter name="minutes">38</parameter>
+            </trigger>
+            <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="ViewCreatedTrigger"/>
+        </cache>
+    </view>
+
+    
+
+
+
     <!-- @TODO Récupérer jour courant -->
-    <view name="status_report-site">
+    <view name="status_site" xmlns:java="http://software.in2p3.fr/lavoisier/java">
         <info>
             <category>Status Report</category>
             <description>Site Reports - cache Rotated</description>
@@ -60,20 +116,59 @@
 
         <argument name="ngi">all</argument>
         <argument name="site">false</argument>
+        <argument name="lastdays">3</argument>
+        <argument name="report">Critical</argument>
 
+        <variable name='setutc' eval="java:java.util.TimeZone.setDefault(java:java.util.TimeZone.getTimeZone('UTC'))"></variable>
+        <variable name="start_date" eval="concat(str:replace(substring(date:add(date:date-time(),concat('-P',$lastdays,'D')), 0,20),' ','T'),'Z')"></variable>
+        <variable name="end_date" eval="concat(str:replace(substring(date:date-time(), 0,20),' ','T'),'Z')"></variable>
+
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('api.status.call',entry('group_type','sites')|entry('site',$site)|entry('start_time',$start_date)|entry('end_time',$end_date)|entry('report',$report))"></parameter>
+        </connector>
+
+    </view>
+
+
+
+    <!-- @TODO Récupérer jour courant -->
+    <view name="status_report-site">
+        <info>
+            <category>Status Report</category>
+            <description>Site Reports - cache Rotated</description>
+        </info>
+
+
+
+        <argument name="ngi">all</argument>
+        <argument name="site">false</argument>
 
         <argument name="start" eval="false()"></argument>
         <argument name="end" eval="false()"></argument>
         <argument name="report">Critical</argument>
+        <argument name="lastdays">3</argument>
 
-        <variable name="start_date" eval="choose($start!='false',concat($start,'T00:00:00Z'),concat(substring(date:add(date:date-time(),'-P3D'), 0,11),'T00:00:00Z'))"></variable>
-        <variable name="end_date" eval="choose($end!='false',concat($end,'T00:00:00Z'),concat(substring(date:date-time(),0,11),'T23:59:59Z'))"></variable>
+
+        <variable name="nbdays">3,10,30</variable>
+
+        <variable name="dateTime" eval="date:date-time()"></variable>
+
+
+        <variable name="start_date" eval="concat(str:replace(substring(date:add(date:date-time(),concat('-P',$lastdays,'D')), 0,20),' ','T'),'Z')"/>
+        <variable name="end_date" eval="concat(str:replace(substring(date:date-time(), 0,20),' ','T'),'Z')"/>
+
+
 
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('api.status.rotating.caches',entry('site',$site)|entry('starttime',$start_date)|entry('endtime',$end_date)|entry('report',$report))"></parameter>
+            <parameter name="content" eval="
+            view(
+                choose(boolean(str:split($nbdays,',')[text()=$lastdays]),
+                    concat('status_site_',$lastdays),
+                    'api.status.call')
+            ,entry('group_type','sites')|entry('site',$site)|entry('start_time',$start_date)|entry('end_time',$end_date)|entry('report',$report))"/>
         </connector>
-
 
         <processors>
             <element in="root">
@@ -81,7 +176,8 @@
                 <set variable="SiteList">view('listSitesbyNgi')</set>
                 <attribute-create out="view">'status_report-sf'</attribute-create>
                 <attribute-create out="ngi" if="$ngi!='all'">$ngi</attribute-create>
-
+                <attribute-create out="lastdays">$lastdays</attribute-create>
+                <attribute-create out="dateTime">$dateTime</attribute-create>
                 <element in="group" if="contains(concat($site,','),@name) or $site='false'">
                     <attribute-create out="group">choose($SiteList/results/Ngi[SITE/@NAME=current()/../@name]/@key!='',$SiteList/results/Ngi[SITE/@NAME=current()/../@name]/@key,'UNCERTIFIED')</attribute-create>
                 </element>
