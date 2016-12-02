@@ -26,18 +26,28 @@
 
 
             <div id="local_groups" tpl:if="/e:entries/@type='availability'">
-                   <span tpl:foreach="/e:entries/e:entry/group"   class="hidden" >
-
-                <div tpl:if="Availability[@timestamp=ancestor::e:entries/@month1]/@color_av">{{@NGI}} : {{@site}},{{ancestor::e:entries/@month1}}_{{@NGI}} : {{@site}}_av,{{ancestor::e:entries/@month1}},{{ancestor::e:entries/@month2}},{{Availability[@timestamp=ancestor::e:entries/@month1]/@color_av}},{{Availability[@timestamp=ancestor::e:entries/@month1]/@availability}}</div>
-                <div tpl:else="">{{@NGI}} : {{@site}},{{ancestor::e:entries/@month1}}_{{@NGI}} : {{@site}}_av,{{ancestor::e:entries/@month1}},{{ancestor::e:entries/@month2}},grey,unknown</div>
+                   <span tpl:foreach="/e:entries/e:entries/group"   class="hidden" >
 
 
-                <div tpl:if="Availability[@timestamp=ancestor::e:entries/@month2]/@color_av">{{@NGI}} : {{@site}},{{ancestor::e:entries/@month2}}_{{@NGI}} : {{@site}}_av,{{ancestor::e:entries/@month2}},{{ancestor::e:entries/@month3}},{{Availability[@timestamp=ancestor::e:entries/@month2]/@color_av}},{{Availability[@timestamp=ancestor::e:entries/@month2]/@availability}}</div>
-                <div tpl:else="">{{@NGI}} : {{@site}},{{ancestor::e:entries/@month2}}_{{@NGI}} : {{@site}}_av,{{ancestor::e:entries/@month2}},{{ancestor::e:entries/@month3}},grey,unknown</div>
+                       <div tpl:if="Availability[@timestamp=/e:entries/@monthstart]/@color_av">{{@key}} : {{@site}},{{/e:entries/@monthstart}}_{{@key}} : {{@site}}_av,{{/e:entries/@monthstart}},{{/e:entries/@month3}},{{Availability[@timestamp=/e:entries/@monthstart]/@color_av}},{{Availability[@timestamp=/e:entries/@monthstart]/@availability}}</div>
+                <div tpl:else="">{{@key}} : {{@site}},{{/e:entries/@monthstart}}_{{@key}} : {{@site}}_av,{{/e:entries/@monthstart}},{{/e:entries/@month3}},grey,unknown</div>
 
 
-                <div tpl:if="Availability[@timestamp=ancestor::e:entries/@month3]/@color_av">{{@NGI}} : {{@site}},{{ancestor::e:entries/@month3}}_{{@NGI}} : {{@site}}_av,{{ancestor::e:entries/@month3}},{{ancestor::e:entries/@month4}},{{Availability[@timestamp=ancestor::e:entries/@month3]/@color_av}},{{Availability[@timestamp=ancestor::e:entries/@month3]/@availability}}</div>
-                <div tpl:else="">{{@NGI}} : {{@site}},{{ancestor::e:entries/@month3}}_{{@NGI}} : {{@site}}_av,{{ancestor::e:entries/@month3}},{{ancestor::e:entries/@month4}},grey,unknown</div>
+
+                       <div tpl:if="Availability[@timestamp=/e:entries/@month3]/@color_av">{{@key}} : {{@site}},{{/e:entries/@month3}}_{{@key}} : {{@site}}_av,{{/e:entries/@month3}},{{/e:entries/@month2}},{{Availability[@timestamp=/e:entries/@month3]/@color_av}},{{Availability[@timestamp=/e:entries/@month3]/@availability}}</div>
+                <div tpl:else="">{{@key}} : {{@site}},{{/e:entries/@month3}}_{{@key}} : {{@site}}_av,{{/e:entries/@month3}},{{/e:entries/@month2}},grey,unknown</div>
+
+
+                <div tpl:if="Availability[@timestamp=/e:entries/@month2]/@color_av">{{@key}} : {{@site}},{{/e:entries/@month2}}_{{@key}} : {{@site}}_av,{{/e:entries/@month2}},{{/e:entries/@month1}},{{Availability[@timestamp=/e:entries/@month2]/@color_av}},{{Availability[@timestamp=/e:entries/@month2]/@availability}}</div>
+                <div tpl:else="">{{@key}} : {{@site}},{{/e:entries/@month2}}_{{@key}} : {{@site}}_av,{{/e:entries/@month2}},{{/e:entries/@month1}},grey,unknown</div>
+
+                <div tpl:if="Availability[@timestamp=/e:entries/@month1]/@color_av">{{@key}} : {{@site}},{{/e:entries/@month1}}_{{@key}} : {{@site}}_av,{{/e:entries/@month1}},{{/e:entries/@month0}},{{Availability[@timestamp=/e:entries/@month1]/@color_av}},{{Availability[@timestamp=/e:entries/@month1]/@availability}}</div>
+                <div tpl:else="">{{@key}} : {{@site}},{{/e:entries/@month1}}_{{@key}} : {{@site}}_av,{{/e:entries/@month1}},{{/e:entries/@month0}},grey,unknown</div>
+
+                       <div tpl:if="Availability[@timestamp=/e:entries/@month0]/@color_av">{{@key}} : {{@site}},{{/e:entries/@month0}}_{{@key}} : {{@site}}_av,{{/e:entries/@month0}},{{/e:entries/@monthend}},{{Availability[@timestamp=/e:entries/@month0]/@color_av}},{{Availability[@timestamp=/e:entries/@month0]/@availability}}</div>
+                <div tpl:else="">{{@key}} : {{@site}},{{/e:entries/@month0}}_{{@key}} : {{@site}}_av,{{/e:entries/@month0}},{{/e:entries/@monthend}},grey,unknown</div>
+
+
 
 
             </span>
@@ -45,24 +55,33 @@
             </div>
 
             <div id="local_groups" tpl:else="">
-                   <span tpl:foreach="/e:entries/e:entry/group"   class="hidden" >
+                   <span tpl:foreach="/e:entries/e:entries/group"   class="hidden" >
 
 
-                  <div tpl:if="Availability[@timestamp=ancestor::e:entries/@month1]/@color_av">{{@NGI}} : {{@site}},{{ancestor::e:entries/@month1}}_{{@NGI}} : {{@site}}_re,{{ancestor::e:entries/@month1}},{{ancestor::e:entries/@month2}},{{Availability[@timestamp=ancestor::e:entries/@month1]/@color_av}},{{Availability[@timestamp=ancestor::e:entries/@month1]/@reliability}}</div>
-                <div tpl:else="">{{@NGI}} : {{@site}},{{ancestor::e:entries/@month1}}_{{@NGI}} : {{@site}}_re,{{ancestor::e:entries/@month1}},{{ancestor::e:entries/@month2}},grey,unknown</div>
+                       <div tpl:if="Availability[@timestamp=/e:entries/@monthstart]/@color_av">{{@key}} : {{@site}},{{/e:entries/@monthstart}}_{{@key}} : {{@site}}_av,{{/e:entries/@monthstart}},{{/e:entries/@month3}},{{Availability[@timestamp=/e:entries/@monthstart]/@color_av}},{{Availability[@timestamp=/e:entries/@monthstart]/@reliability}}</div>
+                <div tpl:else="">{{@key}} : {{@site}},{{/e:entries/@monthstart}}_{{@key}} : {{@site}}_av,{{/e:entries/@monthstart}},{{/e:entries/@month3}},grey,unknown</div>
 
 
-                       <div tpl:if="Availability[@timestamp=ancestor::e:entries/@month2]/@color_av">{{@NGI}} : {{@site}},{{ancestor::e:entries/@month2}}_{{@NGI}} : {{@site}}_re,{{ancestor::e:entries/@month2}},{{ancestor::e:entries/@month3}},{{Availability[@timestamp=ancestor::e:entries/@month2]/@color_av}},{{Availability[@timestamp=ancestor::e:entries/@month2]/@reliability}}</div>
-                <div tpl:else="">{{@NGI}} : {{@site}},{{ancestor::e:entries/@month2}}_{{@NGI}} : {{@site}}_re,{{ancestor::e:entries/@month2}},{{ancestor::e:entries/@month3}},grey,unknown</div>
+
+                       <div tpl:if="Availability[@timestamp=/e:entries/@month3]/@color_av">{{@key}} : {{@site}},{{/e:entries/@month3}}_{{@key}} : {{@site}}_av,{{/e:entries/@month3}},{{/e:entries/@month2}},{{Availability[@timestamp=/e:entries/@month3]/@color_av}},{{Availability[@timestamp=/e:entries/@month3]/@reliability}}</div>
+                <div tpl:else="">{{@key}} : {{@site}},{{/e:entries/@month3}}_{{@key}} : {{@site}}_av,{{/e:entries/@month3}},{{/e:entries/@month2}},grey,unknown</div>
 
 
-                <div tpl:if="Availability[@timestamp=ancestor::e:entries/@month3]/@color_av">{{@NGI}} : {{@site}},{{ancestor::e:entries/@month3}}_{{@NGI}} : {{@site}}_re,{{ancestor::e:entries/@month3}},{{ancestor::e:entries/@month4}},{{Availability[@timestamp=ancestor::e:entries/@month3]/@color_av}},{{Availability[@timestamp=ancestor::e:entries/@month3]/@reliability}}</div>
-                <div tpl:else="">{{@NGI}} : {{@site}},{{ancestor::e:entries/@month3}}_{{@NGI}} : {{@site}}_re,{{ancestor::e:entries/@month3}},{{ancestor::e:entries/@month4}},grey,unknown</div>
+                <div tpl:if="Availability[@timestamp=/e:entries/@month2]/@color_av">{{@key}} : {{@site}},{{/e:entries/@month2}}_{{@key}} : {{@site}}_av,{{/e:entries/@month2}},{{/e:entries/@month1}},{{Availability[@timestamp=/e:entries/@month2]/@color_av}},{{Availability[@timestamp=/e:entries/@month2]/@reliability}}</div>
+                <div tpl:else="">{{@key}} : {{@site}},{{/e:entries/@month2}}_{{@key}} : {{@site}}_av,{{/e:entries/@month2}},{{/e:entries/@month1}},grey,unknown</div>
+
+                <div tpl:if="Availability[@timestamp=/e:entries/@month1]/@color_av">{{@key}} : {{@site}},{{/e:entries/@month1}}_{{@key}} : {{@site}}_av,{{/e:entries/@month1}},{{/e:entries/@month0}},{{Availability[@timestamp=/e:entries/@month1]/@color_av}},{{Availability[@timestamp=/e:entries/@month1]/@reliability}}</div>
+                <div tpl:else="">{{@key}} : {{@site}},{{/e:entries/@month1}}_{{@key}} : {{@site}}_av,{{/e:entries/@month1}},{{/e:entries/@month0}},grey,unknown</div>
+
+                       <div tpl:if="Availability[@timestamp=/e:entries/@month0]/@color_av">{{@key}} : {{@site}},{{/e:entries/@month0}}_{{@key}} : {{@site}}_av,{{/e:entries/@month0}},{{/e:entries/@monthend}},{{Availability[@timestamp=/e:entries/@month0]/@color_av}},{{Availability[@timestamp=/e:entries/@month0]/@reliability}}</div>
+                <div tpl:else="">{{@key}} : {{@site}},{{/e:entries/@month0}}_{{@key}} : {{@site}}_av,{{/e:entries/@month0}},{{/e:entries/@monthend}},grey,unknown</div>
+
+
+
 
             </span>
 
             </div>
-
 
 
             <div id="div_timeline" style="height: 800px;margin:20px;width:1000px" ></div>
@@ -155,8 +174,9 @@
 
                     },
                     hAxis: {
-                        format: 'MMM yyyy'
+                        format: 'dd.MM'
                     }
+
 
                 };
 

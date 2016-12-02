@@ -28,7 +28,10 @@
                             <h3 class="box-title">Recomputation Form</h3>
                         </div><!-- /.box-header -->
                         <!-- form start -->
-                        <form action="/lavoisier/form_recomputation_results?accept=html&amp;admin=false" method="post"  id="recomp_form">
+
+                        <form action="/lavoisier/form_recomputation_results?accept=html" method="POST"  id="recomp_form">
+
+
                             <div class="box-body">
 
                                 <div class="form-group">
@@ -44,7 +47,7 @@
 
 
                                 <div class="form-group">
-                                    <label class="span1">Sites to be excluded from the computation</label>
+                                    <label class="span1">Sites to be considered for the recomputation</label>
 
                                     <select   class="form-control"  multiple="multiple"  id="listSites">
                                         <optgroup   tpl:foreach="/root/results/Ngi" label="{{@key}}">

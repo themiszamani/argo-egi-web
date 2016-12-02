@@ -65,6 +65,7 @@
                 <parameter name="minutes">14</parameter>
             </trigger>
             <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="ViewCreatedTrigger"/>
 
         </cache>
     </view>
@@ -81,6 +82,7 @@
                 <parameter name="minutes">26</parameter>
             </trigger>
             <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="ViewCreatedTrigger"/>
 
         </cache>
     </view>
@@ -97,18 +99,10 @@
                 <parameter name="minutes">38</parameter>
             </trigger>
             <trigger type="ViewNotifiedTrigger"/>
-
+            <trigger type="ViewCreatedTrigger"/>
         </cache>
     </view>
 
-
-
-    <view name="testDateTime" xmlns:lav="http://software.in2p3.fr/lavoisier/functions.xsd">
-        <connector type="StringConnector" xmlns:date="http://exslt.org/dates-and-times">
-            <parameter name="content" eval="concat('DateTime: ',lav:DateTimeUtc(), '  - TimeZone : ',property('user.timezone'))"/>
-        </connector>
-        <serializer type="EncapsulateSerializer"/>
-    </view>
 
 
 
@@ -150,8 +144,10 @@
         <argument name="ngi">all</argument>
         <argument name="site">false</argument>
 
-        <argument name="start" eval="false()"></argument>
-        <argument name="end" eval="false()"></argument>
+
+        <argument name="start">_START_</argument>
+        <argument name="end">_END_</argument>
+
         <argument name="report">Critical</argument>
         <argument name="lastdays">3</argument>
 
@@ -161,8 +157,10 @@
         <variable name="dateTime" eval="date:date-time()"></variable>
 
 
-        <variable name="start_date" eval="concat(str:replace(substring(date:add(date:date-time(),concat('-P',$lastdays,'D')), 0,20),' ','T'),'Z')"/>
-        <variable name="end_date" eval="concat(str:replace(substring(date:date-time(), 0,20),' ','T'),'Z')"/>
+        <variable name="start_date" eval="choose($start!='_START_',concat($start,'T00:00:00Z'),concat(str:replace(substring(date:add(date:date-time(),concat('-P',$lastdays,'D')), 0,20),' ','T'),'Z'))"/>
+        <variable name="end_date" eval="choose($end!='_END_',concat($end,'T00:00:00Z'),concat(str:replace(substring(date:date-time(), 0,20),' ','T'),'Z'))"/>
+
+
 
 
 

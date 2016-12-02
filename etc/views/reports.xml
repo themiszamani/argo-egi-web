@@ -5,6 +5,215 @@
         xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
 
 
+    <!--
+            XML TEMPLATE used to prepare data to the reports
+            1) sort data by name (site or ngi)
+            2) group it by name
+            3) Add potential missing data for a month with N.A values
+            4) Add average values for group
+            5) Sort by date to be sure that all group have the same number of entries sorted in the same way
+            -->
+
+    <processors name="ReportsTemplate" xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" xmlns:date="http://exslt.org/dates-and-times"  xmlns:str="http://exslt.org/strings">
+
+        <element in="root" out="e:entries">
+            <element out="e:entries">
+                <element in="group">
+                    <element in="results" out="Availability"></element>
+                </element>
+                <element-ignore></element-ignore>
+            </element>
+
+        </element>
+
+
+        <element in="e:entries">
+            <element in="e:entries">
+                <element-ignore in="group"></element-ignore>
+                <element-create>sort_by_string(../group,'@name')</element-create>
+            </element>
+        </element>
+
+        <element in="e:entries">
+            <element in="e:entries">
+                <element-create-as-parent out="e:entry" group-by="@name" attributes="@name">
+                    <element in="group"></element>
+                </element-create-as-parent>
+            </element>
+        </element>
+
+
+        <element in="e:entries">
+            <element in="e:entries">
+                <element in="e:entry">
+                    <attribute in="name" out="key"></attribute>
+                    <element-ignore in="group">
+                        <element></element>
+                    </element-ignore>
+                </element>
+            </element>
+        </element>
+
+
+
+        <!-- ADD MISSING AV / RE  ans transform it into N.A entries then sort by date -->
+
+        <element in="e:entries">
+            <element in="e:entries">
+                <element in="e:entry">
+                    <element-create if="not(../Availability[@timestamp=/e:entries/@monthstart])">
+                        new_element('Availability',new_attribute('timestamp',/e:entries/@monthstart)|new_attribute('availability','N.A')|new_attribute('reliability','N.A')|new_attribute('downtime','N.A')|new_attribute('unknown','N.A'))
+                    </element-create>
+
+
+                    <element-create if="not(../Availability[@timestamp=/e:entries/@month3])">
+                        new_element('Availability',new_attribute('timestamp',/e:entries/@month3)|new_attribute('availability','N.A')|new_attribute('reliability','N.A')|new_attribute('downtime','N.A')|new_attribute('unknown','N.A'))
+                    </element-create>
+
+                    <element-create if="not(../Availability[@timestamp=/e:entries/@month2])">
+                        new_element('Availability',new_attribute('timestamp',/e:entries/@month2)|new_attribute('availability','N.A')|new_attribute('reliability','N.A')|new_attribute('downtime','N.A')|new_attribute('unknown','N.A'))
+                    </element-create>
+
+                    <element-create if="not(../Availability[@timestamp=/e:entries/@month1])">
+                        new_element('Availability',new_attribute('timestamp',/e:entries/@month1)|new_attribute('availability','N.A')|new_attribute('reliability','N.A')|new_attribute('downtime','N.A')|new_attribute('unknown','N.A'))
+                    </element-create>
+
+
+                    <element-create if="not(../Availability[@timestamp=/e:entries/@month0])">
+                        new_element('Availability',new_attribute('timestamp',/e:entries/@month0)|new_attribute('availability','N.A')|new_attribute('reliability','N.A')|new_attribute('downtime','N.A')|new_attribute('unknown','N.A'))
+                    </element-create>
+
+
+
+                </element>
+            </element>
+        </element>
+
+
+
+
+
+        <!-- ADD ENTRY for average values -->
+
+
+
+
+        <element in="e:entries">
+            <element in="e:entries">
+                <element-create as="last-child">
+                    entry('AVERAGE','')
+                </element-create>
+            </element>
+        </element>
+
+        <element in="e:entries">
+            <element in="e:entries">
+                <element in="e:entry" if="@key='AVERAGE'">
+                    <element-create>
+                        new_element('Availability',new_attribute('timestamp',/e:entries/@monthstart)
+                        |new_attribute('availability',
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@availability!='N.A']/@availability)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@availability!='N.A']/@availability))
+                        |new_attribute('reliability',
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@reliability!='N.A']/@reliability)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@reliability!='N.A']/@reliability))
+                        |new_attribute('downtime',
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@downtime!='N.A']/@downtime)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@downtime!='N.A']/@downtime))
+                        |new_attribute('unknown',
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@unknown!='N.A']/@unknown)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@unknown!='N.A']/@unknown))
+                        )
+                    </element-create>
+
+
+                    <element-create>
+                        new_element('Availability',new_attribute('timestamp',/e:entries/@month3)
+                        |new_attribute('availability',
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month3][@availability!='N.A']/@availability)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month3][@availability!='N.A']/@availability))
+                        |new_attribute('reliability',
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month3][@reliability!='N.A']/@reliability)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month3][@reliability!='N.A']/@reliability))
+                        |new_attribute('downtime',
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month3][@downtime!='N.A']/@downtime)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month3][@downtime!='N.A']/@downtime))
+                        |new_attribute('unknown',
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month3][@unknown!='N.A']/@unknown)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month3][@unknown!='N.A']/@unknown))
+                        )
+                    </element-create>
+
+                    <element-create>
+                        new_element('Availability',new_attribute('timestamp',/e:entries/@month2)
+                        |new_attribute('availability',
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@availability!='N.A']/@availability)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@availability!='N.A']/@availability))
+                        |new_attribute('reliability',
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@reliability!='N.A']/@reliability)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@reliability!='N.A']/@reliability))
+                        |new_attribute('downtime',
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@downtime!='N.A']/@downtime)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@downtime!='N.A']/@downtime))
+                        |new_attribute('unknown',
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@unknown!='N.A']/@unknown)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@unknown!='N.A']/@unknown))
+                        )
+                    </element-create>
+
+                    <element-create>
+                        new_element('Availability',new_attribute('timestamp',/e:entries/@month1)
+                        |new_attribute('availability',
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month1][@availability!='N.A']/@availability)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month1][@availability!='N.A']/@availability))
+                        |new_attribute('reliability',
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month1][@reliability!='N.A']/@reliability)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month1][@reliability!='N.A']/@reliability))
+                        |new_attribute('downtime',
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month1][@downtime!='N.A']/@downtime)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month1][@downtime!='N.A']/@downtime))
+                        |new_attribute('unknown',
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month1][@unknown!='N.A']/@unknown)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month1][@unknown!='N.A']/@unknown))
+                        )
+                    </element-create>
+
+
+                    <element-create>
+                        new_element('Availability',new_attribute('timestamp',/e:entries/@month0)
+                        |new_attribute('availability',
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month0][@availability!='N.A']/@availability)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month0][@availability!='N.A']/@availability))
+                        |new_attribute('reliability',
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month0][@reliability!='N.A']/@reliability)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month0][@reliability!='N.A']/@reliability))
+                        |new_attribute('downtime',
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month0][@downtime!='N.A']/@downtime)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month0][@downtime!='N.A']/@downtime))
+                        |new_attribute('unknown',
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month0][@unknown!='N.A']/@unknown)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month0][@unknown!='N.A']/@unknown))
+                        )
+                    </element-create>
+
+
+
+                </element>
+            </element>
+        </element>
+
+
+        <element in="e:entries">
+            <element in="e:entries">
+                <element in="e:entry">
+                    <element-ignore in="Availability"></element-ignore>
+                    <element-create>sort_by_string(../Availability,'@timestamp')</element-create>
+                </element>
+            </element>
+        </element>
+
+    </processors>
+
 
 
     <view name="ngi_reports_cached">
@@ -15,19 +224,28 @@
         <argument name="report">Critical</argument>
 
 
-        <argument name="start_time" eval="concat(substring(date:add(date:date-time(),concat('-P',3,'M')), 0,8),'-01T00:00:00Z')"></argument>
-        <argument name="end_time" eval="concat(str:replace(substring(date:date-time(),0,20),' ','T'),'Z')"></argument>
+        <argument name="month0" eval="substring(date:date(),0,8)"></argument>
+        <argument name="monthend" eval="substring(date:add($month0,'P1M'),0,8)"></argument>
+        <argument name="month1" eval="substring(date:add($month0,'-P1M'),0,8)"></argument>
+        <argument name="month2" eval="substring(date:add($month0,'-P2M'),0,8)"></argument>
+        <argument name="month3" eval="substring(date:add($month0,'-P3M'),0,8)"></argument>
+        <argument name="monthstart" eval="substring(date:add($month0,'-P4M'),0,8)"></argument>
 
 
         <connector type="XMLConnector">
             <parameter name="content" eval="new_element('root')"></parameter>
         </connector>
-
         <processors>
 
-
             <element in="root">
-                <element-create>view('api.availability.file.cache',entry('group_type','ngi')|entry('granularity','MONTHLY')|entry('start_time',$start_time)|entry('end_time',$end_time)|entry('report',$report))</element-create>
+                <attribute-create out="monthstart">$monthstart</attribute-create>
+                <attribute-create out="monthend">$monthend</attribute-create>
+                <attribute-create out="month0">$month0</attribute-create>
+                <attribute-create out="month1">$month1</attribute-create>
+                <attribute-create out="month2">$month2</attribute-create>
+                <attribute-create out="month3">$month3</attribute-create>
+
+                <element-create>view('api.availability.file.cache',entry('group_type','ngi')|entry('granularity','MONTHLY')|entry('start_time',concat($monthstart,'-01T00:00:00Z'))|entry('end_time',concat($monthend,'-01T00:00:00Z'))|entry('report',$report))</element-create>
             </element>
 
         </processors>
@@ -36,31 +254,7 @@
 
     </view>
 
-    <view name="ngi_reports_cached_2">
-        <info>
-            <category>AR reports</category>
-            <description>NGI League Reports - cache Rotated</description>
-        </info>
-        <argument name="report">Critical</argument>
-        <argument name="mode">RW</argument>
 
-        <connector type="XMLConnector">
-            <parameter name="content" eval="new_element('root')"></parameter>
-        </connector>
-
-        <processors>
-
-
-            <element in="root">
-                <element-create>view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','MONTHLY')|entry('diff','0')|entry('mode',$mode)|entry('report',$report))</element-create>
-                <element-create>view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','MONTHLY')|entry('diff','1')|entry('mode',$mode)|entry('report',$report))</element-create>
-                <element-create>view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','MONTHLY')|entry('diff','2')|entry('mode',$mode)|entry('report',$report))</element-create>
-                <element-create>view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','MONTHLY')|entry('diff','3')|entry('mode',$mode)|entry('report',$report))</element-create>
-            </element>
-
-        </processors>
-
-    </view>
 
     <view name="ngi_reports_daily_cached">
         <info>
@@ -70,27 +264,38 @@
         <argument name="mode">RW</argument>
         <argument name="report">Critical</argument>
 
-        <argument name="start_time" eval="concat(substring(date:add(date:date-time(),concat('-P',3,'M')), 0,8),'-01T00:00:00Z')"></argument>
-        <argument name="end_time" eval="concat(str:replace(substring(date:date-time(),0,20),' ','T'),'Z')"></argument>
+
+        <argument name="month0" eval="substring(date:date(),0,8)"></argument>
+
+        <argument name="monthend" eval="substring(date:add($month0,'P1M'),0,8)"></argument>
+
+        <argument name="month1" eval="substring(date:add($month0,'-P1M'),0,8)"></argument>
+        <argument name="month2" eval="substring(date:add($month0,'-P2M'),0,8)"></argument>
+        <argument name="month3" eval="substring(date:add($month0,'-P3M'),0,8)"></argument>
+        <argument name="monthstart" eval="substring(date:add($month0,'-P4M'),0,8)"></argument>
 
 
         <connector type="XMLConnector">
             <parameter name="content" eval="new_element('root')"></parameter>
+
         </connector>
 
         <processors>
 
 
 
-            <!--<element>-->
-            <!--<element-create>view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','DAILY')|entry('diff','0')|entry('mode',$mode)|entry('report',$report))</element-create>-->
-            <!--<element-create>view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','DAILY')|entry('diff','1')|entry('mode',$mode)|entry('report',$report))</element-create>-->
-            <!--<element-create>view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','DAILY')|entry('diff','2')|entry('mode',$mode)|entry('report',$report))</element-create>-->
-            <!--<element-create>view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','DAILY')|entry('diff','3')|entry('mode',$mode)|entry('report',$report))</element-create>-->
-            <!--</element>-->
-
             <element in="root">
-                <element-create>view('api.availability.file.cache',entry('group_type','ngi')|entry('granularity','DAILY')|entry('start_time',$start_time)|entry('end_time',$end_time)|entry('report',$report))</element-create>
+
+                <attribute-create out="monthstart">$monthstart</attribute-create>
+                <attribute-create out="monthend">$monthend</attribute-create>
+                <attribute-create out="month0">$month0</attribute-create>
+                <attribute-create out="month1">$month1</attribute-create>
+                <attribute-create out="month2">$month2</attribute-create>
+                <attribute-create out="month3">$month3</attribute-create>
+
+
+                <element-create>view('api.availability.file.cache',entry('group_type','ngi')|entry('granularity','DAILY')|entry('start_time',concat($monthstart,'-01T00:00:00Z'))|entry('end_time',concat($monthend,'-01T00:00:00Z'))|entry('report',$report))</element-create>
+
             </element>
 
 
@@ -108,10 +313,14 @@
             <category>AR reports</category>
             <description>NGI League Reports from date </description>
         </info>
-        <argument name="month"></argument>
-        <argument name="month1" eval="choose($month!=0,$month,substring(date:date(),0,8))"></argument>
-        <argument name="month2" eval="substring(date:add($month1,'P1M'),0,8)"></argument>
-        <argument name="month3" eval="substring(date:add($month1,'-P3M'),0,8)"></argument>
+
+        <argument name="month" eval="0"></argument>
+        <argument name="month0" eval="choose($month!=0,$month,substring(date:date(),0,8))"></argument>
+        <argument name="monthend" eval="substring(date:add($month0,'P1M'),0,8)"></argument>
+        <argument name="month1" eval="substring(date:add($month0,'-P1M'),0,8)"></argument>
+        <argument name="month2" eval="substring(date:add($month0,'-P2M'),0,8)"></argument>
+        <argument name="month3" eval="substring(date:add($month0,'-P3M'),0,8)"></argument>
+        <argument name="monthstart" eval="substring(date:add($month0,'-P4M'),0,8)"></argument>
 
 
 
@@ -123,143 +332,34 @@
 
         <processors>
             <element>
-                <element-create >view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','MONTHLY')|entry('start_time',concat($month3,'-01T00:00:00Z'))|entry('end_time',concat($month2,'-01T00:00:00Z'))|entry('report',$report))</element-create>
+
+                <attribute-create out="monthstart">$monthstart</attribute-create>
+                <attribute-create out="monthend">$monthend</attribute-create>
+                <attribute-create out="month0">$month0</attribute-create>
+                <attribute-create out="month1">$month1</attribute-create>
+                <attribute-create out="month2">$month2</attribute-create>
+                <attribute-create out="month3">$month3</attribute-create>
+
+                <element-create >view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','MONTHLY')|entry('start_time',concat($monthstart,'-01T00:00:00Z'))|entry('end_time',concat($monthend,'-01T00:00:00Z'))|entry('report',$report))</element-create>
+
+
             </element>
         </processors>
 
 
     </view>
 
-    <view name="ngi_fedcloudcritical_reports">
-        <info>
-            <category>AR reports</category>
-            <description>NGI League Reports</description>
-        </info>
-        <argument name="month" eval="0"></argument>
-
-        <connector type="XMLConnector">
-            <parameter name="content" eval="choose($month=0,view('ngi_reports_cached',entry('report','Critical-Fedcloud')),view('ngi_reports_date',entry('month',$month)|entry('report','Critical-Fedcloud')))"></parameter>
-        </connector>
-
-        <processors>
-
-
-            <element in="root" out="e:entries">
-                <element-ignore in="root">
-                    <element in="group" if="@type='NGI'" out="Ngi">
-                        <attribute in="name" out="NGI"></attribute>
-                        <element in="results" out="Availability"></element>
-                    </element>
-
-                    <element-ignore></element-ignore>
-                </element-ignore>
-            </element>
-
-
-            <!--<select match="/root/root/Profile"></select>-->
-
-            <select match="/e:entries/Ngi[*]">
-                <group by="@NGI" sort="text"></group>
-            </select>
-
-
-            <insert-parent match="/e:entries/e:entry/Ngi" name="Ngi"></insert-parent>
-
-            <merge match="/e:entries/e:entry/Ngi"></merge>
-            <remove match="/e:entries/e:entry/Ngi/Ngi" depth="1"></remove>
 
 
 
-
-            <processor match="/e:entries" type="InsertProcessor" disabled="$month!=0">
-                <parameter name="nodes" eval="new_attribute('month3',substring(date:add(date:date-time(),'-P1D'),  0,8))|new_attribute('month2',substring(date:add(date:date-time(),'-P1M'),  0,8))|new_attribute('month1',substring(date:add(date:date-time(),'-P2M'),  0,8))|new_attribute('month4',substring(date:date-time(),  0,11))"/>
-            </processor>
-
-            <processor match="/e:entries" type="InsertProcessor" disabled="$month=0">
-                <parameter name="nodes" eval="new_attribute('month3',$month)|new_attribute('month4',substring(date:add(concat($month,'-01T00:00:00'),'P1M'),  0,8))|new_attribute('month2',substring(date:add(concat($month,'-01T00:00:00'),'-P1M'),  0,8))|new_attribute('month1',substring(date:add(concat($month,'-01T00:00:00'),'-P2M'),  0,8))"/>
-            </processor>
-
-
-
-            <insert match="/e:entries"  nodes="new_attribute('description','NGI Fedcloud Critical Report')"></insert>
-            <insert match="/e:entries" nodes="new_attribute('details','site_reports')"></insert>
-            <insert match="/e:entries"  nodes="new_attribute('view','ngi_reports')"></insert>
-            <insert match="/e:entries"  nodes="new_attribute('related_view','ngi_ar')"></insert>
-            <insert match="/e:entries"  nodes="new_attribute('ngi','all')"></insert>
-            <insert match="/e:entries"  nodes="new_attribute('report','Critical-Fedcloud')"></insert>
-
-
-
-            <element in="e:entries" if="@ngi='all'">
-                <set variable="last">0</set>
-                <element in="e:entry" future="true">
-                    <set variable="last">.</set>
-                </element>
-                <element-create as="last-child">entries($last)</element-create>
-            </element>
-
-            <element in="e:entries" if="@ngi='all'">
-                <element-ignore in="e:entries">
-                    <element in="e:entry">
-                        <attribute in="key">'EGI'</attribute>
-                        <element in="Ngi">
-                            <attribute in="NGI">'EGI'</attribute>
-                            <element in="Availability">
-                                <attribute in="availability">(sum(/e:entries/e:entry/Ngi[@NGI!='EGI']/Availability[@availability&gt;=0][@timestamp=current()/../@timestamp]/@availability)) div count(/e:entries/e:entry/Ngi[@NGI!='EGI']/Availability[@availability&gt;=0][@timestamp=current()/../@timestamp]/@availability) </attribute>
-                                <attribute in="reliability">(sum(/e:entries/e:entry/Ngi[@NGI!='EGI']/Availability[@reliaibility&gt;=0][@timestamp=current()/../@timestamp]/@reliability)) div count(/e:entries/e:entry/Ngi[@NGI!='EGI']/Availability[@reliaibility&gt;=0][@timestamp=current()/../@timestamp]/@reliability) </attribute>
-                            </element>
-                        </element>
-                    </element>
-
-                </element-ignore>
-
-            </element>
-
-        </processors>
-
-        <pre-renderers>
-            <title>/e:entries/@description</title>
-            <field label="month1">/e:entries/@month1</field>
-            <field label="month2">/e:entries/@month2</field>
-            <field label="month3">/e:entries/@month3</field>
-
-            <row foreach="/e:entries/e:entry/Ngi/Availability[@timestamp=/e:entries/@month1 or @timestamp=/e:entries/@month2 or @timestamp=/e:entries/@month3]">
-                <column label="Ngi">ancestor::Ngi/@NGI</column>
-                <column label="Timestamp">@timestamp</column>
-                <column label="Availability" unit="percentage">@availability</column>
-                <column label="Reliability" unit="percentage">@reliability</column>
-            </row>
-        </pre-renderers>
-        <renderers>
-
-            <renderer type="DefaultRenderer">
-                <parameter name="template">/html/ar_reports.html</parameter>
-
-            </renderer>
-            <renderer type="HTMLRenderer">
-                <parameter name="template">/html/ar_reports.html</parameter>
-
-            </renderer>
-            <renderer type="ChartRenderer">
-
-                <parameter name="axis">inverted</parameter>
-                <!--optional: The width of the chart (Integer)-->
-                <parameter name="width">1200</parameter>
-
-
-                <!--optional: The height of the chart (Integer)-->
-                <parameter name="height">2000</parameter>
-            </renderer>
-        </renderers>
-    </view>
-
-    <view name="ngi_reports">
+    <view name="ngi_reports" post-processors="ReportsTemplate">
         <info>
             <category>AR reports</category>
             <description>NGI League Reports</description>
         </info>
         <argument name="month" eval="0"></argument>
         <argument name="report">Critical</argument>
+
 
         <connector type="XMLConnector">
             <parameter name="content" eval="choose($month=0,view('ngi_reports_cached',entry('report',$report)),view('ngi_reports_date',entry('month',$month)|entry('report',$report)))"></parameter>
@@ -268,87 +368,38 @@
         <processors>
 
 
-            <element in="root" out="e:entries">
-                <element-ignore in="root">
-                    <element in="group" if="@type='NGI'" out="Ngi">
-                        <attribute in="name" out="NGI"></attribute>
-                        <element in="results" out="Availability"></element>
-                    </element>
+            <element in="root">
+                <attribute-create out="description">'NGI League Report'</attribute-create>
+                <attribute-create out="view">'ngi_reports'</attribute-create>
+                <attribute-create out="related_view">'ngi_ar'</attribute-create>
+                <attribute-create out="ngi">'all'</attribute-create>
+                <attribute-create out="report">$report</attribute-create>
+                <attribute-create out="details">'site_reports'</attribute-create>
+                <attribute-create out="entity">'ngi'</attribute-create>
 
-                    <element-ignore></element-ignore>
-                </element-ignore>
-            </element>
-
-
-            <!--<select match="/root/root/Profile"></select>-->
-
-            <select match="/e:entries/Ngi[*]">
-                <group by="@NGI" sort="text"></group>
-            </select>
-
-
-            <insert-parent match="/e:entries/e:entry/Ngi" name="Ngi"></insert-parent>
-
-            <merge match="/e:entries/e:entry/Ngi"></merge>
-            <remove match="/e:entries/e:entry/Ngi/Ngi" depth="1"></remove>
-
-
-
-
-            <processor match="/e:entries" type="InsertProcessor" disabled="$month!=0">
-                <parameter name="nodes" eval="new_attribute('month3',substring(date:add(date:date-time(),'-PT1H'),  0,8))|new_attribute('month2',substring(date:add(date:date-time(),'-P1M'),  0,8))|new_attribute('month1',substring(date:add(date:date-time(),'-P2M'),  0,8))|new_attribute('month4',substring(date:date-time(),  0,11))"/>
-            </processor>
-
-            <processor match="/e:entries" type="InsertProcessor" disabled="$month=0">
-                <parameter name="nodes" eval="new_attribute('month3',$month)|new_attribute('month4',substring(date:add(concat($month,'-01T00:00:00'),'P1M'),  0,8))|new_attribute('month2',substring(date:add(concat($month,'-01T00:00:00'),'-P1M'),  0,8))|new_attribute('month1',substring(date:add(concat($month,'-01T00:00:00'),'-P2M'),  0,8))"/>
-            </processor>
-
-
-
-            <insert match="/e:entries"  nodes="new_attribute('description','NGI League Report')"></insert>
-            <insert match="/e:entries" nodes="new_attribute('details','site_reports')"></insert>
-            <insert match="/e:entries"  nodes="new_attribute('view','ngi_reports')"></insert>
-            <insert match="/e:entries"  nodes="new_attribute('related_view','ngi_ar')"></insert>
-            <insert match="/e:entries"  nodes="new_attribute('ngi','all')"></insert>
-            <insert match="/e:entries"  nodes="new_attribute('report',$report)"></insert>
-
-
-
-            <element in="e:entries" if="@ngi='all'">
-                <set variable="last">0</set>
-                <element in="e:entry" future="true">
-                    <set variable="last">.</set>
+                <element in="root">
+                    <attribute-create out="name">'EGI'</attribute-create>
                 </element>
-                <element-create as="last-child">entries($last)</element-create>
-            </element>
-
-            <element in="e:entries" if="@ngi='all'">
-                <element-ignore in="e:entries">
-                    <element in="e:entry">
-                        <attribute in="key">'EGI'</attribute>
-                        <element in="Ngi">
-                            <attribute in="NGI">'EGI'</attribute>
-                            <element in="Availability">
-                                <attribute in="availability">(sum(/e:entries/e:entry/Ngi[@NGI!='EGI']/Availability[@timestamp=current()/../@timestamp]/@availability)) div count(/e:entries/e:entry/Ngi[@NGI!='EGI']/Availability[@timestamp=current()/../@timestamp]/@availability) </attribute>
-                                <attribute in="reliability">(sum(/e:entries/e:entry/Ngi[@NGI!='EGI']/Availability[@timestamp=current()/../@timestamp]/@reliability)) div count(/e:entries/e:entry/Ngi[@NGI!='EGI']/Availability[@timestamp=current()/../@timestamp]/@reliability) </attribute>
-                            </element>
-                        </element>
-                    </element>
-
-                </element-ignore>
 
             </element>
+
+
 
         </processors>
 
         <pre-renderers>
             <title>/e:entries/@description</title>
-            <field label="month1">/e:entries/@month1</field>
-            <field label="month2">/e:entries/@month2</field>
-            <field label="month3">/e:entries/@month3</field>
 
-            <row foreach="/e:entries/e:entry/Ngi/Availability[@timestamp=/e:entries/@month1 or @timestamp=/e:entries/@month2 or @timestamp=/e:entries/@month3]">
-                <column label="Ngi">ancestor::Ngi/@NGI</column>
+            <field label="month">/e:entries/@monthstart</field>
+            <field label="month3">/e:entries/@month3</field>
+            <field label="month2">/e:entries/@month2</field>
+            <field label="month1">/e:entries/@month1</field>
+            <field label="month0">/e:entries/@month0</field>
+
+
+
+            <row foreach="/e:entries/e:entries/e:entry/Availability[@timestamp=/e:entries/@monthstart or @timestamp=/e:entries/@month0 or @timestamp=/e:entries/@month1 or @timestamp=/e:entries/@month2 or @timestamp=/e:entries/@month3]">
+                <column label="Ngi">ancestor::e:entry/@key</column>
                 <column label="Timestamp">@timestamp</column>
                 <column label="Availability" unit="percentage">@availability</column>
                 <column label="Reliability" unit="percentage">@reliability</column>
@@ -364,8 +415,14 @@
                 <parameter name="template">/html/ar_reports.html</parameter>
 
             </renderer>
-            <renderer type="ChartRenderer">
 
+            <renderer type="PDFRenderer">
+                <parameter name="template">/html/ar_reports_pdf.html</parameter>
+
+            </renderer>
+
+            <renderer type="ChartRenderer">
+                <parameter name="type">column</parameter>
                 <parameter name="axis">inverted</parameter>
                 <!--optional: The width of the chart (Integer)-->
                 <parameter name="width">1200</parameter>
@@ -378,7 +435,7 @@
     </view>
 
 
-    <view name="opsmon_reports">
+    <view name="opsmon_reports" post-processors="ReportsTemplate">
         <info>
             <category>AR reports</category>
             <description>NGI League Reports</description>
@@ -396,80 +453,44 @@
 
 
 
-
         <processors>
 
 
+            <element in="root">
+                <attribute-create out="description">'OpsMon Report'</attribute-create>
+                <attribute-create out="view">'opsmon_reports'</attribute-create>
+                <attribute-create out="related_view">'opsmon_ar'</attribute-create>
+                <attribute-create out="ngi">$ngi</attribute-create>
+                <attribute-create out="report">'OPS-MONITOR-Critical'</attribute-create>
+                <attribute-create out="entity">'site'</attribute-create>
+            </element>
 
-            <element in="root" out="e:entries">
+
+
+
+
+            <element in="root">
                 <element-ignore in="root">
-                    <element in="group" if="@name=$ngi or $ngi='all'">
-                        <element in="group" if="@type='SITES'" out="Site">
-                            <attribute in="name" out="site"></attribute>
-                            <element in="results" out="Availability"></element>
-                        </element>
-                        <element-ignore></element-ignore>
-                    </element>
+                    <element in="group" if="@name=$ngi or $ngi='all'"></element>
                     <element-ignore></element-ignore>
                 </element-ignore>
             </element>
 
 
-            <element in="e:entries">
-                <element-ignore in="group">
-                    <element in="Site">
-                        <attribute-create out="NGI">../ancestor::group/@name</attribute-create>
-                    </element>
-                    <element></element>
-                </element-ignore>
-            </element>
-
-
-            <!--<select match="/root/root/Profile"></select>                     -->
-            <!--<processor match="/e:entries/Profile/Site[@NGI!=$ngi]" type="RemoveProcessor" disabled="$ngi='all'"></processor>-->
-            <!--<remove match="/e:entries/Profile" depth="1"></remove>-->
-
-
-
-            <select match="/e:entries/Site[*]">
-                <group by="@site" sort="text"></group>
-            </select>
-
-            <insert-parent match="/e:entries/e:entry/Site" name="Site"></insert-parent>
-
-            <merge match="/e:entries/e:entry/Site"></merge>
-            <remove match="/e:entries/e:entry/Site/Site" depth="1"></remove>
-            <remove match="/e:entries/e:entry" depth="1"/>
-            <select match="/e:entries/Site[*]">
-                <group by="@NGI" sort="text"></group>
-            </select>
-
-
-
-            <processor match="/e:entries" type="InsertProcessor" disabled="$month!=0">
-                <parameter name="nodes" eval="new_attribute('month3',substring(date:add(date:date-time(),'-PT1H'),  0,8))|new_attribute('month2',substring(date:add(date:date-time(),'-P1M'),  0,8))|new_attribute('month1',substring(date:add(date:date-time(),'-P2M'),  0,8))|new_attribute('month4',substring(date:date-time(),  0,11))"/>
-            </processor>
-
-            <processor match="/e:entries" type="InsertProcessor" disabled="$month=0">
-                <parameter name="nodes" eval="new_attribute('month3',$month)|new_attribute('month4',substring(date:add(concat($month,'-01T00:00:00'),'P1M'),  0,8))|new_attribute('month2',substring(date:add(concat($month,'-01T00:00:00'),'-P1M'),  0,8))|new_attribute('month1',substring(date:add(concat($month,'-01T00:00:00'),'-P2M'),  0,8))"/>
-            </processor>
-
-            <insert match="/e:entries"  nodes="new_attribute('description','OpsMon Report')"></insert>
-            <insert match="/e:entries"  nodes="new_attribute('view','opsmon_reports')"></insert>
-            <insert match="/e:entries"  nodes="new_attribute('ngi',$ngi)"></insert>
-            <insert match="/e:entries"  nodes="new_attribute('related_view','opsmon_ar')"></insert>
-            <insert match="/e:entries"  nodes="new_attribute('report','OPS-MONITOR-Critical')"></insert>
         </processors>
 
         <pre-renderers>
             <title>/e:entries/@description</title>
-            <field label="month1">/e:entries/@month1</field>
-            <field label="month2">/e:entries/@month2</field>
-            <field label="month3">/e:entries/@month3</field>
 
-            <row foreach="/e:entries/e:entry/Site/Availability[@timestamp=/e:entries/@month1 or @timestamp=/e:entries/@month2 or @timestamp=/e:entries/@month3]">
-                <column label="Site">ancestor::Site/@site</column>
-                <column label="Ngi">ancestor::Site/@NGI</column>
+            <field label="month">/e:entries/@monthstart</field>
+            <field label="month3">/e:entries/@month3</field>
+            <field label="month2">/e:entries/@month2</field>
+            <field label="month1">/e:entries/@month1</field>
+            <field label="month0">/e:entries/@month0</field>
+
+            <row foreach="/e:entries/e:entries/e:entry/Availability[@timestamp=/e:entries/@monthstart or @timestamp=/e:entries/@month0 or @timestamp=/e:entries/@month1 or @timestamp=/e:entries/@month2 or @timestamp=/e:entries/@month3]">
+                <column label="Site">ancestor::e:entry/@key</column>
+                <column label="Ngi">ancestor::e:entries/@key</column>
                 <column label="Timestamp">@timestamp</column>
                 <column label="Availability" unit="percentage">@availability</column>
                 <column label="Reliability" unit="percentage">@reliability</column>
@@ -477,6 +498,8 @@
                 <column label="Downtime" unit="percentage">@downtime </column>
             </row>
         </pre-renderers>
+
+
 
         <renderers>
             <renderer type="DefaultRenderer">
@@ -496,7 +519,7 @@
     </view>
 
 
-    <view name="cloud_reports">
+    <view name="cloud_reports" post-processors="ReportsTemplate">
         <info>
             <category>AR reports</category>
             <description>NGI League Reports</description>
@@ -520,79 +543,39 @@
 
 
 
-            <element in="root" out="e:entries">
+            <element in="root">
+                <attribute-create out="description">'EGI Federated Cloud  Report'</attribute-create>
+                <attribute-create out="view">'cloud_reports'</attribute-create>
+                <attribute-create out="related_view">'cloud_ar'</attribute-create>
+                <attribute-create out="ngi">$ngi</attribute-create>
+                <attribute-create out="report">'Cloud'</attribute-create>
+                <attribute-create out="entity">'site'</attribute-create>
+            </element>
+
+
+
+            <element in="root">
                 <element-ignore in="root">
-                    <element in="group" if="@name=$ngi or $ngi='all'">
-                        <element in="group" if="@type='SITES'" out="Site">
-                            <attribute in="name" out="site"></attribute>
-                            <element in="results" out="Availability"></element>
-                        </element>
-                        <element-ignore></element-ignore>
-                    </element>
+                    <element in="group" if="@name=$ngi or $ngi='all'"></element>
                     <element-ignore></element-ignore>
                 </element-ignore>
             </element>
 
 
-            <element in="e:entries">
-                <element-ignore in="group">
-                    <element in="Site">
-                        <attribute-create out="NGI">../ancestor::group/@name</attribute-create>
-                    </element>
-                    <element></element>
-                </element-ignore>
-            </element>
-
-
-            <!--<select match="/root/root/Profile"></select>                     -->
-            <!--<processor match="/e:entries/Profile/Site[@NGI!=$ngi]" type="RemoveProcessor" disabled="$ngi='all'"></processor>-->
-            <!--<remove match="/e:entries/Profile" depth="1"></remove>-->
-
-
-
-
-
-
-
-            <select match="/e:entries/Site[*]">
-                <group by="@site" sort="text"></group>
-            </select>
-
-            <insert-parent match="/e:entries/e:entry/Site" name="Site"></insert-parent>
-
-            <merge match="/e:entries/e:entry/Site"></merge>
-            <remove match="/e:entries/e:entry/Site/Site" depth="1"></remove>
-            <remove match="/e:entries/e:entry" depth="1"/>
-            <select match="/e:entries/Site[*]">
-                <group by="@NGI" sort="text"></group>
-            </select>
-
-
-
-            <processor match="/e:entries" type="InsertProcessor" disabled="$month!=0">
-                <parameter name="nodes" eval="new_attribute('month3',substring(date:add(date:date-time(),'-PT1H'),  0,8))|new_attribute('month2',substring(date:add(date:date-time(),'-P1M'),  0,8))|new_attribute('month1',substring(date:add(date:date-time(),'-P2M'),  0,8))|new_attribute('month4',substring(date:date-time(),  0,11))"/>
-            </processor>
-
-            <processor match="/e:entries" type="InsertProcessor" disabled="$month=0">
-                <parameter name="nodes" eval="new_attribute('month3',$month)|new_attribute('month4',substring(date:add(concat($month,'-01T00:00:00'),'P1M'),  0,8))|new_attribute('month2',substring(date:add(concat($month,'-01T00:00:00'),'-P1M'),  0,8))|new_attribute('month1',substring(date:add(concat($month,'-01T00:00:00'),'-P2M'),  0,8))"/>
-            </processor>
-
-            <insert match="/e:entries"  nodes="new_attribute('description','EGI Federated Cloud  Report')"></insert>
-            <insert match="/e:entries"  nodes="new_attribute('view','cloud_reports')"></insert>
-            <insert match="/e:entries"  nodes="new_attribute('ngi',$ngi)"></insert>
-            <insert match="/e:entries"  nodes="new_attribute('related_view','cloud_ar')"></insert>
-            <insert match="/e:entries"  nodes="new_attribute('report','Cloud')"></insert>
         </processors>
 
         <pre-renderers>
             <title>/e:entries/@description</title>
-            <field label="month1">/e:entries/@month1</field>
-            <field label="month2">/e:entries/@month2</field>
-            <field label="month3">/e:entries/@month3</field>
 
-            <row foreach="/e:entries/e:entry/Site/Availability[@timestamp=/e:entries/@month1 or @timestamp=/e:entries/@month2 or @timestamp=/e:entries/@month3]">
-                <column label="Site">ancestor::Site/@site</column>
-                <column label="Ngi">ancestor::Site/@NGI</column>
+            <field label="month">/e:entries/@monthstart</field>
+            <field label="month3">/e:entries/@month3</field>
+            <field label="month2">/e:entries/@month2</field>
+            <field label="month1">/e:entries/@month1</field>
+            <field label="month0">/e:entries/@month0</field>
+
+            <row foreach="/e:entries/e:entries/e:entry/Availability[@timestamp=/e:entries/@monthstart or @timestamp=/e:entries/@month0 or @timestamp=/e:entries/@month1 or @timestamp=/e:entries/@month2 or @timestamp=/e:entries/@month3]">
+                <column label="Site">ancestor::e:entry/@key</column>
+                <column label="Ngi">ancestor::e:entries/@key</column>
                 <column label="Timestamp">@timestamp</column>
                 <column label="Availability" unit="percentage">@availability</column>
                 <column label="Reliability" unit="percentage">@reliability</column>
@@ -626,8 +609,19 @@
         <argument name="report">Critical</argument>
         <argument name="mode">RW</argument>
 
-        <argument name="start_time" eval="concat(substring(date:add(date:date-time(),concat('-P',3,'M')), 0,8),'-01T00:00:00Z')"></argument>
-        <argument name="end_time" eval="concat(str:replace(substring(date:date-time(),0,20),' ','T'),'Z')"></argument>
+        <!--<argument name="start_time" eval="concat(substring(date:add(date:date-time(),concat('-P',3,'M')), 0,8),'-01T00:00:00Z')"></argument>-->
+        <!--<argument name="end_time" eval="concat(str:replace(substring(date:date-time(),0,20),' ','T'),'Z')"></argument>-->
+
+        <argument name="month" eval="0"></argument>
+        
+        <variable name="month0" eval="choose($month!=0,$month,substring(date:date(),0,8))"></variable>
+        <variable name="monthend" eval="substring(date:add($month0,'P1M'),0,8)"></variable>
+        <variable name="month1" eval="substring(date:add($month0,'-P1M'),0,8)"></variable>
+        <variable name="month2" eval="substring(date:add($month0,'-P2M'),0,8)"></variable>
+        <variable name="month3" eval="substring(date:add($month0,'-P3M'),0,8)"></variable>
+        <variable name="monthstart" eval="substring(date:add($month0,'-P4M'),0,8)"></variable>
+
+
 
         <connector type="XMLConnector">
             <parameter name="content" eval="new_element('root')"></parameter>
@@ -636,7 +630,17 @@
         <processors>
 
             <element in="root">
-                <element-create>view('api.availability.file.cache',entry('group_type','sites')|entry('granularity','MONTHLY')|entry('start_time',$start_time)|entry('end_time',$end_time)|entry('report',$report))</element-create>
+
+                <attribute-create out="monthstart">$monthstart</attribute-create>
+                <attribute-create out="monthend">$monthend</attribute-create>
+                <attribute-create out="month0">$month0</attribute-create>
+                <attribute-create out="month1">$month1</attribute-create>
+                <attribute-create out="month2">$month2</attribute-create>
+                <attribute-create out="month3">$month3</attribute-create>
+
+
+                <element-create>view('api.availability.file.cache',entry('group_type','sites')|entry('granularity','MONTHLY')|entry('start_time',concat($monthstart,'-01T00:00:00Z'))|entry('end_time',concat($monthend,'-01T00:00:00Z'))|entry('report',$report))</element-create>
+
             </element>
 
         </processors>
@@ -651,12 +655,15 @@
 
         <argument name="report">Critical</argument>
         <argument name="month"></argument>
-        <argument name="month1" eval="choose($month!=0,$month,substring(date:date(),0,8))"></argument>
+        <argument name="month0" eval="choose($month!=0,$month,substring(date:date(),0,8))"></argument>
 
 
-        <argument name="month2" eval="substring(date:add($month1,'P1M'),0,8)"></argument>
-        <argument name="month3" eval="substring(date:add($month1,'-P3M'),0,8)"></argument>
+        <argument name="monthend" eval="substring(date:add($month0,'P1M'),0,8)"></argument>
 
+        <argument name="month1" eval="substring(date:add($month0,'-P1M'),0,8)"></argument>
+        <argument name="month2" eval="substring(date:add($month0,'-P2M'),0,8)"></argument>
+        <argument name="month3" eval="substring(date:add($month0,'-P3M'),0,8)"></argument>
+        <argument name="monthstart" eval="substring(date:add($month0,'-P4M'),0,8)"></argument>
 
 
         <argument name="report">Critical</argument>
@@ -667,34 +674,20 @@
 
         <processors>
             <element>
-                <element-create >view('api.availability.rotating.caches',entry('group_type','sites')|entry('granularity','MONTHLY')|entry('start_time',concat($month3,'-01T00:00:00Z'))|entry('end_time',concat($month2,'-01T00:00:00Z'))|entry('report',$report))</element-create>
+                <attribute-create out="monthstart">$monthstart</attribute-create>
+                <attribute-create out="monthend">$monthend</attribute-create>
+                <attribute-create out="month0">$month0</attribute-create>
+                <attribute-create out="month1">$month1</attribute-create>
+                <attribute-create out="month2">$month2</attribute-create>
+                <attribute-create out="month3">$month3</attribute-create>
+                <element-create >view('api.availability.rotating.caches',entry('group_type','sites')|entry('granularity','MONTHLY')|entry('start_time',concat($monthstart,'-01T00:00:00Z'))|entry('end_time',concat($monthend,'-01T00:00:00Z'))|entry('report',$report))</element-create>
             </element>
+
+
         </processors>
 
 
-        <!--<argument name="start_date1" eval="concat($month1,'-01T00:00:00')"></argument>-->
 
-
-        <!--<argument name="starttime1" eval="concat($start_date1,'Z')"></argument>-->
-        <!--<argument name="endtime1" eval="concat($month1,'-31T23:59:59Z')"></argument>-->
-        <!--<argument name="starttime2" eval="concat(substring(date:add($start_date1,'-P1M'), 0,8),'-01T00:00:00Z')"></argument>-->
-        <!--<argument name="endtime2" eval="concat(substring(date:add($start_date1,'-P1M'), 0,8),'-31T23:59:59Z')"></argument>-->
-        <!--<argument name="starttime3" eval="concat(substring(date:add($start_date1,'-P2M'), 0,8),'-01T00:00:00Z')"></argument>-->
-        <!--<argument name="endtime3" eval="concat(substring(date:add($start_date1,'-P2M'), 0,8),'-31T23:59:59Z')"></argument>-->
-
-
-        <!--<connector type="XMLConnector">-->
-        <!--<parameter name="content" eval="new_element('root')"></parameter>-->
-        <!--</connector>-->
-
-        <!--<processors>-->
-        <!--<insert match="/root" nodes="-->
-        <!--view('api.availability.rotating.caches',entry('group_type','sites')|entry('granularity','MONTHLY')|entry('start_time',$starttime1)|entry('end_time',$endtime1)|entry('report',$report))-->
-        <!--|view('api.availability.rotating.caches',entry('group_type','sites')|entry('granularity','MONTHLY')|entry('start_time',$starttime2)|entry('end_time',$endtime2)|entry('report',$report))-->
-        <!--|view('api.availability.rotating.caches',entry('group_type','sites')|entry('granularity','MONTHLY')|entry('start_time',$starttime3)|entry('end_time',$endtime3)|entry('report',$report))">-->
-
-        <!--</insert>-->
-        <!--</processors>-->
 
 
     </view>
@@ -708,8 +701,14 @@
         <argument name="report">Critical</argument>
         <argument name="mode">RW</argument>
 
-        <argument name="start_time" eval="concat(substring(date:add(date:date-time(),concat('-P',3,'M')), 0,8),'-01T00:00:00Z')"></argument>
-        <argument name="end_time" eval="concat(str:replace(substring(date:date-time(),0,20),' ','T'),'Z')"></argument>
+        <argument name="month" eval="0"></argument>
+        <argument name="month0" eval="choose($month!=0,$month,substring(date:date(),0,8))"></argument>
+        <argument name="monthend" eval="substring(date:add($month0,'P1M'),0,8)"></argument>
+
+        <argument name="month1" eval="substring(date:add($month0,'-P1M'),0,8)"></argument>
+        <argument name="month2" eval="substring(date:add($month0,'-P2M'),0,8)"></argument>
+        <argument name="month3" eval="substring(date:add($month0,'-P3M'),0,8)"></argument>
+        <argument name="monthstart" eval="substring(date:add($month0,'-P4M'),0,8)"></argument>
 
 
         <connector type="XMLConnector">
@@ -717,22 +716,22 @@
         </connector>
 
         <processors>
-            <!--<insert match="/root" nodes="-->
-            <!--view('api.availability.rotating.caches',entry('group_type','sites')|entry('granularity','DAILY')|entry('report',$report)|entry('diff','0')|entry('mode',$mode))-->
-            <!--|view('api.availability.rotating.caches',entry('group_type','sites')|entry('granularity','DAILY')|entry('report',$report)|entry('diff','1')|entry('mode',$mode))-->
-            <!--|view('api.availability.rotating.caches',entry('group_type','sites')|entry('granularity','DAILY')|entry('report',$report)|entry('diff','2')|entry('mode',$mode))">-->
-
-            <!--</insert>-->
 
             <element in="root">
-                <element-create>view('api.availability.file.cache',entry('group_type','sites')|entry('granularity','DAILY')|entry('start_time',$start_time)|entry('end_time',$end_time)|entry('report',$report))</element-create>
+                <attribute-create out="monthstart">$monthstart</attribute-create>
+                <attribute-create out="monthend">$monthend</attribute-create>
+                <attribute-create out="month0">$month0</attribute-create>
+                <attribute-create out="month1">$month1</attribute-create>
+                <attribute-create out="month2">$month2</attribute-create>
+                <attribute-create out="month3">$month3</attribute-create>
+                <element-create>view('api.availability.file.cache',entry('group_type','sites')|entry('granularity','DAILY')|entry('start_time',concat($monthstart,'-01T00:00:00Z'))|entry('end_time',concat($monthend,'-01T00:00:00Z'))|entry('report',$report))</element-create>
             </element>
 
         </processors>
 
     </view>
 
-    <view name="site_reports">
+    <view name="site_reports" post-processors="ReportsTemplate">
         <info>
             <category>AR reports</category>
             <description>Site League Reports</description>
@@ -750,79 +749,43 @@
         <processors>
 
 
-            <element in="root" out="e:entries">
+
+            <element in="root">
+                <attribute-create out="description">'Site League Report'</attribute-create>
+                <attribute-create out="view">'site_reports'</attribute-create>
+                <attribute-create out="related_view">'site_ar'</attribute-create>
+                <attribute-create out="ngi">$ngi</attribute-create>
+                <attribute-create out="report">$report</attribute-create>
+                <attribute-create out="entity">'site'</attribute-create>
+            </element>
+
+
+
+
+            <element in="root">
                 <element-ignore in="root">
-                    <element in="group" if="@name=$ngi or $ngi='all'">
-                        <element in="group" if="@type='SITES'" out="Site">
-                            <attribute in="name" out="site"></attribute>
-                            <element in="results" out="Availability"></element>
-                        </element>
-                        <element-ignore></element-ignore>
-                    </element>
+                    <element in="group" if="@name=$ngi or $ngi='all'"></element>
                     <element-ignore></element-ignore>
                 </element-ignore>
             </element>
 
 
-            <element in="e:entries">
-                <element-ignore in="group">
-                    <element in="Site">
-                        <attribute-create out="NGI">../ancestor::group/@name</attribute-create>
-                    </element>
-                    <element></element>
-                </element-ignore>
-            </element>
 
 
-            <!--<select match="/root/root/Profile"></select>                     -->
-            <!--<processor match="/e:entries/Profile/Site[@NGI!=$ngi]" type="RemoveProcessor" disabled="$ngi='all'"></processor>-->
-            <!--<remove match="/e:entries/Profile" depth="1"></remove>-->
-
-
-            <!---->
-            <!--<select match="/root/root/Profile"></select>-->
-            <!--<remove match="/e:entries/Profile" depth="1"></remove>-->
-
-            <select match="/e:entries/Site[*]">
-                <group by="@site" sort="text"></group>
-            </select>
-
-            <insert-parent match="/e:entries/e:entry/Site" name="Site"></insert-parent>
-
-            <merge match="/e:entries/e:entry/Site"></merge>
-            <remove match="/e:entries/e:entry/Site/Site" depth="1"></remove>
-            <remove match="/e:entries/e:entry" depth="1"/>
-            <select match="/e:entries/Site[*]">
-                <group by="@NGI" sort="text"></group>
-            </select>
-
-
-
-
-            <processor match="/e:entries" type="InsertProcessor" disabled="$month!=0">
-                <parameter name="nodes" eval="new_attribute('month3',substring(date:add(date:date-time(),'-PT1H'),  0,8))|new_attribute('month2',substring(date:add(date:date-time(),'-P1M'),  0,8))|new_attribute('month1',substring(date:add(date:date-time(),'-P2M'),  0,8))|new_attribute('month4',substring(date:date-time(),  0,11))"/>
-            </processor>
-
-            <processor match="/e:entries" type="InsertProcessor" disabled="$month=0">
-                <parameter name="nodes" eval="new_attribute('month3',$month)|new_attribute('month4',substring(date:add(concat($month,'-01T00:00:00'),'P1M'),  0,8))|new_attribute('month2',substring(date:add(concat($month,'-01T00:00:00'),'-P1M'),  0,8))|new_attribute('month1',substring(date:add(concat($month,'-01T00:00:00'),'-P2M'),  0,8))"/>
-            </processor>
-
-            <insert match="/e:entries"  nodes="new_attribute('description','Site League Report')"></insert>
-            <insert match="/e:entries"  nodes="new_attribute('view','site_reports')"></insert>
-            <insert match="/e:entries"  nodes="new_attribute('ngi',$ngi)"></insert>
-            <insert match="/e:entries"  nodes="new_attribute('related_view','site_ar')"></insert>
-            <insert match="/e:entries"  nodes="new_attribute('report',$report)"></insert>
         </processors>
 
         <pre-renderers>
             <title>/e:entries/@description</title>
-            <field label="month1">/e:entries/@month1</field>
-            <field label="month2">/e:entries/@month2</field>
-            <field label="month3">/e:entries/@month3</field>
 
-            <row foreach="/e:entries/e:entry/Site/Availability[@timestamp=/e:entries/@month1 or @timestamp=/e:entries/@month2 or @timestamp=/e:entries/@month3]">
-                <column label="Site">ancestor::Site/@site</column>
-                <column label="Ngi">ancestor::Site/@NGI</column>
+            <field label="month">/e:entries/@monthstart</field>
+            <field label="month3">/e:entries/@month3</field>
+            <field label="month2">/e:entries/@month2</field>
+            <field label="month1">/e:entries/@month1</field>
+            <field label="month0">/e:entries/@month0</field>
+
+            <row foreach="/e:entries/e:entries/e:entry/Availability[@timestamp=/e:entries/@monthstart or @timestamp=/e:entries/@month0 or @timestamp=/e:entries/@month1 or @timestamp=/e:entries/@month2 or @timestamp=/e:entries/@month3]">
+                <column label="Site">ancestor::e:entry/@key</column>
+                <column label="Ngi">ancestor::e:entries/@key</column>
                 <column label="Timestamp">@timestamp</column>
                 <column label="Availability" unit="percentage">@availability</column>
                 <column label="Reliability" unit="percentage">@reliability</column>
@@ -838,7 +801,9 @@
             </renderer>
             <renderer type="HTMLRenderer">
                 <parameter name="template">/html/ar_reports.html</parameter>
-
+            </renderer>
+            <renderer type="PDFRenderer">
+                <parameter name="template">/html/ar_reports_pdf.html</parameter>
             </renderer>
             <renderer type="ChartRenderer">
                 <parameter name="rotation">-45</parameter>
@@ -1074,57 +1039,30 @@
         <argument name="report">Critical</argument>
         <connector type="XMLConnector">
             <parameter name="content" eval="view($view,arguments())"></parameter>
-
         </connector>
 
         <processors>
 
 
 
-            <processor match="/e:entries/e:entry[@key!=$ngi]" type="RemoveProcessor" disabled="$ngi='all' or $ngi='false' "></processor>
-
-
-
-            <processor match="//Availability[@timestamp=ancestor::chart/@month1 or @timestamp=ancestor::chart/@month2 or @timestamp=ancestor::chart/@month3]"
-                       type="ReplaceProcessor"
-                       disabled="$type='reliability'">
-                <parameter name="nodes" eval="new_element('point',new_text(@availability))"></parameter>
-            </processor>
-
-            <processor match="//Availability[@timestamp=ancestor::chart/@month1 or @timestamp=ancestor::chart/@month2 or @timestamp=ancestor::chart/@month3]"
-                       type="ReplaceProcessor"
-                       disabled="$type='availability'">
-                <parameter name="nodes" eval="new_element('point',new_text(@reliability))"></parameter>
-            </processor>
-
 
             <elements path="e:entries">
                 <attribute-create out="type">$type</attribute-create>
-                <element in="e:entry">
-                    <element in="Ngi" out="group">
+                <element in="e:entries">
+                    <element in="e:entry" out="group" if="@key!='AVERAGE'">
                         <element in="Availability">
                             <attribute-create out="color_av" if="../@availability &gt;= 80" >'green'</attribute-create>
                             <attribute-create out="color_av" if="../@availability &lt; 80">'red'</attribute-create>
                             <attribute-create out="color_re" if="../@reliability &gt;= 85">'green'</attribute-create>
                             <attribute-create out="color_re" if="../@reliability &lt; 85">'red'</attribute-create>
                         </element>
+                        <!--<element-ignore></element-ignore>-->
                     </element>
                 </element>
             </elements>
 
 
-            <elements path="e:entries">
-                <element in="e:entry">
-                    <element in="Site" out="group">
-                        <element in="Availability">
-                            <attribute-create out="color_av" if="../@availability &gt;= 80" >'green'</attribute-create>
-                            <attribute-create out="color_av" if="../@availability &lt; 80">'red'</attribute-create>
-                            <attribute-create out="color_re" if="../@reliability &gt;= 85">'green'</attribute-create>
-                            <attribute-create out="color_re" if="../@reliability &lt; 85">'red'</attribute-create>
-                        </element>
-                    </element>
-                </element>
-            </elements>
+
         </processors>
 
 

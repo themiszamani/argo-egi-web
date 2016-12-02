@@ -106,8 +106,8 @@
                                 <tfoot>
                                 <tr>
                                     <th>Average</th>
-                                    <th>{{format-number(sum(Availability/@availability) div count(Availability/@availability),'#.00') }}</th>
-                                    <th>{{format-number(sum(Availability/@reliability) div count(Availability/@reliability),'#.00') }}</th>
+                                    <th>{{format-number(sum(Availability[@availability!='-1']/@availability) div count(Availability[@availability!='-1']/@availability),'#.00') }}</th>
+                                    <th>{{format-number(sum(Availability[@reliability!='-1']/@reliability) div count(Availability[@reliability!='-1']/@reliability),'#.00') }}</th>
                                     <th>{{format-number(sum(Availability/@downtime)*100 div count(Availability/@downtime),'#.00') }}</th>
                                     <th>{{format-number(sum(Availability/@unknown)*100 div count(Availability/@unknown),'#.00') }}</th>
                                 </tr>

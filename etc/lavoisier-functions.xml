@@ -1,4 +1,5 @@
-<functions xmlns="http://software.in2p3.fr/lavoisier/functions.xsd" >
+<functions xmlns="http://software.in2p3.fr/lavoisier/functions.xsd">
+<namespace prefix="java">http://software.in2p3.fr/lavoisier/java</namespace>
     <function name="apos" eval='concat("&apos;", $string, "&apos;")'>
         <argument>string</argument>
     </function>
@@ -13,4 +14,12 @@
     <function name="arround" eval="(round($num*100)) div 100">
         <argument>num</argument>
     </function>
+
+
+
+    <function name="DateTimeUtc"
+              eval="java:java.util.TimeZone.getDefault()">
+    </function>
+
+
 </functions>

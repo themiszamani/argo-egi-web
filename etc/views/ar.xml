@@ -13,8 +13,13 @@
 
         <argument name="ngi">any</argument>
         <argument name="granularity"></argument>
-        <argument name="start_date"></argument>
-        <argument name="end_date"></argument>
+
+        <argument name="month"></argument>
+        <argument name="monthend" eval="substring(date:add($month,'P1M'),0,8)"></argument>
+        <argument name="start_date" eval="concat($month,'-01')"></argument>
+        <argument name="end_date"  eval="concat($monthend,'-01')"></argument>
+
+
 
         <argument name="report">Critical</argument>
         <argument name="view_details">site_ar</argument>
@@ -102,8 +107,10 @@
         <argument name="site"></argument>
         <argument name="ngi">false</argument>
         <argument name="granularity"></argument>
-        <argument name="start_date"></argument>
-        <argument name="end_date"></argument>
+        <argument name="month"></argument>
+        <argument name="monthend" eval="substring(date:add($month,'P1M'),0,8)"></argument>
+        <argument name="start_date" eval="concat($month,'-01')"></argument>
+        <argument name="end_date"  eval="concat($monthend,'-01')"></argument>
         <argument name="view_details">services_ar</argument>
         <argument name="report">OPS-MONITOR-Critical</argument>
 
@@ -151,8 +158,10 @@
         <argument name="site"></argument>
         <argument name="ngi">false</argument>
         <argument name="granularity"></argument>
-        <argument name="start_date"></argument>
-        <argument name="end_date"></argument>
+        <argument name="month"></argument>
+        <argument name="monthend" eval="substring(date:add($month,'P1M'),0,8)"></argument>
+        <argument name="start_date" eval="concat($month,'-01')"></argument>
+        <argument name="end_date"  eval="concat($monthend,'-01')"></argument>
         <argument name="view_details">services_ar</argument>
         <argument name="poems">ch.cern.sam.CLOUD-MON_CRITICAL</argument>
         <argument name="report">Cloud</argument>
@@ -197,8 +206,14 @@
         <argument name="site"></argument>
         <argument name="ngi">false</argument>
         <argument name="granularity"></argument>
-        <argument name="start_date">_DATE_</argument>
-        <argument name="end_date">_DATE_</argument>
+
+        <argument name="month" eval="0"></argument>
+        <argument name="monthend" eval="substring(date:add($month,'P1M'),0,8)"></argument>
+        <argument name="start_date" eval="choose($month=0,'_DATE_',concat($month,'-01'))"></argument>
+        <argument name="end_date"  eval="choose($month=0,'_DATE_',concat($monthend,'-01'))"></argument>
+
+
+
         <argument name="view_details">services_ar</argument>
         <argument name="poems">ch.cern.sam.ROC_CRITICAL</argument>
         <argument name="report">Critical</argument>
@@ -305,9 +320,11 @@
 
         <argument name="site"></argument>
 
+
         <argument name="granularity"></argument>
-        <argument name="start_date"></argument>
-        <argument name="end_date"></argument>
+        <argument name="month"></argument>
+        <argument name="start_date" eval="concat($month,'-01')"></argument>
+        <argument name="end_date"  eval="concat($monthend,'-01')"></argument>
         <argument name="poems">ch.cern.sam.ROC_CRITICAL</argument>
         <argument name="report">report</argument>
 

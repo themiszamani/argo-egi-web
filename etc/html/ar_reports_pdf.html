@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html  xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd"
+       xmlns:tpl="http://software.in2p3.fr/lavoisier/template.xsd">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>ARGO AR REPORTS</title>
+
+
+    <style type="text/css" media="print">
+
+        body {
+            width: auto!important;
+            margin: auto!important;
+            font-family: serif;
+            font-size: 12pt;
+            background-color: #fff!important;
+            color: #000!important;
+        }
+        p, h1, h2, h3, h4, h5, h6, blockquote, ul, ol {
+            color: red!important;
+            margin: auto!important;
+        }
+        .print {
+            display: block; /* affichage des éléments de classe print */
+        }
+        p, blockquote {
+            orphans: 3; /* pas de ligne seule en bas */
+            widows: 3; /* pas de ligne seule en haut */
+        }
+        blockquote, ul, ol {
+            page-break-inside: avoid; /* pas de coupure dans ces élements */
+        }
+        h1 {
+            page-break-before: always; /* chaque titre commence sur une nouvelle page */
+        }
+        h1, h2, h3, caption {
+            page-break-after: avoid; /* pas de saut après ces éléments */
+        }
+        a {
+            color: #000!important;
+            text-decoration: underline!important;
+        }
+        a[href]:after {
+            content: " (" attr(href) ")"; /* affichage des URL des liens */
+        }
+
+        table, table td {
+            border: solid darkred;
+        }
+        table {
+            border-width: 1px 1px 0 0;
+        }
+        table td {
+            border-width: 0 0 1px 1px;
+        }
+
+        tr { text-align: center; }
+        th { background-color: lightgreen; padding: 3px; }
+        td {background-color: lightblue;  padding: 3px; }
+
+    </style>
+</head>
+
+
+<body>
+
+
+        <h1>Test pdf</h1>
+
+        <div tpl:foreach="/e:entries/e:entries">
+            <div class="box-header">
+                <h3 class="box-title">{{@name}}</h3>
+            </div>
+
+            <div class="box-body">
+                <table id="dataTable_{{@name}}" class="table table-bordered table-hover table-striped" >
+                 <thead>
+                    <tr>
+                        <th></th>
+                        <th colspan="5" style="border-width: 0 0 1px 1px;">Availabilities</th>
+                        <th colspan="5" style="border-width: 0 0 1px 1px;">Reliabilities</th>
+                    </tr>
+
+
+                    <tr>
+                        <th tpl:if="/e:entries/@view!='ngi_reports'" style="border-width: 0 0 1px 1px;">Site</th>
+                        <th tpl:else="">Ngi</th>
+
+                        <th tpl:foreach="e:entry[1]/Availability" >{{@timestamp}}</th>
+                        <th tpl:foreach="e:entry[1]/Availability" >{{@timestamp}}</th>
+                    </tr>
+                 </thead>
+
+                    <tbody>
+
+                    <tr tpl:foreach="e:entry[@key!='AVERAGE']">
+
+
+
+                        <td style="border-width: 0 0 1px 1px;">{{@key}}</td>
+
+
+
+                <td tpl:foreach="Availability">
+                    <td title="{{format-number(@availability,'#.00')}}" tpl:if="@availability &gt; 80" style="width:30px;height:20px;background-color: #00ca6d">{{format-number(@availability,'#.00')}}</td>
+                    <td title="{{format-number(@availability,'#.00')}}" tpl:else="" >{{format-number(@availability,'#.00')}}</td>
+                </td>
+
+                        <td tpl:foreach="Availability">
+                            <td title="{{format-number(@reliability,'#.00')}}" tpl:if="@reliability &gt; 80" style="width:30px;height:20px;background-color: #00ca6d">{{format-number(@reliability,'#.00')}}</td>
+                            <td title="{{format-number(@reliability,'#.00')}}" tpl:else="" >{{format-number(@reliability,'#.00')}}</td>
+                        </td>
+
+
+
+
+                    </tr>
+
+                    </tbody>
+
+
+
+                </table>
+            </div>
+        </div>
+
+
+
+
+
+
+</body>
+</html>
