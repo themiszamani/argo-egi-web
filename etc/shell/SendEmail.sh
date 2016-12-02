@@ -1,19 +1,30 @@
 #!/bin/bash
 
-EMAIL="$1,$4"
-SUBJECT="Recomputation request $2"
+
+SUBJECT="Recomputation request #$2"
 URL=$3
-BODY="Dear Admins and user,\nA new recomputation request has been registered :\n$URL\n\n-- Mail generated automatically by the ARGO application"
-CC=$4
+
+
 
 if [ $# -eq 4 ]
   then
-    echo "$BODY" | /usr/bin/mail "$EMAIL"  -s "$SUBJECT"  -a "FROM: $1" ;
-    echo "<EmailSent></EmailSent>";
+     /usr/sbin/sendmail -t "$4" << EOF
+Return-Path: $1
+Reply-To: $1
+Subject: $SUBJECT
+From: $1
+Cc: $1
+
+Dear User,
+
+Your recomputation request has been registered :
+$URL
+
+ARGO Team
+
+-- Mail generated automatically by the ARGO application
+EOF
+    echo "<EmailSent>The email has been sent</EmailSent>";
 else
-    echo "<Error>The number of parameters is not correct</Error>";
+    echo "<Error>The Email has not been sent</Error>";
  fi
-
-
-
-
