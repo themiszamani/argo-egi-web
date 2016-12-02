@@ -28,7 +28,7 @@
 
     <categories bg="bg-purple" icon="fa fa-cog" title="Administration">
         <category link="/lavoisier/listProfiles" icon="fa fa-group"> Profile Management</category>
-        <category link="/lavoisier/recomputation" icon="fa fa-mail-forward">Recomputation request</category>
+        <category link="/lavoisier/RecomputationList" icon="fa fa-mail-forward">Recomputation request</category>
         <category link="/lavoisier/administratorsList" icon="fa fa-list"> Admin List</category>
         <category link="/lavoisier/views?accept=html" icon="fa fa-lock">Admin Interface</category>
 
