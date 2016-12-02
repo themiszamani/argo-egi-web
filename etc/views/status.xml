@@ -65,6 +65,7 @@
                 <parameter name="minutes">14</parameter>
             </trigger>
             <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="ViewCreatedTrigger"/>
 
         </cache>
     </view>
@@ -81,6 +82,7 @@
                 <parameter name="minutes">26</parameter>
             </trigger>
             <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="ViewCreatedTrigger"/>
 
         </cache>
     </view>
@@ -97,19 +99,11 @@
                 <parameter name="minutes">38</parameter>
             </trigger>
             <trigger type="ViewNotifiedTrigger"/>
-
+            <trigger type="ViewCreatedTrigger"/>
         </cache>
     </view>
 
-
-
-    <view name="testDateTime" xmlns:lav="http://software.in2p3.fr/lavoisier/functions.xsd">
-        <connector type="StringConnector" xmlns:date="http://exslt.org/dates-and-times">
-            <parameter name="content" eval="concat('DateTime: ',lav:DateTimeUtc(), '  - TimeZone : ',property('user.timezone'))"/>
-        </connector>
-        <serializer type="EncapsulateSerializer"/>
-    </view>
-
+    
 
 
 
