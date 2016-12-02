@@ -101,10 +101,8 @@
         <connector type="FileConnector">
             <parameter name="path">/xml/administrators.xml</parameter>
         </connector>
-        <processors>
 
 
-        </processors>
 
         <renderers>
             <renderer type="DefaultRenderer">
@@ -148,76 +146,133 @@
         </connector>
         <processors>
 
-            <!--<insert match="/e:entries[*]" nodes="new_element('groups')"></insert>-->
-            <!--<insert match="/e:entries[*]/groups" nodes="ancestor::e:entries/e:entry[contains(@key,'group')]"></insert>-->
-            <!--<remove match="/e:entries/e:entry[contains(@key,'group')]"/>-->
-            <!--<replace match="/e:entries//e:entry[text()]" nodes="new_element(match()/@key,new_text(match()/text()))"></replace>-->
-            <!--<replace nodes="/*/*/text()" ><node value="concat('&amp;', @key, '=', .)"/></replace>-->
 
         </processors>
     </view>
 
 
-
-
-
-
-    <view name="form_recomputation_results" authenticators="AuthenticatedUsers">
+    <view name="RecomputationList" authenticators="AuthenticatedUsers">
         <info>
-            <category>Hidden</category>
+            <category>ADMIN</category>
+            <description>List of recomputation</description>
         </info>
 
-        <argument name="recompId"></argument>
-        <argument name="key">0</argument>
-        <argument name="mode">RW</argument>
-        <argument name="admin">_admin_</argument>
+        <argument name="key">_key_</argument>
+        <argument name="details">false</argument>
 
-
-        <connector type="RotatingCacheConnector">
-            <!--<parameter name="content" eval="choose($update='update',post(),view_post('form_recomputation_results_INTERNAL',choose(post(false()),post(false()),entries())))"/>-->
-            <parameter name="content" eval="view_post('form_recomputation_results_INTERNAL',choose(post(false()),post(false()),entries()))"/>
-            <parameter name="key" eval="arguments()[@key='recompId']"/>
-            <parameter name="size">100</parameter>
-            <parameter name="mode" eval="$mode"></parameter>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('form_recomputation_results',entry('mode','RW')|entry('key',$key))"></parameter>
         </connector>
 
         <processors>
-            <element in="entries">
+            <element>
                 <attribute-create out="user">user()</attribute-create>
-                <attribute-create out="admin">choose($admin!='_admin_',false(),boolean(view('administratorsList')/admins/admin/CertDN[text()=user()]))</attribute-create>
-
+                <attribute-create out="admin">boolean(view('administratorsList')/admins/admin/CertDN[text()=user()])</attribute-create>
+                <attribute-create out="details">$details</attribute-create>
             </element>
         </processors>
-
         <renderers>
             <renderer type="DefaultRenderer">
-                <parameter name="template">/html/recomp_res.html</parameter>
+                <parameter name="template">/html/recomputationList.html</parameter>
             </renderer>
             <renderer type="HTMLRenderer">
-                <parameter name="template">/html/recomp_res.html</parameter>
+                <parameter name="template">/html/recomputationList.html</parameter>
             </renderer>
         </renderers>
 
     </view>
 
-    <view name="form_recomputation_results_c" authenticators="AuthenticatedUsers">
+
+    <view name="form_recomputation_results"  xmlns:date="http://exslt.org/dates-and-times">
         <info>
-            <category>Hidden</category>
+            <category>ADMIN</category>
         </info>
 
+
+        <argument name="recompId">_recompId_</argument>
+        <argument name="key" eval="choose($recompId!='_recompId_',$recompId,'_key_')"/>
+        <argument name="mode">RW</argument>
+        <argument name="admin">_admin_</argument>
+
+
+        <connector type="RotatingCacheConnector">
+            <parameter name="content" eval="view_post('recomputation_RotatingCacheContent',choose(post(false()),post(false()),entries()))"/>
+            <parameter name="key" eval="choose($key!='_key_'  ,$key,null())"/>
+            <parameter name="size">100</parameter>
+            <parameter name="mode" eval="$mode"></parameter>
+        </connector>
+
+
+
+
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/html/recomputationList.html</parameter>
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/html/recomputationList.html</parameter>
+            </renderer>
+        </renderers>
+
+    </view>
+
+    <view name="recomputation_RotatingCacheContent">
+        <info>
+            <category>ADMIN</category>
+        </info>
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="post()"></parameter>
+        </connector>
+
+        <processors>
+
+
+            <element  if="not(EmailSent)">
+                <element-create>view('recomputation_SendEmail',entry('id',../e:entry[@key='recompId']/text())|entry('url',../e:entry[@key='url']/text())|entry('cc',../e:entry[@key='email']/text()))</element-create>
+            </element>
+
+        </processors>
+
+    </view>
+
+    <view name="recomputation_SendEmail">
+    <info>
+        <category>ADMIN</category>
+    </info>
+
+        <argument name="id"></argument>
+        <argument name="url"></argument>
+        <argument name="cc"></argument>
+
+        <connector type="ShellConnector">
+            <parameter name="executable">/bin/sh</parameter>
+            <parameter name="arguments">
+                <entry>../../etc/shell/SendEmail.sh</entry>
+                <entry eval="property('contact.email')"></entry>
+                <entry eval="$id"></entry>
+                <entry eval="$url"></entry>
+                <entry eval="$cc"></entry>
+            </parameter>
+            <parameter name="workdir" eval="property('user.dir')"/>
+        </connector>
+
+    </view>
+
+
+    <view name="form_recomputation_results_c">
+        <info>
+            <category>ADMIN</category>
+        </info>
 
 
 
         <connector type="XMLConnector">
             <parameter name="content" eval="new_element('root')"></parameter>
-
         </connector>
 
         <processors>
-            <element in="root">
-                <attribute-create out="user">user()</attribute-create>
-                <attribute-create out="admin">boolean(view('administratorsList')/admins/admin/CertDN[text()=user()])</attribute-create>
-            </element>
+
 
             <element in="root">
                 <element-create>view('form_recomputation_results',post()|entry('mode','W'))</element-create>
@@ -227,93 +282,41 @@
 
     </view>
 
-    <view name="form_recomputation_results_INTERNAL" xmlns:str="http://exslt.org/strings"
-          xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
-        <info>
-            <category>ADMIN</category>
-            <description>Build your AR data</description>
-        </info>
+    <!--<view name="form_recomputation_results_INTERNAL" >-->
+        <!--<info>-->
+            <!--<category>ADMIN</category>-->
+        <!--</info>-->
 
 
 
-        <connector type="HTTPConnector">
-            <parameter name="method">POST</parameter>
-            <parameter name="url">https://operations-portal.egi.eu/cron/sendEmail</parameter>
-            <parameter name="post" eval="post()"></parameter>
-            <parameter name="certificate" eval="property('certificate.path')"/>
-            <parameter name="passphrase" eval="property('certificate.password')"/>
-            <parameter name="force-redirect">true</parameter>
-        </connector>
+        <!--<connector type="HTTPConnector">-->
+            <!--<parameter name="method">POST</parameter>-->
+            <!--<parameter name="url">https://operations-portal.egi.eu/cron/sendEmail</parameter>-->
+            <!--<parameter name="post" eval="post()"></parameter>-->
+            <!--<parameter name="certificate" eval="property('certificate.path')"/>-->
+            <!--<parameter name="passphrase" eval="property('certificate.password')"/>-->
+            <!--<parameter name="force-redirect">true</parameter>-->
+        <!--</connector>-->
 
 
 
-        <serializer type="EncapsulateSerializer"></serializer>
+        <!--<processors>-->
 
-        <processors>
-            <element in="e:entries">
-                <element-create>post()</element-create>
-            </element>
+            <!--<element in="SendEmail">-->
+                <!--<element in="entries">-->
+                    <!--<element-create>post()</element-create>-->
+                <!--</element>-->
+            <!--</element>-->
 
 
+        <!--</processors>-->
 
-            <element in="e:entries">
-                <element in="e:entries">
-                    <element-create>entry('RequestDate',substring-after(substring-before(../../e:entry/text(),'&lt;/entry'),'key="Request date"&gt;'))</element-create>
-                    <element-create>entry('status',
-                        substring-before(substring-after(../../e:entry/text(),'key="status"&gt;'),'&lt;/entry'))</element-create>
-                                </element>
-            </element>
 
-            <element in="e:entries" out="entries">
-
-            </element>
-
-            <element in="entries">
-                <element in="e:entries" out="entries">
-
-                </element>
-                <element-ignore in="entry"></element-ignore>
-            </element>
-
-            <elements path="entries/entries">
-                <element in="e:entry" out="entry"></element>
-            </elements>
+    <!--</view>-->
 
 
 
-        </processors>
-
-
-    </view>
-
-    <view name="RecomputationList" authenticators="AuthenticatedUsers">
-        <info>
-            <category>ADMIN</category>
-            <description>List of recomputation</description>
-        </info>
-
-        <connector type="XMLConnector">
-            <parameter name="content" eval="view('form_recomputation_results')"></parameter>
-        </connector>
-
-        <processors>
-            <element in="properties">
-                <attribute-create out="user">user()</attribute-create>
-                <attribute-create out="admin">boolean(view('administratorsList')/admins/admin/CertDN[text()=user()])</attribute-create>
-            </element>
-        </processors>
-        <renderers>
-            <renderer type="DefaultRenderer">
-                <parameter name="template">/html/recomputationList.html</parameter>
-            </renderer>
-            <renderer type="HTMLRenderer">
-                <parameter name="template">/html/recomputationList.html</parameter>
-            </renderer>
-        </renderers>
-
-    </view>
-
-    <view name="form_profile_results_INTERNAL" xmlns:str="http://exslt.org/strings" authenticators="AuthenticatedUsers"
+    <view name="form_profile_results_INTERNAL" xmlns:str="http://exslt.org/strings"
           xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
         <info>
             <category>ADMIN</category>
@@ -338,6 +341,53 @@
         </renderers>
 
     </view>
+
+
+
+    <view name="modify_recomputation_results">
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('form_recomputation_result',entry('key',$key)|entry('mode','W'))"></parameter>
+        </connector>
+
+    </view>
+
+    <view name="modify_recomputation_results_cache">
+        <info>
+            <category>ADMIN</category>
+        </info>
+
+
+
+        <argument name="key"></argument>
+        <argument name="param"></argument>
+        <argument name="param_value"></argument>
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('form_recomputation_result',entry('key',$key)|entry('mode','R'))"></parameter>
+        </connector>
+
+
+        <processors>
+            <element in="properties">
+                <elements path="entry/SendEmail/entries/e:entries/e:entry[@key=$param]">
+                    <text-ignore></text-ignore>
+                    <text-create>$param_value</text-create>
+                </elements>
+            </element>
+        </processors>
+
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/html/recomputationList.html</parameter>
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/html/recomputationList.html</parameter>
+            </renderer>
+        </renderers>
+
+    </view>
+
+
 
     <view xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" name="listProfiles"
           authenticators="AuthenticatedUsers">

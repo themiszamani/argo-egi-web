@@ -88,3 +88,95 @@ INFO   | jvm 1    | 2016/08/12 16:12:58 | 	at fr.in2p3.lavoisier.helpers.BaseDir
 INFO   | jvm 1    | 2016/08/12 16:12:58 | 	at fr.in2p3.lavoisier.connector.FileCacheConnector.<clinit>(FileCacheConnector.java:28)
 INFO   | jvm 1    | 2016/08/12 16:12:58 | 	... 17 more
 STATUS | wrapper  | 2016/08/12 16:13:00 | <-- Wrapper Stopped
+INFO   | jvm 1    | 2016/12/02 11:39:19 | déc. 02, 2016 10:39:19 AM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2016/12/02 11:39:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-sites-2016-12-01T00:00:00Z-2016-12-01T23:59:59Z-false]]
+INFO   | jvm 1    | 2016/12/02 11:39:19 | déc. 02, 2016 10:39:19 AM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2016/12/02 11:39:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-sites-2016-11-30T00:00:00Z-2016-11-30T23:59:59Z-false]]
+INFO   | jvm 1    | 2016/12/02 11:39:19 | déc. 02, 2016 10:39:19 AM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2016/12/02 11:39:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-sites-2016-11-29T00:00:00Z-2016-11-29T23:59:59Z-false]]
+INFO   | jvm 1    | 2016/12/02 11:39:19 | déc. 02, 2016 10:39:19 AM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2016/12/02 11:39:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-Fedcloud-sites-2016-12-01T00:00:00Z-2016-12-01T23:59:59Z-false]]
+INFO   | jvm 1    | 2016/12/02 11:39:19 | déc. 02, 2016 10:39:19 AM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2016/12/02 11:39:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-Fedcloud-sites-2016-11-30T00:00:00Z-2016-11-30T23:59:59Z-false]]
+INFO   | jvm 1    | 2016/12/02 11:39:19 | déc. 02, 2016 10:39:19 AM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2016/12/02 11:39:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-Fedcloud-sites-2016-11-29T00:00:00Z-2016-11-29T23:59:59Z-false]]
+INFO   | jvm 1    | 2016/12/02 11:49:19 | déc. 02, 2016 10:49:19 AM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2016/12/02 11:49:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-sites-2016-12-01T00:00:00Z-2016-12-01T23:59:59Z-false]]
+INFO   | jvm 1    | 2016/12/02 11:49:19 | déc. 02, 2016 10:49:19 AM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2016/12/02 11:49:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-sites-2016-11-30T00:00:00Z-2016-11-30T23:59:59Z-false]]
+INFO   | jvm 1    | 2016/12/02 11:49:19 | déc. 02, 2016 10:49:19 AM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2016/12/02 11:49:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-sites-2016-11-29T00:00:00Z-2016-11-29T23:59:59Z-false]]
+INFO   | jvm 1    | 2016/12/02 11:49:19 | déc. 02, 2016 10:49:19 AM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2016/12/02 11:49:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-Fedcloud-sites-2016-12-01T00:00:00Z-2016-12-01T23:59:59Z-false]]
+INFO   | jvm 1    | 2016/12/02 11:49:19 | déc. 02, 2016 10:49:19 AM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2016/12/02 11:49:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-Fedcloud-sites-2016-11-30T00:00:00Z-2016-11-30T23:59:59Z-false]]
+INFO   | jvm 1    | 2016/12/02 11:49:19 | déc. 02, 2016 10:49:19 AM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2016/12/02 11:49:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-Fedcloud-sites-2016-11-29T00:00:00Z-2016-11-29T23:59:59Z-false]]
+INFO   | jvm 1    | 2016/12/02 11:59:19 | déc. 02, 2016 10:59:19 AM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2016/12/02 11:59:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-sites-2016-12-01T00:00:00Z-2016-12-01T23:59:59Z-false]]
+INFO   | jvm 1    | 2016/12/02 11:59:19 | déc. 02, 2016 10:59:19 AM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2016/12/02 11:59:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-sites-2016-11-30T00:00:00Z-2016-11-30T23:59:59Z-false]]
+INFO   | jvm 1    | 2016/12/02 11:59:19 | déc. 02, 2016 10:59:19 AM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2016/12/02 11:59:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-sites-2016-11-29T00:00:00Z-2016-11-29T23:59:59Z-false]]
+INFO   | jvm 1    | 2016/12/02 11:59:19 | déc. 02, 2016 10:59:19 AM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2016/12/02 11:59:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-Fedcloud-sites-2016-12-01T00:00:00Z-2016-12-01T23:59:59Z-false]]
+INFO   | jvm 1    | 2016/12/02 11:59:19 | déc. 02, 2016 10:59:19 AM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2016/12/02 11:59:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-Fedcloud-sites-2016-11-30T00:00:00Z-2016-11-30T23:59:59Z-false]]
+INFO   | jvm 1    | 2016/12/02 11:59:19 | déc. 02, 2016 10:59:19 AM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2016/12/02 11:59:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-Fedcloud-sites-2016-11-29T00:00:00Z-2016-11-29T23:59:59Z-false]]
+INFO   | jvm 1    | 2016/12/02 11:59:24 | déc. 02, 2016 10:59:24 AM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2016/12/02 11:59:24 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.availability.call' [java.io.IOException:  <root>
+INFO   | jvm 1    | 2016/12/02 11:59:24 |    <message>No results found for given query</message>
+INFO   | jvm 1    | 2016/12/02 11:59:24 |    <code>404</code>
+INFO   | jvm 1    | 2016/12/02 11:59:24 |  </root>]]
+INFO   | jvm 1    | 2016/12/02 11:59:25 | déc. 02, 2016 10:59:25 AM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2016/12/02 11:59:25 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.availability.call' [java.io.IOException:  <root>
+INFO   | jvm 1    | 2016/12/02 11:59:25 |    <message>No results found for given query</message>
+INFO   | jvm 1    | 2016/12/02 11:59:25 |    <code>404</code>
+INFO   | jvm 1    | 2016/12/02 11:59:25 |  </root>]]
+INFO   | jvm 1    | 2016/12/02 11:59:31 | déc. 02, 2016 10:59:31 AM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2016/12/02 11:59:31 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.availability.call' [java.io.IOException:  <root>
+INFO   | jvm 1    | 2016/12/02 11:59:31 |    <message>No results found for given query</message>
+INFO   | jvm 1    | 2016/12/02 11:59:31 |    <code>404</code>
+INFO   | jvm 1    | 2016/12/02 11:59:31 |  </root>]]
+INFO   | jvm 1    | 2016/12/02 11:59:36 | déc. 02, 2016 10:59:36 AM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2016/12/02 11:59:36 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.availability.call' [java.io.IOException:  <root>
+INFO   | jvm 1    | 2016/12/02 11:59:36 |    <message>No results found for given query</message>
+INFO   | jvm 1    | 2016/12/02 11:59:36 |    <code>404</code>
+INFO   | jvm 1    | 2016/12/02 11:59:36 |  </root>]]
+INFO   | jvm 1    | 2016/12/02 12:09:19 | déc. 02, 2016 11:09:19 AM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2016/12/02 12:09:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-sites-2016-12-01T00:00:00Z-2016-12-01T23:59:59Z-false]]
+INFO   | jvm 1    | 2016/12/02 12:09:19 | déc. 02, 2016 11:09:19 AM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2016/12/02 12:09:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-sites-2016-11-30T00:00:00Z-2016-11-30T23:59:59Z-false]]
+INFO   | jvm 1    | 2016/12/02 12:09:19 | déc. 02, 2016 11:09:19 AM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2016/12/02 12:09:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-sites-2016-11-29T00:00:00Z-2016-11-29T23:59:59Z-false]]
+INFO   | jvm 1    | 2016/12/02 12:09:19 | déc. 02, 2016 11:09:19 AM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2016/12/02 12:09:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-Fedcloud-sites-2016-12-01T00:00:00Z-2016-12-01T23:59:59Z-false]]
+INFO   | jvm 1    | 2016/12/02 12:09:19 | déc. 02, 2016 11:09:19 AM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2016/12/02 12:09:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-Fedcloud-sites-2016-11-30T00:00:00Z-2016-11-30T23:59:59Z-false]]
+INFO   | jvm 1    | 2016/12/02 12:09:19 | déc. 02, 2016 11:09:19 AM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2016/12/02 12:09:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-Fedcloud-sites-2016-11-29T00:00:00Z-2016-11-29T23:59:59Z-false]]
+INFO   | jvm 1    | 2016/12/02 12:19:19 | déc. 02, 2016 11:19:19 AM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2016/12/02 12:19:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-sites-2016-12-01T00:00:00Z-2016-12-01T23:59:59Z-false]]
+INFO   | jvm 1    | 2016/12/02 12:19:19 | déc. 02, 2016 11:19:19 AM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2016/12/02 12:19:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-sites-2016-11-30T00:00:00Z-2016-11-30T23:59:59Z-false]]
+INFO   | jvm 1    | 2016/12/02 12:19:19 | déc. 02, 2016 11:19:19 AM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2016/12/02 12:19:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-sites-2016-11-29T00:00:00Z-2016-11-29T23:59:59Z-false]]
+INFO   | jvm 1    | 2016/12/02 12:19:19 | déc. 02, 2016 11:19:19 AM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2016/12/02 12:19:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-Fedcloud-sites-2016-12-01T00:00:00Z-2016-12-01T23:59:59Z-false]]
+INFO   | jvm 1    | 2016/12/02 12:19:19 | déc. 02, 2016 11:19:19 AM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2016/12/02 12:19:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-Fedcloud-sites-2016-11-30T00:00:00Z-2016-11-30T23:59:59Z-false]]
+INFO   | jvm 1    | 2016/12/02 12:19:19 | déc. 02, 2016 11:19:19 AM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2016/12/02 12:19:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-Fedcloud-sites-2016-11-29T00:00:00Z-2016-11-29T23:59:59Z-false]]
+INFO   | jvm 1    | 2016/12/02 12:29:19 | déc. 02, 2016 11:29:19 AM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2016/12/02 12:29:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-sites-2016-12-01T00:00:00Z-2016-12-01T23:59:59Z-false]]
+INFO   | jvm 1    | 2016/12/02 12:29:19 | déc. 02, 2016 11:29:19 AM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2016/12/02 12:29:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-sites-2016-11-30T00:00:00Z-2016-11-30T23:59:59Z-false]]
+INFO   | jvm 1    | 2016/12/02 12:29:19 | déc. 02, 2016 11:29:19 AM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2016/12/02 12:29:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-sites-2016-11-29T00:00:00Z-2016-11-29T23:59:59Z-false]]
+INFO   | jvm 1    | 2016/12/02 12:29:19 | déc. 02, 2016 11:29:19 AM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2016/12/02 12:29:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-Fedcloud-sites-2016-12-01T00:00:00Z-2016-12-01T23:59:59Z-false]]
+INFO   | jvm 1    | 2016/12/02 12:29:19 | déc. 02, 2016 11:29:19 AM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2016/12/02 12:29:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-Fedcloud-sites-2016-11-30T00:00:00Z-2016-11-30T23:59:59Z-false]]
+INFO   | jvm 1    | 2016/12/02 12:29:19 | déc. 02, 2016 11:29:19 AM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2016/12/02 12:29:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-Fedcloud-sites-2016-11-29T00:00:00Z-2016-11-29T23:59:59Z-false]]

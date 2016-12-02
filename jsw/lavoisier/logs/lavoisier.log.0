@@ -1,4 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
-</log>
+<record>
+  <date>2016-12-02T11:29:19</date>
+  <millis>1480678159314</millis>
+  <sequence>70729</sequence>
+  <logger>class fr.in2p3.lavoisier.engine.view.ViewAbstract</logger>
+  <level>WARNING</level>
+  <class>fr.in2p3.lavoisier.engine.view.ViewAbstract</class>
+  <method>createChain</method>
+  <thread>39</thread>
+  <message>Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-Fedcloud-sites-2016-11-29T00:00:00Z-2016-11-29T23:59:59Z-false]]</message>
+</record>
+<record>
+  <date>2016-12-02T11:29:22</date>
+  <millis>1480678162765</millis>
+  <sequence>72386</sequence>
+  <logger>fr.in2p3.lavoisier.engine.view.ViewCached</logger>
+  <level>INFO</level>
+  <class>fr.in2p3.lavoisier.engine.view.ViewCached</class>
+  <method>refresh</method>
+  <thread>39</thread>
+  <message>Cache has been refresh for view: triggers_status</message>
+</record>
