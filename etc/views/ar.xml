@@ -13,13 +13,11 @@
 
         <argument name="ngi">any</argument>
         <argument name="granularity"></argument>
+        <argument name="month">1970-01</argument>
 
-        <argument name="month">_month_</argument>
-        <argument name="monthend" eval="choose($month!='_month_',substring(date:add($month,'P1M'),0,8))"></argument>
-        <argument name="start_date" eval="concat($month,'-01')"></argument>
-        <argument name="end_date"  eval="concat($monthend,'-01')"></argument>
-
-
+        <argument name="monthend" eval="choose($month!='1970-01',substring(date:add($month,'P1M'),0,8))"></argument>
+        <argument name="start_date" eval="choose($month!='1970-01',concat($month,'-01'))"></argument>
+        <argument name="end_date"  eval="choose($month!='1970-01',concat($monthend,'-01'))"></argument>
 
         <argument name="report">Critical</argument>
         <argument name="view_details">site_ar</argument>
@@ -39,6 +37,7 @@
         </connector>
 
 
+
         <processors>
 
 
@@ -46,13 +45,13 @@
 
                 <attribute-create out="start_date">$start_date</attribute-create>
                 <attribute-create out="end_date">$end_date</attribute-create>
-
+                <attribute-create out="month">$month</attribute-create>
                 <attribute-create out="view">ngi_ar</attribute-create>
                 <attribute-create out="view_details">$view_details</attribute-create>
 
                 <element in="group" if="@name=$ngi or $ngi='any'" out="Entity">
-                        <attribute in="name" out="NGI"></attribute>
-                        <element in="results" out="Availability"></element>
+                    <attribute in="name" out="NGI"></attribute>
+                    <element in="results" out="Availability"></element>
 
                 </element>
                 <element-ignore></element-ignore>
@@ -60,8 +59,8 @@
 
 
             <elements path="e:entries/Entity">
-                    <element-ignore in="Availability" if="date:seconds(@timestamp) &lt; ancestor::e:entries/@start_timestamp"></element-ignore>
-                    <element-ignore in="Availability" if="date:seconds(@timestamp) &gt; ancestor::e:entries/@end_timestamp"></element-ignore>
+                <element-ignore in="Availability" if="date:seconds(@timestamp) &lt; ancestor::e:entries/@start_timestamp"></element-ignore>
+                <element-ignore in="Availability" if="date:seconds(@timestamp) &gt; ancestor::e:entries/@end_timestamp"></element-ignore>
 
             </elements>
 
@@ -107,10 +106,10 @@
         <argument name="site"></argument>
         <argument name="ngi">false</argument>
         <argument name="granularity"></argument>
-        <argument name="month">_month_</argument>
-        <argument name="monthend" eval="choose($month!='_month_',substring(date:add($month,'P1M'),0,8))"></argument>
-        <argument name="start_date" eval="concat($month,'-01')"></argument>
-        <argument name="end_date"  eval="concat($monthend,'-01')"></argument>
+        <argument name="month">1970-01</argument>
+        <argument name="monthend" eval="choose($month!='1970-01',substring(date:add($month,'P1M'),0,8))"></argument>
+        <argument name="start_date" eval="choose($month!='1970-01',concat($month,'-01'))"></argument>
+        <argument name="end_date"  eval="choose($month!='1970-01',concat($monthend,'-01'))"></argument>
         <argument name="view_details">services_ar</argument>
         <argument name="report">OPS-MONITOR-Critical</argument>
 
@@ -158,10 +157,10 @@
         <argument name="site"></argument>
         <argument name="ngi">false</argument>
         <argument name="granularity"></argument>
-        <argument name="month">_month_</argument>
-        <argument name="monthend" eval="choose($month!='_month_',substring(date:add($month,'P1M'),0,8))"></argument>
-        <argument name="start_date" eval="concat($month,'-01')"></argument>
-        <argument name="end_date"  eval="concat($monthend,'-01')"></argument>
+        <argument name="month">1970-01</argument>
+        <argument name="monthend" eval="choose($month!='1970-01',substring(date:add($month,'P1M'),0,8))"></argument>
+        <argument name="start_date" eval="choose($month!='1970-01',concat($month,'-01'))"></argument>
+        <argument name="end_date"  eval="choose($month!='1970-01',concat($monthend,'-01'))"></argument>
         <argument name="view_details">services_ar</argument>
         <argument name="poems">ch.cern.sam.CLOUD-MON_CRITICAL</argument>
         <argument name="report">Cloud</argument>
@@ -207,8 +206,9 @@
         <argument name="ngi">false</argument>
         <argument name="granularity"></argument>
 
-        <argument name="month">_month_</argument>
-        <argument name="monthend" eval="choose($month!='_month_',substring(date:add($month,'P1M'),0,8))"></argument>
+        <argument name="month">1970-01</argument>
+        <argument name="monthend" eval="choose($month!='1970-01',substring(date:add($month,'P1M'),0,8))"></argument>
+
         <argument name="start_date" eval="choose($month=0,'_DATE_',concat($month,'-01'))"></argument>
         <argument name="end_date"  eval="choose($month=0,'_DATE_',concat($monthend,'-01'))"></argument>
 
@@ -233,7 +233,7 @@
         </connector>
 
         <processors>
-            
+
             <element in="root" out="e:entries">
 
                 <attribute-create out="start_timestamp">date:seconds($start_time)</attribute-create>
@@ -248,14 +248,14 @@
                 <element in="group" if="@name=$ngi or $ngi='false'">
                     <element in="group" out="Site" if="contains(concat($site,','),@name) or $ngi!='false'">
                         <element in="results" out="Availability"></element>
-                    </element>                    
-                </element>    
-                <element-ignore></element-ignore>                
+                    </element>
+                </element>
+                <element-ignore></element-ignore>
             </element>
-            
+
             <element in="e:entries">
                 <element-ignore in="group">
-                    
+
                     <element in="Site" out="Entity">
                         <attribute-create out="NGI">../ancestor::group/@name</attribute-create>
                     </element>
@@ -350,13 +350,13 @@
 
 
             <element in="root" out="e:entries">
-                    <element in="group" out="Site" if="@name=$site">
-                        <attribute in="name" out="site"></attribute>
-                        <element in="group" out="Flavor">
-                            <attribute in="name" out="Flavor"></attribute>
-                            <element in="results" out="Availability"></element>
-                        </element>
+                <element in="group" out="Site" if="@name=$site">
+                    <attribute in="name" out="site"></attribute>
+                    <element in="group" out="Flavor">
+                        <attribute in="name" out="Flavor"></attribute>
+                        <element in="results" out="Availability"></element>
                     </element>
+                </element>
 
                 <element-ignore></element-ignore>
             </element>
