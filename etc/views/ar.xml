@@ -14,8 +14,8 @@
         <argument name="ngi">any</argument>
         <argument name="granularity"></argument>
 
-        <argument name="month"></argument>
-        <argument name="monthend" eval="substring(date:add($month,'P1M'),0,8)"></argument>
+        <argument name="month">_month_</argument>
+        <argument name="monthend" eval="choose($month!='_month_',substring(date:add($month,'P1M'),0,8))"></argument>
         <argument name="start_date" eval="concat($month,'-01')"></argument>
         <argument name="end_date"  eval="concat($monthend,'-01')"></argument>
 
@@ -107,8 +107,8 @@
         <argument name="site"></argument>
         <argument name="ngi">false</argument>
         <argument name="granularity"></argument>
-        <argument name="month"></argument>
-        <argument name="monthend" eval="substring(date:add($month,'P1M'),0,8)"></argument>
+        <argument name="month">_month_</argument>
+        <argument name="monthend" eval="choose($month!='_month_',substring(date:add($month,'P1M'),0,8))"></argument>
         <argument name="start_date" eval="concat($month,'-01')"></argument>
         <argument name="end_date"  eval="concat($monthend,'-01')"></argument>
         <argument name="view_details">services_ar</argument>
@@ -158,8 +158,8 @@
         <argument name="site"></argument>
         <argument name="ngi">false</argument>
         <argument name="granularity"></argument>
-        <argument name="month"></argument>
-        <argument name="monthend" eval="substring(date:add($month,'P1M'),0,8)"></argument>
+        <argument name="month">_month_</argument>
+        <argument name="monthend" eval="choose($month!='_month_',substring(date:add($month,'P1M'),0,8))"></argument>
         <argument name="start_date" eval="concat($month,'-01')"></argument>
         <argument name="end_date"  eval="concat($monthend,'-01')"></argument>
         <argument name="view_details">services_ar</argument>
@@ -207,8 +207,8 @@
         <argument name="ngi">false</argument>
         <argument name="granularity"></argument>
 
-        <argument name="month" eval="0"></argument>
-        <argument name="monthend" eval="substring(date:add($month,'P1M'),0,8)"></argument>
+        <argument name="month">_month_</argument>
+        <argument name="monthend" eval="choose($month!='_month_',substring(date:add($month,'P1M'),0,8))"></argument>
         <argument name="start_date" eval="choose($month=0,'_DATE_',concat($month,'-01'))"></argument>
         <argument name="end_date"  eval="choose($month=0,'_DATE_',concat($monthend,'-01'))"></argument>
 
@@ -323,6 +323,7 @@
 
         <argument name="granularity"></argument>
         <argument name="month"></argument>
+
         <argument name="start_date" eval="concat($month,'-01')"></argument>
         <argument name="end_date"  eval="concat($monthend,'-01')"></argument>
         <argument name="poems">ch.cern.sam.ROC_CRITICAL</argument>
