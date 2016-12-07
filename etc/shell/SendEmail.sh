@@ -9,7 +9,7 @@ EMAIL="$1,$4"
 
 if [ $# -eq 4 ]
   then
-     /usr/bin/mail "$EMAIL"  -s "$SUBJECT"  -a "FROM: $1"  << EOF
+     /usr/bin/mail "$EMAIL"  -s $SUBJECT  -S "reply-to=$5"  -S "From=$5" << EOF
 
 Dear User,
 
