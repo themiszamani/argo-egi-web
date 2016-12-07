@@ -1,132 +1,188 @@
 <!DOCTYPE html>
 <html  xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd"
-       xmlns:tpl="http://software.in2p3.fr/lavoisier/template.xsd">
+       xmlns:tpl="http://software.in2p3.fr/lavoisier/template.xsd"
+        xmlns:date="http://exslt.org/dates-and-times">
 
 <head>
     <meta charset="UTF-8" />
-    <title>ARGO AR REPORTS</title>
+    <title>ARGO Availability Reliability Reports</title>
 
 
-    <style type="text/css" media="print">
+    <style type="text/css">
 
-        body {
-            width: auto!important;
-            margin: auto!important;
-            font-family: serif;
-            font-size: 12pt;
-            background-color: #fff!important;
-            color: #000!important;
-        }
-        p, h1, h2, h3, h4, h5, h6, blockquote, ul, ol {
-            color: red!important;
-            margin: auto!important;
-        }
-        .print {
-            display: block; /* affichage des éléments de classe print */
-        }
-        p, blockquote {
-            orphans: 3; /* pas de ligne seule en bas */
-            widows: 3; /* pas de ligne seule en haut */
-        }
-        blockquote, ul, ol {
-            page-break-inside: avoid; /* pas de coupure dans ces élements */
-        }
-        h1 {
-            page-break-before: always; /* chaque titre commence sur une nouvelle page */
-        }
-        h1, h2, h3, caption {
-            page-break-after: avoid; /* pas de saut après ces éléments */
-        }
-        a {
-            color: #000!important;
-            text-decoration: underline!important;
-        }
-        a[href]:after {
-            content: " (" attr(href) ")"; /* affichage des URL des liens */
+        body, html { border: 0px }
+
+        h1, h2, h3, h4, h5, h6 {font-family: Arial, Helvetica, sans-serif }
+        body, p { font-family: "verdana", tahoma, arial, sans-serif }
+        code { font-family: "Courier New", Courier, monospace }
+
+        body            { font-family: "verdana", tahoma, arial, sans-serif;}
+        code        { font-size: 12px; margin-left: 16px; padding-left:16px}
+        hr          { height: 0px; noshade: true; border:1; width: 100%; }
+
+
+
+
+
+        #top {
+
+            text-indent: 0;
+            line-height: 16pt;
+            font-size: 14pt;
+
+
+            
         }
 
-        table, table td {
-            border: solid darkred;
+
+
+
+        div, img { max-width: 100% }
+
+        #legend2 {
+            font-size :8pt;
+
         }
+
+        #AvRe {
+            font-size :7pt;
+            width:100%;
+        }
+
+
+         tr {
+            border-collapse: collapse;
+
+
+        }
+
+        td {
+            border: 1px solid black;
+            noshade: true;
+            border-collapse: collapse;
+
+        }
+
+        th {
+            border: 1px solid black;
+            noshade: true;
+            border-collapse: collapse;
+
+        }
+
+        .noBorder {
+
+            border:  1px white;
+
+        }
+
+
+
+
         table {
-            border-width: 1px 1px 0 0;
-        }
-        table td {
-            border-width: 0 0 1px 1px;
+            border-collapse: collapse;
         }
 
-        tr { text-align: center; }
-        th { background-color: lightgreen; padding: 3px; }
-        td {background-color: lightblue;  padding: 3px; }
+        .critical {
+            background-color: orangered;
+        }
+
+        .success {
+            background-color: darkseagreen;
+        }
+
 
     </style>
 </head>
 
 
+
+
 <body>
 
 
-        <h1>Test pdf</h1>
-
-        <div tpl:foreach="/e:entries/e:entries">
-            <div class="box-header">
-                <h3 class="box-title">{{@name}}</h3>
-            </div>
-
-            <div class="box-body">
-                <table id="dataTable_{{@name}}" class="table table-bordered table-hover table-striped" >
-                 <thead>
-                    <tr>
-                        <th></th>
-                        <th colspan="5" style="border-width: 0 0 1px 1px;">Availabilities</th>
-                        <th colspan="5" style="border-width: 0 0 1px 1px;">Reliabilities</th>
-                    </tr>
 
 
-                    <tr>
-                        <th tpl:if="/e:entries/@view!='ngi_reports'" style="border-width: 0 0 1px 1px;">Site</th>
-                        <th tpl:else="">Ngi</th>
-
-                        <th tpl:foreach="e:entry[1]/Availability" >{{@timestamp}}</th>
-                        <th tpl:foreach="e:entry[1]/Availability" >{{@timestamp}}</th>
-                    </tr>
-                 </thead>
-
-                    <tbody>
-
-                    <tr tpl:foreach="e:entry[@key!='AVERAGE']">
-
-
-
-                        <td style="border-width: 0 0 1px 1px;">{{@key}}</td>
-
-
-
-                <td tpl:foreach="Availability">
-                    <td title="{{format-number(@availability,'#.00')}}" tpl:if="@availability &gt; 80" style="width:30px;height:20px;background-color: #00ca6d">{{format-number(@availability,'#.00')}}</td>
-                    <td title="{{format-number(@availability,'#.00')}}" tpl:else="" >{{format-number(@availability,'#.00')}}</td>
-                </td>
-
-                        <td tpl:foreach="Availability">
-                            <td title="{{format-number(@reliability,'#.00')}}" tpl:if="@reliability &gt; 80" style="width:30px;height:20px;background-color: #00ca6d">{{format-number(@reliability,'#.00')}}</td>
-                            <td title="{{format-number(@reliability,'#.00')}}" tpl:else="" >{{format-number(@reliability,'#.00')}}</td>
-                        </td>
+    <table style="position: absolute;top:5px;">
+        <thead>
+        <tr>
+            <td class="noBorder"> <img   src="https://www.egi.eu/wp-content/uploads/2016/05/cropped-logo_site-1-300x300.png" height="80px" width="80px"/></td>
+            <td class="noBorder" style="width: 68%"><p id="top" tpl:foreach="e:entries" style="align:center;text-align: center"> Availability Reliability Report -  {{concat(date:month-name(@month0),' ',date:year(@month0))}}  </p></td>
+            <td class="noBorder"><img  src="http://argo.egi.eu/resource/img/logo.png"  height="46px" width="100px"/></td>
+        </tr>
+        </thead>
+    </table>
 
 
 
 
-                    </tr>
-
-                    </tbody>
+<hr/>
 
 
 
-                </table>
-            </div>
-        </div>
+        <table id="legend2" style="width:90%;">
+            <tbody>
+            <tr><th >Audience</th><td>EGI Infrastructure</td><td class="noBorder" style="width:20px"> </td><th>LEGEND</th></tr>
+            <tr><th>Service</th><td>EGI RC</td><td class="noBorder" style="width:20px"> </td><td  class="critical">UNDERPERFORMING</td></tr>
+            <tr><th>Documentation</th><td>https://wiki.egi.eu/wiki/Service_Level_Target_-_Availability_Reliability</td><td class="noBorder" style="width:20px"> </td><td class="success">ON TARGET</td></tr>
+            </tbody>
+        </table>
 
 
 
+
+
+
+
+    <br/>
+
+        <table id="AvRe" tpl:foreach="e:entries/e:entries">
+            <thead style="font-size: small">
+            <tr>
+                <th>  </th>
+                <th colspan="2">{{ancestor::e:entries/@month0}}</th>
+                <th>{{ancestor::e:entries/@month1}}</th>
+                <th>{{ancestor::e:entries/@month2}}</th>
+            </tr>
+            <tr>
+                <th tpl:if="@name" style="width:120px">{{@name}}</th>
+                <th tpl:else="" style="width:120px">Operations Centre</th>
+
+                <th>Availability</th>
+                <th>Reliability</th>
+                <th>Availability</th>
+                <th>Availability</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr tpl:foreach="e:entry[@key!='AVERAGE']">
+                <td>{{@key}}</td>
+                
+                <td tpl:if="Availability[@timestamp=ancestor::e:entries/@month0]/@availability &gt; 80 " class="success" >{{format-number(Availability[@timestamp=ancestor::e:entries/@month0]/@availability,'#.00')}}</td>
+                <td tpl:else="" class="critical">{{format-number(Availability[@timestamp=ancestor::e:entries/@month0]/@availability,'#.00')}}</td>
+
+
+                <td tpl:if="Availability[@timestamp=ancestor::e:entries/@month0]/@reliability &gt; 85 " class="success">{{format-number(Availability[@timestamp=ancestor::e:entries/@month0]/@reliability,'#.00')}}</td>
+                <td tpl:else="" class="critical">{{format-number(Availability[@timestamp=ancestor::e:entries/@month0]/@reliability,'#.00')}}</td>
+
+
+                <td tpl:if="Availability[@timestamp=ancestor::e:entries/@month1]/@availability &gt; 80 " class="success">{{format-number(Availability[@timestamp=ancestor::e:entries/@month1]/@availability,'#.00')}}</td>
+                <td tpl:else="" class="critical">{{format-number(Availability[@timestamp=ancestor::e:entries/@month1]/@availability,'#.00')}}</td>
+
+
+                <td tpl:if="Availability[@timestamp=ancestor::e:entries/@month2]/@availability &gt; 80 " class="success">{{format-number(Availability[@timestamp=ancestor::e:entries/@month2]/@availability,'#.00')}}</td>
+                <td tpl:else="" class="critical">{{format-number(Availability[@timestamp=ancestor::e:entries/@month2]/@availability,'#.00')}}</td>
+
+                </tr>
+           
+            </tbody>
+
+            <tfoot>
+
+                <tr class="noBorder"><td class="noBorder" colspan="5" style="height:20px"></td></tr>
+            </tfoot>
+
+        </table>
 
 
 
