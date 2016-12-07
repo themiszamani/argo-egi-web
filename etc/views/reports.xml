@@ -418,7 +418,6 @@
 
             <renderer type="PDFRenderer">
                 <parameter name="template">/html/ar_reports_pdf.html</parameter>
-
             </renderer>
 
             <renderer type="ChartRenderer">
@@ -510,6 +509,10 @@
                 <parameter name="template">/html/ar_reports.html</parameter>
 
             </renderer>
+            <renderer type="PDFRenderer">
+                <parameter name="template">/html/ar_reports_pdf.html</parameter>
+            </renderer>
+
             <renderer type="ChartRenderer">
                 <parameter name="rotation">-45</parameter>
 
@@ -596,6 +599,10 @@
             <renderer type="ChartRenderer">
                 <parameter name="rotation">-45</parameter>
 
+            </renderer>
+
+            <renderer type="PDFRenderer">
+                <parameter name="template">/html/ar_reports_pdf.html</parameter>
             </renderer>
         </renderers>
 
