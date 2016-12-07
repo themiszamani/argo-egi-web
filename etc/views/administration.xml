@@ -253,6 +253,7 @@
                 <entry eval="$id"></entry>
                 <entry eval="$url"></entry>
                 <entry eval="$cc"></entry>
+                <entry eval="property('contact.recomputation')"></entry>
             </parameter>
             <parameter name="workdir" eval="property('user.dir')"/>
         </connector>
