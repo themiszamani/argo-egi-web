@@ -24,7 +24,11 @@
             <parameter name="hours">2</parameter>
         </trigger>
         <trigger type="ViewNotifiedTrigger"/>
-        <trigger type="ViewCreatedTrigger"/>
+        <trigger type="DependencyRefreshedTrigger">
+            <parameter name="views">
+                <entry>goc.siteList</entry>
+            </parameter>
+        </trigger>
     </cache>
     <renderers>
         <renderer type="DefaultRenderer">
@@ -53,7 +57,11 @@
         <parameter name="hours">2</parameter>
     </trigger>
     <trigger type="ViewNotifiedTrigger"/>
-    <trigger type="ViewCreatedTrigger"/>
+    <trigger type="DependencyRefreshedTrigger">
+        <parameter name="views">
+            <entry>goc.siteList</entry>
+        </parameter>
+    </trigger>
 </cache>
 
 
@@ -76,7 +84,11 @@
                 <parameter name="hours">2</parameter>
             </trigger>
             <trigger type="ViewNotifiedTrigger"/>
-            <trigger type="ViewCreatedTrigger"/>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+                </parameter>
+            </trigger>
         </cache>
 
 
@@ -113,7 +125,11 @@
                 <parameter name="hours">2</parameter>
             </trigger>
             <trigger type="ViewNotifiedTrigger"/>
-            <trigger type="ViewCreatedTrigger"/>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+                </parameter>
+            </trigger>
         </cache>
 
 
