@@ -7,7 +7,7 @@ EMAIL="$1,$4"
 
 
 
-if [ $# -eq 4 ]
+if [ $# -eq 5 ]
   then
      /usr/bin/mail "$EMAIL"  -s $SUBJECT  -S "reply-to=$5"  -S "From=$5" << EOF
 
