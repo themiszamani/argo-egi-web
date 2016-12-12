@@ -20,8 +20,7 @@ ARGO Team
 
 -- Mail generated automatically by the ARGO application
 EOF
-    echo "<EmailSent>The email has been sent</EmailSent>";
+    echo "<EmailSent><param>$1</param><param>$2</param><param>$3</param><param>$4</param><param>$5</param></EmailSent>"  |& tee -a logMail.log ;
 else
-    echo "<Error>The Email has not been sent</Error>";
+    echo "<Error><param>$1</param><param>$2</param><param>$3</param><param>$4</param><param>$5</param></Error>" |& tee -a logMail.log ;
 fi
-
