@@ -1,72 +1,169 @@
 <!DOCTYPE html>
-<html xmlns:tpl="http://software.in2p3.fr/lavoisier/template.xsd" xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" tpl:extends="/lavoisier/_default_?accept=html">
+<html xmlns:tpl="http://software.in2p3.fr/lavoisier/template.xsd"
+      xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" xmlns:date="http://exslt.org/dates-and-times"
+      tpl:extends="/lavoisier/_default_?accept=html">
 
 <body>
 <!-- Right side column. Contains the navbar and content of the page -->
 <div id="wrapper">
     <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
+        <!-- Content Header (Page header) -->
+
+        <!-- Main content -->
+        <section class="content" id="content">
+
+            <section class="content-header" id="content-header">
+                <h1>
+                    Recomputation
+                    <small>History of the requests</small>
+                </h1>
+
+            </section>
 
 
-    <!-- Main content -->
-    <section class="content" id="content">
+            <div tpl:if="/properties/@details!='true'" class="col-md-12 box box-primary">
 
-        <section class="content-header" id="content-header">
-            <h1>
-                Recomputation
-                <small>History of the requests</small>
-            </h1>
-
-        </section>
+            <div class="box-header">
+                <a href="/lavoisier/recomputation">
+                    <button class="btn btn-primary" type="submit">New request of recomputation</button>
+                </a>
+            </div>
 
 
+            <div class="box-content" style="padding-top:20px;">
 
-        <div class="col-md-12 box box-primary">
+                <table class="table display display-compact" id="dataTableJs" style="font-size: small">
+                <thead>
+                <tr>
+
+                    <th>Status</th>
+                    <th>Request Date</th>
+                    <th>Requestor</th>
+                    <th>Profile</th>
+                    <th>Sites</th>
+                    <th>Period</th>
+                    <th>Reason</th>
+                    <th>Details</th>
+
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr tpl:foreach="/properties/entry/entries">
+
+                    <td tpl:if="entry[@key='status']/text()"><span class="label label-info">{{entry[@key='status']/text()}}</span></td>
+                    <td tpl:else=""><span class="label label-success">NEW</span></td>
+
+
+
+                    <td class="dateN">{{entry[@key='recompId']/text()}}</td>
+
+                    <td>{{entry[@key='requestor']/text()}}</td>
+                    <td>{{entry[@key='profile']/text()}}</td>
+                    <td>{{entry[@key='SitesList']/text()}}</td>
+                    <td>{{entry[@key='period']/text()}}</td>
+                    <td>{{entry[@key='reason']/text()}}</td>
+                    <th><a href="/lavoisier/RecomputationList?key={{ancestor::entry/@key}}&amp;details=true">Details</a></th>
+
+                </tr>
+                </tbody>
+                </table>
+
+            </div>
+            </div>
+
+
+            <div tpl:else="" class="col-md-12 box box-primary">
 
                 <div class="box-header">
-                    <a href="/lavoisier/recomputation"><button class="btn btn-primary" type="submit">New request of recomputation</button></a>
+                    <a href="/lavoisier/RecomputationList">
+                        <button   class="btn btn-primary" type="submit">Return to the list</button>
+                    </a>
+                    <a href="/lavoisier/recomputation">
+                        <button class="btn btn-primary" type="submit" style="margin-left:10px;">New request of recomputation</button>
+                    </a>
                 </div>
 
 
-            <div class="box-content"  style="padding-top:20px">
+                <div class="box-content" style="padding-top:20px;">
+                    <!-- case with only one entry -->
+                    <table class="table  display display-compact">
 
-                <table class="dataTable display display-compact">
-                   <thead>
-                    <tr>
-                        <th tpl:if="/properties/@admin='true'">Modify the recomputation</th>
-                        <th tpl:else="">Details</th>
-                        <th>Requestor</th><th>Registration Date</th><th>Status</th><th>Status</th>
-                    </tr>
-                   </thead>
-                   <tbody>
 
-                        <tr tpl:foreach="/properties/entry/entries/entries[entry[@key='recompId']/text()!='0']">
-                            <td><a href="/lavoisier/form_recomputation_results?recompId={{entry[@key='recompId']/text()}}&amp;accept=html" title="Link to the details">{{entry[@key='recompId']/text()}}</a></td>
-                            <td>{{entry[@key='requestor']/text()}}</td>
-                            <td>{{entry[@key='RequestDate']/text()}}</td>
-                            <td>{{entry[@key='status']/text()}}</td>
-                            <td>{{entry[@key='status2']/text()}}</td>
+                        <tbody tpl:foreach="/entries">
+                        <tr>
+                            <th class="col-md-1">Status</th>
+                            <td tpl:if="entry[@key='status']/text()"><span class="label label-info">{{entry[@key='status']/text()}}</span>
+                            </td>
+                            <td tpl:else=""><span class="label label-success">NEW</span></td>
                         </tr>
-                   </tbody>
-               </table>
+
+                        <tr>
+                            <th class="col-md-1">Request Date</th>
+                            <td class="dateN">{{entry[@key='recompId']/text()}}</td>
+                        </tr>
+                        <tr>
+                            <th class="col-md-1">Requestor</th>
+                            <td>{{entry[@key='requestor']/text()}}</td>
+                        </tr>
+
+                        <tr>
+                            <th class="col-md-1">profile</th>
+                            <td>{{entry[@key='profile']/text()}}</td>
+                        </tr>
+                        <tr>
+                            <th class="col-md-1">Sites</th>
+                            <td>{{entry[@key='SitesList']/text()}}</td>
+                        </tr>
+                        <tr>
+                            <th class="col-md-1">Period</th>
+                            <td>{{entry[@key='period']/text()}}</td>
+                        </tr>
+                        <tr>
+                            <th class="col-md-1">Reason</th>
+                            <td>{{entry[@key='reason']/text()}}</td>
+
+                        </tr>
+
+                        </tbody>
+
+
+                    </table>
+                </div>
+
 
             </div>
 
 
-            </div>
-
-
-
-
-    </section><!-- /.content -->
-</div><!-- /.right-side -->
+        </section><!-- /.content -->
+    </div><!-- /.right-side -->
 </div>
+
+<style>
+    <!--
+    .table {
+        table-layout: fixed;
+    }
+
+    .table td {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+    }
+
+    -->
+</style>
 </body>
 
 <script>
 
-    $('#dataTableJs').DataTable({
-
+    $(function () {
+        // set the first colors
+        $('td.dateN').each(function () {
+            var DateN = new Date(parseInt($(this).html()));
+            $(this).html(DateN);
+        })
     });
 
 
