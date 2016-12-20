@@ -53,7 +53,7 @@
 
 
 
-    <view name="status_site_3">
+    <view name="status_site_3_Critical">
 
         <connector type="XMLConnector">
             <parameter name="content" eval="view('status_site',entry('lastdays','3'))"></parameter>
@@ -69,7 +69,7 @@
         </cache>
     </view>
 
-    <view name="status_site_10">
+    <view name="status_site_10_Critical">
 
         <connector type="XMLConnector">
             <parameter name="content" eval="view('status_site',entry('lastdays','10'))"></parameter>
@@ -85,7 +85,7 @@
         </cache>
     </view>
 
-    <view name="status_site_30">
+    <view name="status_site_30_Critical">
 
         <connector type="XMLConnector">
             <parameter name="content" eval="view('status_site',entry('lastdays','30'))"></parameter>
@@ -103,6 +103,101 @@
 
 
 
+    <view name="status_site_3_OPS-MONITOR-Critical">
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('status_site',entry('lastdays','3')|entry('report','OPS-MONITOR-Critical'))"></parameter>
+        </connector>
+
+        <cache type="FileCache">
+            <!--<trigger type="ViewCreatedTrigger"/>-->
+            <trigger type="DeltaTimeTrigger">
+                <parameter name="minutes">14</parameter>
+            </trigger>
+            <trigger type="ViewNotifiedTrigger"/>
+
+        </cache>
+    </view>
+
+    <view name="status_site_10_OPS-MONITOR-Critical">
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('status_site',entry('lastdays','10')|entry('report','OPS-MONITOR-Critical'))"></parameter>
+        </connector>
+
+        <cache type="FileCache">
+            <!--<trigger type="ViewCreatedTrigger"/>-->
+            <trigger type="DeltaTimeTrigger">
+                <parameter name="minutes">26</parameter>
+            </trigger>
+            <trigger type="ViewNotifiedTrigger"/>
+
+        </cache>
+    </view>
+
+    <view name="status_site_30_OPS-MONITOR-Critical">
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('status_site',entry('lastdays','30')|entry('report','OPS-MONITOR-Critical'))"></parameter>
+        </connector>
+
+        <cache type="FileCache">
+            <!--<trigger type="ViewCreatedTrigger"/>-->
+            <trigger type="DeltaTimeTrigger">
+                <parameter name="minutes">38</parameter>
+            </trigger>
+            <trigger type="ViewNotifiedTrigger"/>
+
+        </cache>
+    </view>
+
+    <view name="status_site_3_Cloud">
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('status_site',entry('lastdays','3')|entry('report','Cloud'))"></parameter>
+        </connector>
+
+        <cache type="FileCache">
+            <!--<trigger type="ViewCreatedTrigger"/>-->
+            <trigger type="DeltaTimeTrigger">
+                <parameter name="minutes">14</parameter>
+            </trigger>
+            <trigger type="ViewNotifiedTrigger"/>
+
+        </cache>
+    </view>
+
+    <view name="status_site_10_Cloud">
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('status_site',entry('lastdays','10')|entry('report','Cloud'))"></parameter>
+        </connector>
+
+        <cache type="FileCache">
+            <!--<trigger type="ViewCreatedTrigger"/>-->
+            <trigger type="DeltaTimeTrigger">
+                <parameter name="minutes">26</parameter>
+            </trigger>
+            <trigger type="ViewNotifiedTrigger"/>
+
+        </cache>
+    </view>
+
+    <view name="status_site_30_Cloud">
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('status_site',entry('lastdays','30')|entry('report','Cloud'))"></parameter>
+        </connector>
+
+        <cache type="FileCache">
+            <!--<trigger type="ViewCreatedTrigger"/>-->
+            <trigger type="DeltaTimeTrigger">
+                <parameter name="minutes">38</parameter>
+            </trigger>
+            <trigger type="ViewNotifiedTrigger"/>
+
+        </cache>
+    </view>
 
 
 
@@ -165,7 +260,7 @@
             <parameter name="content" eval="
             view(
                 choose(boolean(str:split($nbdays,',')[text()=$lastdays]),
-                    concat('status_site_',$lastdays),
+                    concat('status_site_',$lastdays,'_',$report),
                     'api.status.call')
             ,entry('group_type','sites')|entry('site',$site)|entry('start_time',$start_date)|entry('end_time',$end_date)|entry('report',$report))"/>
         </connector>
