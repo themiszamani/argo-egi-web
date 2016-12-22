@@ -95,6 +95,7 @@
         <h3 class="box-title">{{/e:entries/@description}} - Report Type : {{/e:entries/@report}} <br/>
             <a href="?accept=csv&amp;month={{/e:entries/@month0}}" target="_blank" title="CSV report"><span style="margin:10px;" class="btn btn-primary">CSV</span> </a>
             <a href="?accept=xml&amp;month={{/e:entries/@month0}}" target="_blank" title="XML report"><span style="margin:10px" class="btn btn-primary">XML</span></a>
+            <a href="?accept=pdf&amp;month={{/e:entries/@month0}}" target="_blank" title="PDF report"><span style="margin:10px" class="btn btn-primary">PDF</span></a>
             <a tpl:if="/e:entries/@view!='site_reports'"
                href="/lavoisier/render_chart_n?view={{/e:entries/@view}}&amp;report={{/e:entries/@report}}&amp;type=availability&amp;ngi=all&amp;accept=html&amp;month={{/e:entries/@month0}}"
                title="Chart">
