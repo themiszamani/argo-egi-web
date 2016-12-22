@@ -53,7 +53,13 @@
                 </element>
             </element>
         </element>
-
+        <element in="e:entries">
+            <element in="e:entries">
+                <element in="e:entry">
+                    <element-ignore in="Availability" if="@timestamp=/e:entries/@monthend"></element-ignore>
+                </element>
+            </element>
+        </element>
 
 
         <!-- ADD MISSING AV / RE  ans transform it into N.A entries then sort by date -->
