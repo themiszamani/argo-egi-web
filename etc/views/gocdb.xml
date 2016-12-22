@@ -46,7 +46,6 @@
     <category>GOC DB</category>
 </info>
 
-
 <connector type="XMLConnector">
     <parameter name="content" eval="view('goc.siteList')/results/SITE[not(@NAME=preceding-sibling::SITE/@NAME)]/@NAME"/>
 </connector>
