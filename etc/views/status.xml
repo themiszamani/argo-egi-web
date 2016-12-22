@@ -250,11 +250,15 @@
         <variable name="dateTime" eval="date:date-time()"></variable>
 
 
-        <variable name="start_date" eval="concat(str:replace(substring(date:add(date:date-time(),concat('-P',$lastdays,'D')), 0,20),' ','T'),'Z')"/>
-        <variable name="end_date" eval="concat(str:replace(substring(date:date-time(), 0,20),' ','T'),'Z')"/>
+        <variable name="start_date" eval="choose($start!='false',concat($start,'T00:00:00Z'),concat(str:replace(substring(date:add(date:date-time(),concat('-P',$lastdays,'D')), 0,20),' ','T'),'Z'))"/>
+        <variable name="end_date" eval="choose($end!='false',concat($end,'T00:00:00Z'),concat(str:replace(substring(date:date-time(), 0,20),' ','T'),'Z'))"/>
 
 
 
+        <!--<variable name="start_date" eval="choose($start!='false',concat($start,'T00:00:00Z'),concat(substring(date:add(date:date-time(),'-P3D'), 0,11),'T00:00:00Z'))"></variable>-->
+        <!--<variable name="end_date" eval="choose($end!='false',concat($end,'T00:00:00Z'),concat(substring(date:date-time(),0,11),'T23:59:59Z'))"></variable>-->
+
+        <!---->
 
         <connector type="XMLConnector">
             <parameter name="content" eval="

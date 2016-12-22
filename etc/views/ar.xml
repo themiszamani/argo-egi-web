@@ -50,7 +50,7 @@
                 <attribute-create out="view_details">$view_details</attribute-create>
 
                 <element in="group" if="@name=$ngi or $ngi='any'" out="Entity">
-                    <attribute in="name" out="NGI"></attribute>
+                    <attribute-create out="NGI">../@name</attribute-create>
                     <element in="results" out="Availability"></element>
 
                 </element>
