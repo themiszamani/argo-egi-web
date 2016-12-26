@@ -242,7 +242,7 @@
         <argument name="start" eval="false()"></argument>
         <argument name="end" eval="false()"></argument>
         <argument name="report">Critical</argument>
-        <argument name="lastdays">3</argument>
+        <argument name="lastdays" eval="choose($start!='false',99,3)"></argument>
 
 
         <variable name="nbdays">3,10,30</variable>
