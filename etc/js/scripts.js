@@ -132,6 +132,12 @@ $(".dataTableStyle2").dataTable({
         if (percent < 0)
             classname ="label-info";
 
+        if (percent=='NaN')
+            classname="label-default";
+
+
+        if (percent=='N.A')
+            classname="label-default";
 
 
 
@@ -158,6 +164,15 @@ $(".dataTableStyle2").dataTable({
 
         if (percent == 'Nan')
             classname="badge-success";
+
+
+        if (percent=='NaN')
+            classname="badge-default";
+
+
+        if (percent=='N.A')
+            classname="badge-default";
+        
 
         return classname;
     }

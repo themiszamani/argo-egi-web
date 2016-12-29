@@ -24,7 +24,11 @@
             <parameter name="hours">2</parameter>
         </trigger>
         <trigger type="ViewNotifiedTrigger"/>
-        <trigger type="ViewCreatedTrigger"/>
+        <trigger type="DependencyRefreshedTrigger">
+            <parameter name="views">
+                <entry>goc.siteList</entry>
+            </parameter>
+        </trigger>
     </cache>
     <renderers>
         <renderer type="DefaultRenderer">
@@ -42,7 +46,6 @@
     <category>GOC DB</category>
 </info>
 
-
 <connector type="XMLConnector">
     <parameter name="content" eval="view('goc.siteList')/results/SITE[not(@NAME=preceding-sibling::SITE/@NAME)]/@NAME"/>
 </connector>
@@ -53,7 +56,11 @@
         <parameter name="hours">2</parameter>
     </trigger>
     <trigger type="ViewNotifiedTrigger"/>
-    <trigger type="ViewCreatedTrigger"/>
+    <trigger type="DependencyRefreshedTrigger">
+        <parameter name="views">
+            <entry>goc.siteList</entry>
+        </parameter>
+    </trigger>
 </cache>
 
 
@@ -76,7 +83,11 @@
                 <parameter name="hours">2</parameter>
             </trigger>
             <trigger type="ViewNotifiedTrigger"/>
-            <trigger type="ViewCreatedTrigger"/>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+                </parameter>
+            </trigger>
         </cache>
 
 
@@ -113,7 +124,11 @@
                 <parameter name="hours">2</parameter>
             </trigger>
             <trigger type="ViewNotifiedTrigger"/>
-            <trigger type="ViewCreatedTrigger"/>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+                </parameter>
+            </trigger>
         </cache>
 
 
