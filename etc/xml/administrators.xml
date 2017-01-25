@@ -27,7 +27,21 @@
         <FamilyName>Imamagic</FamilyName>
         <FirstName>Emir</FirstName>
         <DN>/C=HR/O=edu/OU=srce/CN=Emir Imamagic</DN>
-        <CertDN>CN=Emir Imamagic, OU=srce, O=edu , C=HR</CertDN>
+        <CertDN>CN=Emir Imamagic, OU=srce, O=edu, C=HR</CertDN>
     </admin>
 
+    <admin>
+        <FamilyName>Zamani</FamilyName>
+        <FirstName>Themis</FirstName>
+        <DN>/C=GR/O=HellasGrid/OU=grnet.gr/CN=Themis Zamani</DN>
+        <CertDN>CN=Themis Zamani, OU=grnet.gr, O=HellasGrid, C=GR</CertDN>
+    </admin>
+
+
+    <admin>
+        <FamilyName>Vrcic</FamilyName>
+        <FirstName>Daniel</FirstName>
+        <DN>/C=HR/O=edu/OU=srce/CN=Daniel Vrcic</DN>
+        <CertDN>CN=Daniel Vrcic, OU=srce, O=edu, C=HR</CertDN>
+I       </admin>
 </admins>
