@@ -54,13 +54,18 @@
                 <set variable="triggercreate3">view('ngi_reports_cached',entry('report','Critical-Fedcloud'))/*</set>
                 <set variable="triggercreate4">view('ngi_reports_daily_cached',entry('report','Critical-Fedcloud'))/*</set>
 
+                <set variable="triggercreate3">view('ngi_reports_cached',entry('report','Fedcloud'))/*</set>
+                <set variable="triggercreate4">view('ngi_reports_daily_cached',entry('report','Fedcloud'))/*</set>
+
                 <set variable="triggercreate5">view('site_reports_cached')/*</set>
                 <set variable="triggercreate6">view('site_reports_cached',entry('report','Cloud'))/*</set>
+                <set variable="triggercreate6">view('site_reports_cached',entry('report','Fedcloud'))/*</set>
                 <set variable="triggercreate7">view('site_reports_cached',entry('report','OPS-MONITOR-Critical'))/*</set>
                 <set variable="triggercreate8">view('site_reports_cached',entry('report','Critical-Fedcloud'))/*</set>
 
                 <set variable="triggercreate9">view('site_reports_daily_cached')</set>
                 <set variable="triggercreate10">view('site_reports_daily_cached',entry('report','Cloud'))/*</set>
+                <set variable="triggercreate10">view('site_reports_daily_cached',entry('report','FedCloud'))/*</set>
                 <set variable="triggercreate11">view('site_reports_daily_cached',entry('report','OPS-MONITOR-Critical'))/*</set>
                 <set variable="triggercreate12">view('site_reports_daily_cached',entry('report','Critical-Fedcloud'))/*</set>
                 <attribute-create out="action2">'creations done ... '</attribute-create>
