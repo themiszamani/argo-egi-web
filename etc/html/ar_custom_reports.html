@@ -52,11 +52,11 @@
                                     <!--<a tpl:if="/e:entries/Entity[@name and @NGI]"  title="detailed report">-->
                                         <!--<span style="margin:10px" class="btn btn-primary" onclick="change_url('{{/e:entries/@view}}','{{/e:entries/@view_details}}')">DETAILS</span>-->
                                     <!--</a>-->
-                                    <a tpl:if="/e:entries/Entity[@name and @NGI]" href="{{ancestor::e:entries/@url}}{{@name}}" title="detailed report">
+                                    <a tpl:if="ancestor::e:entries/@url" href="{{ancestor::e:entries/@url}}{{@name}}" title="detailed report">
                                         <span style="margin:10px" class="btn btn-primary">DETAILS</span>
                                     </a>
 
-                                    <a tpl:if="/e:entries/Entity[@name and @NGI]" href="{{ancestor::e:entries/@status_url}}{{@name}}" title="Status report">
+                                    <a tpl:if="ancestor::e:entries/@status_url" href="{{ancestor::e:entries/@status_url}}{{@name}}" title="Status report">
                                         <span style="margin:10px" class="btn btn-primary">STATUS</span>
                                     </a>
 

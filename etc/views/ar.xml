@@ -67,9 +67,7 @@
             </elements>
 
             <element in="e:entries">
-                <attribute-create out="url">concat('/lavoisier/',$view_details,'?report=',$report,
-                    '&amp;end_date=',$end_date,'&amp;start_date=',$start_date,'&amp;granularity=',$granularity,'&amp;ngi=')
-                </attribute-create>
+
                 <attribute-create out="status_url">concat('/lavoisier/status_report-site','?report=',$report,
                     '&amp;end=',$end_date,'&amp;start=',$start_date,'&amp;accept=html&amp;ngi=')
                 </attribute-create>
@@ -119,10 +117,13 @@
         <argument name="granularity"></argument>
         <argument name="month">1970-01</argument>
         <argument name="monthend" eval="choose($month!='1970-01',substring(date:add($month,'P1M'),0,8))"></argument>
-        <argument name="start_date" eval="choose($month='1970-01',concat($month,'-01'))"></argument>
-        <argument name="end_date"  eval="choose($month='1970-01',concat($monthend,'-01'))"></argument>
+        <argument name="start_date" eval="choose($month!='1970-01',concat($month,'-01'))"></argument>
+        <argument name="end_date"  eval="choose($month!='1970-01',concat($monthend,'-01'))"></argument>
         <argument name="view_details">services_ar</argument>
         <argument name="report">OPS-MONITOR-Critical</argument>
+
+
+
 
 
 
