@@ -67,9 +67,7 @@
             </elements>
 
             <element in="e:entries">
-                <attribute-create out="url">concat('/lavoisier/',$view_details,'?report=',$report,
-                    '&amp;end_date=',$end_date,'&amp;start_date=',$start_date,'&amp;granularity=',$granularity,'&amp;ngi=')
-                </attribute-create>
+
                 <attribute-create out="status_url">concat('/lavoisier/status_report-site','?report=',$report,
                     '&amp;end=',$end_date,'&amp;start=',$start_date,'&amp;accept=html&amp;ngi=')
                 </attribute-create>
