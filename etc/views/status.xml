@@ -250,6 +250,7 @@
         <argument name="end" eval="false()"></argument>
         <argument name="report">Critical</argument>
 
+
         <argument name="lastdays" eval="choose($start!='false',99,3)"></argument>
 
         <variable name="dateTime" eval="date:date-time()"></variable>
