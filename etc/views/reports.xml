@@ -923,7 +923,7 @@
         <argument name="ngi">all</argument>
         <argument name="site">false</argument>
 
-        <argument name="report">Fedcloud</argument>
+        <argument name="report">Critical</argument>
 
         <argument name="start" eval="false()"></argument>
         <argument name="end" eval="false()"></argument>
