@@ -124,18 +124,18 @@
         <argument name="report">OPS-MONITOR-Critical</argument>
 
 
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('site_ar',arguments())"></parameter>
+        </connector>
+
+
         <processors>
             <element in="e:entries">
                 <attribute-create out="report">$report</attribute-create>
             </element>
 
         </processors>
-
-
-
-        <connector type="XMLConnector">
-            <parameter name="content" eval="view('site_ar',arguments())"></parameter>
-        </connector>
 
         <pre-renderers>
             <title>'Availabilities Reliabilities Chart'</title>
