@@ -48,6 +48,7 @@
                 
 
                 <attribute-create out="month">$month</attribute-create>
+                <attribute-create out="report">$report</attribute-create>
                 <attribute-create out="view">ngi_ar</attribute-create>
                 <attribute-create out="view_details">$view_details</attribute-create>
 
@@ -123,7 +124,12 @@
         <argument name="report">OPS-MONITOR-Critical</argument>
 
 
+        <processors>
+            <element in="e:entries">
+                <attribute-create out="report">$report</attribute-create>
+            </element>
 
+        </processors>
 
 
 
@@ -182,6 +188,13 @@
             <parameter name="content" eval="view('site_ar',arguments())"></parameter>
         </connector>
 
+        <processors>
+            <element in="e:entries">
+                <attribute-create out="report">$report</attribute-create>
+            </element>
+        </processors>
+
+
         <pre-renderers>
             <title>'Availabilities Reliabilities Chart'</title>
             <row foreach="/e:entries/Entity/Availability">
@@ -231,6 +244,13 @@
         <connector type="XMLConnector">
             <parameter name="content" eval="view('site_ar',arguments())"></parameter>
         </connector>
+
+
+        <processors>
+            <element in="e:entries">
+                <attribute-create out="report">$report</attribute-create>
+            </element>
+        </processors>
 
         <pre-renderers>
             <title>'Availabilities Reliabilities Chart'</title>
@@ -305,6 +325,7 @@
 
                 <attribute-create out="view">site_ar</attribute-create>
                 <attribute-create out="view_details">$view_details</attribute-create>
+                <attribute-create out="report">$report</attribute-create>
 
                 <element in="group" if="@name=$ngi or $ngi='false'">
                     <element in="group" out="Site" if="contains(concat($site,','),@name) or $ngi!='false'">
@@ -411,6 +432,7 @@
 
 
             <element in="root" out="e:entries">
+                <attribute-create out="report">$report</attribute-create>
                 <element in="group" out="Site" if="@name=$site">
                     <attribute in="name" out="site"></attribute>
                     <element in="group" out="Flavor">
