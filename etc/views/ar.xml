@@ -45,7 +45,10 @@
 
                 <attribute-create out="start_date">$start_date</attribute-create>
                 <attribute-create out="end_date">$end_date</attribute-create>
+                
+
                 <attribute-create out="month">$month</attribute-create>
+                <attribute-create out="report">$report</attribute-create>
                 <attribute-create out="view">ngi_ar</attribute-create>
                 <attribute-create out="view_details">$view_details</attribute-create>
 
@@ -63,6 +66,13 @@
                 <element-ignore in="Availability" if="date:seconds(@timestamp) &gt; ancestor::e:entries/@end_timestamp"></element-ignore>
 
             </elements>
+
+            <element in="e:entries">
+
+                <attribute-create out="status_url">concat('/lavoisier/status_report-site','?report=',$report,
+                    '&amp;end=',$end_date,'&amp;start=',$start_date,'&amp;accept=html&amp;ngi=')
+                </attribute-create>
+            </element>
 
 
 
@@ -119,6 +129,12 @@
             <parameter name="content" eval="view('site_ar',arguments())"></parameter>
         </connector>
 
+        <processors>
+            <element in="e:entries">
+                <attribute-create out="report">$report</attribute-create>
+            </element>
+        </processors>
+
         <pre-renderers>
             <title>'Availabilities Reliabilities Chart'</title>
             <row foreach="/e:entries/Entity/Availability">
@@ -128,6 +144,58 @@
                 <column unit="percentage" label="reliability">format-number(@reliability,'#.00')</column>
                 <column unit="percentage" label="unknown">format-number(@unknown,'#.00')</column>
                 <column unit="percentage" label="downtime">format-number(@downtime,'#.00')</column>
+            </row>
+        </pre-renderers>
+        <renderers>
+
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/html/ar_custom_reports.html</parameter>
+
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/html/ar_custom_reports.html</parameter>
+
+            </renderer>
+            <renderer type="ChartRenderer">
+                <parameter name="rotation">-45</parameter>
+
+            </renderer>
+        </renderers>
+    </view>
+
+
+    <view name="fedcloud_ar">
+        <info>
+            <category>AR reports</category>
+            <description>CloudCustomized Reports</description>
+        </info>
+        <argument name="site"></argument>
+        <argument name="ngi">false</argument>
+        <argument name="granularity"></argument>
+        <argument name="month">1970-01</argument>
+        <argument name="monthend" eval="choose($month!='1970-01',substring(date:add($month,'P1M'),0,8))"></argument>
+        <argument name="start_date" eval="choose($month!='1970-01',concat($month,'-01'))"></argument>
+        <argument name="end_date"  eval="choose($month!='1970-01',concat($monthend,'-01'))"></argument>
+        <argument name="view_details">services_ar</argument>
+        <argument name="poems">ch.cern.sam.CLOUD-MON_CRITICAL</argument>
+        <argument name="report">Fedcloud</argument>
+
+
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('site_ar',arguments())"></parameter>
+        </connector>
+
+
+
+
+        <pre-renderers>
+            <title>'Availabilities Reliabilities Chart'</title>
+            <row foreach="/e:entries/Entity/Availability">
+                <column label="entity">ancestor::Entity/@name</column>
+                <column label="timestamp">@timestamp</column>
+                <column unit="percentage" label="availability">format-number(@availability,'#.00')</column>
+                <column unit="percentage" label="reliability">format-number(@reliability,'#.00')</column>
             </row>
         </pre-renderers>
         <renderers>
@@ -171,6 +239,9 @@
             <parameter name="content" eval="view('site_ar',arguments())"></parameter>
         </connector>
 
+
+
+
         <pre-renderers>
             <title>'Availabilities Reliabilities Chart'</title>
             <row foreach="/e:entries/Entity/Availability">
@@ -209,8 +280,8 @@
         <argument name="month">1970-01</argument>
         <argument name="monthend" eval="choose($month!='1970-01',substring(date:add($month,'P1M'),0,8))"></argument>
 
-        <argument name="start_date" eval="choose($month=0,'_DATE_',concat($month,'-01'))"></argument>
-        <argument name="end_date"  eval="choose($month=0,'_DATE_',concat($monthend,'-01'))"></argument>
+        <argument name="start_date" eval="choose($month='1970-01','_DATE_',concat($month,'-01'))"></argument>
+        <argument name="end_date"  eval="choose($month='1970-01','_DATE_',concat($monthend,'-01'))"></argument>
 
 
 
@@ -244,6 +315,7 @@
 
                 <attribute-create out="view">site_ar</attribute-create>
                 <attribute-create out="view_details">$view_details</attribute-create>
+                <attribute-create out="report">$report</attribute-create>
 
                 <element in="group" if="@name=$ngi or $ngi='false'">
                     <element in="group" out="Site" if="contains(concat($site,','),@name) or $ngi!='false'">
@@ -273,10 +345,10 @@
 
             <element in="e:entries">
                 <attribute-create out="url">concat('/lavoisier/',$view_details,'?report=',$report,
-                    '&amp;end_date=',$end_date,'&amp;start_date=',$start_date,'&amp;granularity=',$granularity)
+                    '&amp;end_date=',$end_date,'&amp;start_date=',$start_date,'&amp;granularity=',$granularity,'&amp;site=')
                 </attribute-create>
                 <attribute-create out="status_url">concat('/lavoisier/status_report-site','?report=',$report,
-                    '&amp;end=',$end_date,'&amp;start=',$start_date,'&amp;accept=html')
+                    '&amp;end=',$end_date,'&amp;start=',$start_date,'&amp;accept=html&amp;site=')
                 </attribute-create>
             </element>
 
@@ -350,6 +422,7 @@
 
 
             <element in="root" out="e:entries">
+                <attribute-create out="report">$report</attribute-create>
                 <element in="group" out="Site" if="@name=$site">
                     <attribute in="name" out="site"></attribute>
                     <element in="group" out="Flavor">
