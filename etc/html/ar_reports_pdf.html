@@ -12,13 +12,13 @@
 
         body, html { border: 0px }
 
-        h1, h2, h3, h4, h5, h6 {font-family: Arial, Helvetica, sans-serif }
-        body, p { font-family: "verdana", tahoma, arial, sans-serif }
-        code { font-family: "Courier New", Courier, monospace }
+        h1, h2, h3, h4, h5, h6 {font-family: Arial, Helvetica, "sans-serif" }
+        body, p { font-family: Arial, Helvetica, "sans-serif" }
+        code { font-family: Arial, Helvetica, "sans-serif"}
 
-        body            { font-family: "verdana", tahoma, arial, sans-serif;}
+        body            { font-family: Arial, Helvetica, "sans-serif";}
         code        { font-size: 12px; margin-left: 16px; padding-left:16px}
-        hr          { height: 0px; noshade: true; border:1; width: 100%; }
+        hr          { height: 0px; noshade: true; border:1px; width: 100%; }
 
 
 
@@ -27,8 +27,8 @@
         #top {
 
             text-indent: 0;
-            line-height: 16pt;
-            font-size: 14pt;
+            line-height: 14pt;
+            font-size: 12pt;
 
 
             
@@ -45,7 +45,7 @@
         }
 
         #AvRe {
-            font-size :7pt;
+            font-size :8pt;
             width:100%;
         }
 
@@ -60,13 +60,18 @@
             border: 1px solid black;
             noshade: true;
             border-collapse: collapse;
+            font-size :8pt;
+            padding:4px;
+
 
         }
 
         th {
+            font-size :8pt;
             border: 1px solid black;
             noshade: true;
             border-collapse: collapse;
+            padding:4px;
 
         }
 
@@ -91,11 +96,29 @@
             background-color: darkseagreen;
         }
 
+        .unknown{
+            background-color: lightgrey;
+        }
+
+
+        #gen {
+            font-size: xx-small;
+            padding:0;
+            margin:0;
+
+        }
 
     </style>
 </head>
 
+<script>
+    $( document ).ready(function() {
+        var url=$(location).attr('href');
+        $("#location").html(url);
 
+    })
+
+</script>
 
 
 <body>
@@ -115,16 +138,17 @@
 
 
 
-
 <hr/>
-
+    <p id="gen" tpl:foreach="e:entries">-- Report generated automatically on {{date:date-time()}}, for any support : argo@mailman.egi.eu</p>
+        <br/>
 
 
         <table id="legend2" style="width:90%;">
             <tbody>
             <tr><th >Audience</th><td>EGI Infrastructure</td><td class="noBorder" style="width:20px"> </td><th>LEGEND</th></tr>
-            <tr><th>Service</th><td>EGI RC</td><td class="noBorder" style="width:20px"> </td><td  class="critical">UNDERPERFORMING</td></tr>
+            <tr><th>Service</th><td>High-Throughput Compute, File Storage and Cloud Compute</td><td class="noBorder" style="width:20px"> </td><td  class="critical">UNDERPERFORMING</td></tr>
             <tr><th>Documentation</th><td>https://wiki.egi.eu/wiki/Service_Level_Target_-_Availability_Reliability</td><td class="noBorder" style="width:20px"> </td><td class="success">ON TARGET</td></tr>
+            <tr><th>Link</th><td tpl:foreach="e:entries">{{@ReportUrl}}</td><td class="noBorder" style="width:20px"> </td><td class="unknown">NOT AVAILABLE</td></tr>
             </tbody>
         </table>
 
@@ -141,8 +165,8 @@
             <tr>
                 <th>  </th>
                 <th colspan="2">{{ancestor::e:entries/@month0}}</th>
-                <th>{{ancestor::e:entries/@month1}}</th>
-                <th>{{ancestor::e:entries/@month2}}</th>
+                <th colspan="2">{{ancestor::e:entries/@month1}}</th>
+                <th colspan="2">{{ancestor::e:entries/@month2}}</th>
             </tr>
             <tr>
                 <th tpl:if="@name" style="width:120px">{{@name}}</th>
@@ -151,27 +175,44 @@
                 <th>Availability</th>
                 <th>Reliability</th>
                 <th>Availability</th>
+                <th>Reliability</th>
                 <th>Availability</th>
+                <th>Reliability</th>
             </tr>
             </thead>
             <tbody>
             <tr tpl:foreach="e:entry[@key!='AVERAGE']">
                 <td>{{@key}}</td>
                 
-                <td tpl:if="Availability[@timestamp=ancestor::e:entries/@month0]/@availability &gt; 80 " class="success" >{{format-number(Availability[@timestamp=ancestor::e:entries/@month0]/@availability,'#.00')}}</td>
-                <td tpl:else="" class="critical">{{format-number(Availability[@timestamp=ancestor::e:entries/@month0]/@availability,'#.00')}}</td>
+                <td tpl:if="Availability[@timestamp=ancestor::e:entries/@month0]/@availability &gt; 80 " class="success" >{{round(Availability[@timestamp=ancestor::e:entries/@month0]/@availability*100) div 100 }}</td>
+                <td tpl:else="Availability[@timestamp=ancestor::e:entries/@month0]/@availability='N.A'" class="unknown">N.A</td>
+                <td tpl:else="" class="critical">{{round(Availability[@timestamp=ancestor::e:entries/@month0]/@availability*100) div 100 }}</td>
 
 
-                <td tpl:if="Availability[@timestamp=ancestor::e:entries/@month0]/@reliability &gt; 85 " class="success">{{format-number(Availability[@timestamp=ancestor::e:entries/@month0]/@reliability,'#.00')}}</td>
-                <td tpl:else="" class="critical">{{format-number(Availability[@timestamp=ancestor::e:entries/@month0]/@reliability,'#.00')}}</td>
+                <td tpl:if="Availability[@timestamp=ancestor::e:entries/@month0]/@reliability &gt; 85 " class="success">{{round(Availability[@timestamp=ancestor::e:entries/@month0]/@reliability*100) div 100 }}</td>
+                <td tpl:else="Availability[@timestamp=ancestor::e:entries/@month0]/@reliability ='N.A'" class="unknown">N.A</td>
+                <td tpl:else="" class="critical">{{round(Availability[@timestamp=ancestor::e:entries/@month0]/@reliability * 100) div 100 }}</td>
 
 
-                <td tpl:if="Availability[@timestamp=ancestor::e:entries/@month1]/@availability &gt; 80 " class="success">{{format-number(Availability[@timestamp=ancestor::e:entries/@month1]/@availability,'#.00')}}</td>
-                <td tpl:else="" class="critical">{{format-number(Availability[@timestamp=ancestor::e:entries/@month1]/@availability,'#.00')}}</td>
+                <td tpl:if="Availability[@timestamp=ancestor::e:entries/@month1]/@availability &gt; 80 " class="success">{{round(Availability[@timestamp=ancestor::e:entries/@month1]/@availability*100) div 100 }}</td>
+                <td tpl:else="Availability[@timestamp=ancestor::e:entries/@month1]/@availability='N.A'" class="unknown">N.A</td>
+                <td tpl:else="" class="critical">{{round(Availability[@timestamp=ancestor::e:entries/@month1]/@availability * 100 ) div 100}}</td>
 
 
-                <td tpl:if="Availability[@timestamp=ancestor::e:entries/@month2]/@availability &gt; 80 " class="success">{{format-number(Availability[@timestamp=ancestor::e:entries/@month2]/@availability,'#.00')}}</td>
-                <td tpl:else="" class="critical">{{format-number(Availability[@timestamp=ancestor::e:entries/@month2]/@availability,'#.00')}}</td>
+                <td tpl:if="Availability[@timestamp=ancestor::e:entries/@month1]/@reliability &gt; 85 " class="success">{{round(Availability[@timestamp=ancestor::e:entries/@month1]/@reliability*100) div 100 }}</td>
+                <td tpl:else="Availability[@timestamp=ancestor::e:entries/@month1]/@reliability='N.A'" class="unknown">N.A</td>
+                <td tpl:else="" class="critical">{{round(Availability[@timestamp=ancestor::e:entries/@month1]/@reliability * 100 ) div 100}}</td>
+                
+                
+
+                <td tpl:if="Availability[@timestamp=ancestor::e:entries/@month2]/@availability &gt; 80 " class="success">{{round(Availability[@timestamp=ancestor::e:entries/@month2]/@availability*100) div 100 }}</td>
+                <td tpl:else="Availability[@timestamp=ancestor::e:entries/@month2]/@availability='N.A'" class="unknown">N.A</td>
+                <td tpl:else="" class="critical">{{round(Availability[@timestamp=ancestor::e:entries/@month2]/@availability * 100 ) div 100}}</td>
+
+
+                <td tpl:if="Availability[@timestamp=ancestor::e:entries/@month2]/@reliability &gt; 85 " class="success">{{round(Availability[@timestamp=ancestor::e:entries/@month2]/@reliability*100) div 100 }}</td>
+                <td tpl:else="Availability[@timestamp=ancestor::e:entries/@month2]/@reliability='N.A'" class="unknown">N.A</td>
+                <td tpl:else="" class="critical">{{round(Availability[@timestamp=ancestor::e:entries/@month2]/@reliability * 100 ) div 100}}</td>
 
                 </tr>
            
