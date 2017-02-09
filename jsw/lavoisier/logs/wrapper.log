@@ -1,18 +1,289 @@
-
-INFO   | jvm 1    | 2016/12/02 17:09:19 | déc. 02, 2016 4:09:19 PM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
-INFO   | jvm 1    | 2016/12/02 17:09:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-sites-2016-12-01T00:00:00Z-2016-12-01T23:59:59Z-false]]
-INFO   | jvm 1    | 2016/12/02 17:09:19 | déc. 02, 2016 4:09:19 PM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
-INFO   | jvm 1    | 2016/12/02 17:09:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-sites-2016-11-30T00:00:00Z-2016-11-30T23:59:59Z-false]]
-INFO   | jvm 1    | 2016/12/02 17:09:19 | déc. 02, 2016 4:09:19 PM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
-INFO   | jvm 1    | 2016/12/02 17:09:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-sites-2016-11-29T00:00:00Z-2016-11-29T23:59:59Z-false]]
-INFO   | jvm 1    | 2016/12/02 17:09:19 | déc. 02, 2016 4:09:19 PM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
-INFO   | jvm 1    | 2016/12/02 17:09:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-Fedcloud-sites-2016-12-01T00:00:00Z-2016-12-01T23:59:59Z-false]]
-INFO   | jvm 1    | 2016/12/02 17:09:19 | déc. 02, 2016 4:09:19 PM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
-INFO   | jvm 1    | 2016/12/02 17:09:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-Fedcloud-sites-2016-11-30T00:00:00Z-2016-11-30T23:59:59Z-false]]
-INFO   | jvm 1    | 2016/12/02 17:09:19 | déc. 02, 2016 4:09:19 PM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
-INFO   | jvm 1    | 2016/12/02 17:09:19 | AVERTISSEMENT: Entering fallback because of error [Exception raised for view 'api.status.rotating.caches' [java.io.IOException: Can not delete from RotatingCache, no entry found for key: Critical-Fedcloud-sites-2016-11-29T00:00:00Z-2016-11-29T23:59:59Z-false]]
-STATUS | wrapper  | 2016/12/02 17:11:16 | TERM trapped.  Shutting down.
-INFO   | jvm 1    | 2016/12/02 17:11:17 | déc. 02, 2016 4:11:17 PM fr.in2p3.lavoisier.service.Server run
-INFO   | jvm 1    | 2016/12/02 17:11:17 | AVERTISSEMENT: Stopping Lavoisier service...
-INFO   | jvm 1    | 2016/12/02 17:11:17 | Lavoisier service stopped.
-STATUS | wrapper  | 2016/12/02 17:11:17 | <-- Wrapper Stopped
+STATUS | wrapper  | 2017/02/03 15:52:51 | --> Wrapper Started as Daemon
+STATUS | wrapper  | 2017/02/03 15:52:51 | Launching a JVM...
+INFO   | jvm 1    | 2017/02/03 15:52:52 | Wrapper (Version 3.2.3) http://wrapper.tanukisoftware.org
+INFO   | jvm 1    | 2017/02/03 15:52:52 |   Copyright 1999-2006 Tanuki Software, Inc.  All Rights Reserved.
+INFO   | jvm 1    | 2017/02/03 15:52:52 | 
+INFO   | jvm 1    | 2017/02/03 15:52:57 | févr. 03, 2017 3:52:57 PM fr.in2p3.lavoisier.service.ServerProperties getProperties
+INFO   | jvm 1    | 2017/02/03 15:52:57 | AVERTISSEMENT: File not found: security/lavoisier-service-headers.properties
+INFO   | jvm 1    | 2017/02/03 15:52:57 | févr. 03, 2017 3:52:57 PM fr.in2p3.lavoisier.service.ServerProperties getProperties
+INFO   | jvm 1    | 2017/02/03 15:52:57 | AVERTISSEMENT: File not found: security/lavoisier-service-headers.properties
+INFO   | jvm 1    | 2017/02/03 15:52:59 | févr. 03, 2017 2:52:59 PM fr.in2p3.lavoisier.engine.view.ViewCached refresh
+INFO   | jvm 1    | 2017/02/03 15:52:59 | AVERTISSEMENT: Failed to refresh cache for view: default
+INFO   | jvm 1    | 2017/02/03 15:52:59 | fr.in2p3.lavoisier.interfaces.error.AdaptorException: Exception raised for view 'categories' [Adaptor raised exception -- java.io.FileNotFoundException: /tmp/categories/current]
+INFO   | jvm 1    | 2017/02/03 15:52:59 | 	at fr.in2p3.lavoisier.chaining.link.connector.SAXConnectorLink.generate(SAXConnectorLink.java:26)
+INFO   | jvm 1    | 2017/02/03 15:52:59 | 	at fr.in2p3.lavoisier.chaining.Chain.generate(Chain.java:120)
+INFO   | jvm 1    | 2017/02/03 15:52:59 | 	at fr.in2p3.lavoisier.chaining.Chain.writeToContentHandler(Chain.java:103)
+INFO   | jvm 1    | 2017/02/03 15:52:59 | 	at fr.in2p3.lavoisier.engine.view.ViewCached.writeToXMLEventHandler(ViewCached.java:117)
+INFO   | jvm 1    | 2017/02/03 15:52:59 | 	at fr.in2p3.lavoisier.xml.XmlView.write(XmlView.java:54)
+INFO   | jvm 1    | 2017/02/03 15:52:59 | 	at fr.in2p3.lavoisier.connector.XMLConnector.writeToContentHandler(XMLConnector.java:34)
+INFO   | jvm 1    | 2017/02/03 15:52:59 | 	at fr.in2p3.lavoisier.chaining.link.connector.SAXConnectorLink.generate(SAXConnectorLink.java:24)
+INFO   | jvm 1    | 2017/02/03 15:52:59 | 	at fr.in2p3.lavoisier.chaining.Chain.generate(Chain.java:120)
+INFO   | jvm 1    | 2017/02/03 15:52:59 | 	at fr.in2p3.lavoisier.chaining.Chain.writeToCache(Chain.java:109)
+INFO   | jvm 1    | 2017/02/03 15:52:59 | 	at fr.in2p3.lavoisier.engine.view.ViewCached.refresh(ViewCached.java:151)
+INFO   | jvm 1    | 2017/02/03 15:52:59 | 	at fr.in2p3.lavoisier.engine.task.CacheRefreshTask.run(CacheRefreshTask.java:22)
+INFO   | jvm 1    | 2017/02/03 15:52:59 | 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+INFO   | jvm 1    | 2017/02/03 15:52:59 | 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+INFO   | jvm 1    | 2017/02/03 15:52:59 | 	at java.lang.Thread.run(Thread.java:745)
+INFO   | jvm 1    | 2017/02/03 15:52:59 | Caused by: java.io.FileNotFoundException: /tmp/categories/current
+INFO   | jvm 1    | 2017/02/03 15:52:59 | 	at fr.in2p3.lavoisier.connector.FileCacheConnector.writeToContentHandler(FileCacheConnector.java:52)
+INFO   | jvm 1    | 2017/02/03 15:52:59 | 	at fr.in2p3.lavoisier.chaining.link.connector.SAXConnectorLink.generate(SAXConnectorLink.java:24)
+INFO   | jvm 1    | 2017/02/03 15:52:59 | 	... 13 more
+INFO   | jvm 1    | 2017/02/03 15:52:59 | 
+INFO   | jvm 1    | 2017/02/03 15:52:59 | févr. 03, 2017 2:52:59 PM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2017/02/03 15:52:59 | AVERTISSEMENT: Entering fallback because of error [org.dom4j.XPathException: Exception occurred evaluting XPath: document('rsc/categories.xml'). Exception: File not found: rsc/categories.xml]
+INFO   | jvm 1    | 2017/02/03 15:52:59 | févr. 03, 2017 2:52:59 PM fr.in2p3.lavoisier.engine.view.ViewCached refresh
+INFO   | jvm 1    | 2017/02/03 15:52:59 | AVERTISSEMENT: Failed to refresh cache for view: navbar
+INFO   | jvm 1    | 2017/02/03 15:52:59 | fr.in2p3.lavoisier.interfaces.error.ConfigurationException: Exception raised for view 'navbar' [org.dom4j.XPathException: Exception occurred evaluting XPath: document('rsc/categories.xml'). Exception: File not found: rsc/categories.xml]
+INFO   | jvm 1    | 2017/02/03 15:52:59 | 	at fr.in2p3.lavoisier.parameter.source.XPathSource.getParameterValue(XPathSource.java:48)
+INFO   | jvm 1    | 2017/02/03 15:52:59 | 	at fr.in2p3.lavoisier.engine.factory.ParameterValueFactory.createParameterValues(ParameterValueFactory.java:35)
+INFO   | jvm 1    | 2017/02/03 15:52:59 | 	at fr.in2p3.lavoisier.engine.ChainOfAdaptors.<init>(ChainOfAdaptors.java:46)
+INFO   | jvm 1    | 2017/02/03 15:52:59 | 	at fr.in2p3.lavoisier.engine.view.ViewAbstract.createChain(ViewAbstract.java:117)
+INFO   | jvm 1    | 2017/02/03 15:52:59 | 	at fr.in2p3.lavoisier.engine.view.ViewCached.refresh(ViewCached.java:149)
+INFO   | jvm 1    | 2017/02/03 15:52:59 | 	at fr.in2p3.lavoisier.engine.task.CacheRefreshTask.run(CacheRefreshTask.java:22)
+INFO   | jvm 1    | 2017/02/03 15:52:59 | 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+INFO   | jvm 1    | 2017/02/03 15:52:59 | 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+INFO   | jvm 1    | 2017/02/03 15:52:59 | 	at java.lang.Thread.run(Thread.java:745)
+INFO   | jvm 1    | 2017/02/03 15:52:59 | Caused by: org.dom4j.XPathException: Exception occurred evaluting XPath: document('rsc/categories.xml'). Exception: File not found: rsc/categories.xml
+INFO   | jvm 1    | 2017/02/03 15:52:59 | 	at org.dom4j.xpath.DefaultXPath.handleJaxenException(DefaultXPath.java:374)
+INFO   | jvm 1    | 2017/02/03 15:52:59 | 	at org.dom4j.xpath.DefaultXPath.selectNodes(DefaultXPath.java:134)
+INFO   | jvm 1    | 2017/02/03 15:52:59 | 	at fr.in2p3.lavoisier.parameter.source.XPathSource.getParameterValue(XPathSource.java:46)
+INFO   | jvm 1    | 2017/02/03 15:52:59 | 	... 8 more
+INFO   | jvm 1    | 2017/02/03 15:52:59 | 
+STATUS | wrapper  | 2017/02/03 15:55:54 | TERM trapped.  Shutting down.
+INFO   | jvm 1    | 2017/02/03 15:55:55 | févr. 03, 2017 2:55:55 PM fr.in2p3.lavoisier.service.Server run
+INFO   | jvm 1    | 2017/02/03 15:55:55 | AVERTISSEMENT: Stopping Lavoisier service...
+INFO   | jvm 1    | 2017/02/03 15:55:55 | Lavoisier service stopped.
+STATUS | wrapper  | 2017/02/03 15:55:55 | <-- Wrapper Stopped
+STATUS | wrapper  | 2017/02/03 15:55:56 | --> Wrapper Started as Daemon
+STATUS | wrapper  | 2017/02/03 15:55:56 | Launching a JVM...
+INFO   | jvm 1    | 2017/02/03 15:55:57 | Wrapper (Version 3.2.3) http://wrapper.tanukisoftware.org
+INFO   | jvm 1    | 2017/02/03 15:55:57 |   Copyright 1999-2006 Tanuki Software, Inc.  All Rights Reserved.
+INFO   | jvm 1    | 2017/02/03 15:55:57 | 
+INFO   | jvm 1    | 2017/02/03 15:56:02 | févr. 03, 2017 3:56:02 PM fr.in2p3.lavoisier.service.ServerProperties getProperties
+INFO   | jvm 1    | 2017/02/03 15:56:02 | AVERTISSEMENT: File not found: security/lavoisier-service-headers.properties
+INFO   | jvm 1    | 2017/02/03 15:56:02 | févr. 03, 2017 3:56:02 PM fr.in2p3.lavoisier.service.ServerProperties getProperties
+INFO   | jvm 1    | 2017/02/03 15:56:02 | AVERTISSEMENT: File not found: security/lavoisier-service-headers.properties
+INFO   | jvm 1    | 2017/02/03 15:56:04 | févr. 03, 2017 2:56:04 PM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2017/02/03 15:56:04 | AVERTISSEMENT: Entering fallback because of error [org.dom4j.XPathException: Exception occurred evaluting XPath: document('rsc/categories.xml'). Exception: File not found: rsc/categories.xml]
+INFO   | jvm 1    | 2017/02/03 15:56:04 | févr. 03, 2017 2:56:04 PM fr.in2p3.lavoisier.engine.view.ViewCached refresh
+INFO   | jvm 1    | 2017/02/03 15:56:04 | AVERTISSEMENT: Failed to refresh cache for view: navbar
+INFO   | jvm 1    | 2017/02/03 15:56:04 | fr.in2p3.lavoisier.interfaces.error.ConfigurationException: Exception raised for view 'navbar' [org.dom4j.XPathException: Exception occurred evaluting XPath: document('rsc/categories.xml'). Exception: File not found: rsc/categories.xml]
+INFO   | jvm 1    | 2017/02/03 15:56:04 | 	at fr.in2p3.lavoisier.parameter.source.XPathSource.getParameterValue(XPathSource.java:48)
+INFO   | jvm 1    | 2017/02/03 15:56:04 | 	at fr.in2p3.lavoisier.engine.factory.ParameterValueFactory.createParameterValues(ParameterValueFactory.java:35)
+INFO   | jvm 1    | 2017/02/03 15:56:04 | 	at fr.in2p3.lavoisier.engine.ChainOfAdaptors.<init>(ChainOfAdaptors.java:46)
+INFO   | jvm 1    | 2017/02/03 15:56:04 | 	at fr.in2p3.lavoisier.engine.view.ViewAbstract.createChain(ViewAbstract.java:117)
+INFO   | jvm 1    | 2017/02/03 15:56:04 | 	at fr.in2p3.lavoisier.engine.view.ViewCached.refresh(ViewCached.java:149)
+INFO   | jvm 1    | 2017/02/03 15:56:04 | 	at fr.in2p3.lavoisier.engine.task.CacheRefreshTask.run(CacheRefreshTask.java:22)
+INFO   | jvm 1    | 2017/02/03 15:56:04 | 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+INFO   | jvm 1    | 2017/02/03 15:56:04 | 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+INFO   | jvm 1    | 2017/02/03 15:56:04 | 	at java.lang.Thread.run(Thread.java:745)
+INFO   | jvm 1    | 2017/02/03 15:56:04 | Caused by: org.dom4j.XPathException: Exception occurred evaluting XPath: document('rsc/categories.xml'). Exception: File not found: rsc/categories.xml
+INFO   | jvm 1    | 2017/02/03 15:56:04 | 	at org.dom4j.xpath.DefaultXPath.handleJaxenException(DefaultXPath.java:374)
+INFO   | jvm 1    | 2017/02/03 15:56:04 | 	at org.dom4j.xpath.DefaultXPath.selectNodes(DefaultXPath.java:134)
+INFO   | jvm 1    | 2017/02/03 15:56:04 | 	at fr.in2p3.lavoisier.parameter.source.XPathSource.getParameterValue(XPathSource.java:46)
+INFO   | jvm 1    | 2017/02/03 15:56:04 | 	... 8 more
+INFO   | jvm 1    | 2017/02/03 15:56:04 | 
+STATUS | wrapper  | 2017/02/03 15:56:50 | TERM trapped.  Shutting down.
+INFO   | jvm 1    | 2017/02/03 15:56:51 | févr. 03, 2017 2:56:51 PM fr.in2p3.lavoisier.service.Server run
+INFO   | jvm 1    | 2017/02/03 15:56:51 | AVERTISSEMENT: Stopping Lavoisier service...
+INFO   | jvm 1    | 2017/02/03 15:56:51 | Lavoisier service stopped.
+STATUS | wrapper  | 2017/02/03 15:56:52 | <-- Wrapper Stopped
+STATUS | wrapper  | 2017/02/03 15:56:52 | --> Wrapper Started as Daemon
+STATUS | wrapper  | 2017/02/03 15:56:53 | Launching a JVM...
+INFO   | jvm 1    | 2017/02/03 15:56:53 | Wrapper (Version 3.2.3) http://wrapper.tanukisoftware.org
+INFO   | jvm 1    | 2017/02/03 15:56:53 |   Copyright 1999-2006 Tanuki Software, Inc.  All Rights Reserved.
+INFO   | jvm 1    | 2017/02/03 15:56:53 | 
+INFO   | jvm 1    | 2017/02/03 15:56:58 | févr. 03, 2017 3:56:58 PM fr.in2p3.lavoisier.service.ServerProperties getProperties
+INFO   | jvm 1    | 2017/02/03 15:56:58 | AVERTISSEMENT: File not found: security/lavoisier-service-headers.properties
+INFO   | jvm 1    | 2017/02/03 15:56:58 | févr. 03, 2017 3:56:58 PM fr.in2p3.lavoisier.service.ServerProperties getProperties
+INFO   | jvm 1    | 2017/02/03 15:56:58 | AVERTISSEMENT: File not found: security/lavoisier-service-headers.properties
+INFO   | jvm 1    | 2017/02/03 15:56:59 | févr. 03, 2017 2:56:59 PM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2017/02/03 15:56:59 | AVERTISSEMENT: Entering fallback because of error [org.dom4j.XPathException: Exception occurred evaluting XPath: document('rsc/categories.xml'). Exception: File not found: rsc/categories.xml]
+INFO   | jvm 1    | 2017/02/03 15:56:59 | févr. 03, 2017 2:56:59 PM fr.in2p3.lavoisier.engine.view.ViewCached refresh
+INFO   | jvm 1    | 2017/02/03 15:56:59 | AVERTISSEMENT: Failed to refresh cache for view: navbar
+INFO   | jvm 1    | 2017/02/03 15:56:59 | fr.in2p3.lavoisier.interfaces.error.ConfigurationException: Exception raised for view 'navbar' [org.dom4j.XPathException: Exception occurred evaluting XPath: document('rsc/categories.xml'). Exception: File not found: rsc/categories.xml]
+INFO   | jvm 1    | 2017/02/03 15:56:59 | 	at fr.in2p3.lavoisier.parameter.source.XPathSource.getParameterValue(XPathSource.java:48)
+INFO   | jvm 1    | 2017/02/03 15:56:59 | 	at fr.in2p3.lavoisier.engine.factory.ParameterValueFactory.createParameterValues(ParameterValueFactory.java:35)
+INFO   | jvm 1    | 2017/02/03 15:56:59 | 	at fr.in2p3.lavoisier.engine.ChainOfAdaptors.<init>(ChainOfAdaptors.java:46)
+INFO   | jvm 1    | 2017/02/03 15:56:59 | 	at fr.in2p3.lavoisier.engine.view.ViewAbstract.createChain(ViewAbstract.java:117)
+INFO   | jvm 1    | 2017/02/03 15:56:59 | 	at fr.in2p3.lavoisier.engine.view.ViewCached.refresh(ViewCached.java:149)
+INFO   | jvm 1    | 2017/02/03 15:56:59 | 	at fr.in2p3.lavoisier.engine.task.CacheRefreshTask.run(CacheRefreshTask.java:22)
+INFO   | jvm 1    | 2017/02/03 15:56:59 | 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+INFO   | jvm 1    | 2017/02/03 15:56:59 | 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+INFO   | jvm 1    | 2017/02/03 15:56:59 | 	at java.lang.Thread.run(Thread.java:745)
+INFO   | jvm 1    | 2017/02/03 15:56:59 | Caused by: org.dom4j.XPathException: Exception occurred evaluting XPath: document('rsc/categories.xml'). Exception: File not found: rsc/categories.xml
+INFO   | jvm 1    | 2017/02/03 15:56:59 | 	at org.dom4j.xpath.DefaultXPath.handleJaxenException(DefaultXPath.java:374)
+INFO   | jvm 1    | 2017/02/03 15:56:59 | 	at org.dom4j.xpath.DefaultXPath.selectNodes(DefaultXPath.java:134)
+INFO   | jvm 1    | 2017/02/03 15:56:59 | 	at fr.in2p3.lavoisier.parameter.source.XPathSource.getParameterValue(XPathSource.java:46)
+INFO   | jvm 1    | 2017/02/03 15:56:59 | 	... 8 more
+INFO   | jvm 1    | 2017/02/03 15:56:59 | 
+STATUS | wrapper  | 2017/02/03 15:57:34 | TERM trapped.  Shutting down.
+INFO   | jvm 1    | 2017/02/03 15:57:35 | févr. 03, 2017 2:57:35 PM fr.in2p3.lavoisier.service.Server run
+INFO   | jvm 1    | 2017/02/03 15:57:35 | AVERTISSEMENT: Stopping Lavoisier service...
+INFO   | jvm 1    | 2017/02/03 15:57:35 | Lavoisier service stopped.
+STATUS | wrapper  | 2017/02/03 15:57:35 | <-- Wrapper Stopped
+STATUS | wrapper  | 2017/02/03 15:57:36 | --> Wrapper Started as Daemon
+STATUS | wrapper  | 2017/02/03 15:57:36 | Launching a JVM...
+INFO   | jvm 1    | 2017/02/03 15:57:37 | Wrapper (Version 3.2.3) http://wrapper.tanukisoftware.org
+INFO   | jvm 1    | 2017/02/03 15:57:37 |   Copyright 1999-2006 Tanuki Software, Inc.  All Rights Reserved.
+INFO   | jvm 1    | 2017/02/03 15:57:37 | 
+INFO   | jvm 1    | 2017/02/03 15:57:43 | févr. 03, 2017 3:57:42 PM fr.in2p3.lavoisier.service.ServerProperties getProperties
+INFO   | jvm 1    | 2017/02/03 15:57:43 | AVERTISSEMENT: File not found: security/lavoisier-service-headers.properties
+INFO   | jvm 1    | 2017/02/03 15:57:43 | févr. 03, 2017 3:57:43 PM fr.in2p3.lavoisier.service.ServerProperties getProperties
+INFO   | jvm 1    | 2017/02/03 15:57:43 | AVERTISSEMENT: File not found: security/lavoisier-service-headers.properties
+INFO   | jvm 1    | 2017/02/03 15:57:44 | févr. 03, 2017 2:57:44 PM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2017/02/03 15:57:44 | AVERTISSEMENT: Entering fallback because of error [org.dom4j.XPathException: Exception occurred evaluting XPath: document('rsc/categories.xml'). Exception: File not found: rsc/categories.xml]
+INFO   | jvm 1    | 2017/02/03 15:57:44 | févr. 03, 2017 2:57:44 PM fr.in2p3.lavoisier.engine.view.ViewCached refresh
+INFO   | jvm 1    | 2017/02/03 15:57:44 | AVERTISSEMENT: Failed to refresh cache for view: navbar
+INFO   | jvm 1    | 2017/02/03 15:57:44 | fr.in2p3.lavoisier.interfaces.error.ConfigurationException: Exception raised for view 'navbar' [org.dom4j.XPathException: Exception occurred evaluting XPath: document('rsc/categories.xml'). Exception: File not found: rsc/categories.xml]
+INFO   | jvm 1    | 2017/02/03 15:57:44 | 	at fr.in2p3.lavoisier.parameter.source.XPathSource.getParameterValue(XPathSource.java:48)
+INFO   | jvm 1    | 2017/02/03 15:57:44 | 	at fr.in2p3.lavoisier.engine.factory.ParameterValueFactory.createParameterValues(ParameterValueFactory.java:35)
+INFO   | jvm 1    | 2017/02/03 15:57:44 | 	at fr.in2p3.lavoisier.engine.ChainOfAdaptors.<init>(ChainOfAdaptors.java:46)
+INFO   | jvm 1    | 2017/02/03 15:57:44 | 	at fr.in2p3.lavoisier.engine.view.ViewAbstract.createChain(ViewAbstract.java:117)
+INFO   | jvm 1    | 2017/02/03 15:57:44 | 	at fr.in2p3.lavoisier.engine.view.ViewCached.refresh(ViewCached.java:149)
+INFO   | jvm 1    | 2017/02/03 15:57:44 | 	at fr.in2p3.lavoisier.engine.task.CacheRefreshTask.run(CacheRefreshTask.java:22)
+INFO   | jvm 1    | 2017/02/03 15:57:44 | 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+INFO   | jvm 1    | 2017/02/03 15:57:44 | 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+INFO   | jvm 1    | 2017/02/03 15:57:44 | 	at java.lang.Thread.run(Thread.java:745)
+INFO   | jvm 1    | 2017/02/03 15:57:44 | Caused by: org.dom4j.XPathException: Exception occurred evaluting XPath: document('rsc/categories.xml'). Exception: File not found: rsc/categories.xml
+INFO   | jvm 1    | 2017/02/03 15:57:44 | 	at org.dom4j.xpath.DefaultXPath.handleJaxenException(DefaultXPath.java:374)
+INFO   | jvm 1    | 2017/02/03 15:57:44 | 	at org.dom4j.xpath.DefaultXPath.selectNodes(DefaultXPath.java:134)
+INFO   | jvm 1    | 2017/02/03 15:57:44 | 	at fr.in2p3.lavoisier.parameter.source.XPathSource.getParameterValue(XPathSource.java:46)
+INFO   | jvm 1    | 2017/02/03 15:57:44 | 	... 8 more
+INFO   | jvm 1    | 2017/02/03 15:57:44 | 
+STATUS | wrapper  | 2017/02/03 15:59:14 | TERM trapped.  Shutting down.
+INFO   | jvm 1    | 2017/02/03 15:59:15 | févr. 03, 2017 2:59:14 PM fr.in2p3.lavoisier.service.Server run
+INFO   | jvm 1    | 2017/02/03 15:59:15 | AVERTISSEMENT: Stopping Lavoisier service...
+INFO   | jvm 1    | 2017/02/03 15:59:15 | Lavoisier service stopped.
+STATUS | wrapper  | 2017/02/03 15:59:15 | <-- Wrapper Stopped
+STATUS | wrapper  | 2017/02/03 15:59:16 | --> Wrapper Started as Daemon
+STATUS | wrapper  | 2017/02/03 15:59:16 | Launching a JVM...
+INFO   | jvm 1    | 2017/02/03 15:59:16 | Wrapper (Version 3.2.3) http://wrapper.tanukisoftware.org
+INFO   | jvm 1    | 2017/02/03 15:59:16 |   Copyright 1999-2006 Tanuki Software, Inc.  All Rights Reserved.
+INFO   | jvm 1    | 2017/02/03 15:59:16 | 
+INFO   | jvm 1    | 2017/02/03 15:59:22 | févr. 03, 2017 2:59:22 PM fr.in2p3.lavoisier.service.ServerProperties getProperties
+INFO   | jvm 1    | 2017/02/03 15:59:22 | AVERTISSEMENT: File not found: security/lavoisier-service-headers.properties
+INFO   | jvm 1    | 2017/02/03 15:59:22 | févr. 03, 2017 2:59:22 PM fr.in2p3.lavoisier.service.ServerProperties getProperties
+INFO   | jvm 1    | 2017/02/03 15:59:22 | AVERTISSEMENT: File not found: security/lavoisier-service-headers.properties
+INFO   | jvm 1    | 2017/02/03 15:59:23 | févr. 03, 2017 2:59:23 PM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2017/02/03 15:59:23 | AVERTISSEMENT: Entering fallback because of error [org.dom4j.XPathException: Exception occurred evaluting XPath: document('rsc/categories.xml'). Exception: File not found: rsc/categories.xml]
+INFO   | jvm 1    | 2017/02/03 15:59:23 | févr. 03, 2017 2:59:23 PM fr.in2p3.lavoisier.engine.view.ViewCached refresh
+INFO   | jvm 1    | 2017/02/03 15:59:23 | AVERTISSEMENT: Failed to refresh cache for view: navbar
+INFO   | jvm 1    | 2017/02/03 15:59:23 | fr.in2p3.lavoisier.interfaces.error.ConfigurationException: Exception raised for view 'navbar' [org.dom4j.XPathException: Exception occurred evaluting XPath: document('rsc/categories.xml'). Exception: File not found: rsc/categories.xml]
+INFO   | jvm 1    | 2017/02/03 15:59:23 | 	at fr.in2p3.lavoisier.parameter.source.XPathSource.getParameterValue(XPathSource.java:48)
+INFO   | jvm 1    | 2017/02/03 15:59:23 | 	at fr.in2p3.lavoisier.engine.factory.ParameterValueFactory.createParameterValues(ParameterValueFactory.java:35)
+INFO   | jvm 1    | 2017/02/03 15:59:23 | 	at fr.in2p3.lavoisier.engine.ChainOfAdaptors.<init>(ChainOfAdaptors.java:46)
+INFO   | jvm 1    | 2017/02/03 15:59:23 | 	at fr.in2p3.lavoisier.engine.view.ViewAbstract.createChain(ViewAbstract.java:117)
+INFO   | jvm 1    | 2017/02/03 15:59:23 | 	at fr.in2p3.lavoisier.engine.view.ViewCached.refresh(ViewCached.java:149)
+INFO   | jvm 1    | 2017/02/03 15:59:23 | 	at fr.in2p3.lavoisier.engine.task.CacheRefreshTask.run(CacheRefreshTask.java:22)
+INFO   | jvm 1    | 2017/02/03 15:59:23 | 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+INFO   | jvm 1    | 2017/02/03 15:59:23 | 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+INFO   | jvm 1    | 2017/02/03 15:59:23 | 	at java.lang.Thread.run(Thread.java:745)
+INFO   | jvm 1    | 2017/02/03 15:59:23 | Caused by: org.dom4j.XPathException: Exception occurred evaluting XPath: document('rsc/categories.xml'). Exception: File not found: rsc/categories.xml
+INFO   | jvm 1    | 2017/02/03 15:59:23 | 	at org.dom4j.xpath.DefaultXPath.handleJaxenException(DefaultXPath.java:374)
+INFO   | jvm 1    | 2017/02/03 15:59:23 | 	at org.dom4j.xpath.DefaultXPath.selectNodes(DefaultXPath.java:134)
+INFO   | jvm 1    | 2017/02/03 15:59:23 | 	at fr.in2p3.lavoisier.parameter.source.XPathSource.getParameterValue(XPathSource.java:46)
+INFO   | jvm 1    | 2017/02/03 15:59:23 | 	... 8 more
+INFO   | jvm 1    | 2017/02/03 15:59:23 | 
+STATUS | wrapper  | 2017/02/03 15:59:58 | TERM trapped.  Shutting down.
+INFO   | jvm 1    | 2017/02/03 15:59:58 | févr. 03, 2017 2:59:58 PM fr.in2p3.lavoisier.service.Server run
+INFO   | jvm 1    | 2017/02/03 15:59:58 | AVERTISSEMENT: Stopping Lavoisier service...
+INFO   | jvm 1    | 2017/02/03 15:59:58 | Lavoisier service stopped.
+STATUS | wrapper  | 2017/02/03 15:59:59 | <-- Wrapper Stopped
+STATUS | wrapper  | 2017/02/03 16:00:00 | --> Wrapper Started as Daemon
+STATUS | wrapper  | 2017/02/03 16:00:00 | Launching a JVM...
+INFO   | jvm 1    | 2017/02/03 16:00:00 | Wrapper (Version 3.2.3) http://wrapper.tanukisoftware.org
+INFO   | jvm 1    | 2017/02/03 16:00:00 |   Copyright 1999-2006 Tanuki Software, Inc.  All Rights Reserved.
+INFO   | jvm 1    | 2017/02/03 16:00:00 | 
+INFO   | jvm 1    | 2017/02/03 16:00:05 | févr. 03, 2017 4:00:04 PM fr.in2p3.lavoisier.service.ServerProperties getProperties
+INFO   | jvm 1    | 2017/02/03 16:00:05 | AVERTISSEMENT: File not found: security/lavoisier-service-headers.properties
+INFO   | jvm 1    | 2017/02/03 16:00:05 | févr. 03, 2017 4:00:04 PM fr.in2p3.lavoisier.service.ServerProperties getProperties
+INFO   | jvm 1    | 2017/02/03 16:00:05 | AVERTISSEMENT: File not found: security/lavoisier-service-headers.properties
+INFO   | jvm 1    | 2017/02/03 16:00:06 | févr. 03, 2017 3:00:06 PM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2017/02/03 16:00:06 | AVERTISSEMENT: Entering fallback because of error [org.dom4j.XPathException: Exception occurred evaluting XPath: document('rsc/categories.xml'). Exception: File not found: rsc/categories.xml]
+INFO   | jvm 1    | 2017/02/03 16:00:06 | févr. 03, 2017 3:00:06 PM fr.in2p3.lavoisier.engine.view.ViewCached refresh
+INFO   | jvm 1    | 2017/02/03 16:00:06 | AVERTISSEMENT: Failed to refresh cache for view: navbar
+INFO   | jvm 1    | 2017/02/03 16:00:06 | fr.in2p3.lavoisier.interfaces.error.ConfigurationException: Exception raised for view 'navbar' [org.dom4j.XPathException: Exception occurred evaluting XPath: document('rsc/categories.xml'). Exception: File not found: rsc/categories.xml]
+INFO   | jvm 1    | 2017/02/03 16:00:06 | 	at fr.in2p3.lavoisier.parameter.source.XPathSource.getParameterValue(XPathSource.java:48)
+INFO   | jvm 1    | 2017/02/03 16:00:06 | 	at fr.in2p3.lavoisier.engine.factory.ParameterValueFactory.createParameterValues(ParameterValueFactory.java:35)
+INFO   | jvm 1    | 2017/02/03 16:00:06 | 	at fr.in2p3.lavoisier.engine.ChainOfAdaptors.<init>(ChainOfAdaptors.java:46)
+INFO   | jvm 1    | 2017/02/03 16:00:06 | 	at fr.in2p3.lavoisier.engine.view.ViewAbstract.createChain(ViewAbstract.java:117)
+INFO   | jvm 1    | 2017/02/03 16:00:06 | 	at fr.in2p3.lavoisier.engine.view.ViewCached.refresh(ViewCached.java:149)
+INFO   | jvm 1    | 2017/02/03 16:00:06 | 	at fr.in2p3.lavoisier.engine.task.CacheRefreshTask.run(CacheRefreshTask.java:22)
+INFO   | jvm 1    | 2017/02/03 16:00:06 | 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+INFO   | jvm 1    | 2017/02/03 16:00:06 | 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+INFO   | jvm 1    | 2017/02/03 16:00:06 | 	at java.lang.Thread.run(Thread.java:745)
+INFO   | jvm 1    | 2017/02/03 16:00:06 | Caused by: org.dom4j.XPathException: Exception occurred evaluting XPath: document('rsc/categories.xml'). Exception: File not found: rsc/categories.xml
+INFO   | jvm 1    | 2017/02/03 16:00:06 | 	at org.dom4j.xpath.DefaultXPath.handleJaxenException(DefaultXPath.java:374)
+INFO   | jvm 1    | 2017/02/03 16:00:06 | 	at org.dom4j.xpath.DefaultXPath.selectNodes(DefaultXPath.java:134)
+INFO   | jvm 1    | 2017/02/03 16:00:06 | 	at fr.in2p3.lavoisier.parameter.source.XPathSource.getParameterValue(XPathSource.java:46)
+INFO   | jvm 1    | 2017/02/03 16:00:06 | 	... 8 more
+INFO   | jvm 1    | 2017/02/03 16:00:06 | 
+STATUS | wrapper  | 2017/02/03 16:00:28 | TERM trapped.  Shutting down.
+INFO   | jvm 1    | 2017/02/03 16:00:28 | févr. 03, 2017 3:00:28 PM fr.in2p3.lavoisier.service.Server run
+INFO   | jvm 1    | 2017/02/03 16:00:28 | AVERTISSEMENT: Stopping Lavoisier service...
+INFO   | jvm 1    | 2017/02/03 16:00:28 | Lavoisier service stopped.
+STATUS | wrapper  | 2017/02/03 16:00:29 | <-- Wrapper Stopped
+STATUS | wrapper  | 2017/02/03 16:00:30 | --> Wrapper Started as Daemon
+STATUS | wrapper  | 2017/02/03 16:00:30 | Launching a JVM...
+INFO   | jvm 1    | 2017/02/03 16:00:30 | Wrapper (Version 3.2.3) http://wrapper.tanukisoftware.org
+INFO   | jvm 1    | 2017/02/03 16:00:30 |   Copyright 1999-2006 Tanuki Software, Inc.  All Rights Reserved.
+INFO   | jvm 1    | 2017/02/03 16:00:30 | 
+INFO   | jvm 1    | 2017/02/03 16:00:35 | févr. 03, 2017 4:00:35 PM fr.in2p3.lavoisier.service.ServerProperties getProperties
+INFO   | jvm 1    | 2017/02/03 16:00:35 | AVERTISSEMENT: File not found: security/lavoisier-service-headers.properties
+INFO   | jvm 1    | 2017/02/03 16:00:35 | févr. 03, 2017 3:00:35 PM fr.in2p3.lavoisier.service.ServerProperties getProperties
+INFO   | jvm 1    | 2017/02/03 16:00:35 | AVERTISSEMENT: File not found: security/lavoisier-service-headers.properties
+INFO   | jvm 1    | 2017/02/03 16:00:36 | févr. 03, 2017 3:00:36 PM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2017/02/03 16:00:36 | AVERTISSEMENT: Entering fallback because of error [org.dom4j.XPathException: Exception occurred evaluting XPath: document('rsc/categories.xml'). Exception: File not found: rsc/categories.xml]
+INFO   | jvm 1    | 2017/02/03 16:00:36 | févr. 03, 2017 3:00:36 PM fr.in2p3.lavoisier.engine.view.ViewCached refresh
+INFO   | jvm 1    | 2017/02/03 16:00:36 | AVERTISSEMENT: Failed to refresh cache for view: navbar
+INFO   | jvm 1    | 2017/02/03 16:00:36 | fr.in2p3.lavoisier.interfaces.error.ConfigurationException: Exception raised for view 'navbar' [org.dom4j.XPathException: Exception occurred evaluting XPath: document('rsc/categories.xml'). Exception: File not found: rsc/categories.xml]
+INFO   | jvm 1    | 2017/02/03 16:00:36 | 	at fr.in2p3.lavoisier.parameter.source.XPathSource.getParameterValue(XPathSource.java:48)
+INFO   | jvm 1    | 2017/02/03 16:00:36 | 	at fr.in2p3.lavoisier.engine.factory.ParameterValueFactory.createParameterValues(ParameterValueFactory.java:35)
+INFO   | jvm 1    | 2017/02/03 16:00:36 | 	at fr.in2p3.lavoisier.engine.ChainOfAdaptors.<init>(ChainOfAdaptors.java:46)
+INFO   | jvm 1    | 2017/02/03 16:00:36 | 	at fr.in2p3.lavoisier.engine.view.ViewAbstract.createChain(ViewAbstract.java:117)
+INFO   | jvm 1    | 2017/02/03 16:00:36 | 	at fr.in2p3.lavoisier.engine.view.ViewCached.refresh(ViewCached.java:149)
+INFO   | jvm 1    | 2017/02/03 16:00:36 | 	at fr.in2p3.lavoisier.engine.task.CacheRefreshTask.run(CacheRefreshTask.java:22)
+INFO   | jvm 1    | 2017/02/03 16:00:36 | 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+INFO   | jvm 1    | 2017/02/03 16:00:36 | 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+INFO   | jvm 1    | 2017/02/03 16:00:36 | 	at java.lang.Thread.run(Thread.java:745)
+INFO   | jvm 1    | 2017/02/03 16:00:36 | Caused by: org.dom4j.XPathException: Exception occurred evaluting XPath: document('rsc/categories.xml'). Exception: File not found: rsc/categories.xml
+INFO   | jvm 1    | 2017/02/03 16:00:36 | 	at org.dom4j.xpath.DefaultXPath.handleJaxenException(DefaultXPath.java:374)
+INFO   | jvm 1    | 2017/02/03 16:00:36 | 	at org.dom4j.xpath.DefaultXPath.selectNodes(DefaultXPath.java:134)
+INFO   | jvm 1    | 2017/02/03 16:00:36 | 	at fr.in2p3.lavoisier.parameter.source.XPathSource.getParameterValue(XPathSource.java:46)
+INFO   | jvm 1    | 2017/02/03 16:00:36 | 	... 8 more
+INFO   | jvm 1    | 2017/02/03 16:00:36 | 
+STATUS | wrapper  | 2017/02/03 16:01:04 | TERM trapped.  Shutting down.
+INFO   | jvm 1    | 2017/02/03 16:01:05 | févr. 03, 2017 3:01:05 PM fr.in2p3.lavoisier.service.Server run
+INFO   | jvm 1    | 2017/02/03 16:01:05 | AVERTISSEMENT: Stopping Lavoisier service...
+INFO   | jvm 1    | 2017/02/03 16:01:05 | Lavoisier service stopped.
+STATUS | wrapper  | 2017/02/03 16:01:06 | <-- Wrapper Stopped
+STATUS | wrapper  | 2017/02/03 16:01:06 | --> Wrapper Started as Daemon
+STATUS | wrapper  | 2017/02/03 16:01:07 | Launching a JVM...
+INFO   | jvm 1    | 2017/02/03 16:01:07 | Wrapper (Version 3.2.3) http://wrapper.tanukisoftware.org
+INFO   | jvm 1    | 2017/02/03 16:01:07 |   Copyright 1999-2006 Tanuki Software, Inc.  All Rights Reserved.
+INFO   | jvm 1    | 2017/02/03 16:01:07 | 
+INFO   | jvm 1    | 2017/02/03 16:01:13 | févr. 03, 2017 4:01:13 PM fr.in2p3.lavoisier.service.ServerProperties getProperties
+INFO   | jvm 1    | 2017/02/03 16:01:13 | AVERTISSEMENT: File not found: security/lavoisier-service-headers.properties
+INFO   | jvm 1    | 2017/02/03 16:01:13 | févr. 03, 2017 4:01:13 PM fr.in2p3.lavoisier.service.ServerProperties getProperties
+INFO   | jvm 1    | 2017/02/03 16:01:13 | AVERTISSEMENT: File not found: security/lavoisier-service-headers.properties
+INFO   | jvm 1    | 2017/02/03 16:01:15 | févr. 03, 2017 3:01:15 PM fr.in2p3.lavoisier.engine.view.ViewAbstract createChain
+INFO   | jvm 1    | 2017/02/03 16:01:15 | AVERTISSEMENT: Entering fallback because of error [org.dom4j.XPathException: Exception occurred evaluting XPath: document('rsc/categories.xml'). Exception: File not found: rsc/categories.xml]
+INFO   | jvm 1    | 2017/02/03 16:01:15 | févr. 03, 2017 3:01:15 PM fr.in2p3.lavoisier.engine.view.ViewCached refresh
+INFO   | jvm 1    | 2017/02/03 16:01:15 | AVERTISSEMENT: Failed to refresh cache for view: navbar
+INFO   | jvm 1    | 2017/02/03 16:01:15 | fr.in2p3.lavoisier.interfaces.error.ConfigurationException: Exception raised for view 'navbar' [org.dom4j.XPathException: Exception occurred evaluting XPath: document('rsc/categories.xml'). Exception: File not found: rsc/categories.xml]
+INFO   | jvm 1    | 2017/02/03 16:01:15 | 	at fr.in2p3.lavoisier.parameter.source.XPathSource.getParameterValue(XPathSource.java:48)
+INFO   | jvm 1    | 2017/02/03 16:01:15 | 	at fr.in2p3.lavoisier.engine.factory.ParameterValueFactory.createParameterValues(ParameterValueFactory.java:35)
+INFO   | jvm 1    | 2017/02/03 16:01:15 | 	at fr.in2p3.lavoisier.engine.ChainOfAdaptors.<init>(ChainOfAdaptors.java:46)
+INFO   | jvm 1    | 2017/02/03 16:01:15 | 	at fr.in2p3.lavoisier.engine.view.ViewAbstract.createChain(ViewAbstract.java:117)
+INFO   | jvm 1    | 2017/02/03 16:01:15 | 	at fr.in2p3.lavoisier.engine.view.ViewCached.refresh(ViewCached.java:149)
+INFO   | jvm 1    | 2017/02/03 16:01:15 | 	at fr.in2p3.lavoisier.engine.task.CacheRefreshTask.run(CacheRefreshTask.java:22)
+INFO   | jvm 1    | 2017/02/03 16:01:15 | 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+INFO   | jvm 1    | 2017/02/03 16:01:15 | 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+INFO   | jvm 1    | 2017/02/03 16:01:15 | 	at java.lang.Thread.run(Thread.java:745)
+INFO   | jvm 1    | 2017/02/03 16:01:15 | Caused by: org.dom4j.XPathException: Exception occurred evaluting XPath: document('rsc/categories.xml'). Exception: File not found: rsc/categories.xml
+INFO   | jvm 1    | 2017/02/03 16:01:15 | 	at org.dom4j.xpath.DefaultXPath.handleJaxenException(DefaultXPath.java:374)
+INFO   | jvm 1    | 2017/02/03 16:01:15 | 	at org.dom4j.xpath.DefaultXPath.selectNodes(DefaultXPath.java:134)
+INFO   | jvm 1    | 2017/02/03 16:01:15 | 	at fr.in2p3.lavoisier.parameter.source.XPathSource.getParameterValue(XPathSource.java:46)
+INFO   | jvm 1    | 2017/02/03 16:01:15 | 	... 8 more
+INFO   | jvm 1    | 2017/02/03 16:01:15 | 
