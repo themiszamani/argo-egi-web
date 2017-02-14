@@ -45,18 +45,16 @@
                         <div class="box box-primary" id="table" tpl:foreach="/e:entries/Entity">
                             <div class="box-header">
                                 <h3 class="box-title">
-                                    <a tpl:if="/e:entries/@view='ngi_ar'" href="/lavoisier/ngi_reports">EGI</a>
-                                    <a tpl:else="" href="/lavoisier/site_reports?ngi={{@NGI}}&amp;accept=html">{{@NGI}}</a>
+                                    <a tpl:if="/e:entries/@view='ngi_ar'" href="/lavoisier/ngi_reports?report={{/e:entries/@report}}&amp;accept=html">EGI</a>
+                                    <a tpl:else="" href="/lavoisier/site_reports?report={{/e:entries/@report}}&amp;ngi={{@NGI}}&amp;accept=html">{{@NGI}}</a>
                                     > {{@name}}
 
-                                    <!--<a tpl:if="/e:entries/Entity[@name and @NGI]"  title="detailed report">-->
-                                        <!--<span style="margin:10px" class="btn btn-primary" onclick="change_url('{{/e:entries/@view}}','{{/e:entries/@view_details}}')">DETAILS</span>-->
-                                    <!--</a>-->
-                                    <a tpl:if="/e:entries/Entity[@name and @NGI]" href="{{ancestor::e:entries/@url}}{{@name}}" title="detailed report">
+
+                                    <a tpl:if="ancestor::e:entries/@url" href="{{ancestor::e:entries/@url}}{{@name}}" title="detailed report">
                                         <span style="margin:10px" class="btn btn-primary">DETAILS</span>
                                     </a>
 
-                                    <a tpl:if="/e:entries/Entity[@name and @NGI]" href="{{ancestor::e:entries/@status_url}}{{@name}}" title="Status report">
+                                    <a tpl:if="ancestor::e:entries/@status_url" href="{{ancestor::e:entries/@status_url}}{{@name}}" title="Status report">
                                         <span style="margin:10px" class="btn btn-primary">STATUS</span>
                                     </a>
 
