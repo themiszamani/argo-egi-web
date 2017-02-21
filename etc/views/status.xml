@@ -258,8 +258,8 @@
         <argument name="start" eval="false()"></argument>
         <argument name="end" eval="false()"></argument>
         <argument name="report"></argument>
-
-
+        <argument name="Fedcloud">_fedcloud_</argument>
+        <argument name="listSiteFedcloud" eval="concat(',',join(view('goc.listSiteFedcloud')/e:entries/e:entry/text(),','),',')"></argument>
 
         <argument name="lastdays" eval="choose($start!='false',99,3)"></argument>
 
@@ -301,6 +301,14 @@
                 <element in="group" if="@group=$ngi or $ngi='all'"></element>
                 <element-ignore></element-ignore>
             </elements>
+
+
+                <element in="root" if="$Fedcloud!='_fedcloud_'">
+                    <element in="group"  if="contains($listSiteFedcloud,@name)"></element>
+                    <element-ignore></element-ignore>
+                </element>
+
+
 
             <elements path="root">
                 <element-ignore in="group"></element-ignore>
