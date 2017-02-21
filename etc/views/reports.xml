@@ -630,7 +630,7 @@
         <connector type="XMLConnector">
             <parameter name="content" eval="choose($month=0,
             view('site_reports_cached',entry('report','Critical')),
-            view('site_reports_date',entry('report','Fedcloud')|entry('month',$month))
+            view('site_reports_date',entry('report','Critical')|entry('month',$month))
             )"></parameter>
         </connector>
 
@@ -643,9 +643,9 @@
             <element in="root">
                 <attribute-create out="description">'EGI Federated Cloud  Report'</attribute-create>
                 <attribute-create out="view">'fedcloud_reports'</attribute-create>
-                <attribute-create out="related_view">'fedcloud_ar'</attribute-create>
+                <attribute-create out="related_view">'site_ar'</attribute-create>
                 <attribute-create out="ngi">$ngi</attribute-create>
-                <attribute-create out="report">'Fedcloud'</attribute-create>
+                <attribute-create out="report">'Critical'</attribute-create>
                 <attribute-create out="entity">'site'</attribute-create>
             </element>
 
