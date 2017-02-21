@@ -210,6 +210,8 @@
 
 
         <element in="e:entries">
+            <attribute-create out="ReportUrl">url()</attribute-create>
+
             <element in="e:entries">
                 <element in="e:entry">
                     <element-ignore in="Availability"></element-ignore>
@@ -923,7 +925,7 @@
         <argument name="ngi">all</argument>
         <argument name="site">false</argument>
 
-        <argument name="report">Fedcloud</argument>
+        <argument name="report">Critical</argument>
 
         <argument name="start" eval="false()"></argument>
         <argument name="end" eval="false()"></argument>
