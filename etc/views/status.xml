@@ -220,6 +220,8 @@
         <argument name="site">false</argument>
         <argument name="lastdays">3</argument>
         <argument name="report">Critical</argument>
+        <argument name="Fedcloud">_fedcloud_</argument>
+        <argument name="listSiteFedcloud" eval="concat(',',join(view('goc.listSiteFedcloud')/e:entries/e:entry/text(),','),',')"></argument>
 
         <variable name='setutc' eval="java:java.util.TimeZone.setDefault(java:java.util.TimeZone.getTimeZone('UTC'))"></variable>
         <variable name="start_date" eval="concat(str:replace(substring(date:add(date:date-time(),concat('-P',$lastdays,'D')), 0,20),' ','T'),'Z')"></variable>
@@ -229,6 +231,13 @@
         <connector type="XMLConnector">
             <parameter name="content" eval="view('api.status.call',entry('group_type','sites')|entry('site',$site)|entry('start_time',$start_date)|entry('end_time',$end_date)|entry('report',$report))"></parameter>
         </connector>
+
+        <processors>
+        <element in="root" if="$Fedcloud!='_fedcloud_'">
+                    <element in="group"  if="contains($listSiteFedcloud,@name)"></element>
+                    <element-ignore></element-ignore>
+        </element>
+        </processors>
 
     </view>
 
@@ -248,7 +257,8 @@
 
         <argument name="start" eval="false()"></argument>
         <argument name="end" eval="false()"></argument>
-        <argument name="report">Critical</argument>
+        <argument name="report"></argument>
+
 
 
         <argument name="lastdays" eval="choose($start!='false',99,3)"></argument>
