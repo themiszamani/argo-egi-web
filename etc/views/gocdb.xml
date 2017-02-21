@@ -66,6 +66,38 @@
 
 </view>
 
+    <view xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" name="goc.listSiteFedcloud">
+        <info>
+            <description>GOC DB : List of Sites with Cloud Tag</description>
+            <category>GOC DB</category>
+        </info>
+
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('goc.siteList')/results/SITE[SCOPES/SCOPE/text()='FedCloud']/@NAME"/>
+        </connector>
+
+        <cache type="FileCache">
+            <!--<trigger type="ViewCreatedTrigger"/>-->
+            <trigger type="DeltaTimeTrigger">
+                <parameter name="hours">2</parameter>
+            </trigger>
+            <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+                </parameter>
+            </trigger>
+        </cache>
+
+
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="contentType">text/xml</parameter>
+            </renderer>
+        </renderers>
+    </view>
+
     <view xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" name="listSiteElixir">
         <info>
             <description>GOC DB : List of Sites with Elixir Tag</description>
