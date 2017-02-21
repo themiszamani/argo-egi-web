@@ -343,7 +343,7 @@
 
 
 
-            <element in="e:entries">
+            <element in="e:entries" if="$start_date!='_DATE_'">
                 <attribute-create out="url">concat('/lavoisier/',$view_details,'?report=',$report,
                     '&amp;end_date=',$end_date,'&amp;start_date=',$start_date,'&amp;granularity=',$granularity,'&amp;site=')
                 </attribute-create>
@@ -351,6 +351,17 @@
                     '&amp;end=',$end_date,'&amp;start=',$start_date,'&amp;accept=html&amp;site=')
                 </attribute-create>
             </element>
+
+            <element in="e:entries" if="$start_date='_DATE_'">
+                <attribute-create out="url">concat('/lavoisier/',$view_details,'?report=',$report,
+                    '&amp;end_date=',substring(date:date(),0,11),'&amp;start_date=',substring(date:add(date:date(),'-P30D'),0,11),'&amp;granularity=',$granularity,'&amp;site=')
+                </attribute-create>
+                <attribute-create out="status_url">concat('/lavoisier/status_report-site','?report=',$report,
+                    '&amp;end=',substring(date:date(),0,11),'&amp;start=',substring(date:add(date:date(),'-P30D'),0,11),'&amp;accept=html&amp;site=')
+                </attribute-create>
+            </element>
+
+
 
 
         </processors>
