@@ -259,7 +259,7 @@
         <argument name="end" eval="false()"></argument>
         <argument name="report"></argument>
         <argument name="Fedcloud">_fedcloud_</argument>
-
+        <argument name="listSiteFedcloud" eval="concat(',',join(view('goc.listSiteFedcloud')/e:entries/e:entry/text(),','),',')"></argument>
 
         <argument name="lastdays" eval="choose($start!='false',99,3)"></argument>
 
