@@ -65,7 +65,14 @@
                 <parameter name="minutes">14</parameter>
             </trigger>
             <trigger type="ViewNotifiedTrigger"/>
-            <trigger type="ViewCreatedTrigger"></trigger>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="all">true</parameter>
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+                    <entry>goc.listSiteFedcloud</entry>
+                </parameter>
+            </trigger>
+
 
         </cache>
     </view>
@@ -82,7 +89,13 @@
                 <parameter name="minutes">26</parameter>
             </trigger>
             <trigger type="ViewNotifiedTrigger"/>
-            <trigger type="ViewCreatedTrigger"></trigger>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="all">true</parameter>
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+                    <entry>goc.listSiteFedcloud</entry>
+                </parameter>
+            </trigger>
         </cache>
     </view>
 
@@ -98,7 +111,13 @@
                 <parameter name="minutes">38</parameter>
             </trigger>
             <trigger type="ViewNotifiedTrigger"/>
-            <trigger type="ViewCreatedTrigger"></trigger>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="all">true</parameter>
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+                    <entry>goc.listSiteFedcloud</entry>
+                </parameter>
+            </trigger>
 
         </cache>
     </view>
@@ -117,7 +136,13 @@
                 <parameter name="minutes">14</parameter>
             </trigger>
             <trigger type="ViewNotifiedTrigger"/>
-            <trigger type="ViewCreatedTrigger"></trigger>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="all">true</parameter>
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+                    <entry>goc.listSiteFedcloud</entry>
+                </parameter>
+            </trigger>
 
         </cache>
     </view>
@@ -134,7 +159,13 @@
                 <parameter name="minutes">26</parameter>
             </trigger>
             <trigger type="ViewNotifiedTrigger"/>
-            <trigger type="ViewCreatedTrigger"></trigger>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="all">true</parameter>
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+                    <entry>goc.listSiteFedcloud</entry>
+                </parameter>
+            </trigger>
 
         </cache>
     </view>
@@ -151,7 +182,13 @@
                 <parameter name="minutes">38</parameter>
             </trigger>
             <trigger type="ViewNotifiedTrigger"/>
-            <trigger type="ViewCreatedTrigger"></trigger>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="all">true</parameter>
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+                    <entry>goc.listSiteFedcloud</entry>
+                </parameter>
+            </trigger>
         </cache>
     </view>
 
@@ -167,7 +204,13 @@
                 <parameter name="minutes">14</parameter>
             </trigger>
             <trigger type="ViewNotifiedTrigger"/>
-            <trigger type="ViewCreatedTrigger"></trigger>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="all">true</parameter>
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+                    <entry>goc.listSiteFedcloud</entry>
+                </parameter>
+            </trigger>
 
         </cache>
     </view>
@@ -184,7 +227,13 @@
                 <parameter name="minutes">26</parameter>
             </trigger>
             <trigger type="ViewNotifiedTrigger"/>
-            <trigger type="ViewCreatedTrigger"></trigger>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="all">true</parameter>
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+                    <entry>goc.listSiteFedcloud</entry>
+                </parameter>
+            </trigger>
 
         </cache>
     </view>
@@ -201,7 +250,13 @@
                 <parameter name="minutes">38</parameter>
             </trigger>
             <trigger type="ViewNotifiedTrigger"/>
-            <trigger type="ViewCreatedTrigger"></trigger>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="all">true</parameter>
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+                    <entry>goc.listSiteFedcloud</entry>
+                </parameter>
+            </trigger>
 
         </cache>
     </view>
