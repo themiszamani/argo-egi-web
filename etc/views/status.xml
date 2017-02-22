@@ -234,7 +234,7 @@
 
         <processors>
         <element in="root" if="$Fedcloud!='_fedcloud_'">
-                    <element in="group"  if="contains($listSiteFedcloud,@name)"></element>
+                    <element in="group" if="contains($listSiteFedcloud,concat(',',@name,','))"></element>
                     <element-ignore></element-ignore>
         </element>
         </processors>
@@ -304,7 +304,8 @@
 
 
                 <element in="root" if="$Fedcloud!='_fedcloud_'">
-                    <element in="group"  if="contains($listSiteFedcloud,@name)"></element>
+
+                    <element in="group" if="contains($listSiteFedcloud,concat(',',@name,','))"></element>
                     <element-ignore></element-ignore>
                 </element>
 
