@@ -312,7 +312,7 @@
 
         <argument name="start" eval="false()"></argument>
         <argument name="end" eval="false()"></argument>
-        <argument name="report"></argument>
+        <argument name="report">Critical</argument>
         <argument name="Fedcloud">_fedcloud_</argument>
         <argument name="listSiteFedcloud" eval="concat(',',join(view('goc.listSiteFedcloud')/e:entries/e:entry/text(),','),',')"></argument>
 
