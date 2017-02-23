@@ -653,12 +653,17 @@
 
             <element in="root">
                 <element-ignore in="root">
-                    <element in="group" if="contains($listSiteFedcloud,concat(',',group/@name,','))">
+                    <element in="group">
                         <element in="group"  if="contains($listSiteFedcloud,concat(',',@name,','))"></element>
                         <element-ignore></element-ignore>
                     </element>
                     <element-ignore></element-ignore>
                 </element-ignore>
+            </element>
+
+            <element in="root">
+                    <element in="group" if="count(group) &gt; 0"></element>
+                    <element-ignore></element-ignore>
             </element>
 
 
