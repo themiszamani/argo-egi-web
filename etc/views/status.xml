@@ -52,6 +52,75 @@
 
 
 
+    <view name="status_site_3_CriticalUncert">
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('status_site',entry('lastdays','3')|entry('report','CriticalUncert'))"></parameter>
+        </connector>
+
+        <cache type="FileCache">
+            <!--<trigger type="ViewCreatedTrigger"/>-->
+            <trigger type="DeltaTimeTrigger">
+                <parameter name="minutes">14</parameter>
+            </trigger>
+            <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="all">true</parameter>
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+                    <entry>goc.listSiteFedcloud</entry>
+                </parameter>
+            </trigger>
+
+
+        </cache>
+    </view>
+
+    <view name="status_site_10_CriticalUncert">
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('status_site',entry('lastdays','10')|entry('report','CriticalUncert'))"></parameter>
+        </connector>
+
+        <cache type="FileCache">
+            <!--<trigger type="ViewCreatedTrigger"/>-->
+            <trigger type="DeltaTimeTrigger">
+                <parameter name="minutes">26</parameter>
+            </trigger>
+            <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="all">true</parameter>
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+                    <entry>goc.listSiteFedcloud</entry>
+                </parameter>
+            </trigger>
+        </cache>
+    </view>
+
+    <view name="status_site_30_CriticalUncert">
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('status_site',entry('lastdays','30')|entry('report','CriticalUncert'))"></parameter>
+        </connector>
+
+        <cache type="FileCache">
+            <!--<trigger type="ViewCreatedTrigger"/>-->
+            <trigger type="DeltaTimeTrigger">
+                <parameter name="minutes">38</parameter>
+            </trigger>
+            <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="all">true</parameter>
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+                    <entry>goc.listSiteFedcloud</entry>
+                </parameter>
+            </trigger>
+
+        </cache>
+    </view>
+
 
     <view name="status_site_3_Critical">
 
