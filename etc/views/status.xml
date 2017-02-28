@@ -65,6 +65,14 @@
                 <parameter name="minutes">14</parameter>
             </trigger>
             <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="all">true</parameter>
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+                    <entry>goc.listSiteFedcloud</entry>
+                </parameter>
+            </trigger>
+
 
         </cache>
     </view>
@@ -81,7 +89,13 @@
                 <parameter name="minutes">26</parameter>
             </trigger>
             <trigger type="ViewNotifiedTrigger"/>
-
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="all">true</parameter>
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+                    <entry>goc.listSiteFedcloud</entry>
+                </parameter>
+            </trigger>
         </cache>
     </view>
 
@@ -97,6 +111,13 @@
                 <parameter name="minutes">38</parameter>
             </trigger>
             <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="all">true</parameter>
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+                    <entry>goc.listSiteFedcloud</entry>
+                </parameter>
+            </trigger>
 
         </cache>
     </view>
@@ -115,6 +136,13 @@
                 <parameter name="minutes">14</parameter>
             </trigger>
             <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="all">true</parameter>
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+                    <entry>goc.listSiteFedcloud</entry>
+                </parameter>
+            </trigger>
 
         </cache>
     </view>
@@ -131,6 +159,13 @@
                 <parameter name="minutes">26</parameter>
             </trigger>
             <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="all">true</parameter>
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+                    <entry>goc.listSiteFedcloud</entry>
+                </parameter>
+            </trigger>
 
         </cache>
     </view>
@@ -147,14 +182,20 @@
                 <parameter name="minutes">38</parameter>
             </trigger>
             <trigger type="ViewNotifiedTrigger"/>
-
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="all">true</parameter>
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+                    <entry>goc.listSiteFedcloud</entry>
+                </parameter>
+            </trigger>
         </cache>
     </view>
 
-    <view name="status_site_3_Cloud">
+    <view name="status_site_3_Fedcloud">
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('status_site',entry('lastdays','3')|entry('report','Cloud'))"></parameter>
+            <parameter name="content" eval="view('status_site',entry('lastdays','3')|entry('report','Fedcloud'))"></parameter>
         </connector>
 
         <cache type="FileCache">
@@ -163,14 +204,21 @@
                 <parameter name="minutes">14</parameter>
             </trigger>
             <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="all">true</parameter>
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+                    <entry>goc.listSiteFedcloud</entry>
+                </parameter>
+            </trigger>
 
         </cache>
     </view>
 
-    <view name="status_site_10_Cloud">
+    <view name="status_site_10_Fedcloud">
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('status_site',entry('lastdays','10')|entry('report','Cloud'))"></parameter>
+            <parameter name="content" eval="view('status_site',entry('lastdays','10')|entry('report','Fedcloud'))"></parameter>
         </connector>
 
         <cache type="FileCache">
@@ -179,14 +227,21 @@
                 <parameter name="minutes">26</parameter>
             </trigger>
             <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="all">true</parameter>
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+                    <entry>goc.listSiteFedcloud</entry>
+                </parameter>
+            </trigger>
 
         </cache>
     </view>
 
-    <view name="status_site_30_Cloud">
+    <view name="status_site_30_Fedcloud">
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('status_site',entry('lastdays','30')|entry('report','Cloud'))"></parameter>
+            <parameter name="content" eval="view('status_site',entry('lastdays','30')|entry('report','Fedcloud'))"></parameter>
         </connector>
 
         <cache type="FileCache">
@@ -195,6 +250,13 @@
                 <parameter name="minutes">38</parameter>
             </trigger>
             <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="all">true</parameter>
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+                    <entry>goc.listSiteFedcloud</entry>
+                </parameter>
+            </trigger>
 
         </cache>
     </view>
@@ -213,6 +275,8 @@
         <argument name="site">false</argument>
         <argument name="lastdays">3</argument>
         <argument name="report">Critical</argument>
+        <argument name="Fedcloud">_fedcloud_</argument>
+        <argument name="listSiteFedcloud" eval="concat(',',join(view('goc.listSiteFedcloud')/e:entries/e:entry/text(),','),',')"></argument>
 
         <variable name='setutc' eval="java:java.util.TimeZone.setDefault(java:java.util.TimeZone.getTimeZone('UTC'))"></variable>
         <variable name="start_date" eval="concat(str:replace(substring(date:add(date:date-time(),concat('-P',$lastdays,'D')), 0,20),' ','T'),'Z')"></variable>
@@ -222,6 +286,13 @@
         <connector type="XMLConnector">
             <parameter name="content" eval="view('api.status.call',entry('group_type','sites')|entry('site',$site)|entry('start_time',$start_date)|entry('end_time',$end_date)|entry('report',$report))"></parameter>
         </connector>
+
+        <processors>
+        <element in="root" if="$Fedcloud!='_fedcloud_'">
+                    <element in="group" if="contains($listSiteFedcloud,concat(',',@name,','))"></element>
+                    <element-ignore></element-ignore>
+        </element>
+        </processors>
 
     </view>
 
@@ -242,28 +313,23 @@
         <argument name="start" eval="false()"></argument>
         <argument name="end" eval="false()"></argument>
         <argument name="report">Critical</argument>
+        <argument name="Fedcloud">_fedcloud_</argument>
+        <argument name="listSiteFedcloud" eval="concat(',',join(view('goc.listSiteFedcloud')/e:entries/e:entry/text(),','),',')"></argument>
+
         <argument name="lastdays" eval="choose($start!='false',99,3)"></argument>
 
-
-        <variable name="nbdays">3,10,30</variable>
-
         <variable name="dateTime" eval="date:date-time()"></variable>
-
-
         <variable name="start_date" eval="choose($start!='false',concat($start,'T00:00:00Z'),concat(str:replace(substring(date:add(date:date-time(),concat('-P',$lastdays,'D')), 0,20),' ','T'),'Z'))"/>
         <variable name="end_date" eval="choose($end!='false',concat($end,'T00:00:00Z'),concat(str:replace(substring(date:date-time(), 0,20),' ','T'),'Z'))"/>
+        <variable name="nbdays">3,10,30</variable>
 
 
-
-        <!--<variable name="start_date" eval="choose($start!='false',concat($start,'T00:00:00Z'),concat(substring(date:add(date:date-time(),'-P3D'), 0,11),'T00:00:00Z'))"></variable>-->
-        <!--<variable name="end_date" eval="choose($end!='false',concat($end,'T00:00:00Z'),concat(substring(date:date-time(),0,11),'T23:59:59Z'))"></variable>-->
-
-        <!---->
 
         <connector type="XMLConnector">
             <parameter name="content" eval="
             view(
-                choose(boolean(str:split($nbdays,',')[text()=$lastdays]),
+                choose(
+                boolean(str:split($nbdays,',')[text()=$lastdays]),
                     concat('status_site_',$lastdays,'_',$report),
                     'api.status.call')
             ,entry('group_type','sites')|entry('site',$site)|entry('start_time',$start_date)|entry('end_time',$end_date)|entry('report',$report))"/>
@@ -277,6 +343,9 @@
                 <attribute-create out="ngi" if="$ngi!='all'">$ngi</attribute-create>
                 <attribute-create out="lastdays">$lastdays</attribute-create>
                 <attribute-create out="dateTime">$dateTime</attribute-create>
+                <attribute-create out="start_date">$start_date</attribute-create>
+                <attribute-create out="end_date">$end_date</attribute-create>
+
                 <element in="group" if="contains(concat($site,','),@name) or $site='false'">
                     <attribute-create out="group">choose($SiteList/results/Ngi[SITE/@NAME=current()/../@name]/@key!='',$SiteList/results/Ngi[SITE/@NAME=current()/../@name]/@key,'UNCERTIFIED')</attribute-create>
                 </element>
@@ -287,6 +356,15 @@
                 <element in="group" if="@group=$ngi or $ngi='all'"></element>
                 <element-ignore></element-ignore>
             </elements>
+
+
+                <element in="root" if="$Fedcloud!='_fedcloud_'">
+
+                    <element in="group" if="contains($listSiteFedcloud,concat(',',@name,','))"></element>
+                    <element-ignore></element-ignore>
+                </element>
+
+
 
             <elements path="root">
                 <element-ignore in="group"></element-ignore>

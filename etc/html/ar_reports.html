@@ -16,10 +16,10 @@
 
             <ul class="sidebar-menu">
                 <li  tpl:foreach="e:entries/e:entries[@name]" style="font-size: lighter;background-color: #C7d2e1">
-                    <a  href="/lavoisier/site_reports?ngi={{@name}}&amp;report={{/e:entries/@report}}&amp;month={{/e:entries/@month0}}">  <span>-- {{@name}} --</span> </a>
+                    <a  href="/lavoisier/site_reports?ngi={{@name}}&amp;report={{/e:entries/@report}}&amp;month={{/e:entries/@month0}}&amp;accept=html">  <span>-- {{@name}} --</span> </a>
                 </li>
                 <li  tpl:foreach="e:entries/e:entries/e:entry[@key!='AVERAGE'][@name]" style="font-size: lighter;background-color: #C7d2e1">
-                    <a  href="/lavoisier/site_reports?ngi={{@key}}&amp;report={{/e:entries/@report}}&amp;month={{/e:entries/@month0}}">  <span>-- {{@key}} --</span> </a>
+                    <a  href="/lavoisier/site_reports?ngi={{@key}}&amp;report={{/e:entries/@report}}&amp;month={{/e:entries/@month0}}&amp;accept=html">  <span>-- {{@key}} --</span> </a>
                 </li>
 
             </ul>
