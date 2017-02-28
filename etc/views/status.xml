@@ -52,6 +52,75 @@
 
 
 
+    <view name="status_site_3_CriticalUncert">
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('status_site',entry('lastdays','3')|entry('report','CriticalUncert'))"></parameter>
+        </connector>
+
+        <cache type="FileCache">
+            <!--<trigger type="ViewCreatedTrigger"/>-->
+            <trigger type="DeltaTimeTrigger">
+                <parameter name="minutes">14</parameter>
+            </trigger>
+            <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="all">true</parameter>
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+                    <entry>goc.listSiteFedcloud</entry>
+                </parameter>
+            </trigger>
+
+
+        </cache>
+    </view>
+
+    <view name="status_site_10_CriticalUncert">
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('status_site',entry('lastdays','10')|entry('report','CriticalUncert'))"></parameter>
+        </connector>
+
+        <cache type="FileCache">
+            <!--<trigger type="ViewCreatedTrigger"/>-->
+            <trigger type="DeltaTimeTrigger">
+                <parameter name="minutes">26</parameter>
+            </trigger>
+            <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="all">true</parameter>
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+                    <entry>goc.listSiteFedcloud</entry>
+                </parameter>
+            </trigger>
+        </cache>
+    </view>
+
+    <view name="status_site_30_CriticalUncert">
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('status_site',entry('lastdays','30')|entry('report','CriticalUncert'))"></parameter>
+        </connector>
+
+        <cache type="FileCache">
+            <!--<trigger type="ViewCreatedTrigger"/>-->
+            <trigger type="DeltaTimeTrigger">
+                <parameter name="minutes">38</parameter>
+            </trigger>
+            <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="all">true</parameter>
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+                    <entry>goc.listSiteFedcloud</entry>
+                </parameter>
+            </trigger>
+
+        </cache>
+    </view>
+
 
     <view name="status_site_3_Critical">
 
@@ -65,7 +134,14 @@
                 <parameter name="minutes">14</parameter>
             </trigger>
             <trigger type="ViewNotifiedTrigger"/>
-            <trigger type="ViewCreatedTrigger"></trigger>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="all">true</parameter>
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+                    <entry>goc.listSiteFedcloud</entry>
+                </parameter>
+            </trigger>
+
 
         </cache>
     </view>
@@ -82,7 +158,13 @@
                 <parameter name="minutes">26</parameter>
             </trigger>
             <trigger type="ViewNotifiedTrigger"/>
-            <trigger type="ViewCreatedTrigger"></trigger>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="all">true</parameter>
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+                    <entry>goc.listSiteFedcloud</entry>
+                </parameter>
+            </trigger>
         </cache>
     </view>
 
@@ -98,7 +180,13 @@
                 <parameter name="minutes">38</parameter>
             </trigger>
             <trigger type="ViewNotifiedTrigger"/>
-            <trigger type="ViewCreatedTrigger"></trigger>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="all">true</parameter>
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+                    <entry>goc.listSiteFedcloud</entry>
+                </parameter>
+            </trigger>
 
         </cache>
     </view>
@@ -117,7 +205,13 @@
                 <parameter name="minutes">14</parameter>
             </trigger>
             <trigger type="ViewNotifiedTrigger"/>
-            <trigger type="ViewCreatedTrigger"></trigger>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="all">true</parameter>
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+                    <entry>goc.listSiteFedcloud</entry>
+                </parameter>
+            </trigger>
 
         </cache>
     </view>
@@ -134,7 +228,13 @@
                 <parameter name="minutes">26</parameter>
             </trigger>
             <trigger type="ViewNotifiedTrigger"/>
-            <trigger type="ViewCreatedTrigger"></trigger>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="all">true</parameter>
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+                    <entry>goc.listSiteFedcloud</entry>
+                </parameter>
+            </trigger>
 
         </cache>
     </view>
@@ -151,7 +251,13 @@
                 <parameter name="minutes">38</parameter>
             </trigger>
             <trigger type="ViewNotifiedTrigger"/>
-            <trigger type="ViewCreatedTrigger"></trigger>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="all">true</parameter>
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+                    <entry>goc.listSiteFedcloud</entry>
+                </parameter>
+            </trigger>
         </cache>
     </view>
 
@@ -167,7 +273,13 @@
                 <parameter name="minutes">14</parameter>
             </trigger>
             <trigger type="ViewNotifiedTrigger"/>
-            <trigger type="ViewCreatedTrigger"></trigger>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="all">true</parameter>
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+                    <entry>goc.listSiteFedcloud</entry>
+                </parameter>
+            </trigger>
 
         </cache>
     </view>
@@ -184,7 +296,13 @@
                 <parameter name="minutes">26</parameter>
             </trigger>
             <trigger type="ViewNotifiedTrigger"/>
-            <trigger type="ViewCreatedTrigger"></trigger>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="all">true</parameter>
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+                    <entry>goc.listSiteFedcloud</entry>
+                </parameter>
+            </trigger>
 
         </cache>
     </view>
@@ -201,7 +319,13 @@
                 <parameter name="minutes">38</parameter>
             </trigger>
             <trigger type="ViewNotifiedTrigger"/>
-            <trigger type="ViewCreatedTrigger"></trigger>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="all">true</parameter>
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+                    <entry>goc.listSiteFedcloud</entry>
+                </parameter>
+            </trigger>
 
         </cache>
     </view>
@@ -220,6 +344,8 @@
         <argument name="site">false</argument>
         <argument name="lastdays">3</argument>
         <argument name="report">Critical</argument>
+        <argument name="Fedcloud">_fedcloud_</argument>
+        <argument name="listSiteFedcloud" eval="concat(',',join(view('goc.listSiteFedcloud')/e:entries/e:entry/text(),','),',')"></argument>
 
         <variable name='setutc' eval="java:java.util.TimeZone.setDefault(java:java.util.TimeZone.getTimeZone('UTC'))"></variable>
         <variable name="start_date" eval="concat(str:replace(substring(date:add(date:date-time(),concat('-P',$lastdays,'D')), 0,20),' ','T'),'Z')"></variable>
@@ -229,6 +355,13 @@
         <connector type="XMLConnector">
             <parameter name="content" eval="view('api.status.call',entry('group_type','sites')|entry('site',$site)|entry('start_time',$start_date)|entry('end_time',$end_date)|entry('report',$report))"></parameter>
         </connector>
+
+        <processors>
+        <element in="root" if="$Fedcloud!='_fedcloud_'">
+                    <element in="group" if="contains($listSiteFedcloud,concat(',',@name,','))"></element>
+                    <element-ignore></element-ignore>
+        </element>
+        </processors>
 
     </view>
 
@@ -249,7 +382,8 @@
         <argument name="start" eval="false()"></argument>
         <argument name="end" eval="false()"></argument>
         <argument name="report">Critical</argument>
-
+        <argument name="Fedcloud">_fedcloud_</argument>
+        <argument name="listSiteFedcloud" eval="concat(',',join(view('goc.listSiteFedcloud')/e:entries/e:entry/text(),','),',')"></argument>
 
         <argument name="lastdays" eval="choose($start!='false',99,3)"></argument>
 
@@ -291,6 +425,15 @@
                 <element in="group" if="@group=$ngi or $ngi='all'"></element>
                 <element-ignore></element-ignore>
             </elements>
+
+
+                <element in="root" if="$Fedcloud!='_fedcloud_'">
+
+                    <element in="group" if="contains($listSiteFedcloud,concat(',',@name,','))"></element>
+                    <element-ignore></element-ignore>
+                </element>
+
+
 
             <elements path="root">
                 <element-ignore in="group"></element-ignore>

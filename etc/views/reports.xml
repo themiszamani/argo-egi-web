@@ -625,12 +625,12 @@
         <argument name="ngi">all</argument>
         <argument name="month" eval="0"></argument>
 
-
+        <argument name="listSiteFedcloud" eval="concat(',',join(view('goc.listSiteFedcloud')/e:entries/e:entry/text(),','),',')"></argument>
 
         <connector type="XMLConnector">
             <parameter name="content" eval="choose($month=0,
-            view('site_reports_cached',entry('report','Fedcloud')),
-            view('site_reports_date',entry('report','Fedcloud')|entry('month',$month))
+            view('site_reports_cached',entry('report','Critical')),
+            view('site_reports_date',entry('report','Critical')|entry('month',$month))
             )"></parameter>
         </connector>
 
@@ -643,9 +643,9 @@
             <element in="root">
                 <attribute-create out="description">'EGI Federated Cloud  Report'</attribute-create>
                 <attribute-create out="view">'fedcloud_reports'</attribute-create>
-                <attribute-create out="related_view">'fedcloud_ar'</attribute-create>
+                <attribute-create out="related_view">'site_ar'</attribute-create>
                 <attribute-create out="ngi">$ngi</attribute-create>
-                <attribute-create out="report">'Fedcloud'</attribute-create>
+                <attribute-create out="report">'Critical'</attribute-create>
                 <attribute-create out="entity">'site'</attribute-create>
             </element>
 
@@ -653,9 +653,17 @@
 
             <element in="root">
                 <element-ignore in="root">
-                    <element in="group" if="@name=$ngi or $ngi='all'"></element>
+                    <element in="group">
+                        <element in="group"  if="contains($listSiteFedcloud,concat(',',@name,','))"></element>
+                        <element-ignore></element-ignore>
+                    </element>
                     <element-ignore></element-ignore>
                 </element-ignore>
+            </element>
+
+            <element in="root">
+                    <element in="group" if="count(group) &gt; 0"></element>
+                    <element-ignore></element-ignore>
             </element>
 
 
@@ -920,7 +928,9 @@
             <description>Site League Reports</description>
         </info>
 
-        <argument name="listElixirSites" eval="string(concat(view('listSiteElixir')/e:entries/e:entry/text(),','))"></argument>
+
+        <argument name="listElixirSites" eval="concat(',',join(view('listSiteElixir')/e:entries/e:entry/text(),','),',')"></argument>
+
         <argument name="month" eval="0"></argument>
         <argument name="ngi">all</argument>
         <argument name="site">false</argument>
@@ -944,8 +954,8 @@
 
             <element in="root" out="e:entries">
                 <element-ignore in="root">
-                    <element in="group" if="contains($listElixirSites,group/@name)">
-                        <element in="group"  if="contains($listElixirSites,@name)" out="Site">
+                    <element in="group" if="contains($listElixirSites,concat(',',group/@name,','))">
+                        <element in="group"  if="contains($listElixirSites,concat(',',@name,','))" out="Site">
                             <attribute in="name" out="site"></attribute>
                             <element in="results" out="Availability"></element>
                         </element>
