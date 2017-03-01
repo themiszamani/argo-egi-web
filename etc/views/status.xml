@@ -461,7 +461,7 @@
 
 
             <elements path="root/group">
-                <element-ignore in="status" if="date:seconds(following-sibling::status/@timestamp)  &lt; date:seconds($start_date)"></element-ignore>
+                <element-ignore in="status" if="following-sibling::status/@timestamp and date:seconds(following-sibling::status/@timestamp)  &lt; date:seconds($start_date)"></element-ignore>
             </elements>
 
 
@@ -565,8 +565,9 @@
             </elements>
 
             <elements path="root/group">
-                <element-ignore in="status" if="date:seconds(following-sibling::status/@timestamp)  &lt; date:seconds($start_date)"></element-ignore>
+                <element-ignore in="status" if="following-sibling::status/@timestamp and date:seconds(following-sibling::status/@timestamp)  &lt; date:seconds($start_date)"></element-ignore>
             </elements>
+
 
 
             <element in="root">
@@ -672,8 +673,9 @@
             </elements>
 
             <elements path="root/group">
-                <element-ignore in="status" if="date:seconds(following-sibling::status/@timestamp)  &lt; date:seconds($start_date)"></element-ignore>
+                <element-ignore in="status" if="following-sibling::status/@timestamp and date:seconds(following-sibling::status/@timestamp)  &lt; date:seconds($start_date)"></element-ignore>
             </elements>
+
 
 
             <element in="root">
