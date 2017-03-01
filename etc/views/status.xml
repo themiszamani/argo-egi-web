@@ -459,8 +459,15 @@
                 <element-create>sort_by_string(../status,'@timestamp')</element-create>
             </elements>
 
+
+            <elements path="root/group">
+                <element-ignore in="status" if="date:seconds(following-sibling::status/@timestamp)  &lt; date:seconds($start_date)"></element-ignore>
+            </elements>
+
+
             <element in="root">
                 <set variable="StateColor">view('StateColor')</set>
+
 
                 <element in="group">
                     <element in="status">
@@ -471,6 +478,8 @@
                 </element>
 
             </element>
+
+
 
             <elements path="root/group">
                 <element-ignore in="status" if="preceding-sibling::status and date:seconds(@timestamp) &lt; date:seconds($start_date)"></element-ignore>
@@ -555,6 +564,11 @@
                 <element-create>sort_by_string(../status,'@timestamp')</element-create>
             </elements>
 
+            <elements path="root/group">
+                <element-ignore in="status" if="date:seconds(following-sibling::status/@timestamp)  &lt; date:seconds($start_date)"></element-ignore>
+            </elements>
+
+
             <element in="root">
                 <set variable="StateColor">view('StateColor')</set>
 
@@ -567,6 +581,7 @@
                 </element>
 
             </element>
+
 
             <elements path="root/group">
                 <element-ignore in="status" if="preceding-sibling::status and date:seconds(@timestamp) &lt; date:seconds($start_date)"></element-ignore>
@@ -656,6 +671,11 @@
                 <element-create>sort_by_string(../status,'@timestamp')</element-create>
             </elements>
 
+            <elements path="root/group">
+                <element-ignore in="status" if="date:seconds(following-sibling::status/@timestamp)  &lt; date:seconds($start_date)"></element-ignore>
+            </elements>
+
+
             <element in="root">
                 <set variable="StateColor">view('StateColor')</set>
 
@@ -669,6 +689,8 @@
 
 
             </element>
+
+
 
             <elements path="root/group">
                 <element-ignore in="status" if="preceding-sibling::status and date:seconds(@timestamp) &lt; date:seconds($start_date)"></element-ignore>
