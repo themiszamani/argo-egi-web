@@ -922,6 +922,96 @@
 
     </view>
 
+
+    <view name="NGIHR_reports" post-processors="ReportsTemplate">
+        <info>
+            <category>AR reports</category>
+            <description>Site League Reports</description>
+        </info>
+
+        <argument name="month" eval="0"></argument>
+        <argument name="ngi">NGI_HR</argument>
+        <argument name="report">NGIHRTest</argument>
+        <argument name="tag">_tag_</argument>
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="choose($month=0,view('site_reports_cached',entry('report',$report)),view('site_reports_date',entry('month',$month)|entry('report',$report)))"></parameter>
+        </connector>
+
+        <processors>
+
+
+
+            <element in="root">
+                <attribute-create out="description">'Site League Report'</attribute-create>
+                <attribute-create out="view">'site_reports'</attribute-create>
+                <attribute-create out="related_view">'site_ar'</attribute-create>
+                <attribute-create out="ngi">$ngi</attribute-create>
+                <attribute-create out="report">$report</attribute-create>
+                <attribute-create out="entity">'site'</attribute-create>
+            </element>
+
+
+            <element in="root">
+                <set variable="NGIHRCritical">view('site_reports_cached',entry('report','Critical'))/*</set>
+                <element in="root">
+                    <element-create as="first-child">$NGIHRCritical</element-create>
+                </element>
+            </element>
+
+
+            <element in="root">
+                <element-ignore in="root">
+                    <element in="group" if="@name=$ngi or $ngi='all'"></element>
+                    <element-ignore></element-ignore>
+                </element-ignore>
+            </element>
+
+
+
+
+
+        </processors>
+
+        <pre-renderers>
+            <title>/e:entries/@description</title>
+
+            <field label="month">/e:entries/@monthstart</field>
+            <field label="month3">/e:entries/@month3</field>
+            <field label="month2">/e:entries/@month2</field>
+            <field label="month1">/e:entries/@month1</field>
+            <field label="month0">/e:entries/@month0</field>
+
+            <row foreach="/e:entries/e:entries/e:entry/Availability[@timestamp=/e:entries/@monthstart or @timestamp=/e:entries/@month0 or @timestamp=/e:entries/@month1 or @timestamp=/e:entries/@month2 or @timestamp=/e:entries/@month3]">
+                <column label="Site">ancestor::e:entry/@key</column>
+                <column label="Ngi">ancestor::e:entries/@key</column>
+                <column label="Timestamp">@timestamp</column>
+                <column label="Availability" unit="percentage">@availability</column>
+                <column label="Reliability" unit="percentage">@reliability</column>
+                <column label="Unknown" unit="percentage">@unknown </column>
+                <column label="Downtime" unit="percentage">@downtime </column>
+            </row>
+        </pre-renderers>
+
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/html/ar_reports.html</parameter>
+
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/html/ar_reports.html</parameter>
+            </renderer>
+            <renderer type="PDFRenderer">
+                <parameter name="template">/html/ar_reports_pdf.html</parameter>
+            </renderer>
+            <renderer type="ChartRenderer">
+                <parameter name="rotation">-45</parameter>
+            </renderer>
+        </renderers>
+
+    </view>
+
+
     <view name="elixir_report">
         <info>
             <category>AR reports</category>
