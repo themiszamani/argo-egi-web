@@ -22,6 +22,7 @@
         <category link="/lavoisier/report_form?accept=html" icon="fa fa-list"> Customized Report</category>
         <category link="/lavoisier/customFactors?accept=html" icon="fa fa-th">Availability Treemap</category>
         <category mode="test" link="/lavoisier/site_reports?report=CriticalUncert&amp;accept=html" icon="fa fa-flash">UNCERTIFIED SITES</category>
+        <category mode="test" link="/lavoisier/site_HR_comparison?accept=html" icon="fa fa-flash">NGI_HR Comparison</category>
     </categories>
 
 
