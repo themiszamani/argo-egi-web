@@ -565,5 +565,160 @@
 
     </view>
 
+    <view name="site_HR_comparison">
+        <info>
+            <category>AR reports</category>
+            <description>Site Customized Reports</description>
+        </info>
+        <argument name="site"></argument>
+        <argument name="ngi">NGI_HR</argument>
+        <argument name="granularity">DAILY</argument>
+
+        <argument name="month">1970-01</argument>
+        <argument name="monthend" eval="choose($month!='1970-01',substring(date:add($month,'P1M'),0,8))"></argument>
+
+        <argument name="start_date" eval="choose($month='1970-01','_DATE_',concat($month,'-01'))"></argument>
+        <argument name="end_date"  eval="choose($month='1970-01','_DATE_',concat($monthend,'-01'))"></argument>
+
+
+
+        <argument name="view_details">services_ar</argument>
+        <argument name="poems">ch.cern.sam.ROC_CRITICAL</argument>
+        <argument name="report">Critical</argument>
+        <variable name="start_time" eval="choose($start_date!='_DATE_',concat($start_date,'T00:00:00Z'),concat(substring(date:add(date:date-time(),'-P30D'), 0,11),'T00:00:00Z'))"></variable>
+        <variable name="end_time" eval="choose($end_date!='_DATE_',concat($end_date,'T00:00:00Z'),concat(substring(date:add(date:date-time(),'-P1D'), 0,11),'T00:00:00Z'))"></variable>
+
+
+        <connector type="XMLConnector">
+
+            <parameter name="content" eval="view('api.availability.rotating.caches',
+            entry('granularity',$granularity)
+            | entry('report','Critical')
+            | entry('group_type','sites')
+            | entry('start_time',$start_time)
+            | entry('end_time',$end_time)
+            )"/>
+        </connector>
+
+        <processors>
+
+            <element in="root" out="e:entries">
+
+                <attribute-create out="start_timestamp">date:seconds($start_time)</attribute-create>
+                <attribute-create out="end_timestamp">date:seconds($end_time)</attribute-create>
+
+                <attribute-create out="start_date">$start_time</attribute-create>
+                <attribute-create out="end_date">$end_time</attribute-create>
+
+                <attribute-create out="view">site_ar</attribute-create>
+                <attribute-create out="view_details">$view_details</attribute-create>
+                <attribute-create out="report">$report</attribute-create>
+
+                <element in="group" if="@name=$ngi or $ngi='false'">
+                    <element in="group" out="Site">
+                        <element in="results" out="Availability"></element>
+                    </element>
+                </element>
+                <element-ignore></element-ignore>
+            </element>
+
+            <element in="e:entries">
+                <element-ignore in="group">
+
+                    <element in="Site" out="Entity">
+                        <attribute-create out="NGI">../ancestor::group/@name</attribute-create>
+                    </element>
+                </element-ignore>
+            </element>
+
+            <elements path="e:entries">
+                <element-create>view('api.availability.rotating.caches',
+                    entry('granularity',$granularity)
+                    | entry('report','NGIHRTest')
+                    | entry('group_type','sites')
+                    | entry('start_time',$start_time)
+                    | entry('end_time',$end_time))
+                </element-create>
+            </elements>
+
+            <elements path="e:entries/Entity">
+                <element-ignore in="Availability" if="date:seconds(@timestamp) &lt; ancestor::e:entries/@start_timestamp"></element-ignore>
+                <element-ignore in="Availability" if="date:seconds(@timestamp) &gt; ancestor::e:entries/@end_timestamp"></element-ignore>
+            </elements>
+
+            <elements path="e:entries/Entity">
+                <element in="Availability">
+                    <attribute-create out="availability_HR">
+                        ../../../root/group/group[@name=current()/../../@name]/results[@timestamp=current()/../@timestamp]/@availability
+                    </attribute-create>
+                    <attribute-create out="reliability_HR">
+                        ../../../root/group/group[@name=current()/../../@name]/results[@timestamp=current()/../@timestamp]/@reliability
+                    </attribute-create>
+                    <attribute-create out="unknown_HR">
+                        ../../../root/group/group[@name=current()/../../@name]/results[@timestamp=current()/../@timestamp]/@unknown
+                    </attribute-create>
+                    <attribute-create out="uptime_HR">
+                        ../../../root/group/group[@name=current()/../../@name]/results[@timestamp=current()/../@timestamp]/@uptime
+                    </attribute-create>
+                    <attribute-create out="downtime_HR">
+                        ../../../root/group/group[@name=current()/../../@name]/results[@timestamp=current()/../@timestamp]/@downtime
+                    </attribute-create>
+                </element>
+            </elements>
+
+
+
+            <elements path="e:entries/Entity">
+                <element in="Availability"></element>
+                <element-ignore></element-ignore>
+            </elements>
+
+
+
+
+        </processors>
+
+        <pre-renderers>
+            <title>'Availabilities Reliabilities Chart'</title>
+            <row foreach="/e:entries/Entity/Availability">
+                <column label="entity">ancestor::Entity/@name</column>
+                <column label="timestamp">@timestamp</column>
+                
+                <column unit="percentage" label="availability">format-number(@availability,'#.00')</column>
+                <column unit="percentage" label="availability_test">format-number(@availability_HR,'#.00')</column>
+                
+                <column unit="percentage" label="reliability">format-number(@reliability,'#.00')</column>             
+                <column unit="percentage" label="reliability_test">format-number(@reliability_HR,'#.00')</column>
+
+                <column unit="percentage" label="unknown">format-number(@unknown,'#.00')</column>
+                <column unit="percentage" label="unknown_test">format-number(@unknown_HR,'#.00')</column>
+
+                <column unit="percentage" label="uptime">format-number(@uptime,'#.00')</column>
+                <column unit="percentage" label="uptime_test">format-number(@uptime_HR,'#.00')</column>
+
+                <column unit="percentage" label="downtime">format-number(@downtime,'#.00')</column>
+                <column unit="percentage" label="downtime_test">format-number(@downtime_HR,'#.00')</column>
+                
+            </row>
+        </pre-renderers>
+        <renderers>
+
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/html/comparison.html</parameter>
+
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/html/comparison.html</parameter>
+
+            </renderer>
+            <renderer type="ChartRenderer">
+                <parameter name="rotation">-45</parameter>
+
+            </renderer>
+        </renderers>
+
+
+    </view>
+
 
 </config>
