@@ -23,10 +23,12 @@
         <argument name="end_time"></argument>
         <argument name="granularity"></argument>
         <argument name="report">Critical</argument>
+        <argument name="option" eval="''"></argument>
+
         <connector type="HTTPConnector">
             <parameter name="url" eval="concat(property('api.group.availability'),$report,'/',upper-case($group_type),
             '?granularity=',lower-case($granularity),
-            '&amp;start_time=',$start_time,'&amp;end_time=',$end_time)">
+            '&amp;start_time=',$start_time,'&amp;end_time=',$end_time,$option)">
             </parameter>
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>
@@ -183,6 +185,7 @@
 
         <argument name="start_time"></argument>
         <argument name="end_time"></argument>
+        <argument name="option" eval="''"></argument>
 
 
         <connector type="XMLConnector">
@@ -191,7 +194,8 @@
             |entry('granularity',$granularity)
             |entry('start_time',$start_time)
             |entry('end_time',$end_time)
-            |entry('site',$site))">
+            |entry('site',$site)
+            |entry('option',$option))">
             </parameter>
             <fallback eval="new_element('root')">
                 <exception type="java.io.IOException"></exception>
