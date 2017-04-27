@@ -718,6 +718,7 @@
         </info>
         <argument name="report">Critical</argument>
         <argument name="mode">RW</argument>
+        <argument name="option" eval="''"></argument>
 
         <!--<argument name="start_time" eval="concat(substring(date:add(date:date-time(),concat('-P',3,'M')), 0,8),'-01T00:00:00Z')"></argument>-->
         <!--<argument name="end_time" eval="concat(str:replace(substring(date:date-time(),0,20),' ','T'),'Z')"></argument>-->
@@ -749,7 +750,7 @@
                 <attribute-create out="month3">$month3</attribute-create>
 
 
-                <element-create>view('api.availability.file.cache',entry('group_type','sites')|entry('granularity','MONTHLY')|entry('start_time',concat($monthstart,'-01T00:00:00Z'))|entry('end_time',concat($monthend,'-01T00:00:00Z'))|entry('report',$report))</element-create>
+                <element-create>view('api.availability.file.cache',entry('group_type','sites')|entry('granularity','MONTHLY')|entry('start_time',concat($monthstart,'-01T00:00:00Z'))|entry('end_time',concat($monthend,'-01T00:00:00Z'))|entry('report',$report)|entry('option',$option))</element-create>
 
             </element>
 
@@ -953,7 +954,7 @@
 
 
             <element in="root">
-                <set variable="NGIHRCritical">view('site_reports_cached',entry('report','Critical'))/*</set>
+                <set variable="NGIHRCritical">view('site_reports_cached',entry('report','NGIHRTest')|entry('option','amp;&datasource=hbase'))/*</set>
                 <element in="root">
                     <element-create as="first-child">$NGIHRCritical</element-create>
                 </element>
