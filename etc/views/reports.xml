@@ -954,7 +954,7 @@
 
 
             <element in="root">
-                <set variable="NGIHRCritical">view('site_reports_cached',entry('report','NGIHRTest')|entry('option','amp;&datasource=hbase'))/*</set>
+                <set variable="NGIHRCritical">view('site_reports_cached',entry('report','NGIHRTest')|entry('option','&amp;datasource=hbase'))/*</set>
                 <element in="root">
                     <element-create as="first-child">$NGIHRCritical</element-create>
                 </element>
