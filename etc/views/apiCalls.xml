@@ -75,11 +75,12 @@
         <argument name="report"></argument>
         <argument name="site"></argument>
         <argument name="report">Critical</argument>
+        <argument name="option" eval="''"></argument>
 
         <connector type="HTTPConnector">
             <parameter name="url" eval="concat(property('api.service.availability'),$report,'/SITES/',$site,
             '/services?granularity=',lower-case($granularity),
-            '&amp;start_time=',$start_time,'&amp;end_time=',$end_time)">
+            '&amp;start_time=',$start_time,'&amp;end_time=',$end_time,$option)">
             </parameter>
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>
@@ -134,6 +135,7 @@
         <argument name="end_time">0</argument>
         <argument name="site">false</argument>
         <argument name="mode">RW</argument>
+        <argument name="option" eval="''"></argument>
 
 
         <argument name="starttime" eval="choose($diff=10,$start_time,concat(substring(date:add(date:date-time(),concat('-P',$diff,'M')), 0,8),'-01T00:00:00Z'))"></argument>

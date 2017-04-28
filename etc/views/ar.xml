@@ -593,10 +593,10 @@
 
             <parameter name="content" eval="view('api.availability.rotating.caches',
             entry('granularity',$granularity)
-            | entry('report','Critical')
+            | entry('report','NGIHRTest')
             | entry('group_type','sites')
             | entry('start_time',$start_time)
-            | entry('end_time',$end_time)
+            | entry('end_time',$end_time)          
             )"/>
         </connector>
 
@@ -637,7 +637,8 @@
                     | entry('report','NGIHRTest')
                     | entry('group_type','sites')
                     | entry('start_time',$start_time)
-                    | entry('end_time',$end_time))
+                    | entry('end_time',$end_time)
+                    | entry('option','&amp;datasource=hbase'))
                 </element-create>
             </elements>
 
@@ -685,19 +686,19 @@
                 <column label="timestamp">@timestamp</column>
                 
                 <column unit="percentage" label="availability">format-number(@availability,'#.00')</column>
-                <column unit="percentage" label="availability_test">format-number(@availability_HR,'#.00')</column>
+                <column unit="percentage" label="availability_hbase">format-number(@availability_HR,'#.00')</column>
                 
                 <column unit="percentage" label="reliability">format-number(@reliability,'#.00')</column>             
-                <column unit="percentage" label="reliability_test">format-number(@reliability_HR,'#.00')</column>
+                <column unit="percentage" label="reliability_hbase">format-number(@reliability_HR,'#.00')</column>
 
                 <column unit="percentage" label="unknown">format-number(@unknown,'#.00')</column>
-                <column unit="percentage" label="unknown_test">format-number(@unknown_HR,'#.00')</column>
+                <column unit="percentage" label="unknown_hbase">format-number(@unknown_HR,'#.00')</column>
 
                 <column unit="percentage" label="uptime">format-number(@uptime,'#.00')</column>
-                <column unit="percentage" label="uptime_test">format-number(@uptime_HR,'#.00')</column>
+                <column unit="percentage" label="uptime_hbase">format-number(@uptime_HR,'#.00')</column>
 
                 <column unit="percentage" label="downtime">format-number(@downtime,'#.00')</column>
-                <column unit="percentage" label="downtime_test">format-number(@downtime_HR,'#.00')</column>
+                <column unit="percentage" label="downtime_hbase">format-number(@downtime_HR,'#.00')</column>
                 
             </row>
         </pre-renderers>
