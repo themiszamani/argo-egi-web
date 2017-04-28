@@ -229,10 +229,11 @@
         <argument name="end_time"></argument>
         <argument name="granularity"></argument>
         <argument name="report">Critical</argument>
+        <argument name="option" eval="''"></argument>
 
         <connector type="HTTPConnector">
             <parameter name="url" eval="concat(property('api.status.url'),$report,'/',upper-case($group_type),
-            '?start_time=',$start_time,'&amp;end_time=',$end_time)">
+            '?start_time=',$start_time,'&amp;end_time=',$end_time,$option)">
             </parameter>
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>
@@ -253,7 +254,7 @@
                 <attribute-create out="start_time">$start_time</attribute-create>
                 <attribute-create out="end_time">$end_time</attribute-create>
                 <attribute-create out="url">concat(property('api.status.url'),$report,'/',upper-case($group_type),
-                    '?start_time=',$start_time,'&amp;end_time=',$end_time)</attribute-create>
+                    '?start_time=',$start_time,'&amp;end_time=',$end_time,$option)</attribute-create>
             </element>
         </processors>
 
