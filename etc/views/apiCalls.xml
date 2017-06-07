@@ -33,7 +33,7 @@
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>
             <parameter name="header">
-                <entry key="x-api-key" eval="property('argo.api.key')"></entry>
+                <entry key="x-api-key" eval="choose($report='NGIHRTest',property('ngihr.api.key'),property('argo.api.key'))"></entry>
                 <entry key="Accept">application/xml</entry>
             </parameter>
             <fallback eval="new_element('root',new_attribute('key', concat(property('api.group.availability'),$report,'/',upper-case($group_type),'?granularity=',$granularity,'&amp;start_time=',$start_time,'&amp;end_time=',$end_time)))">
@@ -85,7 +85,7 @@
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>
             <parameter name="header">
-                <entry key="x-api-key" eval="property('argo.api.key')"></entry>
+                <entry key="x-api-key" eval="choose($report='NGIHRTest',property('ngihr.api.key'),property('argo.api.key'))"></entry>
                 <entry key="Accept">application/xml</entry>
             </parameter>
             <fallback eval="new_element('root')">
@@ -238,7 +238,7 @@
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>
             <parameter name="header">
-                <entry key="x-api-key" eval="property('argo.api.key')"></entry>
+                <entry key="x-api-key" eval="choose($report='NGIHRTest',property('ngihr.api.key'),property('argo.api.key'))"></entry>
                 <entry key="Accept">application/xml</entry>
             </parameter>
             <fallback eval="new_element('root')">
@@ -346,7 +346,7 @@
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>
             <parameter name="header">
-                <entry key="x-api-key" eval="property('argo.api.key')"></entry>
+                <entry key="x-api-key" eval="choose($report='NGIHRTest',property('ngihr.api.key'),property('argo.api.key'))"></entry>
                 <entry key="Accept">application/xml</entry>
             </parameter>
             <parameter name="connect-timeout">600</parameter>
