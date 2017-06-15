@@ -100,8 +100,9 @@
 
             </renderer>
             <renderer type="ChartRenderer">
-                <parameter name="rotation">-45</parameter>
-
+                <parameter name="options">
+                    <entry key="rotation">-45</entry>
+                </parameter>
             </renderer>
         </renderers>
 
@@ -157,8 +158,9 @@
 
             </renderer>
             <renderer type="ChartRenderer">
-                <parameter name="rotation">-45</parameter>
-
+                <parameter name="options">
+                    <entry key="rotation">-45</entry>
+                </parameter>
             </renderer>
         </renderers>
     </view>
@@ -209,8 +211,9 @@
 
             </renderer>
             <renderer type="ChartRenderer">
-                <parameter name="rotation">-45</parameter>
-
+                <parameter name="options">
+                    <entry key="rotation">-45</entry>
+                </parameter>
             </renderer>
         </renderers>
     </view>
@@ -262,8 +265,9 @@
 
             </renderer>
             <renderer type="ChartRenderer">
-                <parameter name="rotation">-45</parameter>
-
+                <parameter name="options">
+                    <entry key="rotation">-45</entry>
+                </parameter>
             </renderer>
         </renderers>
     </view>
@@ -386,8 +390,9 @@
 
             </renderer>
             <renderer type="ChartRenderer">
-                <parameter name="rotation">-45</parameter>
-
+                <parameter name="options">
+                    <entry key="rotation">-45</entry>
+                </parameter>
             </renderer>
         </renderers>
 
@@ -481,8 +486,9 @@
 
             </renderer>
             <renderer type="ChartRenderer">
-                <parameter name="rotation">-45</parameter>
-
+                <parameter name="options">
+                    <entry key="rotation">-45</entry>
+                </parameter>
             </renderer>
         </renderers>
 
@@ -713,8 +719,9 @@
 
             </renderer>
             <renderer type="ChartRenderer">
-                <parameter name="rotation">-45</parameter>
-
+                <parameter name="options">
+                    <entry key="rotation">-45</entry>
+                </parameter>
             </renderer>
         </renderers>
 

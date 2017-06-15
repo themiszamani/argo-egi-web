@@ -417,8 +417,7 @@
             <variable name="start_date" eval="concat(str:replace(substring(date:add(date:date-time(),concat('-P',$lastdays,'D')), 0,20),' ','T'),'Z')"></variable>
             <variable name="end_date" eval="concat(str:replace(substring(date:date-time(), 0,20),' ','T'),'Z')"></variable>
 
-            <!--<variable name="start_date">'2017-04-27T00:01:00Z'</variable>-->
-        <!--<variable name="end_date">'2017-04-29T08:10:19Z'</variable>-->
+
 
             <connector type="XMLConnector">
                 <parameter name="content" eval="view('api.status.call',entry('group_type','sites')|entry('site',$site)|entry('start_time',$start_date)|entry('end_time',$end_date)|entry('report',$report))"></parameter>
