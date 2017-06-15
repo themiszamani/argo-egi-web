@@ -431,12 +431,13 @@
             <renderer type="ChartRenderer">
                 <parameter name="type">column</parameter>
                 <parameter name="axis">inverted</parameter>
-                <!--optional: The width of the chart (Integer)-->
-                <parameter name="width">1200</parameter>
 
 
-                <!--optional: The height of the chart (Integer)-->
-                <parameter name="height">2000</parameter>
+                <parameter name="options">
+                    <entry key="height">2000</entry>
+                    <entry key="width">1200</entry>
+
+                </parameter>
             </renderer>
         </renderers>
     </view>
@@ -522,7 +523,9 @@
             </renderer>
 
             <renderer type="ChartRenderer">
-                <parameter name="rotation">-45</parameter>
+                <parameter name="options">
+                    <entry key="rotation">-45</entry>
+                </parameter>
 
             </renderer>
         </renderers>
@@ -605,7 +608,9 @@
 
             </renderer>
             <renderer type="ChartRenderer">
-                <parameter name="rotation">-45</parameter>
+                  <parameter name="options">
+                      <entry key="rotation">-45</entry>
+                  </parameter>
 
             </renderer>
 
@@ -699,7 +704,9 @@
 
             </renderer>
             <renderer type="ChartRenderer">
-                <parameter name="rotation">-45</parameter>
+                  <parameter name="options">
+                      <entry key="rotation">-45</entry>
+                  </parameter>
 
             </renderer>
 
@@ -917,7 +924,9 @@
                 <parameter name="template">/html/ar_reports_pdf.html</parameter>
             </renderer>
             <renderer type="ChartRenderer">
-                <parameter name="rotation">-45</parameter>
+                  <parameter name="options">
+                      <entry key="rotation">-45</entry>
+                  </parameter>
             </renderer>
         </renderers>
 
@@ -1006,7 +1015,9 @@
                 <parameter name="template">/html/ar_reports_pdf.html</parameter>
             </renderer>
             <renderer type="ChartRenderer">
-                <parameter name="rotation">-45</parameter>
+                  <parameter name="options">
+                      <entry key="rotation">-45</entry>
+                  </parameter>
             </renderer>
         </renderers>
 
@@ -1196,7 +1207,9 @@
 
             </renderer>
             <renderer type="ChartRenderer">
-                <parameter name="rotation">-45</parameter>
+                  <parameter name="options">
+                      <entry key="rotation">-45</entry>
+                  </parameter>
             </renderer>
         </renderers>
 
