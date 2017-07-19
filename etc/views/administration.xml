@@ -57,6 +57,25 @@
         </processors>
     </view>
 
+    <view name="TermsofUse">
+        <info>
+            <description>EGI terms of use</description>
+            <category>WEBUI</category>
+        </info>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="new_element('root')"></parameter>
+        </connector>
+
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/html/ToU.html</parameter>
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/html/ToU.html</parameter>
+            </renderer>
+        </renderers>
+
+    </view>
 
 
     <view name="recomputation" authenticators="AuthenticatedUsers">

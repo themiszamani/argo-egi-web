@@ -45,9 +45,14 @@
 
    </categories>
 
+    <categories bg="hidden" icon="fa fa-handshake-o" title="Terms of Use" >
+        <category link="/lavoisier/TermsofUse" icon="fa fa-hand-o-right">Terms of Use</category>
+        <category  link="http://www.apache.org/licenses/LICENSE-2.0" icon="fa fa-creative-commons">Licence : Apache 2.0</category>
+    </categories>
+
     <release>
-        <version>2.3</version>
-        <date>2017, January 30th</date>
+        <version>2.4</version>
+        <date>2017, July 20th</date>
         <repository link="https://github.com/ARGOeu" icon="fa fa-github"></repository>
     </release>
 </menu>
