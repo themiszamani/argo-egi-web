@@ -287,13 +287,14 @@
             <parameter name="executable">/bin/rm</parameter>
             <parameter name="arguments">
                 <entry>-Rf</entry>
-                <entry>api.*</entry>
+                <entry eval="concat(property('cache.baseDirectory'),'/api.*')"></entry>
             </parameter>
             <parameter name="workdir" eval="property('cache.baseDirectory')"/>
+
         </connector>
         <serializer type="EncapsulateSerializer"></serializer>
 
-        <cache type="EmptyCache">
+        <cache type="FileCache">
             <trigger type="FixedTimeTrigger">
                 <parameter name="hour">2</parameter>
             </trigger>
