@@ -287,18 +287,15 @@
             <parameter name="executable">/bin/rm</parameter>
             <parameter name="arguments">
                 <entry>-rf</entry>
-                <entry eval="concat(property('cache.baseDirectory'),'/api.*')"/>
+                <entry eval="concat(property('cache.baseDirectory'),'/api.availability.rotating.caches')"/>
+                <entry eval="concat(property('cache.baseDirectory'),'/api.status.rotating.caches')"></entry>
             </parameter>
 
 
         </connector>
-
-        <processors>
-            <element in="e:entries">
-                <attribute-create out="command">concat(property('cache.baseDirectory'),'/api.*')</attribute-create>
-            </element>
-        </processors>
         <serializer type="EncapsulateSerializer"></serializer>
+
+
 
         <cache type="FileCache">
             <trigger type="FixedTimeTrigger">
