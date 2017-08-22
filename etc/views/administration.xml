@@ -291,6 +291,7 @@
             </parameter>
             <parameter name="workdir" eval="property('cache.baseDirectory')"/>
         </connector>
+        <serializer type="EncapsulateSerializer"></serializer>
 
         <cache type="EmptyCache">
             <trigger type="FixedTimeTrigger">
