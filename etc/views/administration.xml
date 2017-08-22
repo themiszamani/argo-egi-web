@@ -279,6 +279,27 @@
 
     </view>
 
+    <view name="cleanCaches">
+        <info>
+            <category>ADMIN</category>
+        </info>
+        <connector type="ShellConnector">
+            <parameter name="executable">/bin/rm</parameter>
+            <parameter name="arguments">
+                <entry>Rf</entry>
+                <entry>api.*</entry>
+            </parameter>
+            <parameter name="workdir" eval="property('cache.baseDirectory')"/>
+        </connector>
+
+        <cache type="EmptyCache">
+            <trigger type="FixedTimeTrigger">
+                <parameter name="hour">2</parameter>
+            </trigger>
+            <trigger type="ViewNotifiedTrigger"></trigger>
+        </cache>
+    </view>
+
 
     <view name="form_recomputation_results_c">
         <info>
