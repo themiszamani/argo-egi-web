@@ -286,7 +286,7 @@
         <connector type="ShellConnector">
             <parameter name="executable">/bin/rm</parameter>
             <parameter name="arguments">
-                <entry>Rf</entry>
+                <entry>-Rf</entry>
                 <entry>api.*</entry>
             </parameter>
             <parameter name="workdir" eval="property('cache.baseDirectory')"/>
