@@ -504,7 +504,7 @@
         </info>
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('customFactorsRaw')"></parameter>
+            <parameter name="content" eval="view('ComputationPowerRaw')"></parameter>
         </connector>
 
         <processors>
@@ -526,8 +526,8 @@
 
             <rename match="/nodeData//@site" name="id"></rename>
 
-            <insert match="/nodeData/children" nodes="new_attribute('color',choose(view('ngi_reports')/e:entries/e:entry/Ngi[@NGI=match()/@id]/Availability[position()=last()]/@availability,view('ngi_reports')/e:entries/e:entry/Ngi[@NGI=match()/@id]/Availability[position()=last()]/@availability,0))"></insert>
-            <insert match="/nodeData/children/children" nodes="new_attribute('color',choose(view('site_reports')/e:entries/e:entry/Site[@site=match()/@id]/Availability[position()=last()]/@availability,view('site_reports')/e:entries/e:entry/Site[@site=match()/@id]/Availability[position()=last()]/@availability,0))"></insert>
+            <insert match="/nodeData/children" nodes="new_attribute('color',choose(view('ngi_reports')/e:entries/e:entries/e:entry[@key=match()/@id]/Availability[position()=last()]/@availability,view('ngi_reports')/e:entries/e:entries/e:entry[@key=match()/@id]/Availability[position()=last()]/@availability,0))"></insert>
+            <insert match="/nodeData/children/children" nodes="new_attribute('color',choose(view('site_reports')/e:entries/e:entries/e:entry[@key=match()/@id]/Availability[position()=last()]/@availability,view('site_reports')/e:entries/e:entries/e:entry[@key=match()/@id]/Availability[position()=last()]/@availability,0))"></insert>
 
             <replace match="/nodeData//children/@color" nodes="match() div 100 "/>
 
@@ -543,7 +543,12 @@
                 <element in="children"></element>
             </element>
 
+            <element in="nodeData">
 
+                <element in="children">
+                    <attribute in="color" if=".='NaN'">0</attribute>
+                </element>
+            </element>
         </processors>
         <cache type="FileCache">
             <!--<trigger type="ViewCreatedTrigger"/>-->

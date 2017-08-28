@@ -459,6 +459,48 @@ node16.datagrid.cea.fr/org.nordugrid.ARC-CE-ARIS?exec_time=2015-06-01T00:01:20Z'
 
     </view>
 
+    <view name="ComputationPowerRaw">
+
+
+        <info>
+            <category>API results</category>
+            <description>Custom factor display</description>
+        </info>
+
+        <connector type="HTTPConnector">
+            <parameter name="url" eval="property('api.computation.power')"></parameter>
+            <parameter name="certificate" eval="property('certificate.path')"/>
+            <parameter name="passphrase" eval="property('certificate.password')"/>
+            <parameter name="force-redirect">true</parameter>
+        </connector>
+        
+        <processors>
+            <element in="sites" out="root">
+                <attribute-ignore></attribute-ignore>
+                <element-ignore in="ngi">
+                    <element in="site" out="Factor">
+                        <attribute in="id" out="site"></attribute>
+                        <attribute in="ngi"></attribute>
+                        <attribute in="ComputationPower" out="weight"></attribute>
+                        <attribute-ignore></attribute-ignore>
+                    </element>
+                </element-ignore>
+
+                
+            </element>
+        </processors>
+
+        <cache type="FileCache">
+            <!--<trigger type="ViewCreatedTrigger"/>-->
+            <trigger type="DeltaTimeTrigger">
+                <parameter name="hours">4</parameter>
+            </trigger>
+            <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="ViewCreatedTrigger"/>
+        </cache>
+
+    </view>
+
     <view name="metricsProfile">
 
 
