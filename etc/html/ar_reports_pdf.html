@@ -181,7 +181,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr tpl:foreach="e:entry[@key!='AVERAGE']">
+            <tr tpl:foreach="e:entry[@key!='AVERAGE' and @key!='WEIGHTED']">
                 <td>{{@key}}</td>
                 
                 <td tpl:if="Availability[@timestamp=ancestor::e:entries/@month0]/@availability &gt; 80 " class="success" >{{round(Availability[@timestamp=ancestor::e:entries/@month0]/@availability*100) div 100 }}</td>
