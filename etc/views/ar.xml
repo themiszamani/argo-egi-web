@@ -508,7 +508,6 @@
         </connector>
 
         <processors>
-            <insert match="/root/Factor" nodes="new_attribute('ngi',choose(view('goc.siteList')/results/SITE[@NAME=match()/@site]/ROC/text(),view('goc.siteList')/results/SITE[@NAME=match()/@site]/ROC/text(),'NA'))"></insert>
 
             <select match="/root/Factor">
                 <group by="@ngi"></group>
