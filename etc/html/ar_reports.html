@@ -192,8 +192,8 @@
                 </tbody>
 
                 <tfoot tpl:if="count(e:entry)&gt;2">
-                        <th>WEIGHTED VALUES</th>
-                        <th tpl:foreach="e:entry[@key='WEIGHTED']/Availability">
+                        <th>AVERAGE VALUES</th>
+                        <th tpl:foreach="e:entry[@key='AVERAGE']/Availability">
                             <a>
                             <span class="avCheck label"
                                   title="{{format-number(@availability,'#.00')}}">{{format-number(@availability,'#.00')}}</span>
