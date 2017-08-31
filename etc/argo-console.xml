@@ -12,6 +12,18 @@
         <connector type="XMLConnector">
             <parameter name="content" eval="view('categories')"/>
         </connector>
+
+        <processors>
+            <elements path="menu/categories">
+                <element-ignore if="property('instance.status')='prod' and category/@mode='test'"></element-ignore>
+            </elements>
+
+            <element in="menu">
+                <element in="categories" if="property('instance.status')!='test'">
+                    <element-ignore if="@mode='test'" in="category"></element-ignore>
+                </element>
+            </element>
+        </processors>
         <cache type="FileCache">
             <trigger type="ViewNotifiedTrigger"></trigger>
                   <trigger type="DependencyRefreshedTrigger">

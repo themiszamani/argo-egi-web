@@ -11,7 +11,7 @@
         <section class="content" id="content">
             <section class="content-header" id="content-header">
                 <h1>
-                    Custom Factors
+                    Computation Power
                     <small>Tree Map Page</small>
 
                     <button type="button" class="pull-right btn btn-primary" data-toggle="modal" data-target="#myHelp">
@@ -34,7 +34,7 @@
                             <div class="modal-body">
                                 <p>
                                 <ul>
-                                    <li>The size of the square is determined by the weight of the sites belonging to the ngi (1st level) or the weight of the site itself (2d level)</li>
+                                    <li>The size of the square is determined by the computation power of the sites belonging to the ngi (1st level) or the weight of the site itself (2d level)</li>
                                     <li>The color is determined by the availability of the NGI or by the availability of the site itself</li>
                                     <li>Left-click to move down the tree and right-click on the graph to move back up the tree</li>
                                 </ul>
@@ -86,7 +86,7 @@
     var local_groups= document.getElementById('local_groups').getElementsByTagName('div');
 
 
-    var groups=[["Entity","Parent","CPU Factors","Availability"],["EGI",null,0,0]];
+    var groups=[["Entity","Parent","Computation Power","Availability"],["EGI",null,0,0]];
 
 
     for (i=0; i<global_groups.length; i++) {
@@ -139,7 +139,7 @@ for (j=0; j<local_groups.length; j++) {
             return            '<div style="background:#c9e2b3; padding:10px; border-style:solid">' +
                 '<span style="font-family:Courier">' +
                 '<b>'  + data.getValue(row, 0) +'</b><br/>' +
-                 'CPU Factors :' +  size + '<br/>' +
+                 'Computation Power :' +  size + '<br/>' +
             'Availability :' +  value*100 + '<br/>' +
                 '</span><br/></div>' ;
 

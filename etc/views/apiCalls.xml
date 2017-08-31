@@ -23,15 +23,17 @@
         <argument name="end_time"></argument>
         <argument name="granularity"></argument>
         <argument name="report">Critical</argument>
+        <argument name="option" eval="''"></argument>
+
         <connector type="HTTPConnector">
             <parameter name="url" eval="concat(property('api.group.availability'),$report,'/',upper-case($group_type),
             '?granularity=',lower-case($granularity),
-            '&amp;start_time=',$start_time,'&amp;end_time=',$end_time)">
+            '&amp;start_time=',$start_time,'&amp;end_time=',$end_time,$option)">
             </parameter>
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>
             <parameter name="header">
-                <entry key="x-api-key" eval="property('argo.api.key')"></entry>
+                <entry key="x-api-key" eval="choose($report='NGIHRTest',property('ngihr.api.key'),property('argo.api.key'))"></entry>
                 <entry key="Accept">application/xml</entry>
             </parameter>
             <fallback eval="new_element('root',new_attribute('key', concat(property('api.group.availability'),$report,'/',upper-case($group_type),'?granularity=',$granularity,'&amp;start_time=',$start_time,'&amp;end_time=',$end_time)))">
@@ -73,16 +75,17 @@
         <argument name="report"></argument>
         <argument name="site"></argument>
         <argument name="report">Critical</argument>
+        <argument name="option" eval="''"></argument>
 
         <connector type="HTTPConnector">
             <parameter name="url" eval="concat(property('api.service.availability'),$report,'/SITES/',$site,
             '/services?granularity=',lower-case($granularity),
-            '&amp;start_time=',$start_time,'&amp;end_time=',$end_time)">
+            '&amp;start_time=',$start_time,'&amp;end_time=',$end_time,$option)">
             </parameter>
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>
             <parameter name="header">
-                <entry key="x-api-key" eval="property('argo.api.key')"></entry>
+                <entry key="x-api-key" eval="choose($report='NGIHRTest',property('ngihr.api.key'),property('argo.api.key'))"></entry>
                 <entry key="Accept">application/xml</entry>
             </parameter>
             <fallback eval="new_element('root')">
@@ -132,6 +135,7 @@
         <argument name="end_time">0</argument>
         <argument name="site">false</argument>
         <argument name="mode">RW</argument>
+        <argument name="option" eval="''"></argument>
 
 
         <argument name="starttime" eval="choose($diff=10,$start_time,concat(substring(date:add(date:date-time(),concat('-P',$diff,'M')), 0,8),'-01T00:00:00Z'))"></argument>
@@ -183,6 +187,7 @@
 
         <argument name="start_time"></argument>
         <argument name="end_time"></argument>
+        <argument name="option" eval="''"></argument>
 
 
         <connector type="XMLConnector">
@@ -191,7 +196,8 @@
             |entry('granularity',$granularity)
             |entry('start_time',$start_time)
             |entry('end_time',$end_time)
-            |entry('site',$site))">
+            |entry('site',$site)
+            |entry('option',$option))">
             </parameter>
             <fallback eval="new_element('root')">
                 <exception type="java.io.IOException"></exception>
@@ -223,15 +229,16 @@
         <argument name="end_time"></argument>
         <argument name="granularity"></argument>
         <argument name="report">Critical</argument>
+        <argument name="option" eval="''"></argument>
 
         <connector type="HTTPConnector">
             <parameter name="url" eval="concat(property('api.status.url'),$report,'/',upper-case($group_type),
-            '?start_time=',$start_time,'&amp;end_time=',$end_time)">
+            '?start_time=',$start_time,'&amp;end_time=',$end_time,$option)">
             </parameter>
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>
             <parameter name="header">
-                <entry key="x-api-key" eval="property('argo.api.key')"></entry>
+                <entry key="x-api-key" eval="choose($report='NGIHRTest',property('ngihr.api.key'),property('argo.api.key'))"></entry>
                 <entry key="Accept">application/xml</entry>
             </parameter>
             <fallback eval="new_element('root')">
@@ -247,7 +254,7 @@
                 <attribute-create out="start_time">$start_time</attribute-create>
                 <attribute-create out="end_time">$end_time</attribute-create>
                 <attribute-create out="url">concat(property('api.status.url'),$report,'/',upper-case($group_type),
-                    '?start_time=',$start_time,'&amp;end_time=',$end_time)</attribute-create>
+                    '?start_time=',$start_time,'&amp;end_time=',$end_time,$option)</attribute-create>
             </element>
         </processors>
 
@@ -339,7 +346,7 @@
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>
             <parameter name="header">
-                <entry key="x-api-key" eval="property('argo.api.key')"></entry>
+                <entry key="x-api-key" eval="choose($report='NGIHRTest',property('ngihr.api.key'),property('argo.api.key'))"></entry>
                 <entry key="Accept">application/xml</entry>
             </parameter>
             <parameter name="connect-timeout">600</parameter>
@@ -440,6 +447,48 @@ node16.datagrid.cea.fr/org.nordugrid.ARC-CE-ARIS?exec_time=2015-06-01T00:01:20Z'
                 <entry key="Accept">application/xml</entry>
             </parameter>
         </connector>
+
+        <cache type="FileCache">
+            <!--<trigger type="ViewCreatedTrigger"/>-->
+            <trigger type="DeltaTimeTrigger">
+                <parameter name="hours">4</parameter>
+            </trigger>
+            <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="ViewCreatedTrigger"/>
+        </cache>
+
+    </view>
+
+    <view name="ComputationPowerRaw">
+
+
+        <info>
+            <category>API results</category>
+            <description>Custom factor display</description>
+        </info>
+
+        <connector type="HTTPConnector">
+            <parameter name="url" eval="property('api.computation.power')"></parameter>
+            <parameter name="certificate" eval="property('certificate.path')"/>
+            <parameter name="passphrase" eval="property('certificate.password')"/>
+            <parameter name="force-redirect">true</parameter>
+        </connector>
+        
+        <processors>
+            <element in="sites" out="root">
+                <attribute-ignore></attribute-ignore>
+                <element-ignore in="ngi">
+                    <element in="site" out="Factor">
+                        <attribute in="id" out="site"></attribute>
+                        <attribute in="ngi"></attribute>
+                        <attribute in="ComputationPower" out="weight"></attribute>
+                        <attribute-ignore></attribute-ignore>
+                    </element>
+                </element-ignore>
+
+                
+            </element>
+        </processors>
 
         <cache type="FileCache">
             <!--<trigger type="ViewCreatedTrigger"/>-->

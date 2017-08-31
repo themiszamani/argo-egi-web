@@ -331,7 +331,209 @@
     </view>
 
 
+    <view name="status_site_30_NGIHRTest">
 
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('status_site',entry('lastdays','30')|entry('report','NGIHRTest'))"></parameter>
+        </connector>
+
+        <cache type="FileCache">
+            <!--<trigger type="ViewCreatedTrigger"/>-->
+            <trigger type="DeltaTimeTrigger">
+                <parameter name="minutes">38</parameter>
+            </trigger>
+            <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="all">true</parameter>
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+
+                </parameter>
+            </trigger>
+
+        </cache>
+    </view>
+
+    <view name="status_site_3_NGIHRTest">
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('status_site',entry('lastdays','3')|entry('report','NGIHRTest'))"></parameter>
+        </connector>
+
+        <cache type="FileCache">
+            <!--<trigger type="ViewCreatedTrigger"/>-->
+            <trigger type="DeltaTimeTrigger">
+                <parameter name="minutes">38</parameter>
+            </trigger>
+            <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="all">true</parameter>
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+
+                </parameter>
+            </trigger>
+
+        </cache>
+    </view>
+
+    <view name="status_site_10_NGIHRTest">
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="view('status_site',entry('lastdays','10')|entry('report','NGIHRTest'))"></parameter>
+        </connector>
+
+        <cache type="FileCache">
+            <!--<trigger type="ViewCreatedTrigger"/>-->
+            <trigger type="DeltaTimeTrigger">
+                <parameter name="minutes">38</parameter>
+            </trigger>
+            <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="DependencyRefreshedTrigger">
+                <parameter name="all">true</parameter>
+                <parameter name="views">
+                    <entry>goc.siteList</entry>
+                </parameter>
+            </trigger>
+
+        </cache>
+    </view>
+
+
+    <view name="status_comparison">
+
+            <info>
+                <category>Status Report</category>
+                <description>Site Reports - cache Rotated</description>
+            </info>
+
+            <argument name="ngi">NGI_HR</argument>
+            <argument name="site">false</argument>
+            <argument name="lastdays">3</argument>
+            <argument name="report">NGIHRTest</argument>
+
+
+
+            <variable name="start_date" eval="concat(str:replace(substring(date:add(date:date-time(),concat('-P',$lastdays,'D')), 0,20),' ','T'),'Z')"></variable>
+            <variable name="end_date" eval="concat(str:replace(substring(date:date-time(), 0,20),' ','T'),'Z')"></variable>
+
+
+
+            <connector type="XMLConnector">
+                <parameter name="content" eval="view('api.status.call',entry('group_type','sites')|entry('site',$site)|entry('start_time',$start_date)|entry('end_time',$end_date)|entry('report',$report))"></parameter>
+            </connector>
+
+            <processors>
+
+                <element in="root">
+                    <element-create>view('api.status.call',entry('group_type','sites')|entry('site',$site)|entry('start_time',$start_date)|entry('end_time',$end_date)|entry('report',$report)|entry('option','&amp;datasource=hbase'))</element-create>
+                </element>
+
+                <element in="root">
+                    <element-ignore in="root">
+                        <element in="group">
+                            <attribute in="name">concat(.,' # ')</attribute>
+                        </element>
+                    </element-ignore>
+
+                </element>
+
+                <element in="root">
+
+                    <set variable="SiteList">view('listSitesbyNgi')</set>
+                    <attribute-create out="view">'status_report-sf'</attribute-create>
+                    <attribute-create out="ngi" if="$ngi!='all'">$ngi</attribute-create>
+                    <attribute-create out="lastdays">$lastdays</attribute-create>
+
+                    <attribute-create out="start_date">$start_date</attribute-create>
+                    <attribute-create out="end_date">$end_date</attribute-create>
+
+                    <element in="group">
+                        <attribute-create out="group">choose($SiteList/results/Ngi[SITE/@NAME=current()/../@name]/@key!='','AMQ','AMS')</attribute-create>
+                    </element>
+                    <element-ignore></element-ignore>
+                </element>
+
+                <elements path="root">
+                    <element in="group"></element>
+                    <element-ignore></element-ignore>
+                </elements>
+
+
+
+                <elements path="root">
+                    <element-ignore in="group"></element-ignore>
+                    <element-create>
+                        sort_by_string(../group,'@name')
+                    </element-create>
+                </elements>
+
+                <elements path="root">
+                    <element-create-as-parent out="group" attributes="@*" group-by="@name">
+                        <element in="group" ></element>
+                    </element-create-as-parent>
+                </elements>
+
+                <elements path="root/group">
+                    <element-ignore in="group">
+                        <element></element>
+                    </element-ignore>
+                </elements>
+
+                <elements path="root/group">
+                    <element-ignore in="status"></element-ignore>
+                    <element-create>sort_by_string(../status,'@timestamp')</element-create>
+                </elements>
+
+
+                <elements path="root/group">
+                    <element-ignore in="status" if="following-sibling::status/@timestamp and date:seconds(following-sibling::status/@timestamp)  &lt; date:seconds($start_date)"></element-ignore>
+                </elements>
+
+
+                <element in="root">
+                    <set variable="StateColor">view('StateColor')</set>
+
+
+                    <element in="group">
+                        <element in="status">
+                            <attribute-create out="color">$StateColor/e:entries/e:entry[@key=current()/../@value]/text()</attribute-create>
+                            <attribute-create out="end_time" if="current()/../following-sibling::status">current()/../following-sibling::status/@timestamp</attribute-create>
+                            <attribute-create out="end_time" if="not(current()/../following-sibling::status)">../ancestor::root/@end_time</attribute-create>
+                        </element>
+                    </element>
+
+                </element>
+
+
+
+                <elements path="root/group">
+                    <element-ignore in="status" if="preceding-sibling::status and date:seconds(@timestamp) &lt; date:seconds($start_date)"></element-ignore>
+                    <element in="status" if="not(preceding-sibling::status)" >
+                        <attribute in="timestamp">$start_date</attribute>
+                    </element>
+                </elements>
+
+
+            </processors>
+
+
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/html/status_report.html</parameter>
+
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/html/status_report.html</parameter>
+
+            </renderer>
+        </renderers>
+
+
+
+
+
+    </view>
 
     <!-- @TODO Récupérer jour courant -->
     <view name="status_site" xmlns:java="http://software.in2p3.fr/lavoisier/java">

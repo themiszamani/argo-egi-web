@@ -57,6 +57,25 @@
         </processors>
     </view>
 
+    <view name="TermsofUse">
+        <info>
+            <description>EGI terms of use</description>
+            <category>WEBUI</category>
+        </info>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="new_element('root')"></parameter>
+        </connector>
+
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/html/ToU.html</parameter>
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/html/ToU.html</parameter>
+            </renderer>
+        </renderers>
+
+    </view>
 
 
     <view name="recomputation" authenticators="AuthenticatedUsers">
@@ -258,6 +277,32 @@
             <parameter name="workdir" eval="property('user.dir')"/>
         </connector>
 
+    </view>
+
+    <view name="cleanCaches">
+        <info>
+            <category>ADMIN</category>
+        </info>
+        <connector type="ShellConnector">
+            <parameter name="executable">/bin/rm</parameter>
+            <parameter name="arguments">
+                <entry>-rf</entry>
+                <entry eval="concat(property('cache.baseDirectory'),'/api.availability.rotating.caches')"/>
+                <entry eval="concat(property('cache.baseDirectory'),'/api.status.rotating.caches')"></entry>
+            </parameter>
+
+
+        </connector>
+        <serializer type="EncapsulateSerializer"></serializer>
+
+
+
+        <cache type="FileCache">
+            <trigger type="FixedTimeTrigger">
+                <parameter name="hour">2</parameter>
+            </trigger>
+            <trigger type="ViewNotifiedTrigger"></trigger>
+        </cache>
     </view>
 
 

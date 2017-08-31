@@ -62,6 +62,9 @@
         </element>
 
 
+
+
+
         <!-- ADD MISSING AV / RE  ans transform it into N.A entries then sort by date -->
 
         <element in="e:entries">
@@ -105,15 +108,127 @@
 
 
         <element in="e:entries">
+            <set variable="ComputationPower">view('ComputationPowerRaw')</set>
             <element in="e:entries">
+                <element in="e:entry">
+                    <attribute-create out="ComputationPower">choose(sum($ComputationPower/root/Factor[@ngi=current()/../@key or @site=current()/../@key]/@weight)!=0,sum($ComputationPower/root/Factor[@ngi=current()/../@key or @site=current()/../@key]/@weight),1)</attribute-create>
+                </element>
                 <element-create as="last-child">
                     entry('AVERAGE','')
+                </element-create>
+                <element-create as="last-child">
+                    entry('WEIGHTED','')
                 </element-create>
             </element>
         </element>
 
         <element in="e:entries">
             <element in="e:entries">
+                <element in="e:entry">
+                    <element in="Availability">
+                        <attribute-create out="availability_W">choose(../@availability!='N.A' and ../../@ComputationPower,../@availability*../../@ComputationPower,'N.A')</attribute-create>
+                        <attribute-create out="reliability_W">choose(../@reliability!='N.A' and ../../@ComputationPower,../@reliability*../../@ComputationPower,'N.A')</attribute-create>
+
+                    </element>
+                </element>
+            </element>
+        </element>
+
+
+        <element in="e:entries">
+            <element in="e:entries">
+                <element in="e:entry" if="@key='WEIGHTED'">
+                    <element-create>
+                        new_element('Availability',new_attribute('timestamp',/e:entries/@monthstart)
+                        |new_attribute('availability',
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@availability_W!='N.A']/@availability_W  )
+                        div sum(../../e:entry/@ComputationPower))
+                        |new_attribute('reliability',
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@reliability_W!='N.A']/@reliability_W)
+                        div sum(../../e:entry/@ComputationPower))
+                        |new_attribute('downtime',
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@downtime_W!='N.A']/@downtime_W)
+                        div sum(../../e:entry/@ComputationPower))
+                        |new_attribute('unknown',
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@unknown_W!='N.A']/@unknown_W)
+                        div sum(../../e:entry/@ComputationPower))
+                        )
+                    </element-create>
+
+
+                    <element-create>
+                        new_element('Availability',new_attribute('timestamp',/e:entries/@month3)
+                        |new_attribute('availability',
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month3][@availability_W!='N.A']/@availability_W)
+                        div sum(../../e:entry/@ComputationPower))
+                        |new_attribute('reliability',
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month3][@reliability_W!='N.A']/@reliability_W)
+                        div sum(../../e:entry/@ComputationPower))
+                        |new_attribute('downtime',
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month3][@downtime_W!='N.A']/@downtime_W)
+                        div sum(../../e:entry/@ComputationPower))
+                        |new_attribute('unknown',
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month3][@unknown_W!='N.A']/@unknown_W)
+                        div sum(../../e:entry/@ComputationPower))
+                        )
+                    </element-create>
+
+                    <element-create>
+                        new_element('Availability',new_attribute('timestamp',/e:entries/@month2)
+                        |new_attribute('availability',
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@availability_W!='N.A']/@availability_W)
+                        div sum(../../e:entry/@ComputationPower))
+                        |new_attribute('reliability',
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@reliability_W!='N.A']/@reliability_W)
+                        div sum(../../e:entry/@ComputationPower))
+                        |new_attribute('downtime',
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@downtime_W!='N.A']/@downtime_W)
+                        div sum(../../e:entry/@ComputationPower))
+                        |new_attribute('unknown',
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@unknown_W!='N.A']/@unknown_W)
+                        div sum(../../e:entry/@ComputationPower))
+                        )
+                    </element-create>
+
+                    <element-create>
+                        new_element('Availability',new_attribute('timestamp',/e:entries/@month1)
+                        |new_attribute('availability',
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month1][@availability_W!='N.A']/@availability_W)
+                        div sum(../../e:entry/@ComputationPower))
+                        |new_attribute('reliability',
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month1][@reliability_W!='N.A']/@reliability_W)
+                        div sum(../../e:entry/@ComputationPower))
+                        |new_attribute('downtime',
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month1][@downtime_W!='N.A']/@downtime_W)
+                        div sum(../../e:entry/@ComputationPower))
+                        |new_attribute('unknown',
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month1][@unknown_W!='N.A']/@unknown_W)
+                        div sum(../../e:entry/@ComputationPower))
+                        )
+                    </element-create>
+
+
+                    <element-create>
+                        new_element('Availability',new_attribute('timestamp',/e:entries/@month0)
+                        |new_attribute('availability',
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month0][@availability_W!='N.A']/@availability_W)
+                        div sum(../../e:entry/@ComputationPower))
+                        |new_attribute('reliability',
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month0][@reliability_W!='N.A']/@reliability_W)
+                        div sum(../../e:entry/@ComputationPower))
+                        |new_attribute('downtime',
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month0][@downtime_W!='N.A']/@downtime_W)
+                        div sum(../../e:entry/@ComputationPower))
+                        |new_attribute('unknown',
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month0][@unknown_W!='N.A']/@unknown_W)
+                        div sum(../../e:entry/@ComputationPower))
+                        )
+                    </element-create>
+
+
+
+                </element>
+
                 <element in="e:entry" if="@key='AVERAGE'">
                     <element-create>
                         new_element('Availability',new_attribute('timestamp',/e:entries/@monthstart)
@@ -124,11 +239,11 @@
                         sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@reliability!='N.A']/@reliability)
                         div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@reliability!='N.A']/@reliability))
                         |new_attribute('downtime',
-                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@downtime!='N.A']/@downtime)
-                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@downtime!='N.A']/@downtime))
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@downtime_W!='N.A']/@downtime_W)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@downtime_W!='N.A']/@downtime_W))
                         |new_attribute('unknown',
-                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@unknown!='N.A']/@unknown)
-                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@unknown!='N.A']/@unknown))
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@unknown_W!='N.A']/@unknown_W)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@unknown_W!='N.A']/@unknown_W))
                         )
                     </element-create>
 
@@ -142,11 +257,11 @@
                         sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month3][@reliability!='N.A']/@reliability)
                         div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month3][@reliability!='N.A']/@reliability))
                         |new_attribute('downtime',
-                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month3][@downtime!='N.A']/@downtime)
-                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month3][@downtime!='N.A']/@downtime))
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month3][@downtime_W!='N.A']/@downtime_W)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month3][@downtime_W!='N.A']/@downtime_W))
                         |new_attribute('unknown',
-                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month3][@unknown!='N.A']/@unknown)
-                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month3][@unknown!='N.A']/@unknown))
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month3][@unknown_W!='N.A']/@unknown_W)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month3][@unknown_W!='N.A']/@unknown_W))
                         )
                     </element-create>
 
@@ -159,11 +274,11 @@
                         sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@reliability!='N.A']/@reliability)
                         div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@reliability!='N.A']/@reliability))
                         |new_attribute('downtime',
-                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@downtime!='N.A']/@downtime)
-                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@downtime!='N.A']/@downtime))
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@downtime_W!='N.A']/@downtime_W)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@downtime_W!='N.A']/@downtime_W))
                         |new_attribute('unknown',
-                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@unknown!='N.A']/@unknown)
-                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@unknown!='N.A']/@unknown))
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@unknown_W!='N.A']/@unknown_W)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@unknown_W!='N.A']/@unknown_W))
                         )
                     </element-create>
 
@@ -176,11 +291,11 @@
                         sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month1][@reliability!='N.A']/@reliability)
                         div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month1][@reliability!='N.A']/@reliability))
                         |new_attribute('downtime',
-                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month1][@downtime!='N.A']/@downtime)
-                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month1][@downtime!='N.A']/@downtime))
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month1][@downtime_W!='N.A']/@downtime_W)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month1][@downtime_W!='N.A']/@downtime_W))
                         |new_attribute('unknown',
-                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month1][@unknown!='N.A']/@unknown)
-                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month1][@unknown!='N.A']/@unknown))
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month1][@unknown_W!='N.A']/@unknown_W)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month1][@unknown_W!='N.A']/@unknown_W))
                         )
                     </element-create>
 
@@ -194,11 +309,11 @@
                         sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month0][@reliability!='N.A']/@reliability)
                         div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month0][@reliability!='N.A']/@reliability))
                         |new_attribute('downtime',
-                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month0][@downtime!='N.A']/@downtime)
-                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month0][@downtime!='N.A']/@downtime))
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month0][@downtime_W!='N.A']/@downtime_W)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month0][@downtime_W!='N.A']/@downtime_W))
                         |new_attribute('unknown',
-                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month0][@unknown!='N.A']/@unknown)
-                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month0][@unknown!='N.A']/@unknown))
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month0][@unknown_W!='N.A']/@unknown_W)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month0][@unknown_W!='N.A']/@unknown_W))
                         )
                     </element-create>
 
@@ -431,12 +546,13 @@
             <renderer type="ChartRenderer">
                 <parameter name="type">column</parameter>
                 <parameter name="axis">inverted</parameter>
-                <!--optional: The width of the chart (Integer)-->
-                <parameter name="width">1200</parameter>
 
 
-                <!--optional: The height of the chart (Integer)-->
-                <parameter name="height">2000</parameter>
+                <parameter name="options">
+                    <entry key="height">2000</entry>
+                    <entry key="width">1200</entry>
+
+                </parameter>
             </renderer>
         </renderers>
     </view>
@@ -522,7 +638,9 @@
             </renderer>
 
             <renderer type="ChartRenderer">
-                <parameter name="rotation">-45</parameter>
+                <parameter name="options">
+                    <entry key="rotation">-45</entry>
+                </parameter>
 
             </renderer>
         </renderers>
@@ -605,7 +723,9 @@
 
             </renderer>
             <renderer type="ChartRenderer">
-                <parameter name="rotation">-45</parameter>
+                  <parameter name="options">
+                      <entry key="rotation">-45</entry>
+                  </parameter>
 
             </renderer>
 
@@ -699,7 +819,9 @@
 
             </renderer>
             <renderer type="ChartRenderer">
-                <parameter name="rotation">-45</parameter>
+                  <parameter name="options">
+                      <entry key="rotation">-45</entry>
+                  </parameter>
 
             </renderer>
 
@@ -718,6 +840,7 @@
         </info>
         <argument name="report">Critical</argument>
         <argument name="mode">RW</argument>
+        <argument name="option" eval="''"></argument>
 
         <!--<argument name="start_time" eval="concat(substring(date:add(date:date-time(),concat('-P',3,'M')), 0,8),'-01T00:00:00Z')"></argument>-->
         <!--<argument name="end_time" eval="concat(str:replace(substring(date:date-time(),0,20),' ','T'),'Z')"></argument>-->
@@ -749,7 +872,7 @@
                 <attribute-create out="month3">$month3</attribute-create>
 
 
-                <element-create>view('api.availability.file.cache',entry('group_type','sites')|entry('granularity','MONTHLY')|entry('start_time',concat($monthstart,'-01T00:00:00Z'))|entry('end_time',concat($monthend,'-01T00:00:00Z'))|entry('report',$report))</element-create>
+                <element-create>view('api.availability.file.cache',entry('group_type','sites')|entry('granularity','MONTHLY')|entry('start_time',concat($monthstart,'-01T00:00:00Z'))|entry('end_time',concat($monthend,'-01T00:00:00Z'))|entry('report',$report)|entry('option',$option))</element-create>
 
             </element>
 
@@ -916,11 +1039,105 @@
                 <parameter name="template">/html/ar_reports_pdf.html</parameter>
             </renderer>
             <renderer type="ChartRenderer">
-                <parameter name="rotation">-45</parameter>
+                  <parameter name="options">
+                      <entry key="rotation">-45</entry>
+                  </parameter>
             </renderer>
         </renderers>
 
     </view>
+
+
+    <view name="NGIHR_reports" post-processors="ReportsTemplate">
+        <info>
+            <category>AR reports</category>
+            <description>Site League Reports</description>
+        </info>
+
+        <argument name="month" eval="0"></argument>
+        <argument name="ngi">NGI_HR</argument>
+        <argument name="report">NGIHRTest</argument>
+        <argument name="tag">_tag_</argument>
+
+        <connector type="XMLConnector">
+            <parameter name="content" eval="choose($month=0,view('site_reports_cached',entry('report',$report)),view('site_reports_date',entry('month',$month)|entry('report',$report)))"></parameter>
+        </connector>
+
+        <processors>
+
+
+
+            <element in="root">
+                <attribute-create out="description">'Site League Report'</attribute-create>
+                <attribute-create out="view">'site_reports'</attribute-create>
+                <attribute-create out="related_view">'site_ar'</attribute-create>
+                <attribute-create out="ngi">$ngi</attribute-create>
+                <attribute-create out="report">$report</attribute-create>
+                <attribute-create out="entity">'site'</attribute-create>
+            </element>
+
+
+            <element in="root">
+                <set variable="NGIHRCritical">view('site_reports_cached',entry('report','NGIHRTest')|entry('option','&amp;datasource=hbase'))/*</set>
+                <element in="root">
+                    <element-create as="first-child">$NGIHRCritical</element-create>
+                </element>
+            </element>
+
+
+            <element in="root">
+                <element-ignore in="root">
+                    <element in="group" if="@name=$ngi or $ngi='all'"></element>
+                    <element-ignore></element-ignore>
+                </element-ignore>
+            </element>
+
+
+
+
+
+        </processors>
+
+        <pre-renderers>
+            <title>/e:entries/@description</title>
+
+            <field label="month">/e:entries/@monthstart</field>
+            <field label="month3">/e:entries/@month3</field>
+            <field label="month2">/e:entries/@month2</field>
+            <field label="month1">/e:entries/@month1</field>
+            <field label="month0">/e:entries/@month0</field>
+
+            <row foreach="/e:entries/e:entries/e:entry/Availability[@timestamp=/e:entries/@monthstart or @timestamp=/e:entries/@month0 or @timestamp=/e:entries/@month1 or @timestamp=/e:entries/@month2 or @timestamp=/e:entries/@month3]">
+                <column label="Site">ancestor::e:entry/@key</column>
+                <column label="Ngi">ancestor::e:entries/@key</column>
+                <column label="Timestamp">@timestamp</column>
+                <column label="Availability" unit="percentage">@availability</column>
+                <column label="Reliability" unit="percentage">@reliability</column>
+                <column label="Unknown" unit="percentage">@unknown </column>
+                <column label="Downtime" unit="percentage">@downtime </column>
+            </row>
+        </pre-renderers>
+
+        <renderers>
+            <renderer type="DefaultRenderer">
+                <parameter name="template">/html/ar_reports.html</parameter>
+
+            </renderer>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">/html/ar_reports.html</parameter>
+            </renderer>
+            <renderer type="PDFRenderer">
+                <parameter name="template">/html/ar_reports_pdf.html</parameter>
+            </renderer>
+            <renderer type="ChartRenderer">
+                  <parameter name="options">
+                      <entry key="rotation">-45</entry>
+                  </parameter>
+            </renderer>
+        </renderers>
+
+    </view>
+
 
     <view name="elixir_report">
         <info>
@@ -1105,7 +1322,9 @@
 
             </renderer>
             <renderer type="ChartRenderer">
-                <parameter name="rotation">-45</parameter>
+                  <parameter name="options">
+                      <entry key="rotation">-45</entry>
+                  </parameter>
             </renderer>
         </renderers>
 
@@ -1161,7 +1380,7 @@
             <elements path="e:entries">
                 <attribute-create out="type">$type</attribute-create>
                 <element in="e:entries">
-                    <element in="e:entry" out="group" if="@key!='AVERAGE'">
+                    <element in="e:entry" out="group" if="@key!='AVERAGE' and  @key!='WEIGHTED'">
                         <element in="Availability">
                             <attribute-create out="color_av" if="../@availability &gt;= 80" >'green'</attribute-create>
                             <attribute-create out="color_av" if="../@availability &lt; 80">'red'</attribute-create>

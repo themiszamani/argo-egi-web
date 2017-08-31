@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:tpl="http://software.in2p3.fr/lavoisier/template.xsd" tpl:extends="/lavoisier/_default_?accept=html">
+<html xmlns:tpl="http://software.in2p3.fr/lavoisier/template.xsd" xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" tpl:extends="/lavoisier/_default_?accept=html">
 
 <body>
 <!-- Right side column. Contains the navbar and content of the page -->
@@ -14,52 +14,47 @@
             <section class="content-header" id="content-header">
                 <h1>
                     Comparison page
-                    <small>Compare the ARGO and MyEGI results</small>
+                    <small>Compare the ARGO new infra with production</small>
                 </h1>
             </section>
 
 
 
+               <table class="table table-condensed table-bordered table-striped" id="dataTable">
+                    <thead>
 
+                    <tr>
+                        <th>Site</th>
+                         <th>Timestamp</th>
+                        <th colspan="2">Availability</th>
+                        <th colspan="2">Reliability</th>
+                        <th colspan="2">Unknown</th>
+                    </tr>
+                    <tr>
+                        <th>AMQ</th> <th>AMS</th>   <th>AMQ</th> <th>AMS</th>  <th>AMQ</th> <th>AMS</th>  <th>AMQ</th> <th>AMS</th>
+                    </tr>
 
-               <table class="table table-condensed table-bordered table-striped"  tpl:foreach="/root/Profile/Site" tpl:with-order="@site">
+                    </thead>
+                   <tbody>
+                   
+                    <tr tpl:foreach="/e:entries/Entity/Availability[@availability_HR!='']">
+                        <td>{{ancestor::Entity/@name}}</td>
+                        <td>{{@timestamp}}</td>
 
+                        <td>{{@availability}}</td>
+                        <td tpl:if="@availability_HR!=@availability" style="color:red">{{@availability_HR}}</td>
+                        <td tpl:else="" style="color:darkgreen">{{@availability_HR}}</td>
 
+                        <td>{{@reliability}}</td>
+                        <td tpl:if="@reliability_HR!=@reliability" style="color:red">{{@reliability_HR}}</td>
+                        <td tpl:else="" style="color:darkgreen">{{@reliability_HR}}</td>
 
-
-                       <tr>
-
-                       <td>{{@site}}</td>
-
-                       <td>
-                           <table class="table table-sorted table-bordered table-striped">
-
-                           <tr>
-                               <th>Source</th>
-                               <th tpl:foreach="Availability">{{@timestamp}}</th>
-                           </tr>
-                            <tr>
-                                <th>ARGO</th>
-                                <td tpl:foreach="Availability">{{@availability}}</td>
-                            </tr>
-                            <tr>
-                                <th>MyEGI</th>
-                                <td tpl:foreach="Availability">{{@availability_cern}}</td>
-                            </tr>
-                            <tr>
-                                <th>Diff</th>
-                                <td tpl:foreach="Availability">
-                                   <span tpl:if="@error_av &lt; 5" style="color:green">{{@error_av}}</span>
-                                   <span tpl:if="@error_av &gt;= 5 and @error_av &lt; 10" style="color:orange">{{@error_av}}</span>
-                                   <span tpl:if="@error_av &gt; 10" style="color:red">{{@error_av}}</span>
-                                </td>
-                            </tr>
-
-                       </table>
-                       </td>
-
-                        </tr>
-
+                        <td>{{@unknown}}</td>
+                        <td tpl:if="@unknown_HR!=@unknown" style="color:red">{{@unknown_HR}}</td>
+                        <td tpl:else="" style="color:darkgreen">{{@unknown_HR}}</td>
+                    </tr>
+                   
+                   </tbody>
 
 
                    </table>
@@ -69,6 +64,16 @@
 
 
 </div>
+<script>
+    <!--
+    $("#dataTable").dataTable(
+            {
+                paging:false
+            }
+    );
+
+            -->
+</script>
 
 </body>
 </html>
