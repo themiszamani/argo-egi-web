@@ -1,6 +1,4 @@
-<config xmlns="http://software.in2p3.fr/lavoisier/config.xsd"
-        xmlns:date="http://exslt.org/dates-and-times"
-        xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" >
+<config xmlns="http://software.in2p3.fr/lavoisier/config.xsd" xmlns:date="http://exslt.org/dates-and-times" xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
 
 
 
@@ -12,28 +10,20 @@
         </info>
 
         <argument name="ngi">any</argument>
-        <argument name="granularity"></argument>
+        <argument name="granularity"/>
         <argument name="month">1970-01</argument>
 
-        <argument name="monthend" eval="choose($month!='1970-01',substring(date:add($month,'P1M'),0,8))"></argument>
-        <argument name="start_date" eval="choose($month!='1970-01',concat($month,'-01'))"></argument>
-        <argument name="end_date"  eval="choose($month!='1970-01',concat($monthend,'-01'))"></argument>
+        <argument name="monthend" eval="choose($month!='1970-01',substring(date:add($month,'P1M'),0,8))"/>
+        <argument name="start_date" eval="choose($month!='1970-01',concat($month,'-01'))"/>
+        <argument name="end_date" eval="choose($month!='1970-01',concat($monthend,'-01'))"/>
 
         <argument name="report">Critical</argument>
-        <argument name="view_details">site_ar</argument>
+        <argument name="view_details">ar-site</argument>
         <argument name="cr">0</argument>
 
         <connector type="XMLConnector">
 
-            <parameter name="content" eval="
-
-            view(choose($cr,'api.availability.call','api.availability.rotating.caches'),
-            entry('granularity',$granularity)
-            | entry('report',$report)
-            | entry('group_type','ngi')
-            | entry('start_time',concat($start_date,'T00:00:00Z'))
-            | entry('end_time',concat($end_date,'T00:00:00Z'))
-            )"/>
+            <parameter name="content" eval="              view(choose($cr,'api.availability.call','api.availability.rotating.caches'),             entry('granularity',$granularity)             | entry('report',$report)             | entry('group_type','ngi')             | entry('start_time',concat($start_date,'T00:00:00Z'))             | entry('end_time',concat($end_date,'T00:00:00Z'))             )"/>
         </connector>
 
 
@@ -54,22 +44,22 @@
 
                 <element in="group" if="@name=$ngi or $ngi='any'" out="Entity">
                     <attribute-create out="NGI">../@name</attribute-create>
-                    <element in="results" out="Availability"></element>
+                    <element in="results" out="Availability"/>
 
                 </element>
-                <element-ignore></element-ignore>
+                <element-ignore/>
             </element>
 
 
             <elements path="e:entries/Entity">
-                <element-ignore in="Availability" if="date:seconds(@timestamp) &lt; ancestor::e:entries/@start_timestamp"></element-ignore>
-                <element-ignore in="Availability" if="date:seconds(@timestamp) &gt; ancestor::e:entries/@end_timestamp"></element-ignore>
+                <element-ignore in="Availability" if="date:seconds(@timestamp) &lt; ancestor::e:entries/@start_timestamp"/>
+                <element-ignore in="Availability" if="date:seconds(@timestamp) &gt; ancestor::e:entries/@end_timestamp"/>
 
             </elements>
 
             <element in="e:entries">
 
-                <attribute-create out="status_url">concat('/lavoisier/status_report-site','?report=',$report,
+                <attribute-create out="status_url">concat('/status-site','?report=',$report,
                     '&amp;end=',$end_date,'&amp;start=',$start_date,'&amp;accept=html&amp;ngi=')
                 </attribute-create>
             </element>
@@ -80,7 +70,7 @@
 
         </processors>
 
-        <pre-renderers>
+        <pre-renderers><namespace prefix="date" uri="http://exslt.org/dates-and-times"/><namespace prefix="e" uri="http://software.in2p3.fr/lavoisier/entries.xsd"/>
             <title>'Availabilities Reliabilities Chart'</title>
             <row foreach="/e:entries/Entity/Availability">
                 <column label="entity">ancestor::Entity/@name</column>
@@ -114,20 +104,20 @@
             <category>AR reports</category>
             <description>CloudCustomized Reports</description>
         </info>
-        <argument name="site"></argument>
+        <argument name="site"/>
         <argument name="ngi">false</argument>
-        <argument name="granularity"></argument>
+        <argument name="granularity"/>
         <argument name="month">1970-01</argument>
-        <argument name="monthend" eval="choose($month!='1970-01',substring(date:add($month,'P1M'),0,8))"></argument>
-        <argument name="start_date" eval="choose($month!='1970-01',concat($month,'-01'))"></argument>
-        <argument name="end_date"  eval="choose($month!='1970-01',concat($monthend,'-01'))"></argument>
-        <argument name="view_details">services_ar</argument>
+        <argument name="monthend" eval="choose($month!='1970-01',substring(date:add($month,'P1M'),0,8))"/>
+        <argument name="start_date" eval="choose($month!='1970-01',concat($month,'-01'))"/>
+        <argument name="end_date" eval="choose($month!='1970-01',concat($monthend,'-01'))"/>
+        <argument name="view_details">ar-service</argument>
         <argument name="report">OPS-MONITOR-Critical</argument>
 
 
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('site_ar',arguments())"></parameter>
+            <parameter name="content" eval="view('site_ar',arguments())"/>
         </connector>
 
         <processors>
@@ -136,7 +126,7 @@
             </element>
         </processors>
 
-        <pre-renderers>
+        <pre-renderers><namespace prefix="date" uri="http://exslt.org/dates-and-times"/><namespace prefix="e" uri="http://software.in2p3.fr/lavoisier/entries.xsd"/>
             <title>'Availabilities Reliabilities Chart'</title>
             <row foreach="/e:entries/Entity/Availability">
                 <column label="entity">ancestor::Entity/@name</column>
@@ -171,27 +161,27 @@
             <category>AR reports</category>
             <description>CloudCustomized Reports</description>
         </info>
-        <argument name="site"></argument>
+        <argument name="site"/>
         <argument name="ngi">false</argument>
-        <argument name="granularity"></argument>
+        <argument name="granularity"/>
         <argument name="month">1970-01</argument>
-        <argument name="monthend" eval="choose($month!='1970-01',substring(date:add($month,'P1M'),0,8))"></argument>
-        <argument name="start_date" eval="choose($month!='1970-01',concat($month,'-01'))"></argument>
-        <argument name="end_date"  eval="choose($month!='1970-01',concat($monthend,'-01'))"></argument>
-        <argument name="view_details">services_ar</argument>
+        <argument name="monthend" eval="choose($month!='1970-01',substring(date:add($month,'P1M'),0,8))"/>
+        <argument name="start_date" eval="choose($month!='1970-01',concat($month,'-01'))"/>
+        <argument name="end_date" eval="choose($month!='1970-01',concat($monthend,'-01'))"/>
+        <argument name="view_details">ar-service</argument>
         <argument name="poems">ch.cern.sam.CLOUD-MON_CRITICAL</argument>
         <argument name="report">Fedcloud</argument>
 
 
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('site_ar',arguments())"></parameter>
+            <parameter name="content" eval="view('site_ar',arguments())"/>
         </connector>
 
 
 
 
-        <pre-renderers>
+        <pre-renderers><namespace prefix="date" uri="http://exslt.org/dates-and-times"/><namespace prefix="e" uri="http://software.in2p3.fr/lavoisier/entries.xsd"/>
             <title>'Availabilities Reliabilities Chart'</title>
             <row foreach="/e:entries/Entity/Availability">
                 <column label="entity">ancestor::Entity/@name</column>
@@ -225,27 +215,27 @@
             <category>AR reports</category>
             <description>CloudCustomized Reports</description>
         </info>
-        <argument name="site"></argument>
+        <argument name="site"/>
         <argument name="ngi">false</argument>
-        <argument name="granularity"></argument>
+        <argument name="granularity"/>
         <argument name="month">1970-01</argument>
-        <argument name="monthend" eval="choose($month!='1970-01',substring(date:add($month,'P1M'),0,8))"></argument>
-        <argument name="start_date" eval="choose($month!='1970-01',concat($month,'-01'))"></argument>
-        <argument name="end_date"  eval="choose($month!='1970-01',concat($monthend,'-01'))"></argument>
-        <argument name="view_details">services_ar</argument>
+        <argument name="monthend" eval="choose($month!='1970-01',substring(date:add($month,'P1M'),0,8))"/>
+        <argument name="start_date" eval="choose($month!='1970-01',concat($month,'-01'))"/>
+        <argument name="end_date" eval="choose($month!='1970-01',concat($monthend,'-01'))"/>
+        <argument name="view_details">ar-service</argument>
         <argument name="poems">ch.cern.sam.CLOUD-MON_CRITICAL</argument>
         <argument name="report">Cloud</argument>
 
 
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('site_ar',arguments())"></parameter>
+            <parameter name="content" eval="view('site_ar',arguments())"/>
         </connector>
 
 
 
 
-        <pre-renderers>
+        <pre-renderers><namespace prefix="date" uri="http://exslt.org/dates-and-times"/><namespace prefix="e" uri="http://software.in2p3.fr/lavoisier/entries.xsd"/>
             <title>'Availabilities Reliabilities Chart'</title>
             <row foreach="/e:entries/Entity/Availability">
                 <column label="entity">ancestor::Entity/@name</column>
@@ -277,34 +267,28 @@
             <category>AR reports</category>
             <description>Site Customized Reports</description>
         </info>
-        <argument name="site"></argument>
+        <argument name="site"/>
         <argument name="ngi">false</argument>
-        <argument name="granularity"></argument>
+        <argument name="granularity"/>
 
         <argument name="month">1970-01</argument>
-        <argument name="monthend" eval="choose($month!='1970-01',substring(date:add($month,'P1M'),0,8))"></argument>
+        <argument name="monthend" eval="choose($month!='1970-01',substring(date:add($month,'P1M'),0,8))"/>
 
-        <argument name="start_date" eval="choose($month='1970-01','_DATE_',concat($month,'-01'))"></argument>
-        <argument name="end_date"  eval="choose($month='1970-01','_DATE_',concat($monthend,'-01'))"></argument>
+        <argument name="start_date" eval="choose($month='1970-01','_DATE_',concat($month,'-01'))"/>
+        <argument name="end_date" eval="choose($month='1970-01','_DATE_',concat($monthend,'-01'))"/>
 
 
 
-        <argument name="view_details">services_ar</argument>
+        <argument name="view_details">ar-service</argument>
         <argument name="poems">ch.cern.sam.ROC_CRITICAL</argument>
         <argument name="report">Critical</argument>
-        <variable name="start_time" eval="choose($start_date!='_DATE_',concat($start_date,'T00:00:00Z'),concat(substring(date:add(date:date-time(),'-P30D'), 0,11),'T00:00:00Z'))"></variable>
-        <variable name="end_time" eval="choose($end_date!='_DATE_',concat($end_date,'T00:00:00Z'),concat(substring(date:add(date:date-time(),'-P1D'), 0,11),'T00:00:00Z'))"></variable>
+        <variable name="start_time" eval="choose($start_date!='_DATE_',concat($start_date,'T00:00:00Z'),concat(substring(date:add(date:date-time(),'-P30D'), 0,11),'T00:00:00Z'))"/>
+        <variable name="end_time" eval="choose($end_date!='_DATE_',concat($end_date,'T00:00:00Z'),concat(substring(date:add(date:date-time(),'-P1D'), 0,11),'T00:00:00Z'))"/>
 
 
         <connector type="XMLConnector">
 
-            <parameter name="content" eval="view('api.availability.rotating.caches',
-            entry('granularity',$granularity)
-            | entry('report',$report)
-            | entry('group_type','sites')
-            | entry('start_time',$start_time)
-            | entry('end_time',$end_time)
-            )"/>
+            <parameter name="content" eval="view('api.availability.rotating.caches',             entry('granularity',$granularity)             | entry('report',$report)             | entry('group_type','sites')             | entry('start_time',$start_time)             | entry('end_time',$end_time)             )"/>
         </connector>
 
         <processors>
@@ -323,10 +307,10 @@
 
                 <element in="group" if="@name=$ngi or $ngi='false'">
                     <element in="group" out="Site" if="contains(concat($site,','),@name) or $ngi!='false'">
-                        <element in="results" out="Availability"></element>
+                        <element in="results" out="Availability"/>
                     </element>
                 </element>
-                <element-ignore></element-ignore>
+                <element-ignore/>
             </element>
 
             <element in="e:entries">
@@ -340,27 +324,27 @@
 
 
             <elements path="e:entries/Entity">
-                <element-ignore in="Availability" if="date:seconds(@timestamp) &lt; ancestor::e:entries/@start_timestamp"></element-ignore>
-                <element-ignore in="Availability" if="date:seconds(@timestamp) &gt; ancestor::e:entries/@end_timestamp"></element-ignore>
+                <element-ignore in="Availability" if="date:seconds(@timestamp) &lt; ancestor::e:entries/@start_timestamp"/>
+                <element-ignore in="Availability" if="date:seconds(@timestamp) &gt; ancestor::e:entries/@end_timestamp"/>
 
             </elements>
 
 
 
             <element in="e:entries" if="$start_date!='_DATE_'">
-                <attribute-create out="url">concat('/lavoisier/',$view_details,'?report=',$report,
+                <attribute-create out="url">concat('/',$view_details,'?report=',$report,
                     '&amp;end_date=',$end_date,'&amp;start_date=',$start_date,'&amp;granularity=',$granularity,'&amp;site=')
                 </attribute-create>
-                <attribute-create out="status_url">concat('/lavoisier/status_report-site','?report=',$report,
+                <attribute-create out="status_url">concat('/status-site','?report=',$report,
                     '&amp;end=',$end_date,'&amp;start=',$start_date,'&amp;accept=html&amp;site=')
                 </attribute-create>
             </element>
 
             <element in="e:entries" if="$start_date='_DATE_'">
-                <attribute-create out="url">concat('/lavoisier/',$view_details,'?report=',$report,
+                <attribute-create out="url">concat('/',$view_details,'?report=',$report,
                     '&amp;end_date=',substring(date:date(),0,11),'&amp;start_date=',substring(date:add(date:date(),'-P30D'),0,11),'&amp;granularity=',$granularity,'&amp;site=')
                 </attribute-create>
-                <attribute-create out="status_url">concat('/lavoisier/status_report-site','?report=',$report,
+                <attribute-create out="status_url">concat('/status-site','?report=',$report,
                     '&amp;end=',substring(date:date(),0,11),'&amp;start=',substring(date:add(date:date(),'-P30D'),0,11),'&amp;accept=html&amp;site=')
                 </attribute-create>
             </element>
@@ -370,7 +354,7 @@
 
         </processors>
 
-        <pre-renderers>
+        <pre-renderers><namespace prefix="date" uri="http://exslt.org/dates-and-times"/><namespace prefix="e" uri="http://software.in2p3.fr/lavoisier/entries.xsd"/>
             <title>'Availabilities Reliabilities Chart'</title>
             <row foreach="/e:entries/Entity/Availability">
                 <column label="entity">ancestor::Entity/@name</column>
@@ -406,14 +390,14 @@
         </info>
 
 
-        <argument name="site"></argument>
+        <argument name="site"/>
 
 
-        <argument name="granularity"></argument>
-        <argument name="month"></argument>
+        <argument name="granularity"/>
+        <argument name="month"/>
 
-        <argument name="start_date" eval="concat($month,'-01')"></argument>
-        <argument name="end_date"  eval="concat($monthend,'-01')"></argument>
+        <argument name="start_date" eval="concat($month,'-01')"/>
+        <argument name="end_date" eval="concat($monthend,'-01')"/>
         <argument name="poems">ch.cern.sam.ROC_CRITICAL</argument>
         <argument name="report">report</argument>
 
@@ -424,14 +408,7 @@
 
         <connector type="XMLConnector">
 
-            <parameter name="content" eval="view('api.availability.services.call',
-            entry('granularity',$granularity)
-            | entry('report',$report)
-            | entry('group_type','service')
-            | entry('start_time',concat($start_date,'T00:00:00Z'))
-            | entry('end_time',concat($end_date,'T00:00:00Z'))
-            | entry('site',$site)
-            )"/>
+            <parameter name="content" eval="view('api.availability.services.call',             entry('granularity',$granularity)             | entry('report',$report)             | entry('group_type','service')             | entry('start_time',concat($start_date,'T00:00:00Z'))             | entry('end_time',concat($end_date,'T00:00:00Z'))             | entry('site',$site)             )"/>
         </connector>
 
         <processors>
@@ -440,14 +417,14 @@
             <element in="root" out="e:entries">
                 <attribute-create out="report">$report</attribute-create>
                 <element in="group" out="Site" if="@name=$site">
-                    <attribute in="name" out="site"></attribute>
+                    <attribute in="name" out="site"/>
                     <element in="group" out="Flavor">
-                        <attribute in="name" out="Flavor"></attribute>
-                        <element in="results" out="Availability"></element>
+                        <attribute in="name" out="Flavor"/>
+                        <element in="results" out="Availability"/>
                     </element>
                 </element>
 
-                <element-ignore></element-ignore>
+                <element-ignore/>
             </element>
 
 
@@ -456,16 +433,16 @@
             <!--<select  match="/e:entries/Profile/Site[@Site=$site]"></select>-->
 
 
-            <insert match="/e:entries" nodes="new_attribute('start_timestamp',date:seconds($start_date))"></insert>
-            <insert match="/e:entries" nodes="new_attribute('end_timestamp',date:seconds($end_date))"></insert>
+            <processor match="/e:entries" type="InsertProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="nodes" eval="new_attribute('start_timestamp',date:seconds($start_date))"/></processor>
+            <processor match="/e:entries" type="InsertProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="nodes" eval="new_attribute('end_timestamp',date:seconds($end_date))"/></processor>
 
-            <remove match="/e:entries/Site/Flavor/Availability[date:seconds(@timestamp) &lt; ancestor::e:entries/@start_timestamp ]"></remove>
-            <remove match="/e:entries/Site/Flavor/Availability[date:seconds(@timestamp) &gt; ancestor::e:entries/@end_timestamp ]"></remove>
-            <rename match="/e:entries/Site" name="Entity"></rename>
-            <rename match="/e:entries/Entity/@site" name="name"></rename>
+            <processor match="/e:entries/Site/Flavor/Availability[date:seconds(@timestamp) &lt; ancestor::e:entries/@start_timestamp ]" type="RemoveProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces></processor>
+            <processor match="/e:entries/Site/Flavor/Availability[date:seconds(@timestamp) &gt; ancestor::e:entries/@end_timestamp ]" type="RemoveProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces></processor>
+            <processor match="/e:entries/Site" type="RenameProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="node_name">Entity</parameter></processor>
+            <processor match="/e:entries/Entity/@site" type="RenameProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="node_name">name</parameter></processor>
         </processors>
 
-        <pre-renderers>
+        <pre-renderers><namespace prefix="date" uri="http://exslt.org/dates-and-times"/><namespace prefix="e" uri="http://software.in2p3.fr/lavoisier/entries.xsd"/>
             <title>'Availabilities Reliabilities Chart'</title>
             <row foreach="/e:entries/Entity/Flavor/Availability">
                 <column label="entity">ancestor::Entity/@name</column>
@@ -504,43 +481,80 @@
         </info>
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('ComputationPowerRaw')"></parameter>
+            <parameter name="content" eval="view('ComputationPowerRaw')"/>
         </connector>
 
         <processors>
-            <insert match="/root/Factor" nodes="new_attribute('ngi',choose(view('goc.siteList')/results/SITE[@NAME=match()/@site]/ROC/text(),view('goc.siteList')/results/SITE[@NAME=match()/@site]/ROC/text(),'NA'))"></insert>
-
-            <select match="/root/Factor">
-                <group by="@ngi"></group>
-            </select>
 
 
 
-            <rename match="/root" name="nodeData"></rename>
-            <!--<insert match="/nodeData" nodes="new_attribute('id','csFactor')"></insert>-->
-            <rename match="/nodeData/e:entry/@key" name="id"></rename>
-            <rename match="/nodeData/e:entry" name="children"></rename>
-            <rename match="/nodeData/children/Factor" name="children"></rename>
+                <element in="root">
+                    <set variable="gocdb">view('goc.siteList')/results</set>
+                    <element in="Factor">
+                        <attribute-create out="ngi">choose($gocdb/SITE[@NAME=current()/../@site]/ROC/text(),$gocdb/SITE[@NAME=current()/../@site]/ROC/text(),'NA')</attribute-create>
+                    </element>
+                </element>
+
+                <element in="root">                    
+                    <element-ignore in="Factor"></element-ignore>
+                    <element-create>sort_by_string(../Factor,'@ngi')</element-create>
+                </element>
 
 
-
-            <rename match="/nodeData//@site" name="id"></rename>
-
-            <insert match="/nodeData/children" nodes="new_attribute('color',choose(view('ngi_reports')/e:entries/e:entries/e:entry[@key=match()/@id]/Availability[position()=last()]/@availability,view('ngi_reports')/e:entries/e:entries/e:entry[@key=match()/@id]/Availability[position()=last()]/@availability,0))"></insert>
-            <insert match="/nodeData/children/children" nodes="new_attribute('color',choose(view('site_reports')/e:entries/e:entries/e:entry[@key=match()/@id]/Availability[position()=last()]/@availability,view('site_reports')/e:entries/e:entries/e:entry[@key=match()/@id]/Availability[position()=last()]/@availability,0))"></insert>
-
-            <replace match="/nodeData//children/@color" nodes="match() div 100 "/>
+                <element in="root">
+                    <element-create-as-parent out="ngi" group-by="@ngi" attributes="@ngi">
+                        <element in="Factor"></element>
+                    </element-create-as-parent>
+                </element>
 
 
-            <insert match="/nodeData/children" nodes="new_element('children',new_attribute('id',match()/@id)|new_attribute('Parent','EGI')|new_attribute('size',0)|new_attribute('color',0))"/>
-            <insert match="/nodeData" nodes="new_element('children',new_attribute('id','EGI')|new_attribute('Parent','null')|new_attribute('size',0)|new_attribute('color',0))"/>
+                <element in="root" out="nodeData">
+                    <set variable="colorNgi">view('ngi_reports')</set>
+                    <set variable="colorSite">view('site_reports')</set>
+                    <element in="ngi" out="children">
+                        <attribute-create out="color">choose($colorNgi/e:entries/e:entries/e:entry[@key=current()/../@ngi]/Availability[position()=last()]/@availability,
+                            $colorNgi/e:entries/e:entries/e:entry[@key=current()/../@ngi]/Availability[position()=last()]/@availability,'NA')</attribute-create>
+                        <element in="Factor" out="children">
+                            <attribute-create out="color">choose($colorSite/e:entries/e:entries/e:entry[@key=current()/../@site]/Availability[position()=last()]/@availability,
+                                $colorSite/e:entries/e:entries/e:entry[@key=current()/../@site]/Availability[position()=last()]/@availability,'NA')</attribute-create>
+                        </element>
+                    </element>
 
-            <remove match="/nodeData/children" depth="1"/>
-            <replace match="/nodeData/children/@ngi" nodes="new_attribute('Parent',match())"></replace>
+                </element>
 
             <element in="nodeData">
-                <element-ignore in="children" if="@Parent='NA'"></element-ignore>
-                <element in="children"></element>
+                    <element in="children">
+                        <attribute in="ngi" out="id"></attribute>
+                        <attribute in="color">round(.) div 100</attribute>
+                        <attribute-create out="Parent">'EGI'</attribute-create>
+                        <element in="children">
+                            <attribute in="site" out="id"></attribute>
+                            <attribute in="ngi" out="Parent"></attribute>
+                            <attribute in="color">round(.) div 100</attribute>
+                        </element>
+                    </element>
+            </element>
+
+            <element in="nodeData">
+                <element-ignore in="children">
+                    <element in="children"></element>
+                    <element-create>../../children</element-create>
+                </element-ignore>
+            </element>
+
+            <element in="nodeData">
+                <element-ignore in="children"></element-ignore>
+                <element-create>uniq(../children,'@id')</element-create>
+            </element>
+            <element in="nodeData">
+                <element in="children">
+                    <element-ignore></element-ignore>
+                </element>
+            </element>
+
+            <element in="nodeData">
+                <element-ignore in="children" if="@Parent='NA'"/>
+                <element in="children"/>
             </element>
 
             <element in="nodeData">
@@ -549,13 +563,14 @@
                     <attribute in="color" if=".='NaN'">0</attribute>
                 </element>
             </element>
+
         </processors>
         <cache type="FileCache">
             <!--<trigger type="ViewCreatedTrigger"/>-->
-            <trigger type="DeltaTimeTrigger">
-                <parameter name="hours">4</parameter>
-            </trigger>
-            <trigger type="ViewNotifiedTrigger"/>
+            <!--<trigger type="DeltaTimeTrigger">-->
+                <!--<parameter name="hours">4</parameter>-->
+            <!--</trigger>-->
+            <!--<trigger type="ViewNotifiedTrigger"/>-->
             <trigger type="ViewCreatedTrigger"/>
         </cache>
 
@@ -581,34 +596,28 @@
             <category>AR reports</category>
             <description>Site Customized Reports</description>
         </info>
-        <argument name="site"></argument>
+        <argument name="site"/>
         <argument name="ngi">NGI_HR</argument>
         <argument name="granularity">DAILY</argument>
 
         <argument name="month">1970-01</argument>
-        <argument name="monthend" eval="choose($month!='1970-01',substring(date:add($month,'P1M'),0,8))"></argument>
+        <argument name="monthend" eval="choose($month!='1970-01',substring(date:add($month,'P1M'),0,8))"/>
 
-        <argument name="start_date" eval="choose($month='1970-01','_DATE_',concat($month,'-01'))"></argument>
-        <argument name="end_date"  eval="choose($month='1970-01','_DATE_',concat($monthend,'-01'))"></argument>
+        <argument name="start_date" eval="choose($month='1970-01','_DATE_',concat($month,'-01'))"/>
+        <argument name="end_date" eval="choose($month='1970-01','_DATE_',concat($monthend,'-01'))"/>
 
 
 
-        <argument name="view_details">services_ar</argument>
+        <argument name="view_details">ar-service</argument>
         <argument name="poems">ch.cern.sam.ROC_CRITICAL</argument>
         <argument name="report">Critical</argument>
-        <variable name="start_time" eval="choose($start_date!='_DATE_',concat($start_date,'T00:00:00Z'),concat(substring(date:add(date:date-time(),'-P30D'), 0,11),'T00:00:00Z'))"></variable>
-        <variable name="end_time" eval="choose($end_date!='_DATE_',concat($end_date,'T00:00:00Z'),concat(substring(date:add(date:date-time(),'-P1D'), 0,11),'T00:00:00Z'))"></variable>
+        <variable name="start_time" eval="choose($start_date!='_DATE_',concat($start_date,'T00:00:00Z'),concat(substring(date:add(date:date-time(),'-P30D'), 0,11),'T00:00:00Z'))"/>
+        <variable name="end_time" eval="choose($end_date!='_DATE_',concat($end_date,'T00:00:00Z'),concat(substring(date:add(date:date-time(),'-P1D'), 0,11),'T00:00:00Z'))"/>
 
 
         <connector type="XMLConnector">
 
-            <parameter name="content" eval="view('api.availability.rotating.caches',
-            entry('granularity',$granularity)
-            | entry('report','NGIHRTest')
-            | entry('group_type','sites')
-            | entry('start_time',$start_time)
-            | entry('end_time',$end_time)          
-            )"/>
+            <parameter name="content" eval="view('api.availability.rotating.caches',             entry('granularity',$granularity)             | entry('report','NGIHRTest')             | entry('group_type','sites')             | entry('start_time',$start_time)             | entry('end_time',$end_time)                       )"/>
         </connector>
 
         <processors>
@@ -621,16 +630,16 @@
                 <attribute-create out="start_date">$start_time</attribute-create>
                 <attribute-create out="end_date">$end_time</attribute-create>
 
-                <attribute-create out="view">site_ar</attribute-create>
+                <attribute-create out="view">ar-site</attribute-create>
                 <attribute-create out="view_details">$view_details</attribute-create>
                 <attribute-create out="report">$report</attribute-create>
 
                 <element in="group" if="@name=$ngi or $ngi='false'">
                     <element in="group" out="Site">
-                        <element in="results" out="Availability"></element>
+                        <element in="results" out="Availability"/>
                     </element>
                 </element>
-                <element-ignore></element-ignore>
+                <element-ignore/>
             </element>
 
             <element in="e:entries">
@@ -654,8 +663,8 @@
             </elements>
 
             <elements path="e:entries/Entity">
-                <element-ignore in="Availability" if="date:seconds(@timestamp) &lt; ancestor::e:entries/@start_timestamp"></element-ignore>
-                <element-ignore in="Availability" if="date:seconds(@timestamp) &gt; ancestor::e:entries/@end_timestamp"></element-ignore>
+                <element-ignore in="Availability" if="date:seconds(@timestamp) &lt; ancestor::e:entries/@start_timestamp"/>
+                <element-ignore in="Availability" if="date:seconds(@timestamp) &gt; ancestor::e:entries/@end_timestamp"/>
             </elements>
 
             <elements path="e:entries/Entity">
@@ -681,8 +690,8 @@
 
 
             <elements path="e:entries/Entity">
-                <element in="Availability"></element>
-                <element-ignore></element-ignore>
+                <element in="Availability"/>
+                <element-ignore/>
             </elements>
 
 
@@ -690,7 +699,7 @@
 
         </processors>
 
-        <pre-renderers>
+        <pre-renderers><namespace prefix="date" uri="http://exslt.org/dates-and-times"/><namespace prefix="e" uri="http://software.in2p3.fr/lavoisier/entries.xsd"/>
             <title>'Availabilities Reliabilities Chart'</title>
             <row foreach="/e:entries/Entity/Availability">
                 <column label="entity">ancestor::Entity/@name</column>
