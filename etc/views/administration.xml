@@ -1,4 +1,9 @@
-<config xmlns="http://software.in2p3.fr/lavoisier/config.xsd" xmlns:date="http://exslt.org/dates-and-times" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:str="http://exslt.org/strings" xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
+<config
+        xmlns="http://software.in2p3.fr/lavoisier/config.xsd"
+        xmlns:date="http://exslt.org/dates-and-times"
+        xmlns:xi="http://www.w3.org/2001/XInclude"
+        xmlns:str="http://exslt.org/strings"
+        xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
 
 
 <view name="saml-metadata">
@@ -7,7 +12,7 @@
         <category>ADMIN</category>
     </info>
     <connector type="FileConnector">
-        <parameter name="path">security/saml-metadata-argo.xml</parameter>
+        <parameter name="path" >security/saml-metadata-argo.xml</parameter>
     </connector>
 
     <renderers>
@@ -26,29 +31,29 @@
         <argument name="mode">light</argument>
         <connector type="XMLConnector">
             <!--<parameter name="content" eval="view('listProfilesRaw')"/>-->
-            <parameter name="content" eval="new_element('root')"/>
+            <parameter name="content" eval="new_element('root')"></parameter>
         </connector>
         <processors>
-            <processor match="/root" type="InsertProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="nodes" eval="new_element('ngis')"/></processor>
-            <processor match="/root" type="InsertProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="nodes" eval="new_element('sites')"/></processor>
-            <processor match="/root" type="InsertProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="nodes" eval="new_element('hosts')"/></processor>
+            <insert match="/root" nodes="new_element('ngis')"/>
+            <insert match="/root" nodes="new_element('sites')"/>
+            <insert match="/root" nodes="new_element('hosts')"/>
 
 
-            <processor match="/root/ngis" type="InsertProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="nodes" eval="view('listNgi')"/></processor>
-            <processor match="/root/sites" type="InsertProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="nodes" eval="view('listSite')"/></processor>
-            <processor match="/root/hosts" type="InsertProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="nodes" eval="view('goc.HostList')"/></processor>
+            <insert match="/root/ngis" nodes="view('listNgi')"/>
+            <insert match="/root/sites" nodes="view('listSite')"/>
+            <insert match="/root/hosts" nodes="view('goc.HostList')"/>
 
 
-            <processor match="/root/ngis/e:entries/e:entry/text()" type="ReplaceProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="nodes" eval="concat(',',.)"/></processor>
-            <processor match="/root/sites/e:entries/e:entry/text()" type="ReplaceProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="nodes" eval="concat(',',.)"/></processor>
-            <processor match="/root/hosts/e:entries/e:entry/text()" type="ReplaceProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="nodes" eval="concat(',',.)"/></processor>
+            <replace match="/root/ngis/e:entries/e:entry/text()" nodes="concat(',',.)"/>
+            <replace match="/root/sites/e:entries/e:entry/text()" nodes="concat(',',.)"/>
+            <replace match="/root/hosts/e:entries/e:entry/text()" nodes="concat(',',.)"/>
 
 
 
-            <processor match="/root/ngis/e:entries" type="RemoveProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="depth">2</parameter></processor>
-            <processor match="/root/sites/e:entries" type="RemoveProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="depth">2</parameter></processor>
-            <processor match="/root/hosts/e:entries" type="RemoveProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="depth">2</parameter></processor>
-            <processor match="/root/sf/e:entries" type="RemoveProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="depth">2</parameter></processor>
+            <remove match="/root/ngis/e:entries" depth="2"/>
+            <remove match="/root/sites/e:entries" depth="2"/>
+            <remove match="/root/hosts/e:entries" depth="2"/>
+            <remove match="/root/sf/e:entries" depth="2"/>
         </processors>
     </view>
 
@@ -58,7 +63,7 @@
             <category>WEBUI</category>
         </info>
         <connector type="XMLConnector">
-            <parameter name="content" eval="new_element('root')"/>
+            <parameter name="content" eval="new_element('root')"></parameter>
         </connector>
 
         <renderers>
@@ -80,12 +85,19 @@
         </info>
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('listParameters')"/>
+            <parameter name="content" eval="view('listParameters')"></parameter>
         </connector>
 
         <processors>
-            <processor match="/root" type="InsertProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="nodes" eval="                     new_attribute('admin',boolean(view('administratorsList')/admins/admin/CertDN[text()=user()]))                     |new_attribute('user',user())                     |new_attribute('WebmasterEmail',property('contact.email'))                     |new_attribute('url',concat(property('server.baseUrl'),':',property('lavoisier.http.port'),'/lavoisier/form_recomputation_results?recompId='))                     "/></processor>
-            <processor match="/root" type="InsertProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="nodes" eval="view('listSitesbyNgi')"/></processor>
+            <insert match="/root"
+                    nodes="
+                    new_attribute('admin',boolean(view('administratorsList')/admins/admin/CertDN[text()=user()]))
+                    |new_attribute('user',user())
+                    |new_attribute('WebmasterEmail',property('contact.email'))
+                    |new_attribute('url',concat(property('server.baseUrl'),':',property('lavoisier.http.port'),'/lavoisier/form_recomputation_results?recompId='))
+                    ">
+            </insert>
+            <insert match="/root" nodes="view('listSitesbyNgi')"/>
 
         </processors>
         <renderers>
@@ -168,7 +180,7 @@
         <argument name="details">false</argument>
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('form_recomputation_results',entry('mode','RW')|entry('key',$key))"/>
+            <parameter name="content" eval="view('form_recomputation_results',entry('mode','RW')|entry('key',$key))"></parameter>
         </connector>
 
         <processors>
@@ -190,7 +202,7 @@
     </view>
 
 
-    <view name="form_recomputation_results">
+    <view name="form_recomputation_results"  xmlns:date="http://exslt.org/dates-and-times">
         <info>
             <category>ADMIN</category>
         </info>
@@ -206,7 +218,7 @@
             <parameter name="content" eval="view_post('recomputation_RotatingCacheContent',choose(post(false()),post(false()),entries()))"/>
             <parameter name="key" eval="choose($key!='_key_'  ,$key,null())"/>
             <parameter name="size">100</parameter>
-            <parameter name="mode" eval="$mode"/>
+            <parameter name="mode" eval="$mode"></parameter>
         </connector>
 
 
@@ -229,13 +241,13 @@
         </info>
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="post()"/>
+            <parameter name="content" eval="post()"></parameter>
         </connector>
 
         <processors>
 
 
-            <element if="not(EmailSent)">
+            <element  if="not(EmailSent)">
                 <element-create>view('recomputation_SendEmail',entry('id',../e:entry[@key='recompId']/text())|entry('url',../e:entry[@key='url']/text())|entry('cc',../e:entry[@key='email']/text()))</element-create>
             </element>
 
@@ -248,19 +260,19 @@
         <category>ADMIN</category>
     </info>
 
-        <argument name="id"/>
-        <argument name="url"/>
-        <argument name="cc"/>
+        <argument name="id"></argument>
+        <argument name="url"></argument>
+        <argument name="cc"></argument>
 
         <connector type="ShellConnector">
             <parameter name="executable">/bin/sh</parameter>
             <parameter name="arguments">
                 <entry>../../etc/shell/SendEmail.sh</entry>
-                <entry eval="property('contact.email')"/>
-                <entry eval="$id"/>
-                <entry eval="$url"/>
-                <entry eval="$cc"/>
-                <entry eval="property('contact.recomputation')"/>
+                <entry eval="property('contact.email')"></entry>
+                <entry eval="$id"></entry>
+                <entry eval="$url"></entry>
+                <entry eval="$cc"></entry>
+                <entry eval="property('contact.recomputation')"></entry>
             </parameter>
             <parameter name="workdir" eval="property('user.dir')"/>
         </connector>
@@ -276,12 +288,12 @@
             <parameter name="arguments">
                 <entry>-rf</entry>
                 <entry eval="concat(property('cache.baseDirectory'),'/api.availability.rotating.caches')"/>
-                <entry eval="concat(property('cache.baseDirectory'),'/api.status.rotating.caches')"/>
+                <entry eval="concat(property('cache.baseDirectory'),'/api.status.rotating.caches')"></entry>
             </parameter>
 
 
         </connector>
-        <serializer type="EncapsulateSerializer"/>
+        <serializer type="EncapsulateSerializer"></serializer>
 
 
 
@@ -289,7 +301,7 @@
             <trigger type="FixedTimeTrigger">
                 <parameter name="hour">2</parameter>
             </trigger>
-            <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="ViewNotifiedTrigger"></trigger>
         </cache>
     </view>
 
@@ -302,7 +314,7 @@
 
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="new_element('root')"/>
+            <parameter name="content" eval="new_element('root')"></parameter>
         </connector>
 
         <processors>
@@ -350,7 +362,8 @@
 
 
 
-    <view name="form_profile_results_INTERNAL">
+    <view name="form_profile_results_INTERNAL" xmlns:str="http://exslt.org/strings"
+          xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
         <info>
             <category>ADMIN</category>
             <description>Build your AR data</description>
@@ -379,7 +392,7 @@
 
     <view name="modify_recomputation_results">
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('form_recomputation_result',entry('key',$key)|entry('mode','W'))"/>
+            <parameter name="content" eval="view('form_recomputation_result',entry('key',$key)|entry('mode','W'))"></parameter>
         </connector>
 
     </view>
@@ -391,19 +404,19 @@
 
 
 
-        <argument name="key"/>
-        <argument name="param"/>
-        <argument name="param_value"/>
+        <argument name="key"></argument>
+        <argument name="param"></argument>
+        <argument name="param_value"></argument>
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('form_recomputation_result',entry('key',$key)|entry('mode','R'))"/>
+            <parameter name="content" eval="view('form_recomputation_result',entry('key',$key)|entry('mode','R'))"></parameter>
         </connector>
 
 
         <processors>
             <element in="properties">
                 <elements path="entry/SendEmail/entries/e:entries/e:entry[@key=$param]">
-                    <text-ignore/>
+                    <text-ignore></text-ignore>
                     <text-create>$param_value</text-create>
                 </elements>
             </element>
@@ -422,18 +435,22 @@
 
 
 
-    <view name="listProfiles" authenticators="AuthenticatedUsers">
+    <view xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" name="listProfiles"
+          authenticators="AuthenticatedUsers">
         <info>
             <description>List of Profile html</description>
             <category>Profile</category>
         </info>
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('aggregation_profiles')"/>
+            <parameter name="content" eval="view('aggregation_profiles')"></parameter>
         </connector>
 
         <processors>
-            <processor match="/object" type="InsertProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="nodes" eval="new_attribute('admin',boolean(view('administratorsList')/admins/admin/CertDN[text()=user()]))                      |new_attribute('user',user())"/></processor>
+            <insert match="/object"
+                    nodes="new_attribute('admin',boolean(view('administratorsList')/admins/admin/CertDN[text()=user()]))
+                     |new_attribute('user',user())">
+            </insert>
         </processors>
 
 
@@ -451,7 +468,8 @@
 
 
     </view>
-    <view name="CreationProfiles" authenticators="AuthenticatedUsers">
+    <view xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" name="CreationProfiles"
+          authenticators="AuthenticatedUsers">
         <info>
             <description>creation of Profile</description>
             <category>ADMIN</category>
@@ -459,11 +477,14 @@
 
         <argument name="metricsProfileId">0</argument>
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('metricsProfile')"/>
+            <parameter name="content" eval="view('metricsProfile')"></parameter>
         </connector>
 
         <processors>
-            <processor match="/object" type="InsertProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="nodes" eval="new_attribute('admin',boolean(view('administratorsList')/admins/admin/CertDN[text()=user()]))                      |new_attribute('user',user()) | new_attribute('metricsProfileId',$metricsProfileId)"/></processor>
+            <insert match="/object"
+                    nodes="new_attribute('admin',boolean(view('administratorsList')/admins/admin/CertDN[text()=user()]))
+                     |new_attribute('user',user()) | new_attribute('metricsProfileId',$metricsProfileId)">
+            </insert>
             <!--<element in="results">-->
             <!--<element-create>view('metricsProfile')</element-create>-->
             <!--</element>-->
@@ -481,20 +502,24 @@
 
     </view>
 
-    <view name="updateProfile" authenticators="AuthenticatedUsers">
+    <view xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" name="updateProfile"
+          authenticators="AuthenticatedUsers">
         <info>
             <description>creation of Profile</description>
             <category>ADMIN</category>
         </info>
 
-        <argument name="profileId"/>
+        <argument name="profileId"></argument>
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('metricsProfile')"/>
+            <parameter name="content" eval="view('metricsProfile')"></parameter>
         </connector>
 
 
         <processors>
-            <processor match="/object" type="InsertProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="nodes" eval="new_attribute('admin',boolean(view('administratorsList')/admins/admin/CertDN[text()=user()]))                      |new_attribute('user',user())"/></processor>
+            <insert match="/object"
+                    nodes="new_attribute('admin',boolean(view('administratorsList')/admins/admin/CertDN[text()=user()]))
+                     |new_attribute('user',user())">
+            </insert>
 
             <element in="object">
                 <attribute-create out="mode">'edition'</attribute-create>
@@ -522,21 +547,21 @@
             <category>ADMIN</category>
             <description>Delete a profile</description>
         </info>
-        <argument name="profileId"/>
+        <argument name="profileId"></argument>
         <connector type="HTTPConnector">
-            <parameter name="url" eval="concat(property('api.aggregation_profiles'),'/',$profileId)"/>
+            <parameter name="url" eval="concat(property('api.aggregation_profiles'),'/',$profileId)"></parameter>
             <parameter name="method">DELETE</parameter>
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>
             <parameter name="force-redirect">true</parameter>
 
             <parameter name="header">
-                <entry key="x-api-key" eval="property('argo.api.key')"/>
+                <entry key="x-api-key" eval="property('argo.api.key')"></entry>
                 <entry key="Accept">application/json</entry>
             </parameter>
         </connector>
 
-        <serializer type="JSONStreamSerializer"/>
+        <serializer type="JSONStreamSerializer"></serializer>
 
         <processors>
             <element>
@@ -558,23 +583,23 @@
             <category>ADMIN</category>
             <description>Delete a profile</description>
         </info>
-        <argument name="id"/>
-        <argument name="json"/>
+        <argument name="id"></argument>
+        <argument name="json"></argument>
 
 
         <connector type="HTTPConnector">
-            <parameter name="url" eval="concat(property('api.aggregation_profiles'),'/',$id)"/>
+            <parameter name="url" eval="concat(property('api.aggregation_profiles'),'/',$id)"></parameter>
             <parameter name="method">PUT</parameter>
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>
-            <parameter name="post" eval="$json"/>
+            <parameter name="post" eval="$json"></parameter>
             <parameter name="force-redirect">true</parameter>
             <parameter name="header">
-                <entry key="x-api-key" eval="property('argo.api.key')"/>
+                <entry key="x-api-key" eval="property('argo.api.key')"></entry>
                 <entry key="Content-Type">application/json</entry>
             </parameter>
         </connector>
-        <serializer type="JSONStreamSerializer"/>
+        <serializer type="JSONStreamSerializer"></serializer>
         <processors>
             <element>
                 <element-create>view('triggerProfileList')/null</element-create>
@@ -599,22 +624,22 @@
             <category>ADMIN</category>
             <description>Delete a profile</description>
         </info>
-        <argument name="json"/>
+        <argument name="json"></argument>
 
 
         <connector type="HTTPConnector">
-            <parameter name="url" eval="property('api.aggregation_profiles')"/>
+            <parameter name="url" eval="property('api.aggregation_profiles')"></parameter>
             <parameter name="method">POST</parameter>
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>
-            <parameter name="post" eval="$json"/>
+            <parameter name="post" eval="$json"></parameter>
             <parameter name="force-redirect">true</parameter>
             <parameter name="header">
-                <entry key="x-api-key" eval="property('argo.api.key')"/>
+                <entry key="x-api-key" eval="property('argo.api.key')"></entry>
                 <entry key="Content-Type">application/json</entry>
             </parameter>
         </connector>
-        <serializer type="JSONStreamSerializer"/>
+        <serializer type="JSONStreamSerializer"></serializer>
         <processors>
             <element>
                 <element-create>view('triggerProfileList')/null</element-create>
@@ -639,7 +664,7 @@
             <parameter name="path">test.json</parameter>
         </connector>
 
-        <serializer type="JSONStreamSerializer"/>
+        <serializer type="JSONStreamSerializer"></serializer>
     </view>
 
     <view name="testJson2">
@@ -647,7 +672,7 @@
             <parameter name="path">test2.json</parameter>
         </connector>
 
-        <serializer type="JSONStreamSerializer"/>
+        <serializer type="JSONStreamSerializer"></serializer>
     </view>
 
 </config>
