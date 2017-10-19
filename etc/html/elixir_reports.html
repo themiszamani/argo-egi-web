@@ -24,7 +24,7 @@
 
 <section class="content-header" id="content-header">
     <h1>
-        <img src="/resource/img/ELIXIR_logo.png" title="Elixir logo"/>
+
         <small>Availabilities and Status Reports</small>
 
 
@@ -85,8 +85,8 @@
 
 
                 <h3 class="box-header box-title">
-
-                    ELIXIR > AVAILABILITIES/RELIABILITIES > LAST 3 MONTHS
+                    <img src="/resource/img/ELIXIR_logo.png" title="Elixir logo"/>
+                     > AVAILABILITIES/RELIABILITIES > LAST 3 MONTHS
                 </h3>
 
 
@@ -121,7 +121,7 @@
                     <td class="col-md-4">{{@site}}</td>
 
                     <td tpl:if="Availability[@timestamp=ancestor::e:entries/@month1]">
-                        <a href="/lavoisier/{{/e:entries/@related_view}}?granularity=DAILY&amp;report={{/e:entries/@report}}&amp;start_date={{/e:entries/@month1}}-01&amp;end_date={{/e:entries/@month2}}-01&amp;site={{@site}}">
+                        <a href="{{/e:entries/@related_view}}?granularity=DAILY&amp;report={{/e:entries/@report}}&amp;start_date={{/e:entries/@month1}}-01&amp;end_date={{/e:entries/@month2}}-01&amp;site={{@site}}">
                             <span class="avCheck label"
                                   title="{{format-number(Availability[@timestamp=ancestor::e:entries/@month1]/@availability,'#.00')}}">{{format-number(Availability[@timestamp=ancestor::e:entries/@month1]/@availability,'#.00')}}</span>
                             <span class="reCheck label" style="margin-left:10px"
@@ -151,7 +151,7 @@
                     </td>
 
                     <td tpl:if="Availability[@timestamp=ancestor::e:entries/@month2]">
-                        <a href="/lavoisier/{{/e:entries/@related_view}}?granularity=DAILY&amp;report={{/e:entries/@report}}&amp;start_date={{/e:entries/@month2}}-01&amp;end_date={{/e:entries/@month3}}-01&amp;site={{@site}}">
+                        <a href="{{/e:entries/@related_view}}?granularity=DAILY&amp;report={{/e:entries/@report}}&amp;start_date={{/e:entries/@month2}}-01&amp;end_date={{/e:entries/@month3}}-01&amp;site={{@site}}">
                             <span class="avCheck label"
                                   title="{{format-number(Availability[@timestamp=ancestor::e:entries/@month2]/@availability,'#.00')}}">{{format-number(Availability[@timestamp=ancestor::e:entries/@month2]/@availability,'#.00')}}</span>
                             <span class="reCheck label" style="margin-left:10px"
@@ -181,7 +181,7 @@
                     </td>
 
                     <td tpl:if="Availability[@timestamp=ancestor::e:entries/@month3]">
-                        <a href="/lavoisier/{{/e:entries/@related_view}}?granularity=DAILY&amp;report={{/e:entries/@report}}&amp;start_date={{/e:entries/@month3}}-01&amp;end_date={{/e:entries/@month4}}&amp;site={{@site}}">
+                        <a href="{{/e:entries/@related_view}}?granularity=DAILY&amp;report={{/e:entries/@report}}&amp;start_date={{/e:entries/@month3}}-01&amp;end_date={{/e:entries/@month4}}&amp;site={{@site}}">
                             <span class="avCheck label"
                                   title="{{format-number(Availability[@timestamp=ancestor::e:entries/@month3]/@availability,'#.00')}}">{{format-number(Availability[@timestamp=ancestor::e:entries/@month3]/@availability,'#.00')}}</span>
                             <span class="reCheck label" style="margin-left:10px"
@@ -223,7 +223,7 @@
 
 
         <h3 class="box-header box-title">
-            ELIXIR > STATUS > LAST 4 DAYS
+            <img src="/resource/img/ELIXIR_logo.png" title="Elixir logo"/> > STATUS > LAST 4 DAYS
         </h3>
 
 
@@ -238,7 +238,7 @@
 
 
             <div  id="local_links">
-                <div style="display: none" tpl:foreach="/e:entries/status/group/status" >/lavoisier/{{ancestor::status/@view}}?site={{ancestor::group/@name}}&amp;start_date={{ancestor::e:entries/status/@start_time}}&amp;end_date={{ancestor::e:entries/status/@end_time}}&amp;report={{ancestor::e:entries/status/@report}}&amp;accept=html</div>
+                <div style="display: none" tpl:foreach="/e:entries/status/group/status" >{{ancestor::status/@view}}?site={{ancestor::group/@name}}&amp;start_date={{ancestor::e:entries/status/@start_time}}&amp;end_date={{ancestor::e:entries/status/@end_time}}&amp;report={{ancestor::e:entries/status/@report}}&amp;accept=html</div>
             </div>
 
 
