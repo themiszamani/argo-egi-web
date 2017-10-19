@@ -16,10 +16,10 @@
 
             <ul class="sidebar-menu" id="addMenu" >
                 <li  tpl:foreach="e:entries/e:entries[@name]" style="font-size: lighter;background-color: #C7d2e1">
-                    <a  href="/lavoisier/site_reports?ngi={{@name}}&amp;report={{/e:entries/@report}}&amp;month={{/e:entries/@month0}}&amp;accept=html">  <span>-- {{@name}} --</span> </a>
+                    <a  href="/ar-site?ngi={{@name}}&amp;report={{/e:entries/@report}}&amp;month={{/e:entries/@month0}}&amp;accept=html">  <span>-- {{@name}} --</span> </a>
                 </li>
                 <li  tpl:foreach="e:entries/e:entries/e:entry[@key!='AVERAGE' and @key!='WEIGHTED'][@name]" style="font-size: lighter;background-color: #C7d2e1">
-                    <a  href="/lavoisier/site_reports?ngi={{@key}}&amp;report={{/e:entries/@report}}&amp;month={{/e:entries/@month0}}&amp;accept=html">  <span>-- {{@key}} --</span> </a>
+                    <a  href="/ar-site?ngi={{@key}}&amp;report={{/e:entries/@report}}&amp;month={{/e:entries/@month0}}&amp;accept=html">  <span>-- {{@key}} --</span> </a>
                 </li>
 
             </ul>
@@ -97,13 +97,13 @@
             <a href="?accept=xml&amp;month={{/e:entries/@month0}}" target="_blank" title="XML report"><span style="margin:10px" class="btn btn-primary">XML</span></a>
             <a href="?accept=pdf&amp;month={{/e:entries/@month0}}" target="_blank" title="PDF report"><span style="margin:10px" class="btn btn-primary">PDF</span></a>
             <a tpl:if="/e:entries/@view!='site_reports'"
-               href="/lavoisier/render_chart_n?view={{/e:entries/@view}}&amp;report={{/e:entries/@report}}&amp;type=availability&amp;ngi=all&amp;accept=html&amp;month={{/e:entries/@month0}}"
+               href="/chart?view={{/e:entries/@view}}&amp;report={{/e:entries/@report}}&amp;type=availability&amp;ngi=all&amp;accept=html&amp;month={{/e:entries/@month0}}"
                title="Chart">
                 <span style="margin:15px" class="btn btn-primary"><i class="fa fa-bar-chart-o"> </i>  AVAILABILITY </span>
             </a>
 
             <a tpl:if="/e:entries/@view!='site_reports'"
-               href="/lavoisier/render_chart_n?view={{/e:entries/@view}}&amp;report={{/e:entries/@report}}&amp;type=reliability&amp;ngi=all&amp;accept=html&amp;month={{/e:entries/@month0}}"
+               href="/chart?view={{/e:entries/@view}}&amp;report={{/e:entries/@report}}&amp;type=reliability&amp;ngi=all&amp;accept=html&amp;month={{/e:entries/@month0}}"
                title="Chart">
                 <span style="margin:15px" class="btn btn-primary"><i class="fa fa-bar-chart-o"> </i> RELIABILITY </span>
             </a>
@@ -122,13 +122,13 @@
             <h3 class="box-title">{{@name}}</h3>
 
             <a tpl:if="/e:entries/@view='site_reports'"
-               href="/lavoisier/render_chart_n?view={{/e:entries/@view}}&amp;report={{/e:entries/@report}}&amp;type=availability&amp;ngi={{@name}}&amp;accept=html&amp;month={{/e:entries/@month0}}"
+               href="/chart?view={{/e:entries/@view}}&amp;report={{/e:entries/@report}}&amp;type=availability&amp;ngi={{@name}}&amp;accept=html&amp;month={{/e:entries/@month0}}"
                title="Chart">
                 <span style="margin:15px" class="btn btn-primary"><i class="fa fa-bar-chart-o"> </i>  AVAILABILITY </span>
             </a>
 
             <a tpl:if="/e:entries/@view='site_reports'"
-               href="/lavoisier/render_chart_n?view={{/e:entries/@view}}&amp;report={{/e:entries/@report}}&amp;type=reliability&amp;ngi={{@name}}&amp;accept=html&amp;month={{/e:entries/@month0}}"
+               href="/chart?view={{/e:entries/@view}}&amp;report={{/e:entries/@report}}&amp;type=reliability&amp;ngi={{@name}}&amp;accept=html&amp;month={{/e:entries/@month0}}"
                title="Chart">
                 <span style="margin:15px" class="btn btn-primary"><i class="fa fa-bar-chart-o"> </i> RELIABILITY </span>
             </a>
@@ -153,13 +153,13 @@
 
 
                              <td tpl:if="/e:entries/@details" class="ngi">
-                                 <a href="/lavoisier/{{/e:entries/@details}}?ngi={{@key}}&amp;report={{/e:entries/@report}}&amp;accept=html">{{@key}}</a>
+                                 <a href="/{{/e:entries/@details}}?ngi={{@key}}&amp;report={{/e:entries/@report}}&amp;accept=html">{{@key}}</a>
                              </td>
                             <td tpl:else="">{{@key}}</td>
 
 
                     <td tpl:foreach="Availability">
-                        <a href="/lavoisier/{{/e:entries/@related_view}}?month={{@timestamp}}&amp;granularity=daily&amp;report={{/e:entries/@report}}&amp;{{/e:entries/@entity}}={{ancestor::e:entry/@key}}&amp;accept=html">
+                        <a href="/{{/e:entries/@related_view}}?month={{@timestamp}}&amp;granularity=daily&amp;report={{/e:entries/@report}}&amp;{{/e:entries/@entity}}={{ancestor::e:entry/@key}}&amp;accept=html">
                             <span class="avCheck label"
                                   title="{{format-number(@availability,'#.00')}}">{{format-number(@availability,'#.00')}}</span>
                             <span style="margin-left:10px" class="reCheck label"

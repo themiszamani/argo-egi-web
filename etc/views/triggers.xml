@@ -1,8 +1,4 @@
-<config xmlns="http://software.in2p3.fr/lavoisier/config.xsd"
-        xmlns:date="http://exslt.org/dates-and-times"
-        xmlns:xi="http://www.w3.org/2001/XInclude"
-        xmlns:str="http://exslt.org/strings"
-        xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
+<config xmlns="http://software.in2p3.fr/lavoisier/config.xsd" xmlns:date="http://exslt.org/dates-and-times" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:str="http://exslt.org/strings" xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
 
 
 
@@ -17,8 +13,8 @@
         </connector>
 
         <cache type="EmptyCache">
-            <trigger type="ViewAccessedTrigger"></trigger>
-            <trigger type="ViewNotifiedTrigger"></trigger>
+            <trigger type="ViewAccessedTrigger"/>
+            <trigger type="ViewNotifiedTrigger"/>
         </cache>
 
         <renderers>
@@ -40,7 +36,7 @@
         </info>
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="new_element('root')"></parameter>
+            <parameter name="content" eval="new_element('root')"/>
         </connector>
 
         <processors>
@@ -74,7 +70,7 @@
         </processors>
 
         <cache type="EmptyCache">
-            <trigger type="ViewNotifiedTrigger"></trigger>
+            <trigger type="ViewNotifiedTrigger"/>
             <trigger type="FixedTimeTrigger">
                 <parameter name="hour">7</parameter>
             </trigger>
@@ -103,7 +99,7 @@
         </info>
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="new_element('root')"></parameter>
+            <parameter name="content" eval="new_element('root')"/>
         </connector>
 
         <processors>
@@ -122,7 +118,7 @@
         </processors>
 
         <cache type="EmptyCache">
-            <trigger type="ViewNotifiedTrigger"></trigger>
+            <trigger type="ViewNotifiedTrigger"/>
             <trigger type="DeltaTimeTrigger">
                 <parameter name="minutes">10</parameter>
             </trigger>

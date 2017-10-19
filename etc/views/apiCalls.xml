@@ -1,8 +1,4 @@
-<config xmlns="http://software.in2p3.fr/lavoisier/config.xsd"
-        xmlns:date="http://exslt.org/dates-and-times"
-        xmlns:xi="http://www.w3.org/2001/XInclude"
-        xmlns:str="http://exslt.org/strings"
-        xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
+<config xmlns="http://software.in2p3.fr/lavoisier/config.xsd" xmlns:date="http://exslt.org/dates-and-times" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:str="http://exslt.org/strings" xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
 
 <!-- *******************************************************************
 ****               CALL TO THE API
@@ -18,41 +14,39 @@
             <description>Call the Availability Method for sites or ngi - All options </description>
         </info>
 
-        <argument name="group_type"></argument>
-        <argument name="start_time"></argument>
-        <argument name="end_time"></argument>
-        <argument name="granularity"></argument>
+        <argument name="group_type"/>
+        <argument name="start_time"/>
+        <argument name="end_time"/>
+        <argument name="granularity"/>
         <argument name="report">Critical</argument>
-        <argument name="option" eval="''"></argument>
+        <argument name="option" eval="''"/>
 
         <connector type="HTTPConnector">
-            <parameter name="url" eval="concat(property('api.group.availability'),$report,'/',upper-case($group_type),
-            '?granularity=',lower-case($granularity),
-            '&amp;start_time=',$start_time,'&amp;end_time=',$end_time,$option)">
+            <parameter name="url" eval="concat(property('api.group.availability'),$report,'/',upper-case($group_type),             '?granularity=',lower-case($granularity),             '&amp;start_time=',$start_time,'&amp;end_time=',$end_time,$option)">
             </parameter>
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>
             <parameter name="header">
-                <entry key="x-api-key" eval="choose($report='NGIHRTest',property('ngihr.api.key'),property('argo.api.key'))"></entry>
+                <entry key="x-api-key" eval="choose($report='NGIHRTest',property('ngihr.api.key'),property('argo.api.key'))"/>
                 <entry key="Accept">application/xml</entry>
             </parameter>
             <fallback eval="new_element('root',new_attribute('key', concat(property('api.group.availability'),$report,'/',upper-case($group_type),'?granularity=',$granularity,'&amp;start_time=',$start_time,'&amp;end_time=',$end_time)))">
-                <exception type="java.io.IOException"></exception>
+                <exception type="java.io.IOException"/>
             </fallback>
         </connector>
 
         <processors>
             <!-- Remove results from an extra day of the next  month , when date is like 2015-02-30 translated into 2015-03-02 -->
             <elements path="/root/Profile/Site">
-                <element-ignore in="Availability" if="not(contains(@timestamp,substring($start_time,0,8))) and substring($start_time,0,8)=substring($end_time,0,8)"></element-ignore>
+                <element-ignore in="Availability" if="not(contains(@timestamp,substring($start_time,0,8))) and substring($start_time,0,8)=substring($end_time,0,8)"/>
             </elements>
             <elements path="/root/Profile/Ngi">
-                <element-ignore in="Availability" if="not(contains(@timestamp,substring($start_time,0,8))) and substring($start_time,0,8)=substring($end_time,0,8)"></element-ignore>
+                <element-ignore in="Availability" if="not(contains(@timestamp,substring($start_time,0,8))) and substring($start_time,0,8)=substring($end_time,0,8)"/>
             </elements>
 
 
             <elements path="/root/root/group">
-                <element-ignore in="results" if="not(contains(@timestamp,substring($start_time,0,8))) and substring($start_time,0,8)=substring($end_time,0,8)"></element-ignore>
+                <element-ignore in="results" if="not(contains(@timestamp,substring($start_time,0,8))) and substring($start_time,0,8)=substring($end_time,0,8)"/>
             </elements>
 
             <element in="root">
@@ -69,27 +63,25 @@
         </info>
 
 
-        <argument name="start_time"></argument>
-        <argument name="end_time"></argument>
-        <argument name="granularity"></argument>
-        <argument name="report"></argument>
-        <argument name="site"></argument>
+        <argument name="start_time"/>
+        <argument name="end_time"/>
+        <argument name="granularity"/>
+        <argument name="report"/>
+        <argument name="site"/>
         <argument name="report">Critical</argument>
-        <argument name="option" eval="''"></argument>
+        <argument name="option" eval="''"/>
 
         <connector type="HTTPConnector">
-            <parameter name="url" eval="concat(property('api.service.availability'),$report,'/SITES/',$site,
-            '/services?granularity=',lower-case($granularity),
-            '&amp;start_time=',$start_time,'&amp;end_time=',$end_time,$option)">
+            <parameter name="url" eval="concat(property('api.service.availability'),$report,'/SITES/',$site,             '/services?granularity=',lower-case($granularity),             '&amp;start_time=',$start_time,'&amp;end_time=',$end_time,$option)">
             </parameter>
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>
             <parameter name="header">
-                <entry key="x-api-key" eval="choose($report='NGIHRTest',property('ngihr.api.key'),property('argo.api.key'))"></entry>
+                <entry key="x-api-key" eval="choose($report='NGIHRTest',property('ngihr.api.key'),property('argo.api.key'))"/>
                 <entry key="Accept">application/xml</entry>
             </parameter>
             <fallback eval="new_element('root')">
-                <exception type="java.io.IOException"></exception>
+                <exception type="java.io.IOException"/>
             </fallback>
         </connector>
 
@@ -97,15 +89,15 @@
             <!-- Remove results from an extra day of the next  month , when date is like 2015-02-30 translated into 2015-03-02 -->
 
             <elements path="/root/Profile/Site">
-                <element-ignore in="Availability" if="not(contains(@timestamp,substring($start_time,0,8))) and substring($start_time,0,8)=substring($end_time,0,8)"></element-ignore>
+                <element-ignore in="Availability" if="not(contains(@timestamp,substring($start_time,0,8))) and substring($start_time,0,8)=substring($end_time,0,8)"/>
             </elements>
 
             <elements path="/root/Profile/Ngi">
-                <element-ignore in="Availability" if="not(contains(@timestamp,substring($start_time,0,8))) and substring($start_time,0,8)=substring($end_time,0,8)"></element-ignore>
+                <element-ignore in="Availability" if="not(contains(@timestamp,substring($start_time,0,8))) and substring($start_time,0,8)=substring($end_time,0,8)"/>
             </elements>
 
             <elements path="/root/root/group">
-                <element-ignore in="results" if="not(contains(@timestamp,substring($start_time,0,8))) and substring($start_time,0,8)=substring($end_time,0,8)"></element-ignore>
+                <element-ignore in="results" if="not(contains(@timestamp,substring($start_time,0,8))) and substring($start_time,0,8)=substring($end_time,0,8)"/>
             </elements>
 
 
@@ -135,30 +127,22 @@
         <argument name="end_time">0</argument>
         <argument name="site">false</argument>
         <argument name="mode">RW</argument>
-        <argument name="option" eval="''"></argument>
+        <argument name="option" eval="''"/>
 
 
-        <argument name="starttime" eval="choose($diff=10,$start_time,concat(substring(date:add(date:date-time(),concat('-P',$diff,'M')), 0,8),'-01T00:00:00Z'))"></argument>
-        <argument name="endtime" eval="choose($diff=10,$end_time,concat(substring(date:add(date:date-time(),concat('-P',$diff,'M')), 0,8),'-31T23:59:59Z'))"></argument>
+        <argument name="starttime" eval="choose($diff=10,$start_time,concat(substring(date:add(date:date-time(),concat('-P',$diff,'M')), 0,8),'-01T00:00:00Z'))"/>
+        <argument name="endtime" eval="choose($diff=10,$end_time,concat(substring(date:add(date:date-time(),concat('-P',$diff,'M')), 0,8),'-31T23:59:59Z'))"/>
 
 
 
         <connector type="RotatingCacheConnector">
-            <parameter name="content" eval="
-            view(choose($group_type!='service','api.availability.call','api.availability.services.call'),
-            entry('report',$report)
-            |entry('group_type',$group_type)
-            |entry('granularity',$granularity)
-            |entry('start_time',$starttime)
-             |entry('end_time',$endtime)
-             |entry('site',$site)
-             )"/>
+            <parameter name="content" eval="             view(choose($group_type!='service','api.availability.call','api.availability.services.call'),             entry('report',$report)             |entry('group_type',$group_type)             |entry('granularity',$granularity)             |entry('start_time',$starttime)              |entry('end_time',$endtime)              |entry('site',$site)              )"/>
             <parameter name="key" eval="concat($report,'-',$group_type,'-',$granularity,'-',$starttime,'-',$endtime,'-',$site)"/>
             <parameter name="size">100000</parameter>
-            <parameter name="mode" eval="$mode"></parameter>
+            <parameter name="mode" eval="$mode"/>
 
             <fallback eval="new_element('root')">
-                <exception type="java.io.IOException"></exception>
+                <exception type="java.io.IOException"/>
 
             </fallback>
         </connector>
@@ -185,22 +169,16 @@
         <argument name="mode">RW</argument>
 
 
-        <argument name="start_time"></argument>
-        <argument name="end_time"></argument>
-        <argument name="option" eval="''"></argument>
+        <argument name="start_time"/>
+        <argument name="end_time"/>
+        <argument name="option" eval="''"/>
 
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('api.availability.call',  entry('report',$report)
-            |entry('group_type',$group_type)
-            |entry('granularity',$granularity)
-            |entry('start_time',$start_time)
-            |entry('end_time',$end_time)
-            |entry('site',$site)
-            |entry('option',$option))">
+            <parameter name="content" eval="view('api.availability.call',  entry('report',$report)             |entry('group_type',$group_type)             |entry('granularity',$granularity)             |entry('start_time',$start_time)             |entry('end_time',$end_time)             |entry('site',$site)             |entry('option',$option))">
             </parameter>
             <fallback eval="new_element('root')">
-                <exception type="java.io.IOException"></exception>
+                <exception type="java.io.IOException"/>
             </fallback>
         </connector>
 
@@ -225,24 +203,23 @@
         </info>
 
         <argument name="group_type">SITES</argument>
-        <argument name="start_time"></argument>
-        <argument name="end_time"></argument>
-        <argument name="granularity"></argument>
+        <argument name="start_time"/>
+        <argument name="end_time"/>
+        <argument name="granularity"/>
         <argument name="report">Critical</argument>
-        <argument name="option" eval="''"></argument>
+        <argument name="option" eval="''"/>
 
         <connector type="HTTPConnector">
-            <parameter name="url" eval="concat(property('api.status.url'),$report,'/',upper-case($group_type),
-            '?start_time=',$start_time,'&amp;end_time=',$end_time,$option)">
+            <parameter name="url" eval="concat(property('api.status.url'),$report,'/',upper-case($group_type),             '?start_time=',$start_time,'&amp;end_time=',$end_time,$option)">
             </parameter>
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>
             <parameter name="header">
-                <entry key="x-api-key" eval="choose($report='NGIHRTest',property('ngihr.api.key'),property('argo.api.key'))"></entry>
+                <entry key="x-api-key" eval="choose($report='NGIHRTest',property('ngihr.api.key'),property('argo.api.key'))"/>
                 <entry key="Accept">application/xml</entry>
             </parameter>
             <fallback eval="new_element('root')">
-                <exception type="java.io.IOException"></exception>
+                <exception type="java.io.IOException"/>
 
             </fallback>
 
@@ -284,26 +261,19 @@
         <argument name="site">false</argument>
         <argument name="mode">RW</argument>
 
-        <argument name="starttime" eval="concat(substring(date:add(date:date-time(),concat('-P',$diff+1,'D')), 0,11),'T00:00:00Z')"></argument>
-        <argument name="endtime" eval="concat(substring(date:add(date:date-time(),concat('-P',$diff+1,'D')), 0,11),'T23:59:59Z')"></argument>
+        <argument name="starttime" eval="concat(substring(date:add(date:date-time(),concat('-P',$diff+1,'D')), 0,11),'T00:00:00Z')"/>
+        <argument name="endtime" eval="concat(substring(date:add(date:date-time(),concat('-P',$diff+1,'D')), 0,11),'T23:59:59Z')"/>
 
 
 
         <connector type="RotatingCacheConnector">
-            <parameter name="content" eval="
-            view('api.status.call',
-            entry('report',$report)
-            |entry('group_type',$group_type)
-            |entry('start_time',$starttime)
-             |entry('end_time',$endtime)
-             |entry('site',upper-case($site)))
-             "/>
+            <parameter name="content" eval="             view('api.status.call',             entry('report',$report)             |entry('group_type',$group_type)             |entry('start_time',$starttime)              |entry('end_time',$endtime)              |entry('site',upper-case($site)))              "/>
             <parameter name="key" eval="concat($report,'-',$group_type,'-',$starttime,'-',$endtime,'-',$site)"/>
             <parameter name="size">100000</parameter>
-            <parameter name="mode" eval="$mode"></parameter>
+            <parameter name="mode" eval="$mode"/>
 
             <fallback>
-                <exception type="java.io.IOException"></exception>
+                <exception type="java.io.IOException"/>
             </fallback>
         </connector>
 
@@ -324,35 +294,27 @@
             <description>Call the Availability Method for sites or ngi - All options </description>
         </info>
 
-        <argument name="group_type"></argument>
-        <argument name="start_time"></argument>
-        <argument name="end_time"></argument>
-        <argument name="site"></argument>
+        <argument name="group_type"/>
+        <argument name="start_time"/>
+        <argument name="end_time"/>
+        <argument name="site"/>
         <argument name="report">Critical</argument>
         <argument name="service">false</argument>
         <argument name="endpoint">false</argument>
 
         <connector type="HTTPConnector">
-            <parameter name="url"
-                       eval="choose($service='false',
-                       concat(property('api.status.url'),$report,'/',upper-case($group_type),'/',$site,'/services','?start_time=',$start_time,'&amp;end_time=',$end_time),
-
-                       choose($endpoint='false',
-                                concat(property('api.status.url'),$report,'/',upper-case($group_type),'/',$site,'/services/',$service,'/endpoints?start_time=',$start_time,'&amp;end_time=',$end_time),
-                                concat(property('api.status.url'),$report,'/',upper-case($group_type),'/',$site,'/services/',$service,'/endpoints/',$endpoint,'/metrics?start_time=',$start_time,'&amp;end_time=',$end_time)
-
-                      ) )">
+            <parameter name="url" eval="choose($service='false',                        concat(property('api.status.url'),$report,'/',upper-case($group_type),'/',$site,'/services','?start_time=',$start_time,'&amp;end_time=',$end_time),                         choose($endpoint='false',                                 concat(property('api.status.url'),$report,'/',upper-case($group_type),'/',$site,'/services/',$service,'/endpoints?start_time=',$start_time,'&amp;end_time=',$end_time),                                 concat(property('api.status.url'),$report,'/',upper-case($group_type),'/',$site,'/services/',$service,'/endpoints/',$endpoint,'/metrics?start_time=',$start_time,'&amp;end_time=',$end_time)                        ) )">
             </parameter>
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>
             <parameter name="header">
-                <entry key="x-api-key" eval="choose($report='NGIHRTest',property('ngihr.api.key'),property('argo.api.key'))"></entry>
+                <entry key="x-api-key" eval="choose($report='NGIHRTest',property('ngihr.api.key'),property('argo.api.key'))"/>
                 <entry key="Accept">application/xml</entry>
             </parameter>
             <parameter name="connect-timeout">600</parameter>
             <parameter name="read-timeout">600</parameter>
             <fallback eval="new_element('root')">
-                <exception type="java.io.IOException"></exception>
+                <exception type="java.io.IOException"/>
 
             </fallback>
         </connector>
@@ -385,7 +347,7 @@
             <description>Call the Availability Method for sites or ngi - All options </description>
         </info>
 
-        <argument name="exec_time"></argument>
+        <argument name="exec_time"/>
         <argument name="metric">false</argument>
         <argument name="endpoint">false</argument>
         <argument name="report">Critical</argument>
@@ -394,15 +356,15 @@
 node16.datagrid.cea.fr/org.nordugrid.ARC-CE-ARIS?exec_time=2015-06-01T00:01:20Z'
 -->
         <connector type="HTTPConnector">
-            <parameter name="url" eval="concat(property('api.output.details'),'/',$endpoint,'/',$metric,'?exec_time=',$exec_time)"></parameter>
+            <parameter name="url" eval="concat(property('api.output.details'),'/',$endpoint,'/',$metric,'?exec_time=',$exec_time)"/>
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>
             <parameter name="header">
-                <entry key="x-api-key" eval="property('argo.api.key')"></entry>
+                <entry key="x-api-key" eval="property('argo.api.key')"/>
                 <entry key="Accept">application/xml</entry>
             </parameter>
             <fallback eval="new_element('root')">
-                <exception type="java.io.IOException"></exception>
+                <exception type="java.io.IOException"/>
 
             </fallback>
         </connector>
@@ -438,12 +400,12 @@ node16.datagrid.cea.fr/org.nordugrid.ARC-CE-ARIS?exec_time=2015-06-01T00:01:20Z'
         </info>
 
         <connector type="HTTPConnector">
-            <parameter name="url" eval="property('api.custom.factors')"></parameter>
+            <parameter name="url" eval="property('api.custom.factors')"/>
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>
             <parameter name="force-redirect">true</parameter>
             <parameter name="header">
-                <entry key="x-api-key" eval="property('argo.api.key')"></entry>
+                <entry key="x-api-key" eval="property('argo.api.key')"/>
                 <entry key="Accept">application/xml</entry>
             </parameter>
         </connector>
@@ -468,7 +430,7 @@ node16.datagrid.cea.fr/org.nordugrid.ARC-CE-ARIS?exec_time=2015-06-01T00:01:20Z'
         </info>
 
         <connector type="HTTPConnector">
-            <parameter name="url" eval="property('api.computation.power')"></parameter>
+            <parameter name="url" eval="property('api.computation.power')"/>
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>
             <parameter name="force-redirect">true</parameter>
@@ -476,13 +438,13 @@ node16.datagrid.cea.fr/org.nordugrid.ARC-CE-ARIS?exec_time=2015-06-01T00:01:20Z'
         
         <processors>
             <element in="sites" out="root">
-                <attribute-ignore></attribute-ignore>
+                <attribute-ignore/>
                 <element-ignore in="ngi">
                     <element in="site" out="Factor">
-                        <attribute in="id" out="site"></attribute>
-                        <attribute in="ngi"></attribute>
-                        <attribute in="ComputationPower" out="weight"></attribute>
-                        <attribute-ignore></attribute-ignore>
+                        <attribute in="id" out="site"/>
+                        <attribute in="ngi"/>
+                        <attribute in="ComputationPower" out="weight">floor(.)</attribute>
+                        <attribute-ignore/>
                     </element>
                 </element-ignore>
 
@@ -511,16 +473,16 @@ node16.datagrid.cea.fr/org.nordugrid.ARC-CE-ARIS?exec_time=2015-06-01T00:01:20Z'
         </info>
 
         <connector type="HTTPConnector">
-            <parameter name="url" eval="property('api.metrics.profile')"></parameter>
+            <parameter name="url" eval="property('api.metrics.profile')"/>
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>
             <parameter name="force-redirect">true</parameter>
             <parameter name="header">
-                <entry key="x-api-key" eval="property('argo.api.key')"></entry>
+                <entry key="x-api-key" eval="property('argo.api.key')"/>
                 <entry key="Accept">application/json</entry>
             </parameter>
         </connector>
-        <serializer type="JSONStreamSerializer"></serializer>
+        <serializer type="JSONStreamSerializer"/>
 
         <cache type="FileCache">
             <!--<trigger type="ViewCreatedTrigger"/>-->
@@ -544,16 +506,16 @@ node16.datagrid.cea.fr/org.nordugrid.ARC-CE-ARIS?exec_time=2015-06-01T00:01:20Z'
         </info>
 
         <connector type="HTTPConnector">
-            <parameter name="url" eval="property('api.aggregation_profiles')"></parameter>
+            <parameter name="url" eval="property('api.aggregation_profiles')"/>
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>
             <parameter name="force-redirect">true</parameter>
             <parameter name="header">
-                <entry key="x-api-key" eval="property('argo.api.key')"></entry>
+                <entry key="x-api-key" eval="property('argo.api.key')"/>
                 <entry key="Accept">application/xml</entry>
             </parameter>
         </connector>
-        <serializer type="JSONSerializer"></serializer>
+        <serializer type="JSONSerializer"/>
 
         <cache type="FileCache">
             <!--<trigger type="ViewCreatedTrigger"/>-->
@@ -582,12 +544,12 @@ node16.datagrid.cea.fr/org.nordugrid.ARC-CE-ARIS?exec_time=2015-06-01T00:01:20Z'
         </info>
 
         <connector type="HTTPConnector">
-            <parameter name="url" eval="property('api.reports')"></parameter>
+            <parameter name="url" eval="property('api.reports')"/>
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>
             <parameter name="force-redirect">true</parameter>
             <parameter name="header">
-                <entry key="x-api-key" eval="property('argo.api.key')"></entry>
+                <entry key="x-api-key" eval="property('argo.api.key')"/>
                 <entry key="Accept">application/xml</entry>
             </parameter>
         </connector>

@@ -1,8 +1,4 @@
-<config xmlns="http://software.in2p3.fr/lavoisier/config.xsd"
-        xmlns:date="http://exslt.org/dates-and-times"
-        xmlns:xi="http://www.w3.org/2001/XInclude"
-        xmlns:str="http://exslt.org/strings"
-        xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
+<config xmlns="http://software.in2p3.fr/lavoisier/config.xsd" xmlns:date="http://exslt.org/dates-and-times" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:str="http://exslt.org/strings" xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
 
 
 
@@ -37,16 +33,11 @@
         <argument name="report">Critical</argument>
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="new_element('root')"></parameter>
+            <parameter name="content" eval="new_element('root')"/>
         </connector>
 
         <processors>
-            <insert match="/root" nodes="
-            view('api.status.rotating.caches',entry('group_type','sites')|entry('diff','0')|entry('report',$report)|entry('mode',$mode))
-            |view('api.status.rotating.caches',entry('group_type','sites')|entry('diff','1')|entry('report',$report)|entry('mode',$mode))
-            |view('api.status.rotating.caches',entry('group_type','sites')|entry('diff','2')|entry('report',$report)|entry('mode',$mode))">
-
-            </insert>
+            <processor match="/root" type="InsertProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="nodes" eval="             view('api.status.rotating.caches',entry('group_type','sites')|entry('diff','0')|entry('report',$report)|entry('mode',$mode))             |view('api.status.rotating.caches',entry('group_type','sites')|entry('diff','1')|entry('report',$report)|entry('mode',$mode))             |view('api.status.rotating.caches',entry('group_type','sites')|entry('diff','2')|entry('report',$report)|entry('mode',$mode))"/></processor>
         </processors>
     </view>
 
@@ -55,7 +46,7 @@
     <view name="status_site_3_CriticalUncert">
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('status_site',entry('lastdays','3')|entry('report','CriticalUncert'))"></parameter>
+            <parameter name="content" eval="view('status_site',entry('lastdays','3')|entry('report','CriticalUncert'))"/>
         </connector>
 
         <cache type="FileCache">
@@ -79,7 +70,7 @@
     <view name="status_site_10_CriticalUncert">
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('status_site',entry('lastdays','10')|entry('report','CriticalUncert'))"></parameter>
+            <parameter name="content" eval="view('status_site',entry('lastdays','10')|entry('report','CriticalUncert'))"/>
         </connector>
 
         <cache type="FileCache">
@@ -101,7 +92,7 @@
     <view name="status_site_30_CriticalUncert">
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('status_site',entry('lastdays','30')|entry('report','CriticalUncert'))"></parameter>
+            <parameter name="content" eval="view('status_site',entry('lastdays','30')|entry('report','CriticalUncert'))"/>
         </connector>
 
         <cache type="FileCache">
@@ -125,7 +116,7 @@
     <view name="status_site_3_Critical">
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('status_site',entry('lastdays','3'))"></parameter>
+            <parameter name="content" eval="view('status_site',entry('lastdays','3'))"/>
         </connector>
 
         <cache type="FileCache">
@@ -149,7 +140,7 @@
     <view name="status_site_10_Critical">
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('status_site',entry('lastdays','10'))"></parameter>
+            <parameter name="content" eval="view('status_site',entry('lastdays','10'))"/>
         </connector>
 
         <cache type="FileCache">
@@ -171,7 +162,7 @@
     <view name="status_site_30_Critical">
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('status_site',entry('lastdays','30'))"></parameter>
+            <parameter name="content" eval="view('status_site',entry('lastdays','30'))"/>
         </connector>
 
         <cache type="FileCache">
@@ -196,7 +187,7 @@
     <view name="status_site_3_OPS-MONITOR-Critical">
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('status_site',entry('lastdays','3')|entry('report','OPS-MONITOR-Critical'))"></parameter>
+            <parameter name="content" eval="view('status_site',entry('lastdays','3')|entry('report','OPS-MONITOR-Critical'))"/>
         </connector>
 
         <cache type="FileCache">
@@ -219,7 +210,7 @@
     <view name="status_site_10_OPS-MONITOR-Critical">
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('status_site',entry('lastdays','10')|entry('report','OPS-MONITOR-Critical'))"></parameter>
+            <parameter name="content" eval="view('status_site',entry('lastdays','10')|entry('report','OPS-MONITOR-Critical'))"/>
         </connector>
 
         <cache type="FileCache">
@@ -242,7 +233,7 @@
     <view name="status_site_30_OPS-MONITOR-Critical">
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('status_site',entry('lastdays','30')|entry('report','OPS-MONITOR-Critical'))"></parameter>
+            <parameter name="content" eval="view('status_site',entry('lastdays','30')|entry('report','OPS-MONITOR-Critical'))"/>
         </connector>
 
         <cache type="FileCache">
@@ -264,7 +255,7 @@
     <view name="status_site_3_Fedcloud">
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('status_site',entry('lastdays','3')|entry('report','Fedcloud'))"></parameter>
+            <parameter name="content" eval="view('status_site',entry('lastdays','3')|entry('report','Fedcloud'))"/>
         </connector>
 
         <cache type="FileCache">
@@ -287,7 +278,7 @@
     <view name="status_site_10_Fedcloud">
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('status_site',entry('lastdays','10')|entry('report','Fedcloud'))"></parameter>
+            <parameter name="content" eval="view('status_site',entry('lastdays','10')|entry('report','Fedcloud'))"/>
         </connector>
 
         <cache type="FileCache">
@@ -310,7 +301,7 @@
     <view name="status_site_30_Fedcloud">
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('status_site',entry('lastdays','30')|entry('report','Fedcloud'))"></parameter>
+            <parameter name="content" eval="view('status_site',entry('lastdays','30')|entry('report','Fedcloud'))"/>
         </connector>
 
         <cache type="FileCache">
@@ -334,7 +325,7 @@
     <view name="status_site_30_NGIHRTest">
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('status_site',entry('lastdays','30')|entry('report','NGIHRTest'))"></parameter>
+            <parameter name="content" eval="view('status_site',entry('lastdays','30')|entry('report','NGIHRTest'))"/>
         </connector>
 
         <cache type="FileCache">
@@ -357,7 +348,7 @@
     <view name="status_site_3_NGIHRTest">
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('status_site',entry('lastdays','3')|entry('report','NGIHRTest'))"></parameter>
+            <parameter name="content" eval="view('status_site',entry('lastdays','3')|entry('report','NGIHRTest'))"/>
         </connector>
 
         <cache type="FileCache">
@@ -380,7 +371,7 @@
     <view name="status_site_10_NGIHRTest">
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('status_site',entry('lastdays','10')|entry('report','NGIHRTest'))"></parameter>
+            <parameter name="content" eval="view('status_site',entry('lastdays','10')|entry('report','NGIHRTest'))"/>
         </connector>
 
         <cache type="FileCache">
@@ -414,13 +405,13 @@
 
 
 
-            <variable name="start_date" eval="concat(str:replace(substring(date:add(date:date-time(),concat('-P',$lastdays,'D')), 0,20),' ','T'),'Z')"></variable>
-            <variable name="end_date" eval="concat(str:replace(substring(date:date-time(), 0,20),' ','T'),'Z')"></variable>
+            <variable name="start_date" eval="concat(str:replace(substring(date:add(date:date-time(),concat('-P',$lastdays,'D')), 0,20),' ','T'),'Z')"/>
+            <variable name="end_date" eval="concat(str:replace(substring(date:date-time(), 0,20),' ','T'),'Z')"/>
 
 
 
             <connector type="XMLConnector">
-                <parameter name="content" eval="view('api.status.call',entry('group_type','sites')|entry('site',$site)|entry('start_time',$start_date)|entry('end_time',$end_date)|entry('report',$report))"></parameter>
+                <parameter name="content" eval="view('api.status.call',entry('group_type','sites')|entry('site',$site)|entry('start_time',$start_date)|entry('end_time',$end_date)|entry('report',$report))"/>
             </connector>
 
             <processors>
@@ -441,7 +432,7 @@
                 <element in="root">
 
                     <set variable="SiteList">view('listSitesbyNgi')</set>
-                    <attribute-create out="view">'status_report-sf'</attribute-create>
+                    <attribute-create out="view">'status-sf'</attribute-create>
                     <attribute-create out="ngi" if="$ngi!='all'">$ngi</attribute-create>
                     <attribute-create out="lastdays">$lastdays</attribute-create>
 
@@ -451,18 +442,18 @@
                     <element in="group">
                         <attribute-create out="group">choose($SiteList/results/Ngi[SITE/@NAME=current()/../@name]/@key!='','AMQ','AMS')</attribute-create>
                     </element>
-                    <element-ignore></element-ignore>
+                    <element-ignore/>
                 </element>
 
                 <elements path="root">
-                    <element in="group"></element>
-                    <element-ignore></element-ignore>
+                    <element in="group"/>
+                    <element-ignore/>
                 </elements>
 
 
 
                 <elements path="root">
-                    <element-ignore in="group"></element-ignore>
+                    <element-ignore in="group"/>
                     <element-create>
                         sort_by_string(../group,'@name')
                     </element-create>
@@ -470,24 +461,24 @@
 
                 <elements path="root">
                     <element-create-as-parent out="group" attributes="@*" group-by="@name">
-                        <element in="group" ></element>
+                        <element in="group"/>
                     </element-create-as-parent>
                 </elements>
 
                 <elements path="root/group">
                     <element-ignore in="group">
-                        <element></element>
+                        <element/>
                     </element-ignore>
                 </elements>
 
                 <elements path="root/group">
-                    <element-ignore in="status"></element-ignore>
+                    <element-ignore in="status"/>
                     <element-create>sort_by_string(../status,'@timestamp')</element-create>
                 </elements>
 
 
                 <elements path="root/group">
-                    <element-ignore in="status" if="following-sibling::status/@timestamp and date:seconds(following-sibling::status/@timestamp)  &lt; date:seconds($start_date)"></element-ignore>
+                    <element-ignore in="status" if="following-sibling::status/@timestamp and date:seconds(following-sibling::status/@timestamp)  &lt; date:seconds($start_date)"/>
                 </elements>
 
 
@@ -508,8 +499,8 @@
 
 
                 <elements path="root/group">
-                    <element-ignore in="status" if="preceding-sibling::status and date:seconds(@timestamp) &lt; date:seconds($start_date)"></element-ignore>
-                    <element in="status" if="not(preceding-sibling::status)" >
+                    <element-ignore in="status" if="preceding-sibling::status and date:seconds(@timestamp) &lt; date:seconds($start_date)"/>
+                    <element in="status" if="not(preceding-sibling::status)">
                         <attribute in="timestamp">$start_date</attribute>
                     </element>
                 </elements>
@@ -536,7 +527,7 @@
     </view>
 
     <!-- @TODO Récupérer jour courant -->
-    <view name="status_site" xmlns:java="http://software.in2p3.fr/lavoisier/java">
+    <view xmlns:java="http://software.in2p3.fr/lavoisier/java" name="status_site">
         <info>
             <category>Status Report</category>
             <description>Site Reports - cache Rotated</description>
@@ -547,21 +538,21 @@
         <argument name="lastdays">3</argument>
         <argument name="report">Critical</argument>
         <argument name="Fedcloud">_fedcloud_</argument>
-        <argument name="listSiteFedcloud" eval="concat(',',join(view('goc.listSiteFedcloud')/e:entries/e:entry/text(),','),',')"></argument>
+        <argument name="listSiteFedcloud" eval="concat(',',join(view('goc.listSiteFedcloud')/e:entries/e:entry/text(),','),',')"/>
 
-        <variable name='setutc' eval="java:java.util.TimeZone.setDefault(java:java.util.TimeZone.getTimeZone('UTC'))"></variable>
-        <variable name="start_date" eval="concat(str:replace(substring(date:add(date:date-time(),concat('-P',$lastdays,'D')), 0,20),' ','T'),'Z')"></variable>
-        <variable name="end_date" eval="concat(str:replace(substring(date:date-time(), 0,20),' ','T'),'Z')"></variable>
+        <variable name="setutc" eval="java:java.util.TimeZone.setDefault(java:java.util.TimeZone.getTimeZone('UTC'))"/>
+        <variable name="start_date" eval="concat(str:replace(substring(date:add(date:date-time(),concat('-P',$lastdays,'D')), 0,20),' ','T'),'Z')"/>
+        <variable name="end_date" eval="concat(str:replace(substring(date:date-time(), 0,20),' ','T'),'Z')"/>
 
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('api.status.call',entry('group_type','sites')|entry('site',$site)|entry('start_time',$start_date)|entry('end_time',$end_date)|entry('report',$report))"></parameter>
+            <parameter name="content" eval="view('api.status.call',entry('group_type','sites')|entry('site',$site)|entry('start_time',$start_date)|entry('end_time',$end_date)|entry('report',$report))"/>
         </connector>
 
         <processors>
         <element in="root" if="$Fedcloud!='_fedcloud_'">
-                    <element in="group" if="contains($listSiteFedcloud,concat(',',@name,','))"></element>
-                    <element-ignore></element-ignore>
+                    <element in="group" if="contains($listSiteFedcloud,concat(',',@name,','))"/>
+                    <element-ignore/>
         </element>
         </processors>
 
@@ -581,15 +572,15 @@
         <argument name="ngi">all</argument>
         <argument name="site">false</argument>
 
-        <argument name="start" eval="false()"></argument>
-        <argument name="end" eval="false()"></argument>
+        <argument name="start" eval="false()"/>
+        <argument name="end" eval="false()"/>
         <argument name="report">Critical</argument>
         <argument name="Fedcloud">_fedcloud_</argument>
-        <argument name="listSiteFedcloud" eval="concat(',',join(view('goc.listSiteFedcloud')/e:entries/e:entry/text(),','),',')"></argument>
+        <argument name="listSiteFedcloud" eval="concat(',',join(view('goc.listSiteFedcloud')/e:entries/e:entry/text(),','),',')"/>
 
-        <argument name="lastdays" eval="choose($start!='false',99,3)"></argument>
+        <argument name="lastdays" eval="choose($start!='false',99,3)"/>
 
-        <variable name="dateTime" eval="date:date-time()"></variable>
+        <variable name="dateTime" eval="date:date-time()"/>
         <variable name="start_date" eval="choose($start!='false',concat($start,'T00:00:00Z'),concat(str:replace(substring(date:add(date:date-time(),concat('-P',$lastdays,'D')), 0,20),' ','T'),'Z'))"/>
         <variable name="end_date" eval="choose($end!='false',concat($end,'T00:00:00Z'),concat(str:replace(substring(date:date-time(), 0,20),' ','T'),'Z'))"/>
         <variable name="nbdays">3,10,30</variable>
@@ -597,20 +588,14 @@
 
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="
-            view(
-                choose(
-                boolean(str:split($nbdays,',')[text()=$lastdays]),
-                    concat('status_site_',$lastdays,'_',$report),
-                    'api.status.call')
-            ,entry('group_type','sites')|entry('site',$site)|entry('start_time',$start_date)|entry('end_time',$end_date)|entry('report',$report))"/>
+            <parameter name="content" eval="             view(                 choose(                 boolean(str:split($nbdays,',')[text()=$lastdays]),                     concat('status_site_',$lastdays,'_',$report),                     'api.status.call')             ,entry('group_type','sites')|entry('site',$site)|entry('start_time',$start_date)|entry('end_time',$end_date)|entry('report',$report))"/>
         </connector>
 
         <processors>
             <element in="root">
 
                 <set variable="SiteList">view('listSitesbyNgi')</set>
-                <attribute-create out="view">'status_report-sf'</attribute-create>
+                <attribute-create out="view">'status-sf'</attribute-create>
                 <attribute-create out="ngi" if="$ngi!='all'">$ngi</attribute-create>
                 <attribute-create out="lastdays">$lastdays</attribute-create>
                 <attribute-create out="dateTime">$dateTime</attribute-create>
@@ -620,25 +605,25 @@
                 <element in="group" if="contains(concat($site,','),@name) or $site='false'">
                     <attribute-create out="group">choose($SiteList/results/Ngi[SITE/@NAME=current()/../@name]/@key!='',$SiteList/results/Ngi[SITE/@NAME=current()/../@name]/@key,'UNCERTIFIED')</attribute-create>
                 </element>
-                <element-ignore></element-ignore>
+                <element-ignore/>
             </element>
 
             <elements path="root">
-                <element in="group" if="@group=$ngi or $ngi='all'"></element>
-                <element-ignore></element-ignore>
+                <element in="group" if="@group=$ngi or $ngi='all'"/>
+                <element-ignore/>
             </elements>
 
 
                 <element in="root" if="$Fedcloud!='_fedcloud_'">
 
-                    <element in="group" if="contains($listSiteFedcloud,concat(',',@name,','))"></element>
-                    <element-ignore></element-ignore>
+                    <element in="group" if="contains($listSiteFedcloud,concat(',',@name,','))"/>
+                    <element-ignore/>
                 </element>
 
 
 
             <elements path="root">
-                <element-ignore in="group"></element-ignore>
+                <element-ignore in="group"/>
                 <element-create>
                     sort_by_string(../group,'@name')
                 </element-create>
@@ -646,24 +631,24 @@
 
             <elements path="root">
                 <element-create-as-parent out="group" attributes="@*" group-by="@name">
-                    <element in="group" ></element>
+                    <element in="group"/>
                 </element-create-as-parent>
             </elements>
 
             <elements path="root/group">
                 <element-ignore in="group">
-                    <element></element>
+                    <element/>
                 </element-ignore>
             </elements>
 
             <elements path="root/group">
-                <element-ignore in="status"></element-ignore>
+                <element-ignore in="status"/>
                 <element-create>sort_by_string(../status,'@timestamp')</element-create>
             </elements>
 
 
             <elements path="root/group">
-                <element-ignore in="status" if="following-sibling::status/@timestamp and date:seconds(following-sibling::status/@timestamp)  &lt; date:seconds($start_date)"></element-ignore>
+                <element-ignore in="status" if="following-sibling::status/@timestamp and date:seconds(following-sibling::status/@timestamp)  &lt; date:seconds($start_date)"/>
             </elements>
 
 
@@ -684,8 +669,8 @@
 
 
             <elements path="root/group">
-                <element-ignore in="status" if="preceding-sibling::status and date:seconds(@timestamp) &lt; date:seconds($start_date)"></element-ignore>
-                <element in="status" if="not(preceding-sibling::status)" >
+                <element-ignore in="status" if="preceding-sibling::status and date:seconds(@timestamp) &lt; date:seconds($start_date)"/>
+                <element in="status" if="not(preceding-sibling::status)">
                     <attribute in="timestamp">$start_date</attribute>
                 </element>
             </elements>
@@ -720,12 +705,12 @@
         <argument name="start">_START_</argument>
         <argument name="end">_END_</argument>
 
-        <argument name="start_date" eval="choose($start!='_START_',concat($start,'T00:00:00Z'),concat(substring(date:add(date:date-time(),'-P3D'), 0,11),'T00:00:00Z'))"></argument>
-        <argument name="end_date" eval="choose($end!='_END_',concat($end,'T00:00:00Z'),concat(substring(date:date-time(),0,11),'T23:59:59Z'))"></argument>
+        <argument name="start_date" eval="choose($start!='_START_',concat($start,'T00:00:00Z'),concat(substring(date:add(date:date-time(),'-P3D'), 0,11),'T00:00:00Z'))"/>
+        <argument name="end_date" eval="choose($end!='_END_',concat($end,'T00:00:00Z'),concat(substring(date:date-time(),0,11),'T23:59:59Z'))"/>
 
 
     <connector type="XMLConnector">
-        <parameter name="content" eval="view('api.status',entry('group_type','sites')|entry('site',$site)|entry('start_time',$start_date)|entry('end_time',$end_date)|entry('report',$report))"></parameter>
+        <parameter name="content" eval="view('api.status',entry('group_type','sites')|entry('site',$site)|entry('start_time',$start_date)|entry('end_time',$end_date)|entry('report',$report))"/>
     </connector>
 
         <processors>
@@ -733,7 +718,7 @@
                 <set variable="SiteList">view('listSitesbyNgi')</set>
 
                 <attribute-create out="ngi">$SiteList/results/Ngi[SITE/@NAME=$site]/@key</attribute-create>
-                <attribute-create out="view">'status_report-endpoints'</attribute-create>
+                <attribute-create out="view">'status-endpoints'</attribute-create>
                 <element-ignore in="group">
                 <element in="group">
                     <attribute-create out="group">$site</attribute-create>
@@ -743,7 +728,7 @@
 
 
             <elements path="root">
-                <element-ignore in="group"></element-ignore>
+                <element-ignore in="group"/>
                 <element-create>
                     sort_by_string(../group,'@name')
                 </element-create>
@@ -751,23 +736,23 @@
 
             <elements path="root">
                 <element-create-as-parent out="group" attributes="@*" group-by="@name">
-                    <element in="group" ></element>
+                    <element in="group"/>
                 </element-create-as-parent>
             </elements>
 
             <elements path="root/group">
                 <element-ignore in="group">
-                    <element></element>
+                    <element/>
                 </element-ignore>
             </elements>
 
             <elements path="root/group">
-                <element-ignore in="status"></element-ignore>
+                <element-ignore in="status"/>
                 <element-create>sort_by_string(../status,'@timestamp')</element-create>
             </elements>
 
             <elements path="root/group">
-                <element-ignore in="status" if="following-sibling::status/@timestamp and date:seconds(following-sibling::status/@timestamp)  &lt; date:seconds($start_date)"></element-ignore>
+                <element-ignore in="status" if="following-sibling::status/@timestamp and date:seconds(following-sibling::status/@timestamp)  &lt; date:seconds($start_date)"/>
             </elements>
 
 
@@ -787,8 +772,8 @@
 
 
             <elements path="root/group">
-                <element-ignore in="status" if="preceding-sibling::status and date:seconds(@timestamp) &lt; date:seconds($start_date)"></element-ignore>
-                <element in="status" if="not(preceding-sibling::status)" >
+                <element-ignore in="status" if="preceding-sibling::status and date:seconds(@timestamp) &lt; date:seconds($start_date)"/>
+                <element in="status" if="not(preceding-sibling::status)">
                     <attribute in="timestamp">$start_date</attribute>
                 </element>
             </elements>
@@ -821,16 +806,16 @@
 
         <argument name="site">false</argument>
         <argument name="report">sites</argument>
-        <argument name="service"></argument>
+        <argument name="service"/>
         <argument name="start">_START_</argument>
         <argument name="end">_END_</argument>
 
-        <argument name="start_date" eval="choose($start!='_START_',concat($start,'T00:00:00Z'),concat(substring(date:add(date:date-time(),'-P3D'), 0,11),'T00:00:00Z'))"></argument>
-        <argument name="end_date" eval="choose($end!='_END_',concat($end,'T00:00:00Z'),concat(substring(date:date-time(),0,11),'T23:59:59Z'))"></argument>
+        <argument name="start_date" eval="choose($start!='_START_',concat($start,'T00:00:00Z'),concat(substring(date:add(date:date-time(),'-P3D'), 0,11),'T00:00:00Z'))"/>
+        <argument name="end_date" eval="choose($end!='_END_',concat($end,'T00:00:00Z'),concat(substring(date:date-time(),0,11),'T23:59:59Z'))"/>
 
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('api.status',entry('group_type','sites')|entry('site',$site)|entry('service',$service)|entry('start_time',$start_date)|entry('end_time',$end_date)|entry('report',$report))"></parameter>
+            <parameter name="content" eval="view('api.status',entry('group_type','sites')|entry('site',$site)|entry('service',$service)|entry('start_time',$start_date)|entry('end_time',$end_date)|entry('report',$report))"/>
         </connector>
 
         <processors>
@@ -838,7 +823,7 @@
                 <set variable="SiteList">view('listSitesbyNgi')</set>
 
                 <attribute-create out="ngi">$SiteList/results/Ngi[SITE/@NAME=$site]/@key</attribute-create>
-                <attribute-create out="view">'status_report-metrics'</attribute-create>
+                <attribute-create out="view">'status-metrics'</attribute-create>
                 <element-ignore in="group">
                     <element-ignore in="group">
                         <element in="endpoint" out="group">
@@ -851,7 +836,7 @@
 
 
             <elements path="root">
-                <element-ignore in="group"></element-ignore>
+                <element-ignore in="group"/>
                 <element-create>
                     sort_by_string(../group,'@name')
                 </element-create>
@@ -859,23 +844,23 @@
 
             <elements path="root">
                 <element-create-as-parent out="group" attributes="@*" group-by="@name">
-                    <element in="group" ></element>
+                    <element in="group"/>
                 </element-create-as-parent>
             </elements>
 
             <elements path="root/group">
                 <element-ignore in="group">
-                    <element></element>
+                    <element/>
                 </element-ignore>
             </elements>
 
             <elements path="root/group">
-                <element-ignore in="status"></element-ignore>
+                <element-ignore in="status"/>
                 <element-create>sort_by_string(../status,'@timestamp')</element-create>
             </elements>
 
             <elements path="root/group">
-                <element-ignore in="status" if="following-sibling::status/@timestamp and date:seconds(following-sibling::status/@timestamp)  &lt; date:seconds($start_date)"></element-ignore>
+                <element-ignore in="status" if="following-sibling::status/@timestamp and date:seconds(following-sibling::status/@timestamp)  &lt; date:seconds($start_date)"/>
             </elements>
 
 
@@ -897,15 +882,15 @@
 
 
             <elements path="root/group">
-                <element-ignore in="status" if="preceding-sibling::status and date:seconds(@timestamp) &lt; date:seconds($start_date)"></element-ignore>
-                <element in="status" if="not(preceding-sibling::status)" >
+                <element-ignore in="status" if="preceding-sibling::status and date:seconds(@timestamp) &lt; date:seconds($start_date)"/>
+                <element in="status" if="not(preceding-sibling::status)">
                     <attribute in="timestamp">$start_date</attribute>
                 </element>
             </elements>
 
             <elements path="root/group">
-                <element-ignore in="status" if="preceding-sibling::status/@timestamp=current()/@timestamp"></element-ignore>
-                <element-ignore in="status" if="@timestamp=@end_time"></element-ignore>
+                <element-ignore in="status" if="preceding-sibling::status/@timestamp=current()/@timestamp"/>
+                <element-ignore in="status" if="@timestamp=@end_time"/>
             </elements>
 
         </processors>
@@ -935,19 +920,19 @@
 
         <argument name="site">false</argument>
         <argument name="report">sites</argument>
-        <argument name="service"></argument>
-        <argument name="endpoint"></argument>
+        <argument name="service"/>
+        <argument name="endpoint"/>
         <argument name="sf">_SF_</argument>
         <argument name="start">_START_</argument>
         <argument name="end">_END_</argument>
         <argument name="overview">mod</argument>
 
-        <argument name="start_date" eval="choose($start!='_START_',concat($start,'T00:00:00Z'),concat(substring(date:add(date:date-time(),'-P3D'), 0,11),'T00:00:00Z'))"></argument>
-        <argument name="end_date" eval="choose($end!='_END_',concat($end,'T00:00:00Z'),concat(substring(date:date-time(),0,11),'T23:59:59Z'))"></argument>
+        <argument name="start_date" eval="choose($start!='_START_',concat($start,'T00:00:00Z'),concat(substring(date:add(date:date-time(),'-P3D'), 0,11),'T00:00:00Z'))"/>
+        <argument name="end_date" eval="choose($end!='_END_',concat($end,'T00:00:00Z'),concat(substring(date:date-time(),0,11),'T23:59:59Z'))"/>
 
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('api.status',entry('group_type','sites')|entry('site',$site)|entry('service',$service)|entry('endpoint',$endpoint)|entry('start_time',$start_date)|entry('end_time',$end_date)|entry('report',$report))"></parameter>
+            <parameter name="content" eval="view('api.status',entry('group_type','sites')|entry('site',$site)|entry('service',$service)|entry('endpoint',$endpoint)|entry('start_time',$start_date)|entry('end_time',$end_date)|entry('report',$report))"/>
         </connector>
 
         <processors>
@@ -972,7 +957,7 @@
             </element>
 
             <elements path="root">
-                <element-ignore in="group"></element-ignore>
+                <element-ignore in="group"/>
                 <element-create>
                     sort_by_string(../group,'@name')
                 </element-create>
@@ -981,18 +966,18 @@
             <elements path="root">
                 <attribute-create out="overview">$overview</attribute-create>
                 <element-create-as-parent out="group" attributes="@*" group-by="@name">
-                    <element in="group" ></element>
+                    <element in="group"/>
                 </element-create-as-parent>
             </elements>
 
             <elements path="root/group">
                 <element-ignore in="group">
-                    <element></element>
+                    <element/>
                 </element-ignore>
             </elements>
 
             <elements path="root/group">
-                <element-ignore in="status"></element-ignore>
+                <element-ignore in="status"/>
                 <element-create>sort_by_string(../status,'@timestamp')</element-create>
             </elements>
 
@@ -1064,18 +1049,17 @@
     <view name="metric-output">
 
 
-        <argument name="metric"></argument>
-        <argument name="endpoint"></argument>
-        <argument name="metric"></argument>
-        <argument name="site"></argument>
-        <argument name="service"></argument>
-        <argument name="start_time"></argument>
-        <argument name="end_time"></argument>
-        <argument name="report"></argument>
+        <argument name="metric"/>
+        <argument name="endpoint"/>
+        <argument name="metric"/>
+        <argument name="site"/>
+        <argument name="service"/>
+        <argument name="start_time"/>
+        <argument name="end_time"/>
+        <argument name="report"/>
 
         <connector type="XMLConnector">
-            <parameter name="content"
-                       eval="view('api.output.details',entry('exec_time',$exec_time)|entry('endpoint',$endpoint)|entry('metric',$metric))">
+            <parameter name="content" eval="view('api.output.details',entry('exec_time',$exec_time)|entry('endpoint',$endpoint)|entry('metric',$metric))">
             </parameter>
         </connector>
 
@@ -1113,7 +1097,7 @@
 
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('listParameters',entry('mode','full'))"></parameter>
+            <parameter name="content" eval="view('listParameters',entry('mode','full'))"/>
 
         </connector>
 

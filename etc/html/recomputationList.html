@@ -24,7 +24,7 @@
             <div tpl:if="/properties/@details!='true'" class="col-md-12 box box-primary">
 
             <div class="box-header">
-                <a href="/lavoisier/recomputation">
+                <a href="/new-recomputation">
                     <button class="btn btn-primary" type="submit">New request of recomputation</button>
                 </a>
             </div>
@@ -63,7 +63,7 @@
                     <td>{{entry[@key='SitesList']/text()}}</td>
                     <td>{{entry[@key='period']/text()}}</td>
                     <td>{{entry[@key='reason']/text()}}</td>
-                    <th><a href="/lavoisier/RecomputationList?key={{ancestor::entry/@key}}&amp;details=true">Details</a></th>
+                    <th><a href="/recomputation?key={{ancestor::entry/@key}}&amp;details=true">Details</a></th>
 
                 </tr>
                 </tbody>
@@ -76,10 +76,10 @@
             <div tpl:else="" class="col-md-12 box box-primary">
 
                 <div class="box-header">
-                    <a href="/lavoisier/RecomputationList">
+                    <a href="/lavoisier/recomputation">
                         <button   class="btn btn-primary" type="submit">Return to the list</button>
                     </a>
-                    <a href="/lavoisier/recomputation">
+                    <a href="/lavoisier/new-recomputation">
                         <button class="btn btn-primary" type="submit" style="margin-left:10px;">New request of recomputation</button>
                     </a>
                 </div>

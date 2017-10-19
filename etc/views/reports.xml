@@ -1,8 +1,4 @@
-<config xmlns="http://software.in2p3.fr/lavoisier/config.xsd"
-        xmlns:date="http://exslt.org/dates-and-times"
-        xmlns:xi="http://www.w3.org/2001/XInclude"
-        xmlns:str="http://exslt.org/strings"
-        xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
+<config xmlns="http://software.in2p3.fr/lavoisier/config.xsd" xmlns:date="http://exslt.org/dates-and-times" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:str="http://exslt.org/strings" xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
 
 
     <!--
@@ -14,14 +10,14 @@
             5) Sort by date to be sure that all group have the same number of entries sorted in the same way
             -->
 
-    <processors name="ReportsTemplate" xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" xmlns:date="http://exslt.org/dates-and-times"  xmlns:str="http://exslt.org/strings">
+    <processors name="ReportsTemplate">
 
         <element in="root" out="e:entries">
             <element out="e:entries">
                 <element in="group">
-                    <element in="results" out="Availability"></element>
+                    <element in="results" out="Availability"/>
                 </element>
-                <element-ignore></element-ignore>
+                <element-ignore/>
             </element>
 
         </element>
@@ -29,7 +25,7 @@
 
         <element in="e:entries">
             <element in="e:entries">
-                <element-ignore in="group"></element-ignore>
+                <element-ignore in="group"/>
                 <element-create>sort_by_string(../group,'@name')</element-create>
             </element>
         </element>
@@ -37,7 +33,7 @@
         <element in="e:entries">
             <element in="e:entries">
                 <element-create-as-parent out="e:entry" group-by="@name" attributes="@name">
-                    <element in="group"></element>
+                    <element in="group"/>
                 </element-create-as-parent>
             </element>
         </element>
@@ -46,9 +42,9 @@
         <element in="e:entries">
             <element in="e:entries">
                 <element in="e:entry">
-                    <attribute in="name" out="key"></attribute>
+                    <attribute in="name" out="key"/>
                     <element-ignore in="group">
-                        <element></element>
+                        <element/>
                     </element-ignore>
                 </element>
             </element>
@@ -56,7 +52,7 @@
         <element in="e:entries">
             <element in="e:entries">
                 <element in="e:entry">
-                    <element-ignore in="Availability" if="@timestamp=/e:entries/@monthend"></element-ignore>
+                    <element-ignore in="Availability" if="@timestamp=/e:entries/@monthend"/>
                 </element>
             </element>
         </element>
@@ -128,6 +124,8 @@
                     <element in="Availability">
                         <attribute-create out="availability_W">choose(../@availability!='N.A' and ../../@ComputationPower,../@availability*../../@ComputationPower,'N.A')</attribute-create>
                         <attribute-create out="reliability_W">choose(../@reliability!='N.A' and ../../@ComputationPower,../@reliability*../../@ComputationPower,'N.A')</attribute-create>
+                        <attribute-create out="unknown_W">choose(../@unknown!='N.A' and ../../@ComputationPower,../@unknown*../../@ComputationPower,'N.A')</attribute-create>
+                        <attribute-create out="downtime_W">choose(../@downtime!='N.A' and ../../@ComputationPower,../@downtime*../../@ComputationPower,'N.A')</attribute-create>
 
                     </element>
                 </element>
@@ -176,16 +174,16 @@
                     <element-create>
                         new_element('Availability',new_attribute('timestamp',/e:entries/@month2)
                         |new_attribute('availability',
-                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@availability_W!='N.A']/@availability_W)
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month2][@availability_W!='N.A']/@availability_W)
                         div sum(../../e:entry/@ComputationPower))
                         |new_attribute('reliability',
-                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@reliability_W!='N.A']/@reliability_W)
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month2][@reliability_W!='N.A']/@reliability_W)
                         div sum(../../e:entry/@ComputationPower))
                         |new_attribute('downtime',
-                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@downtime_W!='N.A']/@downtime_W)
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month2][@downtime_W!='N.A']/@downtime_W)
                         div sum(../../e:entry/@ComputationPower))
                         |new_attribute('unknown',
-                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@unknown_W!='N.A']/@unknown_W)
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month2][@unknown_W!='N.A']/@unknown_W)
                         div sum(../../e:entry/@ComputationPower))
                         )
                     </element-create>
@@ -239,11 +237,11 @@
                         sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@reliability!='N.A']/@reliability)
                         div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@reliability!='N.A']/@reliability))
                         |new_attribute('downtime',
-                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@downtime_W!='N.A']/@downtime_W)
-                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@downtime_W!='N.A']/@downtime_W))
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@downtime!='N.A']/@downtime)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@downtime!='N.A']/@downtime))
                         |new_attribute('unknown',
-                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@unknown_W!='N.A']/@unknown_W)
-                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@unknown_W!='N.A']/@unknown_W))
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@unknown!='N.A']/@unknown)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@unknown!='N.A']/@unknown))
                         )
                     </element-create>
 
@@ -257,28 +255,28 @@
                         sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month3][@reliability!='N.A']/@reliability)
                         div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month3][@reliability!='N.A']/@reliability))
                         |new_attribute('downtime',
-                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month3][@downtime_W!='N.A']/@downtime_W)
-                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month3][@downtime_W!='N.A']/@downtime_W))
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month3][@downtime!='N.A']/@downtime)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month3][@downtime!='N.A']/@downtime))
                         |new_attribute('unknown',
-                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month3][@unknown_W!='N.A']/@unknown_W)
-                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month3][@unknown_W!='N.A']/@unknown_W))
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month3][@unknown!='N.A']/@unknown)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month3][@unknown!='N.A']/@unknown))
                         )
                     </element-create>
 
                     <element-create>
                         new_element('Availability',new_attribute('timestamp',/e:entries/@month2)
                         |new_attribute('availability',
-                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@availability!='N.A']/@availability)
-                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@availability!='N.A']/@availability))
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month2][@availability!='N.A']/@availability)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month2][@availability!='N.A']/@availability))
                         |new_attribute('reliability',
-                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@reliability!='N.A']/@reliability)
-                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@reliability!='N.A']/@reliability))
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month2][@reliability!='N.A']/@reliability)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month2][@reliability!='N.A']/@reliability))
                         |new_attribute('downtime',
-                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@downtime_W!='N.A']/@downtime_W)
-                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@downtime_W!='N.A']/@downtime_W))
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month2][@downtime!='N.A']/@downtime)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month2][@downtime!='N.A']/@downtime))
                         |new_attribute('unknown',
-                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@unknown_W!='N.A']/@unknown_W)
-                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@monthstart][@unknown_W!='N.A']/@unknown_W))
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month2][@unknown!='N.A']/@unknown)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month2][@unknown!='N.A']/@unknown))
                         )
                     </element-create>
 
@@ -291,11 +289,11 @@
                         sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month1][@reliability!='N.A']/@reliability)
                         div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month1][@reliability!='N.A']/@reliability))
                         |new_attribute('downtime',
-                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month1][@downtime_W!='N.A']/@downtime_W)
-                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month1][@downtime_W!='N.A']/@downtime_W))
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month1][@downtime!='N.A']/@downtime)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month1][@downtime!='N.A']/@downtime))
                         |new_attribute('unknown',
-                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month1][@unknown_W!='N.A']/@unknown_W)
-                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month1][@unknown_W!='N.A']/@unknown_W))
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month1][@unknown!='N.A']/@unknown)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month1][@unknown!='N.A']/@unknown))
                         )
                     </element-create>
 
@@ -309,11 +307,11 @@
                         sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month0][@reliability!='N.A']/@reliability)
                         div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month0][@reliability!='N.A']/@reliability))
                         |new_attribute('downtime',
-                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month0][@downtime_W!='N.A']/@downtime_W)
-                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month0][@downtime_W!='N.A']/@downtime_W))
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month0][@downtime!='N.A']/@downtime)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month0][@downtime!='N.A']/@downtime))
                         |new_attribute('unknown',
-                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month0][@unknown_W!='N.A']/@unknown_W)
-                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month0][@unknown_W!='N.A']/@unknown_W))
+                        sum(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month0][@unknown!='N.A']/@unknown)
+                        div count(../preceding-sibling::e:entry/Availability[@timestamp=/e:entries/@month0][@unknown!='N.A']/@unknown))
                         )
                     </element-create>
 
@@ -329,7 +327,7 @@
 
             <element in="e:entries">
                 <element in="e:entry">
-                    <element-ignore in="Availability"></element-ignore>
+                    <element-ignore in="Availability"/>
                     <element-create>sort_by_string(../Availability,'@timestamp')</element-create>
                 </element>
             </element>
@@ -347,16 +345,16 @@
         <argument name="report">Critical</argument>
 
 
-        <argument name="month0" eval="substring(date:date(),0,8)"></argument>
-        <argument name="monthend" eval="substring(date:add($month0,'P1M'),0,8)"></argument>
-        <argument name="month1" eval="substring(date:add($month0,'-P1M'),0,8)"></argument>
-        <argument name="month2" eval="substring(date:add($month0,'-P2M'),0,8)"></argument>
-        <argument name="month3" eval="substring(date:add($month0,'-P3M'),0,8)"></argument>
-        <argument name="monthstart" eval="substring(date:add($month0,'-P4M'),0,8)"></argument>
+        <argument name="month0" eval="substring(date:date(),0,8)"/>
+        <argument name="monthend" eval="substring(date:add($month0,'P1M'),0,8)"/>
+        <argument name="month1" eval="substring(date:add($month0,'-P1M'),0,8)"/>
+        <argument name="month2" eval="substring(date:add($month0,'-P2M'),0,8)"/>
+        <argument name="month3" eval="substring(date:add($month0,'-P3M'),0,8)"/>
+        <argument name="monthstart" eval="substring(date:add($month0,'-P4M'),0,8)"/>
 
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="new_element('root')"></parameter>
+            <parameter name="content" eval="new_element('root')"/>
         </connector>
         <processors>
 
@@ -388,18 +386,18 @@
         <argument name="report">Critical</argument>
 
 
-        <argument name="month0" eval="substring(date:date(),0,8)"></argument>
+        <argument name="month0" eval="substring(date:date(),0,8)"/>
 
-        <argument name="monthend" eval="substring(date:add($month0,'P1M'),0,8)"></argument>
+        <argument name="monthend" eval="substring(date:add($month0,'P1M'),0,8)"/>
 
-        <argument name="month1" eval="substring(date:add($month0,'-P1M'),0,8)"></argument>
-        <argument name="month2" eval="substring(date:add($month0,'-P2M'),0,8)"></argument>
-        <argument name="month3" eval="substring(date:add($month0,'-P3M'),0,8)"></argument>
-        <argument name="monthstart" eval="substring(date:add($month0,'-P4M'),0,8)"></argument>
+        <argument name="month1" eval="substring(date:add($month0,'-P1M'),0,8)"/>
+        <argument name="month2" eval="substring(date:add($month0,'-P2M'),0,8)"/>
+        <argument name="month3" eval="substring(date:add($month0,'-P3M'),0,8)"/>
+        <argument name="monthstart" eval="substring(date:add($month0,'-P4M'),0,8)"/>
 
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="new_element('root')"></parameter>
+            <parameter name="content" eval="new_element('root')"/>
 
         </connector>
 
@@ -437,20 +435,20 @@
             <description>NGI League Reports from date </description>
         </info>
 
-        <argument name="month" eval="0"></argument>
-        <argument name="month0" eval="choose($month!=0,$month,substring(date:date(),0,8))"></argument>
-        <argument name="monthend" eval="substring(date:add($month0,'P1M'),0,8)"></argument>
-        <argument name="month1" eval="substring(date:add($month0,'-P1M'),0,8)"></argument>
-        <argument name="month2" eval="substring(date:add($month0,'-P2M'),0,8)"></argument>
-        <argument name="month3" eval="substring(date:add($month0,'-P3M'),0,8)"></argument>
-        <argument name="monthstart" eval="substring(date:add($month0,'-P4M'),0,8)"></argument>
+        <argument name="month" eval="0"/>
+        <argument name="month0" eval="choose($month!=0,$month,substring(date:date(),0,8))"/>
+        <argument name="monthend" eval="substring(date:add($month0,'P1M'),0,8)"/>
+        <argument name="month1" eval="substring(date:add($month0,'-P1M'),0,8)"/>
+        <argument name="month2" eval="substring(date:add($month0,'-P2M'),0,8)"/>
+        <argument name="month3" eval="substring(date:add($month0,'-P3M'),0,8)"/>
+        <argument name="monthstart" eval="substring(date:add($month0,'-P4M'),0,8)"/>
 
 
 
         <argument name="report">Critical</argument>
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="new_element('root')"></parameter>
+            <parameter name="content" eval="new_element('root')"/>
         </connector>
 
         <processors>
@@ -463,7 +461,7 @@
                 <attribute-create out="month2">$month2</attribute-create>
                 <attribute-create out="month3">$month3</attribute-create>
 
-                <element-create >view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','MONTHLY')|entry('start_time',concat($monthstart,'-01T00:00:00Z'))|entry('end_time',concat($monthend,'-01T00:00:00Z'))|entry('report',$report))</element-create>
+                <element-create>view('api.availability.rotating.caches',entry('group_type','ngi')|entry('granularity','MONTHLY')|entry('start_time',concat($monthstart,'-01T00:00:00Z'))|entry('end_time',concat($monthend,'-01T00:00:00Z'))|entry('report',$report))</element-create>
 
 
             </element>
@@ -480,12 +478,12 @@
             <category>AR reports</category>
             <description>NGI League Reports</description>
         </info>
-        <argument name="month" eval="0"></argument>
+        <argument name="month" eval="0"/>
         <argument name="report">Critical</argument>
 
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="choose($month=0,view('ngi_reports_cached',entry('report',$report)),view('ngi_reports_date',entry('month',$month)|entry('report',$report)))"></parameter>
+            <parameter name="content" eval="choose($month=0,view('ngi_reports_cached',entry('report',$report)),view('ngi_reports_date',entry('month',$month)|entry('report',$report)))"/>
         </connector>
 
         <processors>
@@ -494,10 +492,10 @@
             <element in="root">
                 <attribute-create out="description">'NGI League Report'</attribute-create>
                 <attribute-create out="view">'ngi_reports'</attribute-create>
-                <attribute-create out="related_view">'ngi_ar'</attribute-create>
+                <attribute-create out="related_view">'ar-ngi'</attribute-create>
                 <attribute-create out="ngi">'all'</attribute-create>
                 <attribute-create out="report">$report</attribute-create>
-                <attribute-create out="details">'site_reports'</attribute-create>
+                <attribute-create out="details">'ar-site'</attribute-create>
                 <attribute-create out="entity">'ngi'</attribute-create>
 
                 <element in="root">
@@ -510,7 +508,7 @@
 
         </processors>
 
-        <pre-renderers>
+        <pre-renderers><namespace prefix="date" uri="http://exslt.org/dates-and-times"/><namespace prefix="str" uri="http://exslt.org/strings"/><namespace prefix="e" uri="http://software.in2p3.fr/lavoisier/entries.xsd"/>
             <title>/e:entries/@description</title>
 
             <field label="month">/e:entries/@monthstart</field>
@@ -565,13 +563,10 @@
         </info>
 
         <argument name="ngi">all</argument>
-        <argument name="month" eval="0"></argument>
+        <argument name="month" eval="0"/>
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="choose($month=0,
-            view('site_reports_cached',entry('report','OPS-MONITOR-Critical')),
-            view('site_reports_date',entry('report','OPS-MONITOR-Critical')|entry('month',$month))
-            )"></parameter>
+            <parameter name="content" eval="choose($month=0,             view('site_reports_cached',entry('report','OPS-MONITOR-Critical')),             view('site_reports_date',entry('report','OPS-MONITOR-Critical')|entry('month',$month))             )"/>
         </connector>
 
 
@@ -594,15 +589,15 @@
 
             <element in="root">
                 <element-ignore in="root">
-                    <element in="group" if="@name=$ngi or $ngi='all'"></element>
-                    <element-ignore></element-ignore>
+                    <element in="group" if="@name=$ngi or $ngi='all'"/>
+                    <element-ignore/>
                 </element-ignore>
             </element>
 
 
         </processors>
 
-        <pre-renderers>
+        <pre-renderers><namespace prefix="date" uri="http://exslt.org/dates-and-times"/><namespace prefix="str" uri="http://exslt.org/strings"/><namespace prefix="e" uri="http://software.in2p3.fr/lavoisier/entries.xsd"/>
             <title>/e:entries/@description</title>
 
             <field label="month">/e:entries/@monthstart</field>
@@ -655,15 +650,12 @@
         </info>
 
         <argument name="ngi">all</argument>
-        <argument name="month" eval="0"></argument>
+        <argument name="month" eval="0"/>
 
 
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="choose($month=0,
-            view('site_reports_cached',entry('report','Cloud')),
-            view('site_reports_date',entry('report','Cloud')|entry('month',$month))
-            )"></parameter>
+            <parameter name="content" eval="choose($month=0,             view('site_reports_cached',entry('report','Cloud')),             view('site_reports_date',entry('report','Cloud')|entry('month',$month))             )"/>
         </connector>
 
         <processors>
@@ -685,15 +677,15 @@
 
             <element in="root">
                 <element-ignore in="root">
-                    <element in="group" if="@name=$ngi or $ngi='all'"></element>
-                    <element-ignore></element-ignore>
+                    <element in="group" if="@name=$ngi or $ngi='all'"/>
+                    <element-ignore/>
                 </element-ignore>
             </element>
 
 
         </processors>
 
-        <pre-renderers>
+        <pre-renderers><namespace prefix="date" uri="http://exslt.org/dates-and-times"/><namespace prefix="str" uri="http://exslt.org/strings"/><namespace prefix="e" uri="http://software.in2p3.fr/lavoisier/entries.xsd"/>
             <title>/e:entries/@description</title>
 
             <field label="month">/e:entries/@monthstart</field>
@@ -743,15 +735,12 @@
         </info>
 
         <argument name="ngi">all</argument>
-        <argument name="month" eval="0"></argument>
+        <argument name="month" eval="0"/>
 
-        <argument name="listSiteFedcloud" eval="concat(',',join(view('goc.listSiteFedcloud')/e:entries/e:entry/text(),','),',')"></argument>
+        <argument name="listSiteFedcloud" eval="concat(',',join(view('goc.listSiteFedcloud')/e:entries/e:entry/text(),','),',')"/>
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="choose($month=0,
-            view('site_reports_cached',entry('report','Critical')),
-            view('site_reports_date',entry('report','Critical')|entry('month',$month))
-            )"></parameter>
+            <parameter name="content" eval="choose($month=0,             view('site_reports_cached',entry('report','Critical')),             view('site_reports_date',entry('report','Critical')|entry('month',$month))             )"/>
         </connector>
 
         <processors>
@@ -763,7 +752,7 @@
             <element in="root">
                 <attribute-create out="description">'EGI Federated Cloud  Report'</attribute-create>
                 <attribute-create out="view">'fedcloud_reports'</attribute-create>
-                <attribute-create out="related_view">'site_ar'</attribute-create>
+                <attribute-create out="related_view">'ar-site'</attribute-create>
                 <attribute-create out="ngi">$ngi</attribute-create>
                 <attribute-create out="report">'Critical'</attribute-create>
                 <attribute-create out="entity">'site'</attribute-create>
@@ -774,22 +763,22 @@
             <element in="root">
                 <element-ignore in="root">
                     <element in="group">
-                        <element in="group"  if="contains($listSiteFedcloud,concat(',',@name,','))"></element>
-                        <element-ignore></element-ignore>
+                        <element in="group" if="contains($listSiteFedcloud,concat(',',@name,','))"/>
+                        <element-ignore/>
                     </element>
-                    <element-ignore></element-ignore>
+                    <element-ignore/>
                 </element-ignore>
             </element>
 
             <element in="root">
-                    <element in="group" if="count(group) &gt; 0"></element>
-                    <element-ignore></element-ignore>
+                    <element in="group" if="count(group) &gt; 0"/>
+                    <element-ignore/>
             </element>
 
 
         </processors>
 
-        <pre-renderers>
+        <pre-renderers><namespace prefix="date" uri="http://exslt.org/dates-and-times"/><namespace prefix="str" uri="http://exslt.org/strings"/><namespace prefix="e" uri="http://software.in2p3.fr/lavoisier/entries.xsd"/>
             <title>/e:entries/@description</title>
 
             <field label="month">/e:entries/@monthstart</field>
@@ -840,24 +829,24 @@
         </info>
         <argument name="report">Critical</argument>
         <argument name="mode">RW</argument>
-        <argument name="option" eval="''"></argument>
+        <argument name="option" eval="''"/>
 
         <!--<argument name="start_time" eval="concat(substring(date:add(date:date-time(),concat('-P',3,'M')), 0,8),'-01T00:00:00Z')"></argument>-->
         <!--<argument name="end_time" eval="concat(str:replace(substring(date:date-time(),0,20),' ','T'),'Z')"></argument>-->
 
-        <argument name="month" eval="0"></argument>
+        <argument name="month" eval="0"/>
         
-        <variable name="month0" eval="choose($month!=0,$month,substring(date:date(),0,8))"></variable>
-        <variable name="monthend" eval="substring(date:add($month0,'P1M'),0,8)"></variable>
-        <variable name="month1" eval="substring(date:add($month0,'-P1M'),0,8)"></variable>
-        <variable name="month2" eval="substring(date:add($month0,'-P2M'),0,8)"></variable>
-        <variable name="month3" eval="substring(date:add($month0,'-P3M'),0,8)"></variable>
-        <variable name="monthstart" eval="substring(date:add($month0,'-P4M'),0,8)"></variable>
+        <variable name="month0" eval="choose($month!=0,$month,substring(date:date(),0,8))"/>
+        <variable name="monthend" eval="substring(date:add($month0,'P1M'),0,8)"/>
+        <variable name="month1" eval="substring(date:add($month0,'-P1M'),0,8)"/>
+        <variable name="month2" eval="substring(date:add($month0,'-P2M'),0,8)"/>
+        <variable name="month3" eval="substring(date:add($month0,'-P3M'),0,8)"/>
+        <variable name="monthstart" eval="substring(date:add($month0,'-P4M'),0,8)"/>
 
 
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="new_element('root')"></parameter>
+            <parameter name="content" eval="new_element('root')"/>
         </connector>
 
         <processors>
@@ -887,22 +876,22 @@
         </info>
 
         <argument name="report">Critical</argument>
-        <argument name="month"></argument>
-        <argument name="month0" eval="choose($month!=0,$month,substring(date:date(),0,8))"></argument>
+        <argument name="month"/>
+        <argument name="month0" eval="choose($month!=0,$month,substring(date:date(),0,8))"/>
 
 
-        <argument name="monthend" eval="substring(date:add($month0,'P1M'),0,8)"></argument>
+        <argument name="monthend" eval="substring(date:add($month0,'P1M'),0,8)"/>
 
-        <argument name="month1" eval="substring(date:add($month0,'-P1M'),0,8)"></argument>
-        <argument name="month2" eval="substring(date:add($month0,'-P2M'),0,8)"></argument>
-        <argument name="month3" eval="substring(date:add($month0,'-P3M'),0,8)"></argument>
-        <argument name="monthstart" eval="substring(date:add($month0,'-P4M'),0,8)"></argument>
+        <argument name="month1" eval="substring(date:add($month0,'-P1M'),0,8)"/>
+        <argument name="month2" eval="substring(date:add($month0,'-P2M'),0,8)"/>
+        <argument name="month3" eval="substring(date:add($month0,'-P3M'),0,8)"/>
+        <argument name="monthstart" eval="substring(date:add($month0,'-P4M'),0,8)"/>
 
 
         <argument name="report">Critical</argument>
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="new_element('root')"></parameter>
+            <parameter name="content" eval="new_element('root')"/>
         </connector>
 
         <processors>
@@ -913,7 +902,7 @@
                 <attribute-create out="month1">$month1</attribute-create>
                 <attribute-create out="month2">$month2</attribute-create>
                 <attribute-create out="month3">$month3</attribute-create>
-                <element-create >view('api.availability.rotating.caches',entry('group_type','sites')|entry('granularity','MONTHLY')|entry('start_time',concat($monthstart,'-01T00:00:00Z'))|entry('end_time',concat($monthend,'-01T00:00:00Z'))|entry('report',$report))</element-create>
+                <element-create>view('api.availability.rotating.caches',entry('group_type','sites')|entry('granularity','MONTHLY')|entry('start_time',concat($monthstart,'-01T00:00:00Z'))|entry('end_time',concat($monthend,'-01T00:00:00Z'))|entry('report',$report))</element-create>
             </element>
 
 
@@ -934,18 +923,18 @@
         <argument name="report">Critical</argument>
         <argument name="mode">RW</argument>
 
-        <argument name="month" eval="0"></argument>
-        <argument name="month0" eval="choose($month!=0,$month,substring(date:date(),0,8))"></argument>
-        <argument name="monthend" eval="substring(date:add($month0,'P1M'),0,8)"></argument>
+        <argument name="month" eval="0"/>
+        <argument name="month0" eval="choose($month!=0,$month,substring(date:date(),0,8))"/>
+        <argument name="monthend" eval="substring(date:add($month0,'P1M'),0,8)"/>
 
-        <argument name="month1" eval="substring(date:add($month0,'-P1M'),0,8)"></argument>
-        <argument name="month2" eval="substring(date:add($month0,'-P2M'),0,8)"></argument>
-        <argument name="month3" eval="substring(date:add($month0,'-P3M'),0,8)"></argument>
-        <argument name="monthstart" eval="substring(date:add($month0,'-P4M'),0,8)"></argument>
+        <argument name="month1" eval="substring(date:add($month0,'-P1M'),0,8)"/>
+        <argument name="month2" eval="substring(date:add($month0,'-P2M'),0,8)"/>
+        <argument name="month3" eval="substring(date:add($month0,'-P3M'),0,8)"/>
+        <argument name="monthstart" eval="substring(date:add($month0,'-P4M'),0,8)"/>
 
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="new_element('root')"></parameter>
+            <parameter name="content" eval="new_element('root')"/>
         </connector>
 
         <processors>
@@ -970,13 +959,13 @@
             <description>Site League Reports</description>
         </info>
 
-        <argument name="month" eval="0"></argument>
+        <argument name="month" eval="0"/>
         <argument name="ngi">all</argument>
         <argument name="report">Critical</argument>
         <argument name="tag">_tag_</argument>
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="choose($month=0,view('site_reports_cached',entry('report',$report)),view('site_reports_date',entry('month',$month)|entry('report',$report)))"></parameter>
+            <parameter name="content" eval="choose($month=0,view('site_reports_cached',entry('report',$report)),view('site_reports_date',entry('month',$month)|entry('report',$report)))"/>
         </connector>
 
         <processors>
@@ -986,7 +975,7 @@
             <element in="root">
                 <attribute-create out="description">'Site League Report'</attribute-create>
                 <attribute-create out="view">'site_reports'</attribute-create>
-                <attribute-create out="related_view">'site_ar'</attribute-create>
+                <attribute-create out="related_view">'ar-site'</attribute-create>
                 <attribute-create out="ngi">$ngi</attribute-create>
                 <attribute-create out="report">$report</attribute-create>
                 <attribute-create out="entity">'site'</attribute-create>
@@ -997,8 +986,8 @@
 
             <element in="root">
                 <element-ignore in="root">
-                    <element in="group" if="@name=$ngi or $ngi='all'"></element>
-                    <element-ignore></element-ignore>
+                    <element in="group" if="@name=$ngi or $ngi='all'"/>
+                    <element-ignore/>
                 </element-ignore>
             </element>
 
@@ -1007,7 +996,7 @@
 
         </processors>
 
-        <pre-renderers>
+        <pre-renderers><namespace prefix="date" uri="http://exslt.org/dates-and-times"/><namespace prefix="str" uri="http://exslt.org/strings"/><namespace prefix="e" uri="http://software.in2p3.fr/lavoisier/entries.xsd"/>
             <title>/e:entries/@description</title>
 
             <field label="month">/e:entries/@monthstart</field>
@@ -1054,13 +1043,13 @@
             <description>Site League Reports</description>
         </info>
 
-        <argument name="month" eval="0"></argument>
+        <argument name="month" eval="0"/>
         <argument name="ngi">NGI_HR</argument>
         <argument name="report">NGIHRTest</argument>
         <argument name="tag">_tag_</argument>
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="choose($month=0,view('site_reports_cached',entry('report',$report)),view('site_reports_date',entry('month',$month)|entry('report',$report)))"></parameter>
+            <parameter name="content" eval="choose($month=0,view('site_reports_cached',entry('report',$report)),view('site_reports_date',entry('month',$month)|entry('report',$report)))"/>
         </connector>
 
         <processors>
@@ -1070,7 +1059,7 @@
             <element in="root">
                 <attribute-create out="description">'Site League Report'</attribute-create>
                 <attribute-create out="view">'site_reports'</attribute-create>
-                <attribute-create out="related_view">'site_ar'</attribute-create>
+                <attribute-create out="related_view">'ar-site'</attribute-create>
                 <attribute-create out="ngi">$ngi</attribute-create>
                 <attribute-create out="report">$report</attribute-create>
                 <attribute-create out="entity">'site'</attribute-create>
@@ -1087,8 +1076,8 @@
 
             <element in="root">
                 <element-ignore in="root">
-                    <element in="group" if="@name=$ngi or $ngi='all'"></element>
-                    <element-ignore></element-ignore>
+                    <element in="group" if="@name=$ngi or $ngi='all'"/>
+                    <element-ignore/>
                 </element-ignore>
             </element>
 
@@ -1098,7 +1087,7 @@
 
         </processors>
 
-        <pre-renderers>
+        <pre-renderers><namespace prefix="date" uri="http://exslt.org/dates-and-times"/><namespace prefix="str" uri="http://exslt.org/strings"/><namespace prefix="e" uri="http://software.in2p3.fr/lavoisier/entries.xsd"/>
             <title>/e:entries/@description</title>
 
             <field label="month">/e:entries/@monthstart</field>
@@ -1146,24 +1135,24 @@
         </info>
 
 
-        <argument name="listElixirSites" eval="concat(',',join(view('listSiteElixir')/e:entries/e:entry/text(),','),',')"></argument>
+        <argument name="listElixirSites" eval="concat(',',join(view('listSiteElixir')/e:entries/e:entry/text(),','),',')"/>
 
-        <argument name="month" eval="0"></argument>
+        <argument name="month" eval="0"/>
         <argument name="ngi">all</argument>
         <argument name="site">false</argument>
 
         <argument name="report">Critical</argument>
 
-        <argument name="start" eval="false()"></argument>
-        <argument name="end" eval="false()"></argument>
+        <argument name="start" eval="false()"/>
+        <argument name="end" eval="false()"/>
 
 
-        <variable name="start_date" eval="choose($start!='false',concat($start,'T00:00:00Z'),concat(substring(date:add(date:date-time(),'-P3D'), 0,11),'T00:00:00Z'))"></variable>
-        <variable name="end_date" eval="choose($end!='false',concat($end,'T00:00:00Z'),concat(substring(date:date-time(),0,11),'T23:59:59Z'))"></variable>
+        <variable name="start_date" eval="choose($start!='false',concat($start,'T00:00:00Z'),concat(substring(date:add(date:date-time(),'-P3D'), 0,11),'T00:00:00Z'))"/>
+        <variable name="end_date" eval="choose($end!='false',concat($end,'T00:00:00Z'),concat(substring(date:date-time(),0,11),'T23:59:59Z'))"/>
 
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="choose($month=0,view('site_reports_cached',entry('report',$report)),view('site_reports_date',entry('month',$month)|entry('report',$report)))"></parameter>
+            <parameter name="content" eval="choose($month=0,view('site_reports_cached',entry('report',$report)),view('site_reports_date',entry('month',$month)|entry('report',$report)))"/>
         </connector>
 
         <processors>
@@ -1172,13 +1161,13 @@
             <element in="root" out="e:entries">
                 <element-ignore in="root">
                     <element in="group" if="contains($listElixirSites,concat(',',group/@name,','))">
-                        <element in="group"  if="contains($listElixirSites,concat(',',@name,','))" out="Site">
-                            <attribute in="name" out="site"></attribute>
-                            <element in="results" out="Availability"></element>
+                        <element in="group" if="contains($listElixirSites,concat(',',@name,','))" out="Site">
+                            <attribute in="name" out="site"/>
+                            <element in="results" out="Availability"/>
                         </element>
-                        <element-ignore></element-ignore>
+                        <element-ignore/>
                     </element>
-                    <element-ignore></element-ignore>
+                    <element-ignore/>
                 </element-ignore>
             </element>
 
@@ -1188,25 +1177,24 @@
                     <element in="Site">
                         <attribute-create out="NGI">'ELIXIR'</attribute-create>
                     </element>
-                    <element></element>
+                    <element/>
                 </element-ignore>
             </element>
 
 
 
 
-            <select match="/e:entries/Site[*]">
-                <group by="@site" sort="text"></group>
-            </select>
+            <processor match="/e:entries/Site[*]" type="SelectGroupByProcessor">
+                <parameter name="group_by" eval="@site"/>
+                <parameter name="sort_type">text</parameter>
+            </processor>
 
-            <insert-parent match="/e:entries/e:entry/Site" name="Site"></insert-parent>
+            <processor match="/e:entries/e:entry/Site" type="InsertParentProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="node_name">Site</parameter></processor>
 
-            <merge match="/e:entries/e:entry/Site"></merge>
-            <remove match="/e:entries/e:entry/Site/Site" depth="1"></remove>
-            <remove match="/e:entries/e:entry" depth="1"/>
-            <select match="/e:entries/Site[*]">
-                <group by="@NGI" sort="text"></group>
-            </select>
+            <processor match="/e:entries/e:entry/Site" type="MergeProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces></processor>
+            <processor match="/e:entries/e:entry/Site/Site" type="RemoveProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="depth">1</parameter></processor>
+            <processor match="/e:entries/e:entry" type="RemoveProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="depth">1</parameter></processor>
+            <processor match="/e:entries/Site[*]" type="SelectGroupByProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="group_by" eval="@NGI"/><parameter name="sort_type">text</parameter></processor>
 
 
 
@@ -1219,11 +1207,11 @@
                 <parameter name="nodes" eval="new_attribute('month3',$month)|new_attribute('month4',substring(date:add(concat($month,'-01T00:00:00'),'P1M'),  0,8))|new_attribute('month2',substring(date:add(concat($month,'-01T00:00:00'),'-P1M'),  0,8))|new_attribute('month1',substring(date:add(concat($month,'-01T00:00:00'),'-P2M'),  0,8))"/>
             </processor>
 
-            <insert match="/e:entries"  nodes="new_attribute('description','Elixir Report')"></insert>
-            <insert match="/e:entries"  nodes="new_attribute('view','site_reports')"></insert>
-            <insert match="/e:entries"  nodes="new_attribute('ngi',$ngi)"></insert>
-            <insert match="/e:entries"  nodes="new_attribute('related_view','site_ar')"></insert>
-            <insert match="/e:entries"  nodes="new_attribute('report',$report)"></insert>
+            <processor match="/e:entries" type="InsertProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="nodes" eval="new_attribute('description','Elixir Report')"/></processor>
+            <processor match="/e:entries" type="InsertProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="nodes" eval="new_attribute('view','site_reports')"/></processor>
+            <processor match="/e:entries" type="InsertProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="nodes" eval="new_attribute('ngi',$ngi)"/></processor>
+            <processor match="/e:entries" type="InsertProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="nodes" eval="new_attribute('related_view','ar-site')"/></processor>
+            <processor match="/e:entries" type="InsertProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="nodes" eval="new_attribute('report',$report)"/></processor>
 
 
             <element in="e:entries">
@@ -1234,20 +1222,20 @@
                 <element in="root" out="status">
 
 
-                    <attribute-create out="view">'status_report-sf'</attribute-create>
+                    <attribute-create out="view">'status-sf'</attribute-create>
                     <attribute-create out="ngi">'ELIXIR'</attribute-create>
 
                     <element in="group" if="contains($listElixirSites,@name)">
                         <attribute-create out="group">'ELIXIR'</attribute-create>
                     </element>
-                    <element-ignore></element-ignore>
+                    <element-ignore/>
 
 
                 </element>
             </element>
 
             <elements path="e:entries/status">
-                <element-ignore in="group"></element-ignore>
+                <element-ignore in="group"/>
                 <element-create>
                     sort_by_string(../group,'@name')
                 </element-create>
@@ -1255,18 +1243,18 @@
 
             <elements path="e:entries/status">
                 <element-create-as-parent out="group" attributes="@*" group-by="@name">
-                    <element in="group" ></element>
+                    <element in="group"/>
                 </element-create-as-parent>
             </elements>
 
             <elements path="e:entries/status/group">
                 <element-ignore in="group">
-                    <element></element>
+                    <element/>
                 </element-ignore>
             </elements>
 
             <elements path="e:entries/status">
-                <element-ignore in="status"></element-ignore>
+                <element-ignore in="status"/>
                 <element-create>sort_by_string(../status,'@timestamp')</element-create>
             </elements>
 
@@ -1287,15 +1275,15 @@
 
 
             <elements path="e:entries/status/group">
-                <element-ignore in="status" if="preceding-sibling::status and date:seconds(@timestamp) &lt; date:seconds($start_date)"></element-ignore>
-                <element in="status" if="not(preceding-sibling::status)" >
+                <element-ignore in="status" if="preceding-sibling::status and date:seconds(@timestamp) &lt; date:seconds($start_date)"/>
+                <element in="status" if="not(preceding-sibling::status)">
                     <attribute in="timestamp">$start_date</attribute>
                 </element>
             </elements>
 
         </processors>
 
-        <pre-renderers>
+        <pre-renderers><namespace prefix="date" uri="http://exslt.org/dates-and-times"/><namespace prefix="str" uri="http://exslt.org/strings"/><namespace prefix="e" uri="http://software.in2p3.fr/lavoisier/entries.xsd"/>
             <title>/e:entries/@description</title>
             <field label="month1">/e:entries/@month1</field>
             <field label="month2">/e:entries/@month2</field>
@@ -1338,7 +1326,7 @@
         </info>
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('listParameters')"></parameter>
+            <parameter name="content" eval="view('listParameters')"/>
         </connector>
 
 
@@ -1358,18 +1346,18 @@
 
 
 
-    <view name="render_chart_n" xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
+    <view name="render_chart_n">
         <info>
             <category>AR reports</category>
             <description>Render view in chart</description>
         </info>
-        <argument name="view"></argument>
+        <argument name="view"/>
         <argument name="ngi">all</argument>
         <argument name="type">availability</argument>
         <argument name="chart">false</argument>
         <argument name="report">Critical</argument>
         <connector type="XMLConnector">
-            <parameter name="content" eval="view($view,arguments())"></parameter>
+            <parameter name="content" eval="view($view,arguments())"/>
         </connector>
 
         <processors>
@@ -1382,7 +1370,7 @@
                 <element in="e:entries">
                     <element in="e:entry" out="group" if="@key!='AVERAGE' and  @key!='WEIGHTED'">
                         <element in="Availability">
-                            <attribute-create out="color_av" if="../@availability &gt;= 80" >'green'</attribute-create>
+                            <attribute-create out="color_av" if="../@availability &gt;= 80">'green'</attribute-create>
                             <attribute-create out="color_av" if="../@availability &lt; 80">'red'</attribute-create>
                             <attribute-create out="color_re" if="../@reliability &gt;= 85">'green'</attribute-create>
                             <attribute-create out="color_re" if="../@reliability &lt; 85">'red'</attribute-create>
@@ -1409,17 +1397,17 @@
         </renderers>
     </view>
 
-    <view name="render_chart" >
+    <view name="render_chart">
         <info>
             <category>AR reports</category>
             <description>Render view in chart</description>
         </info>
-        <argument name="view"></argument>
+        <argument name="view"/>
         <argument name="ngi">all</argument>
         <argument name="type">availability</argument>
         <argument name="chart">false</argument>
         <connector type="XMLConnector">
-            <parameter name="content" eval="view($view)"></parameter>
+            <parameter name="content" eval="view($view)"/>
 
         </connector>
 
@@ -1427,50 +1415,46 @@
 
 
 
-            <processor match="/e:entries/e:entry[@key!=$ngi]" type="RemoveProcessor" disabled="$ngi='all' or $ngi='false' "></processor>
+            <processor match="/e:entries/e:entry[@key!=$ngi]" type="RemoveProcessor" disabled="$ngi='all' or $ngi='false' "/>
 
 
-            <rename match="/e:entries" name="chart"></rename>
-            <rename match="/chart/e:entry/ngi" name="Ngi"></rename>
-            <rename match="/chart/e:entry//availability" name="Availability"></rename>
+            <processor match="/e:entries" type="RenameProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="node_name">chart</parameter></processor>
+            <processor match="/chart/e:entry/ngi" type="RenameProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="node_name">Ngi</parameter></processor>
+            <processor match="/chart/e:entry//availability" type="RenameProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="node_name">Availability</parameter></processor>
 
-            <insert match="/chart/e:entry/Ngi" nodes="new_element('name',new_text(@NGI))" as="first_child"/>
-            <insert match="/chart/e:entry/Site" nodes="new_element('name',new_text(@site))" as="first_child"/>
+            <processor match="/chart/e:entry/Ngi" type="InsertProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="nodes" eval="new_element('name',new_text(@NGI))"/><parameter name="destination_as">first_child</parameter></processor>
+            <processor match="/chart/e:entry/Site" type="InsertProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="nodes" eval="new_element('name',new_text(@site))"/><parameter name="destination_as">first_child</parameter></processor>
 
 
 
-            <processor match="/chart/e:entry//Availability[@timestamp=ancestor::chart/@month1 or @timestamp=ancestor::chart/@month2 or @timestamp=ancestor::chart/@month3]"
-                       type="ReplaceProcessor"
-                       disabled="$type='reliability'">
-                <parameter name="nodes" eval="new_element('point',new_text(@availability))"></parameter>
+            <processor match="/chart/e:entry//Availability[@timestamp=ancestor::chart/@month1 or @timestamp=ancestor::chart/@month2 or @timestamp=ancestor::chart/@month3]" type="ReplaceProcessor" disabled="$type='reliability'">
+                <parameter name="nodes" eval="new_element('point',new_text(@availability))"/>
             </processor>
 
-            <processor match="/chart/e:entry//Availability[@timestamp=ancestor::chart/@month1 or @timestamp=ancestor::chart/@month2 or @timestamp=ancestor::chart/@month3]"
-                       type="ReplaceProcessor"
-                       disabled="$type='availability'">
-                <parameter name="nodes" eval="new_element('point',new_text(@reliability))"></parameter>
+            <processor match="/chart/e:entry//Availability[@timestamp=ancestor::chart/@month1 or @timestamp=ancestor::chart/@month2 or @timestamp=ancestor::chart/@month3]" type="ReplaceProcessor" disabled="$type='availability'">
+                <parameter name="nodes" eval="new_element('point',new_text(@reliability))"/>
             </processor>
 
-            <remove match="/chart/e:entry//Availability"></remove>
+            <processor match="/chart/e:entry//Availability" type="RemoveProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces></processor>
 
-            <insert-parent match="/chart/e:entry//point" name="data"></insert-parent>
+            <processor match="/chart/e:entry//point" type="InsertParentProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="node_name">data</parameter></processor>
 
-            <rename match="/chart/e:entry/Ngi" name="series"></rename>
+            <processor match="/chart/e:entry/Ngi" type="RenameProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="node_name">series</parameter></processor>
 
-            <rename match="/chart/e:entry/Site" name="series"></rename>
-            <remove match="/chart/e:entry/series/@*"></remove>
-            <remove match="/chart/e:entry" depth="1"></remove>
+            <processor match="/chart/e:entry/Site" type="RenameProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="node_name">series</parameter></processor>
+            <processor match="/chart/e:entry/series/@*" type="RemoveProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces></processor>
+            <processor match="/chart/e:entry" type="RemoveProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="depth">1</parameter></processor>
 
 
-            <insert match="/chart" nodes="new_element('categories')" as="first_child"></insert>
-            <insert match="/chart[*]/categories" nodes="new_element('item',new_text(ancestor::chart/@month1))|new_element('item',new_text(ancestor::chart/@month2))|new_element('item',new_text(ancestor::chart/@month3))"></insert>
+            <processor match="/chart" type="InsertProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="nodes" eval="new_element('categories')"/><parameter name="destination_as">first_child</parameter></processor>
+            <processor match="/chart[*]/categories" type="InsertProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="nodes" eval="new_element('item',new_text(ancestor::chart/@month1))|new_element('item',new_text(ancestor::chart/@month2))|new_element('item',new_text(ancestor::chart/@month3))"/></processor>
 
 
 
 
 
             <processor match="/chart" type="InsertProcessor" disabled="$chart='true'">
-                <parameter name="nodes" eval="new_attribute('title',concat(substring-before($view,'_report'),' : ',$ngi))"></parameter>
+                <parameter name="nodes" eval="new_attribute('title',concat(substring-before($view,'_report'),' : ',$ngi))"/>
                 <parameter name="destination_as">first_child</parameter>
             </processor>
 

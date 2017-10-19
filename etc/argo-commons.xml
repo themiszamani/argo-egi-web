@@ -1,4 +1,4 @@
-<config xmlns="http://software.in2p3.fr/lavoisier/config.xsd" version="14">
+<config xmlns="http://software.in2p3.fr/lavoisier/config.xsd" version="16">
     <!-- post-processors -->
     <processors>
         <processor type="SelectWindowProcessor" match="/*/*" disabled="not(arguments()[@key='_window_']/text())">
@@ -86,10 +86,10 @@
             </parameter>
         </connector>
         <processors xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-            <insert-parent match="/*" name="xsl:template"/>
-            <insert match="/*" nodes="new_attribute('name', 'navbar')"/>
-            <insert-parent match="/*" name="xsl:stylesheet"/>
-            <insert match="/*" nodes="new_attribute('version', '1.0')"/>
+            <processor match="/*" type="InsertParentProcessor"><namespaces><entry key="xsl">http://www.w3.org/1999/XSL/Transform</entry></namespaces><parameter name="node_name">xsl:template</parameter></processor>
+            <processor match="/*" type="InsertProcessor"><namespaces><entry key="xsl">http://www.w3.org/1999/XSL/Transform</entry></namespaces><parameter name="nodes" eval="new_attribute('name', 'navbar')"/></processor>
+            <processor match="/*" type="InsertParentProcessor"><namespaces><entry key="xsl">http://www.w3.org/1999/XSL/Transform</entry></namespaces><parameter name="node_name">xsl:stylesheet</parameter></processor>
+            <processor match="/*" type="InsertProcessor"><namespaces><entry key="xsl">http://www.w3.org/1999/XSL/Transform</entry></namespaces><parameter name="nodes" eval="new_attribute('version', '1.0')"/></processor>
         </processors>
         <cache type="FileCache">
             <trigger type="ViewCreatedTrigger"/>
@@ -114,7 +114,7 @@
     <view name="unknown_route">
         <argument name="route"/>
         <connector type="XMLConnector">
-          <parameter name="content"><![CDATA[<error code='404'>Unknown_route : Page Not Found</error>]]></parameter>
+          <parameter name="content">&lt;error code='404'&gt;Unknown_route : Page Not Found&lt;/error&gt;</parameter>
         </connector>
 
         <renderers>
