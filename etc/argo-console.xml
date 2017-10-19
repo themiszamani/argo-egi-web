@@ -1,4 +1,4 @@
-<config xmlns="http://software.in2p3.fr/lavoisier/config.xsd" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" version="16">
+<config xmlns="http://software.in2p3.fr/lavoisier/config.xsd" xmlns:xi="http://www.w3.org/2001/XInclude" version="14" xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
     <xi:include href="argo-commons.xml" xpointer="element(/1/*)"/>
     <xi:include href="security/lavoisier-authenticators.xml" xpointer="element(/1/*)"/>
 
@@ -15,17 +15,17 @@
 
         <processors>
             <elements path="menu/categories">
-                <element-ignore if="property('instance.status')='prod' and category/@mode='test'"/>
+                <element-ignore if="property('instance.status')='prod' and category/@mode='test'"></element-ignore>
             </elements>
 
             <element in="menu">
                 <element in="categories" if="property('instance.status')!='test'">
-                    <element-ignore if="@mode='test'" in="category"/>
+                    <element-ignore if="@mode='test'" in="category"></element-ignore>
                 </element>
             </element>
         </processors>
         <cache type="FileCache">
-            <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="ViewNotifiedTrigger"></trigger>
                   <trigger type="DependencyRefreshedTrigger">
                 <parameter name="views">
                     <entry>categories</entry>
@@ -37,7 +37,7 @@
                 <parameter name="template">/html/index.html</parameter>
             </renderer>
             <renderer type="HTMLRenderer">
-                <parameter name="template">html/default.html</parameter>
+                <parameter name="template" >html/default.html</parameter>
             </renderer>
         </renderers>
     </view>
@@ -59,8 +59,8 @@
             </elements>
         </processors>
         <cache type="FileCache">
-            <trigger type="ViewNotifiedTrigger"/>
-            <trigger type="ViewCreatedTrigger"/>
+            <trigger type="ViewNotifiedTrigger"></trigger>
+            <trigger type="ViewCreatedTrigger"></trigger>
         </cache>
 
     </view>
@@ -75,27 +75,27 @@
             <parameter name="content" eval="view('categories')"/>
         </connector>
         <cache type="FileCache">
-            <trigger type="ViewNotifiedTrigger"/>
-            <trigger type="ViewCreatedTrigger"/>
+            <trigger type="ViewNotifiedTrigger"></trigger>
+            <trigger type="ViewCreatedTrigger"></trigger>
         </cache>
         <renderers>
 
             <renderer type="HTMLRenderer">
-                <parameter name="template">/html/index.html</parameter>
+                <parameter name="template" >/html/index.html</parameter>
             </renderer>
         </renderers>
 
     </view>
 
 
-    <view xmlns:cfg="http://software.in2p3.fr/lavoisier/config.xsd" xmlns:str="http://exslt.org/strings" name="views" authenticators="console">
+    <view name="views"  authenticators="console" xmlns:cfg="http://software.in2p3.fr/lavoisier/config.xsd" xmlns:str="http://exslt.org/strings">
         <info>
             <category>Hidden</category>
             <description>The console home page</description>
         </info>
 
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('status')/jmx/domain/group"/>
+            <parameter name="content" eval="view('status')/jmx/domain/group"></parameter>
         </connector>
 
 
@@ -132,12 +132,12 @@
 
 
                     </element>
-                    <element-ignore/>
+                    <element-ignore></element-ignore>
                 </element>
             </element>
             <elements path="views/mbean">
 
-                <attribute-create out="category">concat(choose(../Info/cfg:category/text(),../Info/cfg:category/text(),'No Category'),'---')</attribute-create>
+                <attribute-create out="category" >concat(choose(../Info/cfg:category/text(),../Info/cfg:category/text(),'No Category'),'---')</attribute-create>
 
                 <element in="attribute" if="@type='java.util.Date'">
                     <element in="value">
@@ -147,7 +147,7 @@
             </elements>
 
             <elements path="views/mbean">
-                <element-ignore in="attribute"/>
+                <element-ignore in="attribute"></element-ignore>
                 <element-create>sort_by_string(../attribute,'@type')</element-create>
 
             </elements>
@@ -162,15 +162,15 @@
             <element in="views">
                 <element in="categories">
                     <element-create>str:split(../text(),'---')</element-create>
-                    <text-ignore/>
+                    <text-ignore></text-ignore>
                 </element>
 
             </element>
 
             <element in="views">
                 <element in="categories">
-                    <element in="token" out="category" if="not(text()=preceding-sibling::token/text())"/>
-                    <element-ignore/>
+                    <element in="token" out="category" if="not(text()=preceding-sibling::token/text())"></element>
+                    <element-ignore></element-ignore>
                 </element>
             </element>
 
@@ -178,10 +178,10 @@
 
         <renderers>
             <renderer type="DefaultRenderer">
-                <parameter name="template">/html/console.html</parameter>
+                <parameter name="template" >/html/console.html</parameter>
             </renderer>
             <renderer type="HTMLRenderer">
-                <parameter name="template">/html/console.html</parameter>
+                <parameter name="template" >/html/console.html</parameter>
             </renderer>
 
 
@@ -197,11 +197,12 @@
             <parameter name="key">!effective_configuration!</parameter>
         </connector>
         <processors xmlns:cfg="http://software.in2p3.fr/lavoisier/config.xsd">
-            <processor match="/cfg:config/cfg:view[@name=$view]" type="SelectProcessor"><namespaces><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry><entry key="cfg">http://software.in2p3.fr/lavoisier/config.xsd</entry></namespaces><parameter name="single_node">true</parameter></processor>
+            <select match="/cfg:config/cfg:view[@name=$view]" single="true"/>
             <processor type="XPathValidatorProcessor" match="/cfg:view"/>
-            <processor match="/cfg:view" type="InsertProcessor"><namespaces><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry><entry key="cfg">http://software.in2p3.fr/lavoisier/config.xsd</entry></namespaces><parameter name="nodes" eval="view('configuration')/cfg:config/cfg:authenticators[@name=match()/@authenticators]"/></processor>
-            <processor match="/cfg:view/cfg:authenticators/cfg:authenticator" type="InsertProcessor"><namespaces><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry><entry key="cfg">http://software.in2p3.fr/lavoisier/config.xsd</entry></namespaces><parameter name="nodes" eval="view('authenticators')/cfg:jmx/cfg:domain/cfg:group/cfg:mbean[cfg:attribute[@name='AuthenticatorClass']/cfg:value/text()=match()/@type]/cfg:attribute[@name='AuthId']/cfg:value"/></processor>
-            <processor match="/cfg:view" type="InsertProcessor"><namespaces><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry><entry key="cfg">http://software.in2p3.fr/lavoisier/config.xsd</entry></namespaces><parameter name="nodes" eval="view('renderers')"/></processor>
+            <insert match="/cfg:view" nodes="view('configuration')/cfg:config/cfg:authenticators[@name=match()/@authenticators]"/>
+            <insert match="/cfg:view/cfg:authenticators/cfg:authenticator"
+                    nodes="view('authenticators')/cfg:jmx/cfg:domain/cfg:group/cfg:mbean[cfg:attribute[@name='AuthenticatorClass']/cfg:value/text()=match()/@type]/cfg:attribute[@name='AuthId']/cfg:value"/>
+            <insert match="/cfg:view" nodes="view('renderers')"/>
         </processors>
         <renderers>
             <renderer type="HTMLRenderer">
@@ -385,15 +386,29 @@
         <connector type="XMLConnector">
             <parameter name="content" eval="view('configuration_file')"/>
         </connector>
-        <processors xmlns:cfg="http://software.in2p3.fr/lavoisier/config.xsd">
-            <processor match="/cfg:config/cfg:view[*]" type="SelectGroupByProcessor"><namespaces><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry><entry key="cfg">http://software.in2p3.fr/lavoisier/config.xsd</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="group_by" eval="cfg:connector/@type"/></processor>
-            <processor match="/cfg:config" type="AppendAggregateProcessor"><namespaces><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry><entry key="cfg">http://software.in2p3.fr/lavoisier/config.xsd</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="function">count</parameter><parameter name="node_name">NbViews</parameter><parameter name="node_values" eval="e:entry/cfg:view"/></processor>
-            <processor match="/cfg:config/e:entry" type="AppendAggregateProcessor"><namespaces><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry><entry key="cfg">http://software.in2p3.fr/lavoisier/config.xsd</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="function">count</parameter><parameter name="node_name">cfg:NbConnector</parameter><parameter name="node_values" eval="cfg:view/cfg:connector"/></processor>
-            <processor match="/cfg:config/e:entry/cfg:view" type="AppendAggregateProcessor"><namespaces><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry><entry key="cfg">http://software.in2p3.fr/lavoisier/config.xsd</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="function">count</parameter><parameter name="node_name">cfg:NbProcessors</parameter><parameter name="node_values" eval="cfg:processors/cfg:*"/></processor>
-            <processor match="/cfg:config" type="AppendAggregateProcessor"><namespaces><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry><entry key="cfg">http://software.in2p3.fr/lavoisier/config.xsd</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="function">avg</parameter><parameter name="node_name">AvgNbProcessors</parameter><parameter name="node_values" eval="e:entry/cfg:view/cfg:NbProcessors/text()"/></processor>
-            <processor match="/cfg:config" type="AppendAggregateProcessor"><namespaces><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry><entry key="cfg">http://software.in2p3.fr/lavoisier/config.xsd</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="function">max</parameter><parameter name="node_name">MaxNbProcessors</parameter><parameter name="node_values" eval="e:entry/cfg:view/cfg:NbProcessors/text()"/></processor>
-            <processor match="/cfg:config" type="AppendAggregateProcessor"><namespaces><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry><entry key="cfg">http://software.in2p3.fr/lavoisier/config.xsd</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="function">count</parameter><parameter name="node_name">NbCaches</parameter><parameter name="node_values" eval="e:entry/cfg:view/cfg:cache"/></processor>
-            <processor match="/cfg:config/e:entry/cfg:view | /cfg:config/@version" type="RemoveProcessor"><namespaces><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry><entry key="cfg">http://software.in2p3.fr/lavoisier/config.xsd</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces></processor>
+        <processors xmlns:cfg="http://software.in2p3.fr/lavoisier/config.xsd" xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
+            <select match="/cfg:config/cfg:view[*]">
+                <group by="cfg:connector/@type"/>
+            </select>
+            <aggregate match="/cfg:config" function="count">
+                <to-last-child name="NbViews" values="e:entry/cfg:view"/>
+            </aggregate>
+            <aggregate match="/cfg:config/e:entry" function="count">
+                <to-last-child name="cfg:NbConnector" values="cfg:view/cfg:connector"/>
+            </aggregate>
+            <aggregate match="/cfg:config/e:entry/cfg:view" function="count">
+                <to-last-child name="cfg:NbProcessors" values="cfg:processors/cfg:*"/>
+            </aggregate>
+            <aggregate match="/cfg:config" function="avg">
+                <to-last-child name="AvgNbProcessors" values="e:entry/cfg:view/cfg:NbProcessors/text()"/>
+            </aggregate>
+            <aggregate match="/cfg:config" function="max">
+                <to-last-child name="MaxNbProcessors" values="e:entry/cfg:view/cfg:NbProcessors/text()"/>
+            </aggregate>
+            <aggregate match="/cfg:config" function="count">
+                <to-last-child name="NbCaches" values="e:entry/cfg:view/cfg:cache"/>
+            </aggregate>
+            <remove match="/cfg:config/e:entry/cfg:view | /cfg:config/@version"/>
         </processors>
     </view>
     <view name="events">
@@ -451,9 +466,7 @@
             <processor type="XmlDumpProcessor" match="/*"/>
         </processors>
     </view>
-    <view name="resume_breakpoint_0"><info><category>Hidden</category></info><argument name="disable-default-XPath" path-format="value">true</argument><connector type="FileConnector">
-                    <parameter name="path" eval="concat(property('java.io.tmpdir'), '/debugging.xml')"/>
-                </connector><serializer type="EncapsulateSerializer"/></view><view name="resume_breakpoint">
+    <view name="resume_breakpoint">
         <info>
             <category>Environment</category>
             <label>Resume Breakpoint</label>
@@ -463,10 +476,15 @@
             <parameter name="name">stop</parameter>
             <parameter name="value">false</parameter>
         </connector>
-        <processors>
-            <processor match="/e:entries" type="InsertProcessor"><parameter name="nodes" eval="view_path_post('resume_breakpoint_0', choose(path(false()), path(false()), ''), match(), arguments())"/></processor>
-            <processor match="/e:entries/e:entry" type="RemoveProcessor"/>
-            <processor match="/e:entries" type="RemoveProcessor"><parameter name="depth">1</parameter></processor>
+        <processors xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
+            <insert match="/e:entries">
+                <connector type="FileConnector">
+                    <parameter name="path" eval="concat(property('java.io.tmpdir'), '/debugging.xml')"/>
+                </connector>
+                <serializer type="EncapsulateSerializer"/>
+            </insert>
+            <remove match="/e:entries/e:entry"/>
+            <remove match="/e:entries" depth="1"/>
         </processors>
         <renderers>
             <renderer type="DefaultRenderer">
@@ -505,7 +523,7 @@
                 <variable name="hidden" eval="view_path('properties', '/lavoisier-hidden.properties')/*"/>
             </processor>
         </processors>
-        <pre-renderers><namespace prefix="e" uri="http://software.in2p3.fr/lavoisier/entries.xsd"/>
+        <pre-renderers>
             <title>'System Properties'</title>
             <row foreach="/*/value">
                 <column>@key</column>
@@ -522,7 +540,7 @@
             <parameter name="domain">java.lang</parameter>
             <parameter name="type">OperatingSystem</parameter>
         </connector>
-        <pre-renderers><namespace prefix="e" uri="http://software.in2p3.fr/lavoisier/entries.xsd"/>
+        <pre-renderers>
             <title>'Operating System Information'</title>
             <field>/jmx/domain/mbean/@type</field>
             <row foreach="/jmx/domain/mbean/attribute">
@@ -533,7 +551,7 @@
             </row>
         </pre-renderers>
     </view>
-    <view name="status">
+    <view name="status" >
         <info>
             <category>Monitoring</category>
             <description>Statuses of the data views</description>
@@ -603,16 +621,21 @@
         <argument name="description"/>
         <argument name="stacktrace"/>
         <connector type="XMLConnector">
-            <parameter name="content">&lt;issue&gt;
-                &lt;project_id&gt;lavoisier&lt;/project_id&gt;
-                &lt;subject&gt;Stacktrace&lt;/subject&gt;
-                &lt;priority_id&gt;3&lt;/priority_id&gt;
-                &lt;category_id&gt;327&lt;/category_id&gt;
-                &lt;description&gt;?&lt;/description&gt;
-            &lt;/issue&gt;</parameter>
+            <parameter name="content"><![CDATA[<issue>
+                <project_id>lavoisier</project_id>
+                <subject>Stacktrace</subject>
+                <priority_id>3</priority_id>
+                <category_id>327</category_id>
+                <description>?</description>
+            </issue>]]></parameter>
         </connector>
         <processors>
-            <processor match="/issue/description/text()" type="ReplaceProcessor"><namespaces><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="nodes" eval="concat(                 'Build Version: ', view('build')/mbean/attribute[@name='version']/value/text(), '&#13;&#10;',                 'Build Date: ',    view('build')/mbean/attribute[@name='buildTime']/value/text(), '&#13;&#10;',                 'Author: ', property('user.name'), '&#13;&#10;',                 'Description: ', $description, '&#13;&#10;',                 'Stack Trace: ', $stacktrace)"/></processor>
+            <replace match="/issue/description/text()" nodes="concat(
+                'Build Version: ', view('build')/mbean/attribute[@name='version']/value/text(), '&#13;&#10;',
+                'Build Date: ',    view('build')/mbean/attribute[@name='buildTime']/value/text(), '&#13;&#10;',
+                'Author: ', property('user.name'), '&#13;&#10;',
+                'Description: ', $description, '&#13;&#10;',
+                'Stack Trace: ', $stacktrace)"/>
         </processors>
     </view>
     <view name="logs" authenticators="console">
@@ -625,9 +648,9 @@
             <parameter name="path">logs/lavoisier.log.0</parameter>
         </connector>
         <serializer type="SurroundSerializer">
-            <parameter name="footer">&lt;/log&gt;</parameter>
+            <parameter name="footer"><![CDATA[</log>]]></parameter>
         </serializer>
-        <pre-renderers><namespace prefix="e" uri="http://software.in2p3.fr/lavoisier/entries.xsd"/>
+        <pre-renderers>
             <row foreach="/log/record">
                 <column>date</column><column>level</column><column>logger</column><column>message</column>
             </row>
@@ -662,7 +685,7 @@
         </connector>
         <serializer type="EncapsulateSerializer"/>
         <processors>
-            <processor match="/*/*" type="InsertProcessor"><namespaces><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="nodes" eval="concat(property('cache.baseDirectory'), path())"/></processor>
+            <insert match="/*/*" nodes="concat(property('cache.baseDirectory'), path())"/>
         </processors>
     </view>
     <view name="cache">
@@ -673,7 +696,7 @@
         <connector type="DirectoryConnector">
             <parameter name="directory" eval="property('cache.baseDirectory')"/>
         </connector>
-        <pre-renderers><namespace prefix="e" uri="http://software.in2p3.fr/lavoisier/entries.xsd"/>
+        <pre-renderers>
             <title>'Cache files'</title>
             <field>/entry/@path</field>
             <field>/entry/@permissions</field>
@@ -697,7 +720,7 @@
             <parameter name="domain">fr.in2p3.lavoisier.engine.jmx</parameter>
             <parameter name="type">daemon</parameter>
         </connector>
-        <pre-renderers><namespace prefix="e" uri="http://software.in2p3.fr/lavoisier/entries.xsd"/>
+        <pre-renderers>
             <title>'JSW daemon Information'</title>
             <row foreach="/jmx/domain/mbean/attribute">
                 <column>@name</column>
@@ -729,7 +752,7 @@
         <connector type="XMLConnector">
             <parameter name="content" eval="view('configuration')"/>
         </connector>
-        <pre-renderers><namespace prefix="e" uri="http://software.in2p3.fr/lavoisier/entries.xsd"/>
+        <pre-renderers>
             <namespace prefix="cfg" uri="http://software.in2p3.fr/lavoisier/config.xsd"/>
             <title>/*/cfg:view/cfg:info/cfg:category/text()</title>
             <row foreach="/*/cfg:view">

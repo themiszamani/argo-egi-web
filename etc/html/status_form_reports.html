@@ -376,10 +376,10 @@
 
 
                         if ($('input[id=filters-ngi]').val())
-                            var view='status-site?ngi=' + $('input[id=filters-ngi]').val();
+                            var view='status_report-site?ngi=' + $('input[id=filters-ngi]').val();
 
                         if ($('input[id=filters-site]').val())
-                        var view='status-site?site=' + $('input[id=filters-site]').val();
+                        var view='status_report-site?site=' + $('input[id=filters-site]').val();
 
 //
 //                        if ($('input[id=filters-sf]').val()!='') {
@@ -410,14 +410,14 @@
                             var Sf= tabavailableHostSf[Host];
 
 
-                            view = 'status-metrics?site='+ Site + '&service=' +  Sf +'&endpoint=' + HostName;
+                            view = 'status_report-metrics?site='+ Site + '&service=' +  Sf +'&endpoint=' + HostName;
 
                         }
 
 
 
-                        var link ='/'  + view   + range + '&report='+ report +  '&accept=html' ;
-
+                        var link ='/lavoisier/'  + view   + range + '&report='+ report +  '&accept=html' ;
+                        console.log(link);
                         window.location.href = link;
 
 
