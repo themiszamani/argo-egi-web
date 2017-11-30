@@ -9,9 +9,11 @@
         <category link="/status-custom" icon="fa fa-list"> Customized Report</category>
 
 
+
     </categories>
 
     <categories bg="bg-blue" icon="fa fa-table" title="Availabilities/Reliabilities" >
+
         <category link="/ar-ngi" icon="fa fa-globe"> NGI Report</category>
         <category link="/ar-site" icon="fa fa-home"> Site Report</category>
         <category link="/ar-fedcloud" icon="fa fa-cloud"> FedCloud Report</category>
@@ -21,6 +23,7 @@
         <category link="/ar-treemap" icon="fa fa-th">Availability Treemap</category>
         <category mode="test" link="/ar-uncert" icon="fa fa-flash">UNCERTIFIED SITES</category>
         <category mode="test" link="/ar-NGIHR" icon="fa fa-flash">NGI_HR Comparison</category>
+
     </categories>
 
 
@@ -28,15 +31,16 @@
 
 
     <categories bg="bg-purple" icon="fa fa-cog" title="Administration">
+
         <category link="/profiles" icon="fa fa-group"> Profile Management</category>
         <category link="/recomputation" icon="fa fa-mail-forward">Recomputation request</category>
         <category link="/adminList" icon="fa fa-list"> Admin List</category>
         <category link="/admin" icon="fa fa-lock">Admin Interface</category>
 
-    </categories>
 
+    </categories>
    <categories bg="bg-light-blue" icon="fa fa-comments" title="About ARGO">
-       <category link="/" icon="fa fa-home"> Start Page</category>
+       <category link="/lavoisier" icon="fa fa-home"> Start Page</category>
        <category link="http://argoeu.github.io" icon="fa fa-eye">ARGO Web Site</category>
        <category link="http://argoeu.github.io/overview" icon="fa fa-book"> Documentation</category>
        <category link="https://github.com/ARGOeu" icon="fa fa-github-alt"> GitHub</category>
@@ -45,7 +49,7 @@
    </categories>
 
     <categories bg="hidden" icon="fa fa-handshake-o" title="Terms of Use" >
-        <category link="/termsOfUse" icon="fa fa-hand-o-right">Terms of Use</category>
+        <category link="/lavoisier/TermsofUse" icon="fa fa-hand-o-right">Terms of Use</category>
         <category  link="http://www.apache.org/licenses/LICENSE-2.0" icon="fa fa-creative-commons">Licence : Apache 2.0</category>
     </categories>
 
