@@ -27,9 +27,6 @@
     </categories>
 
 
-
-
-
     <categories bg="bg-purple" icon="fa fa-cog" title="Administration">
 
         <category link="/profiles" icon="fa fa-group"> Profile Management</category>
