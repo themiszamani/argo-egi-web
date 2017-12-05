@@ -45,8 +45,8 @@
                         <div class="box box-primary" id="table" tpl:foreach="/e:entries/Entity">
                             <div class="box-header">
                                 <h3 class="box-title">
-                                    <a tpl:if="/e:entries/@view='ngi_ar'" href="/ar-ngi?report={{/e:entries/@report}}&amp;accept=html">EGI</a>
-                                    <a tpl:else="" href="/ar-site?report={{/e:entries/@report}}&amp;ngi={{@NGI}}&amp;accept=html">{{@NGI}}</a>
+                                    <a tpl:if="/e:entries/@view='ngi_ar'" href="/lavoisier/ngi_reports?report={{/e:entries/@report}}&amp;accept=html">EGI</a>
+                                    <a tpl:else="" href="/lavoisier/site_reports?report={{/e:entries/@report}}&amp;ngi={{@NGI}}&amp;accept=html">{{@NGI}}</a>
                                     > {{@name}}
 
 
