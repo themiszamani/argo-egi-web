@@ -18,7 +18,7 @@ title: Web UI | ARGO
 
 # Open ports
 * firewall-cmd --zone=public --add-port=80/tcp --permanent
-* firewall-cmd --zone=public --add-port=43/tcp --permanent
+* firewall-cmd --zone=public --add-port=443/tcp --permanent
 * firewall-cmd --reload
 
 

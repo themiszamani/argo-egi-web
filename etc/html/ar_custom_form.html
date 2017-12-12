@@ -286,7 +286,7 @@
 
                     var range = 'start_date=' + $('#reportrange').val().replace(' - ','&end_date=');
 
-                    var link ='/'  + view  + '&cr=1' + '&' + range + '&granularity='   +  $('input[name=granularity]:checked').val() + '&report=' +  $('#report :selected').val();
+                    var link ='/lavoisier/'  + view  + '&cr=1' + '&' + range + '&granularity='   +  $('input[name=granularity]:checked').val() + '&report=' +  $('#report :selected').val();
                     window.location= link;
 
                 }

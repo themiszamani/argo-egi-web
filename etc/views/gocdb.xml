@@ -1,6 +1,10 @@
-<config xmlns="http://software.in2p3.fr/lavoisier/config.xsd" xmlns:date="http://exslt.org/dates-and-times" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:str="http://exslt.org/strings" xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
+<config xmlns="http://software.in2p3.fr/lavoisier/config.xsd"
+        xmlns:date="http://exslt.org/dates-and-times"
+        xmlns:xi="http://www.w3.org/2001/XInclude"
+        xmlns:str="http://exslt.org/strings"
+        xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
 
-<view name="listNgi">
+<view xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" name="listNgi">
 
     <info>
         <description>GOC DB : List of Ngi</description>
@@ -36,7 +40,7 @@
 
 
 
-<view name="listSite">
+<view xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" name="listSite">
 <info>
     <description>GOC DB : List of Sites</description>
     <category>GOC DB</category>
@@ -62,7 +66,7 @@
 
 </view>
 
-    <view name="goc.listSiteFedcloud">
+    <view xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" name="goc.listSiteFedcloud">
         <info>
             <description>GOC DB : List of Sites with Cloud Tag</description>
             <category>GOC DB</category>
@@ -94,7 +98,7 @@
         </renderers>
     </view>
 
-    <view name="listSiteElixir">
+    <view xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" name="listSiteElixir">
         <info>
             <description>GOC DB : List of Sites with Elixir Tag</description>
             <category>GOC DB</category>
@@ -126,7 +130,7 @@
         </renderers>
     </view>
 
-    <view name="listSiteScopes">
+    <view xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" name="listSiteScopes">
         <info>
             <description>GOC DB : List of Sites Scope</description>
             <category>GOC DB</category>
@@ -139,7 +143,7 @@
 
         <processors>
             <element in="e:entries">
-                <element-ignore in="e:entry"/>
+                <element-ignore in="e:entry"></element-ignore>
                 <element-create>
                     uniq(../e:entry,'text()')
                 </element-create>
@@ -168,7 +172,7 @@
     </view>
 
 
-    <view name="listSitesbyNgi">
+    <view xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" name="listSitesbyNgi">
 <info>
     <description>GOC DB : List of Sites per Ngi</description>
     <category>GOC DB</category>
@@ -211,7 +215,7 @@
 </info>
 
 <connector type="HTTPConnector">
-    <parameter name="url" eval="property('goc.siteList')"/>
+    <parameter name="url" eval="property('goc.siteList')"></parameter>
     <parameter name="certificate" eval="property('certificate.path')"/>
     <parameter name="passphrase" eval="property('certificate.password')"/>
     <parameter name="force-redirect">true</parameter>
@@ -236,7 +240,7 @@
         </info>
 
         <connector type="HTTPConnector">
-            <parameter name="url" eval="property('goc.ngiContactsList')"/>
+            <parameter name="url" eval="property('goc.ngiContactsList')"></parameter>
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>
             <parameter name="force-redirect">true</parameter>
@@ -258,18 +262,18 @@
             <description>list of ngi roles for user for the form</description>
             <category>GOC DB</category>
         </info>
-        <argument name="user"/>
+        <argument name="user"></argument>
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('ngiContactsList')"/>
+            <parameter name="content" eval="view('ngiContactsList')"></parameter>
 
         </connector>
 
         <processors>
-            <processor match="/results" type="InsertProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="nodes" eval="new_attribute('user',str:concat(eval('concat(&quot;/&quot;,.)', reverse(str:split($user, ', ')))))"/></processor>
-            <processor match="/results/ROC/CONTACT" type="InsertProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="nodes" eval="new_attribute('ngi',ancestor::ROC/@ROC_NAME)"/></processor>
-            <processor match="/results/ROC/CONTACT[CERTDN/text()=str:concat(eval('concat(&quot;/&quot;,.)', reverse(str:split($user, ', ')))) ]" type="SelectProcessor"/>
-            <processor match="/e:entries/CONTACT" type="InsertProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces><parameter name="nodes" eval="view('goc.siteList')/results/SITE[not(@NAME=preceding-sibling::SITE/@NAME) and ROC/text()=match()/@ngi]"/></processor>
-            <processor match="/e:entries/CONTACT/SITE/*" type="RemoveProcessor"><namespaces><entry key="date">http://exslt.org/dates-and-times</entry><entry key="str">http://exslt.org/strings</entry><entry key="e">http://software.in2p3.fr/lavoisier/entries.xsd</entry></namespaces></processor>
+            <insert match="/results" nodes="new_attribute('user',str:concat(eval('concat(&quot;/&quot;,.)', reverse(str:split($user, ', ')))))"></insert>
+            <insert match="/results/ROC/CONTACT" nodes="new_attribute('ngi',ancestor::ROC/@ROC_NAME)"/>
+            <processor match="/results/ROC/CONTACT[CERTDN/text()=str:concat(eval('concat(&quot;/&quot;,.)', reverse(str:split($user, ', ')))) ]" type="SelectProcessor"></processor>
+            <insert match="/e:entries/CONTACT" nodes="view('goc.siteList')/results/SITE[not(@NAME=preceding-sibling::SITE/@NAME) and ROC/text()=match()/@ngi]"></insert>
+            <remove match="/e:entries/CONTACT/SITE/*"></remove>
         </processors>
 
     </view>
@@ -279,15 +283,15 @@
             <description>list of ngi roles for user for the form</description>
             <category>GOC DB</category>
         </info>
-        <argument name="user"/>
+        <argument name="user"></argument>
         <connector type="XMLConnector">
-            <parameter name="content" eval="view('ngiContactsList')"/>
+            <parameter name="content" eval="view('ngiContactsList')"></parameter>
 
         </connector>
 
         <processors>
             <element in="results">
-                <attribute-create out="user">str:concat(eval('concat("/",.)', reverse(str:split($user, ', '))))</attribute-create>
+                <attribute-create out="user">str:concat(eval('concat(&quot;/&quot;,.)', reverse(str:split($user, ', '))))</attribute-create>
                 <element in="ROC">
                     <element in="CONTACT">
                         <attribute-create out="ngi">../ancestor::ROC/@ROC_NAME</attribute-create>
@@ -296,8 +300,8 @@
             </element>
 
             <elements path="/results/ROC">
-                <element in="CONTACT" if="CERTDN/text() = str:concat(eval('concat(&quot;/&quot;,.)', reverse(str:split($user, ', '))))"/>
-                <element-ignore/>
+                <element in="CONTACT" if="CERTDN/text() = str:concat(eval('concat(&quot;/&quot;,.)', reverse(str:split($user, ', '))))"></element>
+                <element-ignore></element-ignore>
             </elements>
 
             <element in="results" out="e:entries">
@@ -307,7 +311,7 @@
                 </element>
             </element>
             <elements path="/e:entries/CONTACT/SITE">
-                <element-ignore/>
+                <element-ignore></element-ignore>
             </elements>
 
 
@@ -326,7 +330,7 @@
         </info>
 
         <connector type="HTTPConnector">
-            <parameter name="url" eval="property('goc.serviceFlavours')"/>
+            <parameter name="url" eval="property('goc.serviceFlavours')"></parameter>
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>
             <parameter name="force-redirect">true</parameter>
@@ -349,7 +353,7 @@
         </info>
 
         <connector type="HTTPConnector">
-            <parameter name="url" eval="property('goc.hostList')"/>
+            <parameter name="url" eval="property('goc.hostList')"></parameter>
             <parameter name="certificate" eval="property('certificate.path')"/>
             <parameter name="passphrase" eval="property('certificate.password')"/>
             <parameter name="force-redirect">true</parameter>
@@ -358,20 +362,20 @@
 
         <processors>
             <element in="results" out="e:entries">
-                <element in="SERVICE_ENDPOINT" out="e:entry">
+                <element in="SERVICE_ENDPOINT" out="e:entry" >
 
 
                     <attribute-create out="hostname">../HOSTNAME/text()</attribute-create>
                     <attribute-create out="site">../SITENAME/text()</attribute-create>
                     <attribute-create out="ngi">../ROC_NAME/text()</attribute-create>
                     <attribute-create out="service">../SERVICE_TYPE/text()</attribute-create>
-                    <element-ignore/>
+                    <element-ignore></element-ignore>
                 </element>
 
             </element>
             <element in="e:entries">
                 <element in="e:entry">
-                    <attribute-ignore/>
+                    <attribute-ignore></attribute-ignore>
                     <text-create>concat(../@ngi,'___',../@site,'___',../@hostname,'___',../@service)</text-create>
                 </element>
             </element>
