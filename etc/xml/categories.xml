@@ -29,7 +29,6 @@
         <category link="/recomputation" icon="fa fa-mail-forward">Recomputation request</category>
         <category link="/adminList" icon="fa fa-list"> Admin List</category>
         <category link="/admin" icon="fa fa-lock">Admin Interface</category>
-
     </categories>
 
    <categories bg="bg-light-blue" icon="fa fa-comments" title="About ARGO">
