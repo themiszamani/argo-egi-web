@@ -17,8 +17,8 @@
         </connector>
 
         <cache type="EmptyCache">
-            <trigger type="ViewAccessedTrigger"></trigger>
-            <trigger type="ViewNotifiedTrigger"></trigger>
+            <trigger type="ViewAccessedTrigger"/>
+            <trigger type="ViewNotifiedTrigger"/>
         </cache>
 
         <renderers>
@@ -74,7 +74,7 @@
         </processors>
 
         <cache type="EmptyCache">
-            <trigger type="ViewNotifiedTrigger"></trigger>
+            <trigger type="ViewNotifiedTrigger"/>
             <trigger type="FixedTimeTrigger">
                 <parameter name="hour">7</parameter>
             </trigger>
@@ -124,7 +124,7 @@
         <cache type="EmptyCache">
             <trigger type="ViewNotifiedTrigger"></trigger>
             <trigger type="DeltaTimeTrigger">
-                <parameter name="minutes">10</parameter>
+                <parameter name="minutes">6</parameter>
             </trigger>
         </cache>
 
