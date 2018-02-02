@@ -58,7 +58,8 @@
 
         <processors>
             <elements path="menu/categories/category">
-                <attribute in="link" if="starts-with(.,'/')">concat(property('server.baseUrl'),':',property('lavoisier.https.port'),.)</attribute>
+                <attribute in="link" if="starts-with(.,'/') and property('lavoisier.http.port')!='80'">concat(property('server.baseUrl'),':',property('lavoisier.http.port'),.)</attribute>
+                <attribute in="link" if="starts-with(.,'/') and property('lavoisier.http.port')='80'">concat(property('server.baseUrl'),.)</attribute>
             </elements>
         </processors>
         <cache type="FileCache">
