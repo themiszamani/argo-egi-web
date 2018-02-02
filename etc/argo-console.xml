@@ -62,6 +62,7 @@
         </processors>
         <cache type="FileCache">
             <trigger type="ViewNotifiedTrigger"/>
+            <trigger type="ViewCreatedTrigger"/>
             <trigger type="DeltaTimeTrigger">
                 <parameter name="minutes">6</parameter>
             </trigger>
