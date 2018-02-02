@@ -31,7 +31,9 @@
                     <entry>categories</entry>
                 </parameter>
             </trigger>
-            <trigger type="ViewCreatedTrigger"></trigger>
+            <trigger type="DeltaTimeTrigger">
+                <parameter name="minutes">4</parameter>
+            </trigger>
         </cache>
         <renderers>
             <renderer type="DefaultRenderer">

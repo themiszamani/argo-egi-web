@@ -493,7 +493,7 @@ node16.datagrid.cea.fr/org.nordugrid.ARC-CE-ARIS?exec_time=2015-06-01T00:01:20Z'
         <cache type="FileCache">
             <!--<trigger type="ViewCreatedTrigger"/>-->
             <trigger type="DeltaTimeTrigger">
-                <parameter name="hours">4</parameter>
+                <parameter name="minutes">7</parameter>
             </trigger>
             <trigger type="ViewNotifiedTrigger"/>
             <trigger type="ViewCreatedTrigger"/>
