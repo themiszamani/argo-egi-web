@@ -66,8 +66,6 @@
                 <parameter name="minutes">6</parameter>
             </trigger>
         </cache>
-
-
     </view>
 
     <view name="default">
