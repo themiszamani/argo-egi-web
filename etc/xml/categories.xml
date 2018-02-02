@@ -32,7 +32,7 @@
     </categories>
 
    <categories bg="bg-light-blue" icon="fa fa-comments" title="About ARGO">
-       <category link="/" icon="fa fa-home"> Start Page</category>
+       <category link="/lavoisier" icon="fa fa-home"> Start Page</category>
        <category link="http://argoeu.github.io" icon="fa fa-eye">ARGO Web Site</category>
        <category link="http://argoeu.github.io/overview" icon="fa fa-book"> Documentation</category>
        <category link="https://github.com/ARGOeu" icon="fa fa-github-alt"> GitHub</category>
@@ -41,7 +41,7 @@
    </categories>
 
     <categories bg="hidden" icon="fa fa-handshake-o" title="Terms of Use" >
-        <category link="/termsOfUse" icon="fa fa-hand-o-right">Terms of Use</category>
+        <category link="/lavoisier/TermsofUse" icon="fa fa-hand-o-right">Terms of Use</category>
         <category  link="http://www.apache.org/licenses/LICENSE-2.0" icon="fa fa-creative-commons">Licence : Apache 2.0</category>
     </categories>
 
