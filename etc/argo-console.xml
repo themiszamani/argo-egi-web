@@ -5,7 +5,7 @@
 
     <view>
         <info>
-            <category>Hidden</category>
+            <category>Console</category>
             <description>The default page</description>
         </info>
 
@@ -25,12 +25,13 @@
             </element>
         </processors>
         <cache type="FileCache">
-            <trigger type="ViewNotifiedTrigger"></trigger>
+            <trigger type="ViewNotifiedTrigger"/>
                   <trigger type="DependencyRefreshedTrigger">
                 <parameter name="views">
                     <entry>categories</entry>
                 </parameter>
             </trigger>
+            <trigger type="ViewCreatedTrigger"></trigger>
         </cache>
         <renderers>
             <renderer type="DefaultRenderer">
@@ -55,12 +56,11 @@
 
         <processors>
             <elements path="menu/categories/category">
-                <attribute in="link" if="starts-with(.,'/')">concat(property('server.baseUrl'),':',property('lavoisier.http.port'),.)</attribute>
+                <attribute in="link" if="starts-with(.,'/')">concat(property('server.baseUrl'),':',property('lavoisier.https.port'),.)</attribute>
             </elements>
         </processors>
         <cache type="FileCache">
-            <trigger type="ViewNotifiedTrigger"></trigger>
-            <trigger type="ViewCreatedTrigger"></trigger>
+            <trigger type="ViewNotifiedTrigger"/>
         </cache>
 
     </view>
@@ -745,6 +745,7 @@
             </renderer>
         </renderers>
     </view>
+
     <view name="category">
         <info>
             <category>Hidden</category>
