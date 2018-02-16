@@ -6,7 +6,7 @@ title: Web UI | ARGO
 # Web UI module for the ARGO Framework
 
 * based on Lavoisier Framework - http://software.in2p3.fr/lavoisier
-* prerequisites : a server certificate and java (version prior to 1.8 or 8 ) 
+* prerequisites : a server certificate and java (version 1.8 or 8 ) 
 * no services running on port 80 and 443
 
 
