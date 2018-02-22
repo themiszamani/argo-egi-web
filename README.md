@@ -67,7 +67,7 @@ and then install the CA
 ### edit lavoisier-hidden.properties
 
 ```
- cd $HOME_LAVOISIER/argo-egi-web-master/etc
+ cd $HOME_LAVOISIER/argo-egi-web/etc
  vi lavoisier-hidden.properties
  complete certificate.path and certificate.password
  specify the cache.baseDirectory property - location of the caches for the data
@@ -81,7 +81,7 @@ and then install the CA
 ### edit password.properties
 
 ```
- cd $HOME_LAVOISIER/argo-egi-web-master/etc/security
+ cd $HOME_LAVOISIER/argo-egi-web/etc/security
  vi password.properties
  change or add login and passwords (admin and changeit by defaut)
 ```
