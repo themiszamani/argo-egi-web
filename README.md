@@ -14,6 +14,7 @@ title: Web UI | ARGO
 
 * yum install java-1.8.0-openjdk.x86_64
 * yum install wget
+* yum install git
 * yum install unzip 
 
 # Open ports
