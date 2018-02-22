@@ -39,6 +39,7 @@ enabled=1
 ## Installation 
 ### the $HOME_LAVOISIER is the directory where do you install the service
 * cd $HOME_LAVOISIER
+* git clone  https://github.com/ARGOeu/argo-egi-web.git via git ansible
 * wget https://github.com/ARGOeu/argo-egi-web/archive/master.zip
 * unzip master.zip
 * mkdir certificate
