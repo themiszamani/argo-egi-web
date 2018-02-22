@@ -1,7 +1,3 @@
----
-title: Web UI | ARGO
----
-
 ## Description
 # Web UI module for the ARGO Framework
 
@@ -28,6 +24,7 @@ title: Web UI | ARGO
 Add the following repo-file to the /etc/yum.repos.d/ directory:  
     
 [EGI-trustanchors]
+
 name=EGI-trustanchors
 baseurl=http://repository.egi.eu/sw/production/cas/1/current/
 gpgkey=http://repository.egi.eu/sw/production/cas/1/GPG-KEY-EUGridPMA-RPM-3
@@ -39,7 +36,7 @@ enabled=1
 ## Installation 
 ### the $HOME_LAVOISIER is the directory where do you install the service
 * cd $HOME_LAVOISIER
-* git clone  https://github.com/ARGOeu/argo-egi-web.git via git ansible
+* git clone  https://github.com/ARGOeu/argo-egi-web.git
 * mkdir certificate
 * put your certificate in p12 format in this directory
 
