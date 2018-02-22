@@ -10,7 +10,7 @@ title: Web UI | ARGO
 * no services running on port 80 and 443
 
 
-# prerequisites (CENTOS installation)
+# prerequisites (CENTOS 7 installation)
 
 * yum install java-1.8.0-openjdk.x86_64
 * yum install wget
@@ -21,7 +21,6 @@ title: Web UI | ARGO
 * firewall-cmd --zone=public --add-port=80/tcp --permanent
 * firewall-cmd --zone=public --add-port=443/tcp --permanent
 * firewall-cmd --reload
-
 
 
 # Installation of CAs
