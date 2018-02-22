@@ -32,15 +32,24 @@ gpgcheck=1
 enabled=1
 ```
 
-* yum install ca-policy-egi-core
+and then install the CA
+
+```
+ yum install ca-policy-egi-core
+```
 
 ## Installation 
-### the $HOME_LAVOISIER is the directory where do you install the service
-* cd $HOME_LAVOISIER
-* git clone  https://github.com/ARGOeu/argo-egi-web.git
-* mkdir certificate
-* put your certificate in p12 format in this directory
 
+ the $HOME_LAVOISIER is the directory where do you install the service
+
+
+```
+ cd $HOME_LAVOISIER
+ git clone  https://github.com/ARGOeu/argo-egi-web.git
+ mkdir certificate
+ put your certificate in p12 format in this directory
+
+```
 
 ## Configuration 
 ### edit lavoisier-hidden.properties
