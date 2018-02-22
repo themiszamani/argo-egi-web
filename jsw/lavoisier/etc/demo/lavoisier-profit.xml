@@ -1,0 +1,82 @@
+<config xmlns="http://software.in2p3.fr/lavoisier/config.xsd" version="16">
+    <view name="profit">
+        <info>
+            <category>profit</category>
+        </info>
+        <connector type="HTTPConnector">
+            <parameter name="url">http://software.in2p3.fr/lavoisier/input.csv</parameter>
+        </connector>
+        <serializer type="CSVSerializer">
+            <parameter name="header">true</parameter>
+        </serializer>
+        <processors xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd" xmlns:ns="http://software.in2p3.fr/lavoisier/tables.xsd">
+            <element in="ns:tables" out="e:entries">
+                <element-ignore in="ns:table">
+                    <element-ignore in="ns:row">
+                        <element in="ns:column" if="@label='Profit'" out="e:entry">
+                            <attribute-ignore in="label"/>
+                        </element>
+                    </element-ignore>
+                </element-ignore>
+            </element>
+        </processors>
+        <renderers>
+            <renderer type="HTMLRenderer">
+                <parameter name="template">html/profit.html</parameter>
+            </renderer>
+        </renderers>
+    </view>
+    <view name="profit_invoices">
+        <info>
+            <category>Main</category>
+            <description>Simple demo of merging CSV and JSON data sources</description>
+        </info>
+        <connector type="StringConnector">
+            <parameter name="content">{"invoices":["128","243","187","306","247","203"]}</parameter>
+        </connector>
+        <serializer type="JSONSerializer"/>
+        <processors xmlns:e="http://software.in2p3.fr/lavoisier/entries.xsd">
+            <element-ignore in="object">
+                <set variable="profit">view('profit')/e:entries/e:entry</set>
+                <set variable="position">0</set>
+                <element in="invoices">
+                    <element in="item">
+                        <set variable="position">$position + 1</set>
+                        <attribute-create out="profit">$profit[$position]</attribute-create>
+                        <element-create-as-parent out="invoices">
+                            <text/>
+                        </element-create-as-parent>
+                    </element>
+                </element>
+            </element-ignore>
+            <element in="invoices">
+                <element in="item">
+                    <element-create>view('ratio', entries(entry('profit',../@profit), entry('invoices',../invoices/text())))</element-create>
+                </element>
+            </element>
+        </processors>
+        <pre-renderers>
+            <title>'Profit / Number of invoices'</title>
+            <row foreach="/invoices/item">
+                <column unit="$" order="descending">@profit</column>
+                <column unit="nb">invoices</column>
+                <column unit="$" label="ratio">(round(ratio * 100) div 100)</column>
+            </row>
+        </pre-renderers>
+        <renderers>
+            <renderer type="CsvRenderer">
+                <parameter name="separator">;</parameter>
+            </renderer>
+        </renderers>
+    </view>
+    <view name="ratio">
+        <info>
+            <category>profit</category>
+        </info>
+        <argument name="profit"/>
+        <argument name="invoices"/>
+        <connector type="XMLConnector">
+            <parameter name="content" eval="new_element('ratio', 100 * $profit div $invoices)"/>
+        </connector>
+    </view>
+</config>

@@ -1,0 +1,10 @@
+<config xmlns="http://software.in2p3.fr/lavoisier/config.xsd" version="16">
+    <authenticators name="admin">
+        <authenticator type="IPAddressAuthenticator">
+            <parameter name="addresses">
+                <entry>127.0.0.1</entry>
+                <entry>0:0:0:0:0:0:0:1</entry>
+            </parameter>
+        </authenticator>
+    </authenticators>
+</config>
